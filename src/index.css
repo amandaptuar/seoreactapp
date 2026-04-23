@@ -1,0 +1,14 @@
+/* Overrides for Limitless template using Bizmax colors */
+:root {
+    --bgcolor: #e9a132 !important; /* Bizmax orange/yellow */
+    --main-color : #18191d !important; /* Bizmax dark */
+}
+body, p {
+    color: #666;
+}
+h1, h2, h3, h4, h5, h6, a {
+    color: #18191d;
+}
+a:hover {
+    color: #e9a132;
+}
