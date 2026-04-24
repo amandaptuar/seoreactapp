@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import limitlessLogo from '../assets/limitless-logo.webp';
 
 const Footer = () => {
@@ -53,10 +54,10 @@ const Footer = () => {
               <div className="widget-title">
                 <h3 className="text-white">Useful Links</h3>
                 <ul>
-                  <li><i className="fa-solid fa-angles-right"></i><a href="#about" className="text-white">The Problem</a></li>
-                  <li><i className="fa-solid fa-angles-right"></i><a href="#services" className="text-white">The Process</a></li>
-                  <li><i className="fa-solid fa-angles-right"></i><a href="#pillars" className="text-white">Pillars</a></li>
-                  <li><i className="fa-solid fa-angles-right"></i><a href="#pricing" className="text-white">Pricing</a></li>
+                  <li><i className="fa-solid fa-angles-right"></i><a href="/#about" className="text-white">The Problem</a></li>
+                  <li><i className="fa-solid fa-angles-right"></i><a href="/#services" className="text-white">The Process</a></li>
+                  <li><i className="fa-solid fa-angles-right"></i><a href="/#pillars" className="text-white">Pillars</a></li>
+                  <li><i className="fa-solid fa-angles-right"></i><a href="/#pricing" className="text-white">Pricing</a></li>
                 </ul>
               </div>
             </div>
@@ -80,15 +81,6 @@ const Footer = () => {
               </div>
             </div>
           </div>
-          <div className="all-rights d-flex justify-content-between align-items-center flex-wrap">
-            <p className="text-white mb-0">Limitless Holistic Cognition © 2026. All Rights Reserved.</p>
-            <ul className="social-media d-flex mb-0" style={{ gap: '15px', listStyle: 'none', padding: 0, margin: 0 }}>
-              <li><a href="https://www.facebook.com/limitlessworldnet" target="_blank" rel="noopener noreferrer" className="text-white" style={{ fontSize: '18px' }}><i className="fa-brands fa-facebook-f"></i></a></li>
-              <li><a href="#" className="text-white" style={{ fontSize: '18px' }}><i className="fa-brands fa-twitter"></i></a></li>
-              <li><a href="#" className="text-white" style={{ fontSize: '18px' }}><i className="fa-brands fa-instagram"></i></a></li>
-              <li><a href="#" className="text-white" style={{ fontSize: '18px' }}><i className="fa-brands fa-linkedin-in"></i></a></li>
-            </ul>
-          </div>
         </div>
         <ul className="shaps-img">
           <li><img src="/assets/img/shaps-4.png" alt="img" /></li> 
@@ -96,6 +88,24 @@ const Footer = () => {
           <li><img src="/assets/img/shaps-2.png" alt="img" /></li> 
         </ul>
       </footer>
+      <div className="bottom-bar" style={{ backgroundColor: '#0d0d0d', padding: '20px 0' }}>
+        <div className="container">
+          <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <p className="text-white mb-0" style={{ fontSize: '14px' }}>Limitless Holistic Cognition © 2026. All Rights Reserved.</p>
+            <div className="d-flex align-items-center gap-3">
+              <Link to="/privacy-policy" className="text-white" style={{ fontSize: '14px', textDecoration: 'none', transition: 'color 0.3s' }} onMouseOver={(e) => e.target.style.color='#ccc'} onMouseOut={(e) => e.target.style.color='#fff'}>Privacy Policy</Link>
+              <span className="text-white" style={{ fontSize: '14px' }}>|</span>
+              <Link to="/terms-conditions" className="text-white" style={{ fontSize: '14px', textDecoration: 'none', transition: 'color 0.3s' }} onMouseOver={(e) => e.target.style.color='#ccc'} onMouseOut={(e) => e.target.style.color='#fff'}>Terms of Condition</Link>
+            </div>
+            <ul className="social-media d-flex mb-0" style={{ gap: '15px', listStyle: 'none', padding: 0, margin: 0 }}>
+              <li><a href="https://www.facebook.com/limitlessworldnet" target="_blank" rel="noopener noreferrer" className="text-white" style={{ fontSize: '16px', transition: 'color 0.3s' }} onMouseOver={(e) => e.target.style.color='#ccc'} onMouseOut={(e) => e.target.style.color='#fff'}><i className="fa-brands fa-facebook-f"></i></a></li>
+              <li><a href="#" className="text-white" style={{ fontSize: '16px', transition: 'color 0.3s' }} onMouseOver={(e) => e.target.style.color='#ccc'} onMouseOut={(e) => e.target.style.color='#fff'}><i className="fa-brands fa-twitter"></i></a></li>
+              <li><a href="#" className="text-white" style={{ fontSize: '16px', transition: 'color 0.3s' }} onMouseOver={(e) => e.target.style.color='#ccc'} onMouseOut={(e) => e.target.style.color='#fff'}><i className="fa-brands fa-instagram"></i></a></li>
+              <li><a href="#" className="text-white" style={{ fontSize: '16px', transition: 'color 0.3s' }} onMouseOver={(e) => e.target.style.color='#ccc'} onMouseOut={(e) => e.target.style.color='#fff'}><i className="fa-brands fa-linkedin-in"></i></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </>
   );
 };

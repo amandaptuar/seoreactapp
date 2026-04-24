@@ -14,16 +14,16 @@ const Header = () => {
           <nav className="navbar">
               <ul className="navbar-links">
                 <li className="navbar-dropdown">
-                  <a href="#about">The Problem</a>
+                  <a href="/#about">The Problem</a>
                 </li>
                 <li className="navbar-dropdown">
-                  <a href="#services">The Process</a>
+                  <a href="/#services">The Process</a>
                 </li>
                 <li className="navbar-dropdown">
-                  <a href="#pillars">Pillars</a>
+                  <a href="/#pillars">Pillars</a>
                 </li>
                 <li className="navbar-dropdown">
-                  <a href="#pricing">Pricing</a>
+                  <a href="/#pricing">Pricing</a>
                 </li>
               </ul>
             </nav>
