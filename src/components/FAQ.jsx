@@ -50,14 +50,14 @@ const FAQ = () => {
               ))}
             </div>
           </div>
-          <div className="col-lg-4">
+          <div className="col-lg-4 d-flex flex-column">
             <div className="accordion-contact">
               <h4>Phone No: <a href="callto:+1234567890">+1 234 567 890</a></h4>
               <h4>Email: <a href="mailto:info@limitlessworld.net">info@limitlessworld.net</a></h4>
               <a href="#pricing" className="button btn"><span><span>Get Started</span></span></a>
             </div>
-            <div className="accordion-img">
-              <img src="/assets/img/faq_bg.jpeg" alt="img" />
+            <div className="accordion-img flex-grow-1 d-flex">
+              <img src="/assets/img/faq_bg.jpeg" alt="img" style={{ width: '100%', height: '100%', objectFit: 'cover', minHeight: '300px' }} />
             </div>
           </div>
         </div>

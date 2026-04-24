@@ -43,7 +43,7 @@ const Footer = () => {
                 <img src={limitlessLogo} alt="img" style={{ maxWidth: '250px', maxHeight: '90px', objectFit: 'contain' }} />
                 <p className="text-white">Limitless is a holistic cognitive performance system delivered directly to your phone. We eliminate the friction between data and execution.</p>
                 <ul className="social-media">
-                  <li><a href="#"><i className="fa-brands fa-facebook-f"></i></a></li>
+                  <li><a href="https://www.facebook.com/limitlessworldnet" target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-facebook-f"></i></a></li>
                   <li><a href="#"><i className="flaticon-twitter"></i></a></li>
                   <li><a href="#"><i className="flaticon-instagram"></i></a></li>
                 </ul>
@@ -83,7 +83,7 @@ const Footer = () => {
           <div className="all-rights d-flex justify-content-between align-items-center flex-wrap">
             <p className="text-white mb-0">Limitless Holistic Cognition © 2026. All Rights Reserved.</p>
             <ul className="social-media d-flex mb-0" style={{ gap: '15px', listStyle: 'none', padding: 0, margin: 0 }}>
-              <li><a href="#" className="text-white" style={{ fontSize: '18px' }}><i className="fa-brands fa-facebook-f"></i></a></li>
+              <li><a href="https://www.facebook.com/limitlessworldnet" target="_blank" rel="noopener noreferrer" className="text-white" style={{ fontSize: '18px' }}><i className="fa-brands fa-facebook-f"></i></a></li>
               <li><a href="#" className="text-white" style={{ fontSize: '18px' }}><i className="fa-brands fa-twitter"></i></a></li>
               <li><a href="#" className="text-white" style={{ fontSize: '18px' }}><i className="fa-brands fa-instagram"></i></a></li>
               <li><a href="#" className="text-white" style={{ fontSize: '18px' }}><i className="fa-brands fa-linkedin-in"></i></a></li>
