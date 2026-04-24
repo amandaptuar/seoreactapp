@@ -23,24 +23,24 @@ const Services = () => {
               <div className="col-md-6">
                 <div className="how-do-stap">
                   <span>1</span>
-                  <i className="flaticon-mail"></i>
+                  <i className="fa-solid fa-brain" style={{ fontSize: '45px', marginBottom: '15px', color: '#14212b' }}></i>
                   <h4>Mental Health Assessment</h4>
                 </div>
                 <div className="how-do-stap two">
                   <span>2</span>
-                  <i className="flaticon-team-building"></i>
+                  <i className="fa-solid fa-female" style={{ fontSize: '45px', marginBottom: '15px', color: '#fff' }}></i>
                   <h4>Woman Health Assessment</h4>
                 </div>
               </div>
               <div className="col-md-6">
                 <div className="how-do-stap three">
                   <span>3</span>
-                  <i className="flaticon-security"></i>
+                  <i className="fa-solid fa-venus-mars" style={{ fontSize: '45px', marginBottom: '15px', color: '#fff' }}></i>
                   <h4>Sexual Health Assessment</h4>
                 </div>
                 <div className="how-do-stap four" style={{ marginTop: '30px' }}>
                   <span>4</span>
-                  <i className="flaticon-team-building"></i>
+                  <i className="fa-solid fa-child" style={{ fontSize: '45px', marginBottom: '15px', color: '#14212b' }}></i>
                   <h4>Kids Health Assessment</h4>
                 </div>
               </div>

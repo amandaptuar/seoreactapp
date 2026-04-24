@@ -1,6 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const FAQ = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const toggleAccordion = (index, e) => {
+    e.preventDefault();
+    setActiveIndex(activeIndex === index ? -1 : index);
+  };
+
+  const faqItems = [
+    {
+      title: "Mental Health Assessment",
+      content: "Understand your mind better with our science-based assessment. Identify stress, anxiety, mood patterns, and cognitive performance, and receive actionable recommendations tailored to your lifestyle."
+    },
+    {
+      title: "Women’s Health Assessment",
+      content: "Take control of your health with a science-based assessment that evaluates key areas such as hormonal health, nutrition, stress, sleep, and reproductive wellness—delivering tailored recommendations for a healthier life."
+    },
+    {
+      title: "Sexual Health Assessment",
+      content: "Understand your sexual wellness with a private, judgment-free assessment. Evaluate key factors such as libido, performance, hormonal health, stress, and lifestyle—along with tailored recommendations for better health and confidence."
+    },
+    {
+      title: "Child Health Assessment",
+      content: "Monitor your child’s health with a structured, science-based assessment. Evaluate key areas such as growth milestones, nutrition, sleep, immunity, and behavioral patterns—along with tailored recommendations for optimal development."
+    }
+  ];
+
   return (
     <section id="pillars" className="gap accordion-section">
       <div className="container">
@@ -11,43 +37,18 @@ const FAQ = () => {
               <h2 className="title-animation">Limitless Unified Specialised Assessment For Good Life</h2> 
             </div>
             <div className="accordion">
-                <div className="accordion-item active">
-                    <a href="#" className="heading">
+              {faqItems.map((item, index) => (
+                <div key={index} className={`accordion-item ${activeIndex === index ? 'active' : ''}`}>
+                    <a href="#" className="heading" onClick={(e) => toggleAccordion(index, e)}>
                         <div className="icon"></div>
-                        <div className="title">Mental Health Assessment</div>
+                        <div className="title">{item.title}</div>
                     </a>
-                    <div className="content" style={{ display: 'block' }}>
-                        <p>Understand your mind better with our science-based assessment. Identify stress, anxiety, mood patterns, and cognitive performance, and receive actionable recommendations tailored to your lifestyle.</p>
+                    <div className="content" style={{ display: activeIndex === index ? 'block' : 'none' }}>
+                        <p>{item.content}</p>
                     </div>
                 </div> 
-                <div className="accordion-item">
-                    <a href="#" className="heading">
-                        <div className="icon"></div>
-                        <div className="title">Women’s Health Assessment</div>
-                    </a>
-                    <div className="content">
-                        <p>Take control of your health with a science-based assessment that evaluates key areas such as hormonal health, nutrition, stress, sleep, and reproductive wellness—delivering tailored recommendations for a healthier life.</p>
-                    </div>
-                </div>
-                <div className="accordion-item">
-                    <a href="#" className="heading">
-                        <div className="icon"></div>
-                        <div className="title">Sexual Health Assessment</div>
-                    </a>
-                    <div className="content">
-                        <p>Understand your sexual wellness with a private, judgment-free assessment. Evaluate key factors such as libido, performance, hormonal health, stress, and lifestyle—along with tailored recommendations for better health and confidence.</p>
-                    </div>
-                </div>
-                <div className="accordion-item">
-                    <a href="#" className="heading">
-                        <div className="icon"></div>
-                        <div className="title">Child Health Assessment</div>
-                    </a>
-                    <div className="content">
-                        <p>Monitor your child’s health with a structured, science-based assessment. Evaluate key areas such as growth milestones, nutrition, sleep, immunity, and behavioral patterns—along with tailored recommendations for optimal development.</p>
-                    </div>
-                </div>
-              </div>
+              ))}
+            </div>
           </div>
           <div className="col-lg-4">
             <div className="accordion-contact">
