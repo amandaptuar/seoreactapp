@@ -5,6 +5,7 @@ import About from '../components/About';
 import Services from '../components/Services';
 import FAQ from '../components/FAQ';
 import Pricing from '../components/Pricing';
+import Stats from '../components/Stats';
 import Footer from '../components/Footer';
 
 const Home = () => {
@@ -17,6 +18,7 @@ const Home = () => {
       <Services />
       <FAQ />
       <Pricing />
+      <Stats />
       <Footer />
     </>
   );

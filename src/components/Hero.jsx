@@ -18,7 +18,7 @@ const Hero = () => {
             </div>
           </div>
           <div className="col-lg-5">
-            <form role="form" className="get-a-quote" id="contact-form" method="post" onSubmit={(e) => e.preventDefault()}>
+            <form role="form" className="get-a-quote" id="contact-form" method="post" onSubmit={(e) => { e.preventDefault(); window.location.href = 'https://limitlessworld.net'; }}>
               <img src="/assets/img/fom-img.png" alt="img" /> 
                 <h3>Get Started Today</h3>
                 <h6>Begin your $79 Cognitive Audit</h6> 
