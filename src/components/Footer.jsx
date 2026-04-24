@@ -80,8 +80,14 @@ const Footer = () => {
               </div>
             </div>
           </div>
-          <div className="all-rights">
-            <p className="text-white">Limitless Holistic Cognition © 2026. All Rights Reserved.</p>
+          <div className="all-rights d-flex justify-content-between align-items-center flex-wrap">
+            <p className="text-white mb-0">Limitless Holistic Cognition © 2026. All Rights Reserved.</p>
+            <ul className="social-media d-flex mb-0" style={{ gap: '15px', listStyle: 'none', padding: 0, margin: 0 }}>
+              <li><a href="#" className="text-white" style={{ fontSize: '18px' }}><i className="fa-brands fa-facebook-f"></i></a></li>
+              <li><a href="#" className="text-white" style={{ fontSize: '18px' }}><i className="fa-brands fa-twitter"></i></a></li>
+              <li><a href="#" className="text-white" style={{ fontSize: '18px' }}><i className="fa-brands fa-instagram"></i></a></li>
+              <li><a href="#" className="text-white" style={{ fontSize: '18px' }}><i className="fa-brands fa-linkedin-in"></i></a></li>
+            </ul>
           </div>
         </div>
         <ul className="shaps-img">

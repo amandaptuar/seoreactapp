@@ -8,9 +8,9 @@ const Hero = () => {
           <div className="col-lg-7">
             <div className="hero-text sec-title-animation animation-style2">
               <span className="title-animation">Cognitive Performance System </span>
-              <h2 className="title-animation">You don't need more data.<br/>You need a protocol.</h2>
+              <h2 className="title-animation">Your Health, Decoded Instantly</h2>
               <div className="d-flex listing">
-                <p>Limitless is a holistic cognitive performance system delivered directly to your phone. No new apps to download. No confusing dashboards. Just expert, AI-guided daily execution across focus, energy, and clarity.</p>
+                <p>Fast, accurate assessments for mental health, women’s wellness, sexual health, and more—powered by smart insights and personalized guidance.</p>
               </div>  
             </div>
             <div className="review">

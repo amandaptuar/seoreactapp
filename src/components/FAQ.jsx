@@ -8,34 +8,43 @@ const FAQ = () => {
           <div className="col-lg-8">
             <div className="heading two sec-title-animation animation-style2">
               <span className="title-animation">Pillars of Performance</span>
-              <h2 className="title-animation">A Unified System for Human Performance</h2> 
+              <h2 className="title-animation">Limitless Unified Specialised Assessment For Good Life</h2> 
             </div>
             <div className="accordion">
-                <div className="accordion-item">
-                    <a href="#" className="heading">
-                        <div className="icon"></div>
-                        <div className="title">Cognitive Mastery</div>
-                    </a>
-                    <div className="content">
-                        <p>We train your brain to enter deep focus on command, eliminate brain fog, and sustain high output without burning out.</p>
-                    </div>
-                </div> 
                 <div className="accordion-item active">
                     <a href="#" className="heading">
                         <div className="icon"></div>
-                        <div className="title">Foundational Energy</div>
+                        <div className="title">Mental Health Assessment</div>
                     </a>
                     <div className="content" style={{ display: 'block' }}>
-                        <p>Optimize your sleep architecture, align with your circadian rhythm, and properly fuel your body to ensure you have the energy required for elite execution.</p>
+                        <p>Understand your mind better with our science-based assessment. Identify stress, anxiety, mood patterns, and cognitive performance, and receive actionable recommendations tailored to your lifestyle.</p>
+                    </div>
+                </div> 
+                <div className="accordion-item">
+                    <a href="#" className="heading">
+                        <div className="icon"></div>
+                        <div className="title">Women’s Health Assessment</div>
+                    </a>
+                    <div className="content">
+                        <p>Take control of your health with a science-based assessment that evaluates key areas such as hormonal health, nutrition, stress, sleep, and reproductive wellness—delivering tailored recommendations for a healthier life.</p>
                     </div>
                 </div>
                 <div className="accordion-item">
                     <a href="#" className="heading">
                         <div className="icon"></div>
-                        <div className="title">Resilience & Recovery</div>
+                        <div className="title">Sexual Health Assessment</div>
                     </a>
                     <div className="content">
-                        <p>Build the physiological and psychological capacity to handle high-stress environments and bounce back faster from setbacks.</p>
+                        <p>Understand your sexual wellness with a private, judgment-free assessment. Evaluate key factors such as libido, performance, hormonal health, stress, and lifestyle—along with tailored recommendations for better health and confidence.</p>
+                    </div>
+                </div>
+                <div className="accordion-item">
+                    <a href="#" className="heading">
+                        <div className="icon"></div>
+                        <div className="title">Child Health Assessment</div>
+                    </a>
+                    <div className="content">
+                        <p>Monitor your child’s health with a structured, science-based assessment. Evaluate key areas such as growth milestones, nutrition, sleep, immunity, and behavioral patterns—along with tailored recommendations for optimal development.</p>
                     </div>
                 </div>
               </div>

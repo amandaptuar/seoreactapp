@@ -8,14 +8,14 @@ const Services = () => {
           <div className="col-lg-6">
             <div className="heading two sec-title-animation animation-style2">
               <span className="title-animation">The Process </span>
-              <h2 className="title-animation">Elite Coaching, Zero Friction.</h2>
-              <p>We've stripped away everything that slows you down. No more logging into five different dashboards. We manage the complexity, you execute the protocol.</p>
+              <h2 className="title-animation">Start Assessment By One Go with Limitless</h2>
+              <p>Limitless is your all-in-one digital wellness platform. Start with cognitive performance testing and access specialized services in mental health, women’s health, and sexual wellness</p>
             </div>
             <ul className="chek">
-              <li><img src="/assets/img/chek.png" alt="img" /> Clinical Assessment and Data Ingestion</li>
-              <li><img src="/assets/img/chek.png" alt="img" /> Customized Execution Plan</li>
-              <li><img src="/assets/img/chek.png" alt="img" /> Daily Text-Message Coaching Nudges</li>
-              <li><img src="/assets/img/chek.png" alt="img" /> Continuous Expert Refinement</li>
+              <li><img src="/assets/img/chek.png" alt="img" /> Quick Assessment With Limitless</li>
+              <li><img src="/assets/img/chek.png" alt="img" /> Questionnaire Segment For User</li>
+              <li><img src="/assets/img/chek.png" alt="img" /> Quick Interaction focus and concentration</li>
+              <li><img src="/assets/img/chek.png" alt="img" /> AI Report and Analyzing</li>
             </ul>
           </div>
           <div className="col-lg-6">
@@ -24,23 +24,24 @@ const Services = () => {
                 <div className="how-do-stap">
                   <span>1</span>
                   <i className="flaticon-mail"></i>
-                  <h4>The Intake Audit (We analyze your biology)</h4>
+                  <h4>Mental Health Assessment</h4>
                 </div>
                 <div className="how-do-stap two">
                   <span>2</span>
                   <i className="flaticon-team-building"></i>
-                  <h4>The Protocol (We build your custom map)</h4>
+                  <h4>Woman Health Assessment</h4>
                 </div>
               </div>
               <div className="col-md-6">
                 <div className="how-do-stap three">
                   <span>3</span>
                   <i className="flaticon-security"></i>
-                  <h4>Daily Delivery (You get simple daily texts)</h4>
+                  <h4>Sexual Health Assessment</h4>
                 </div>
-                <div className="video">
-                  <img src="/assets/img/video_block.jpeg" alt="img" />
-                  <a className="video-pop" data-fancybox="" href="https://www.youtube.com/watch?v=1La4QzGeaaQ"><i className="fa-solid fa-play"></i></a>
+                <div className="how-do-stap four" style={{ marginTop: '30px' }}>
+                  <span>4</span>
+                  <i className="flaticon-team-building"></i>
+                  <h4>Kids Health Assessment</h4>
                 </div>
               </div>
             </div>
