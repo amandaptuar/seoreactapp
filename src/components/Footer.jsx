@@ -22,7 +22,7 @@ const Footer = () => {
                 <p className="text-white">Limitless is a holistic cognitive performance system delivered directly to your phone. We eliminate the friction between data and execution.</p>
                 <ul className="social-media">
                   <li><a href="https://www.facebook.com/limitlessworldnet" target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-facebook-f"></i></a></li>
-                  <li><a href="#"><i className="flaticon-twitter"></i></a></li>
+                  <li><a href="https://x.com/limitless1964" target="_blank" rel="noopener noreferrer"><i className="flaticon-twitter"></i></a></li>
                   <li><a href="#"><i className="flaticon-instagram"></i></a></li>
                 </ul>
               </div>
@@ -76,7 +76,7 @@ const Footer = () => {
             </div>
             <ul className="social-media d-flex mb-0" style={{ gap: '15px', listStyle: 'none', padding: 0, margin: 0 }}>
               <li><a href="https://www.facebook.com/limitlessworldnet" target="_blank" rel="noopener noreferrer" className="text-white" style={{ fontSize: '16px', transition: 'color 0.3s' }} onMouseOver={(e) => e.target.style.color='#ccc'} onMouseOut={(e) => e.target.style.color='#fff'}><i className="fa-brands fa-facebook-f"></i></a></li>
-              <li><a href="#" className="text-white" style={{ fontSize: '16px', transition: 'color 0.3s' }} onMouseOver={(e) => e.target.style.color='#ccc'} onMouseOut={(e) => e.target.style.color='#fff'}><i className="fa-brands fa-twitter"></i></a></li>
+              <li><a href="https://x.com/limitless1964" target="_blank" rel="noopener noreferrer" className="text-white" style={{ fontSize: '16px', transition: 'color 0.3s' }} onMouseOver={(e) => e.target.style.color='#ccc'} onMouseOut={(e) => e.target.style.color='#fff'}><i className="fa-brands fa-twitter"></i></a></li>
               <li><a href="#" className="text-white" style={{ fontSize: '16px', transition: 'color 0.3s' }} onMouseOver={(e) => e.target.style.color='#ccc'} onMouseOut={(e) => e.target.style.color='#fff'}><i className="fa-brands fa-instagram"></i></a></li>
               <li><a href="#" className="text-white" style={{ fontSize: '16px', transition: 'color 0.3s' }} onMouseOver={(e) => e.target.style.color='#ccc'} onMouseOut={(e) => e.target.style.color='#fff'}><i className="fa-brands fa-linkedin-in"></i></a></li>
             </ul>

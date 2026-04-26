@@ -13,8 +13,10 @@ const Hero = () => {
                 <p>Fast, accurate assessments for mental health, women’s wellness, sexual health, and more—powered by smart insights and personalized guidance.</p>
               </div>  
             </div>
-            <div className="review">
-              <a href="#pricing" className="button btn"><span><span>START YOUR COGNITIVE AUDIT</span></span></a>
+            <div className="mt-4">
+              <a href="https://x.com/limitless1964" target="_blank" rel="noopener noreferrer" className="text-white d-inline-flex align-items-center gap-2" style={{ fontSize: '1.2rem', textDecoration: 'none', transition: 'opacity 0.3s' }} onMouseOver={(e) => e.currentTarget.style.opacity = '0.8'} onMouseOut={(e) => e.currentTarget.style.opacity = '1'}>
+                <i className="fa-brands fa-twitter"></i> @limitless1964
+              </a>
             </div>
           </div>
           <div className="col-lg-5">
