@@ -90,8 +90,11 @@ const Hero = () => {
             <div className="hero-text sec-title-animation animation-style2">
               <span className="title-animation">Cognitive Performance System </span>
               <h2 className="title-animation">Your Health, Decoded Instantly</h2>
-              <div className="d-flex listing">
-                <p>Fast, accurate assessments for mental health, women’s wellness, sexual health, and more—powered by smart insights and personalized guidance.</p>
+              <div className="d-flex listing" style={{ flexDirection: 'column', gap: '12px', marginTop: '24px' }}>
+                <p>Get personalized insights into memory, focus, stress, mental clarity, and daily performance.</p>
+                <p>Identify hidden factors that may be affecting productivity, energy, and decision-making.</p>
+                <p>Receive an easy-to-understand score with practical recommendations tailored to you.</p>
+                <p>Fast, private, and designed for modern lifestyles with instant digital access.</p>
               </div>  
             </div>
           </div>
