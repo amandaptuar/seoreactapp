@@ -2,6 +2,10 @@
 :root {
     --bgcolor: #e9a132 !important; /* Bizmax orange/yellow */
     --main-color : #18191d !important; /* Bizmax dark */
+    --primary: #e9a132;
+    --dark: #18191d;
+    --white: #ffffff;
+    --font-primary: 'Inter', sans-serif;
 }
 body, p {
     color: #666;
@@ -11,4 +15,198 @@ h1, h2, h3, h4, h5, h6, a {
 }
 a:hover {
     color: #e9a132;
+}
+
+/* Glassmorphism Classes */
+.dark-glass-panel {
+  background: rgba(24, 25, 29, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  padding: 30px;
+}
+
+/* Form Styles */
+.support-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.support-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.support-field label {
+  color: #ccc;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.support-field input,
+.support-field textarea,
+.support-field select {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: var(--white);
+  font-size: 15px;
+  font-family: var(--font-primary);
+  transition: border-color 0.2s ease, background 0.2s ease;
+  outline: none;
+  width: 100%;
+}
+
+.support-field input::placeholder,
+.support-field textarea::placeholder {
+  color: #888;
+}
+
+.support-field input:focus,
+.support-field textarea:focus,
+.support-field select:focus {
+  border-color: var(--primary);
+  background: rgba(233, 161, 50, 0.05);
+}
+
+.support-submit {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-top: 10px;
+  background-color: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.support-submit:hover {
+  background-color: #d18d28;
+}
+
+.support-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.country-code-select {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 12px 10px;
+  color: var(--white);
+  font-size: 14px;
+  font-family: var(--font-primary);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s ease;
+  flex-shrink: 0;
+  width: 160px;
+}
+
+.country-code-select:focus {
+  border-color: var(--primary);
+}
+
+.country-code-select option {
+  background: #1a1b20;
+  color: var(--white);
+}
+
+/* Success State */
+.support-success {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.support-success-icon {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, var(--primary), #f4c340);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: var(--white);
+  margin: 0 auto 20px;
+  animation: successPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes successPop {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+
+.support-success h3 {
+  color: var(--white);
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.support-success p {
+  color: #888;
+  font-size: 15px;
+}
+
+/* ===== Question Page Styles Responsive ===== */
+.question-form-panel {
+  padding: 40px;
+  border-radius: var(--radius-md, 12px);
+}
+
+.question-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .question-form-panel {
+    padding: 20px;
+  }
+  .question-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+}
+
+/* ===== Question Page Section ===== */
+.question-section {
+  background-color: var(--dark);
+  position: relative;
+  overflow: hidden;
+}
+
+.question-section::before {
+  content: '';
+  position: absolute;
+  top: -10%;
+  left: -20%;
+  width: 70%;
+  height: 70%;
+  background: radial-gradient(circle, rgba(233, 161, 50, 0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.question-section::after {
+  content: '';
+  position: absolute;
+  bottom: -10%;
+  right: -20%;
+  width: 80%;
+  height: 80%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, transparent 60%);
+  pointer-events: none;
 }
