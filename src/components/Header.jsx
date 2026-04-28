@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import limitlessLogo from '../assets/limitless-logo.webp';
+import EnquiryModal from './EnquiryModal';
 
 const Header = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <header id="stickyHeader">
       <div className="container">
@@ -27,9 +30,15 @@ const Header = () => {
                 </li>
               </ul>
             </nav>
-          <a href="callto:+12344502086"><i className="flaticon-smart-phone"></i><b> +1234 450 2086</b></a>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+            <button className="btn" onClick={() => setIsModalOpen(true)} style={{ padding: '10px 20px', background: 'var(--primary, #e9a132)', color: '#000', border: 'none', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.3s ease' }}>
+              Send Enquiry
+            </button>
+            <a href="callto:+12344502086"><i className="flaticon-smart-phone"></i><b> +1234 450 2086</b></a>
+          </div>
         </div>
       </div>
+      <EnquiryModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </header>
   );
 };
