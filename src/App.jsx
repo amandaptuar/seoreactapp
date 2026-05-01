@@ -9,9 +9,11 @@ import Payment from './components/Payment';
 import PaymentSuccess from './components/PaymentSuccess';
 import AdminLogin from './components/AdminLogin';
 import Admin from './components/Admin';
+import FloatingCTA from './components/FloatingCTA';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 
 const ProtectedRoute = ({ children }) => {
+// ... existing code ...
   const userEmail = localStorage.getItem('userEmail');
   if (!userEmail) {
     return <Navigate to="/" replace />;
@@ -31,6 +33,7 @@ function App() {
   return (
     <Router>
       <ScrollToTop />
+      <FloatingCTA />
       <FloatingWhatsApp />
       <Routes>
         <Route path="/" element={<Home />} />

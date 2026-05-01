@@ -39,6 +39,20 @@ const Admin = () => {
     navigate('/admin-login');
   };
 
+  const deleteUser = async (userId, userEmail) => {
+    if (!window.confirm(`Delete user ${userEmail}? This cannot be undone.`)) return;
+    try {
+      const { error } = await supabase
+        .from('users')
+        .delete()
+        .eq('id', userId);
+      if (error) throw error;
+      setUsers(prev => prev.filter(u => u.id !== userId));
+    } catch (err) {
+      alert('Failed to delete user: ' + err.message);
+    }
+  };
+
   return (
     <section style={styles.section}>
       <div className="container" style={{ maxWidth: '1200px', width: '100%', padding: '0 15px' }}>
@@ -73,11 +87,11 @@ const Admin = () => {
                     <div style={styles.pill}>{user.occupation || 'No Occupation'}</div>
                     <div style={{
                       ...styles.pill,
-                      background: user.payment === 'yes' ? 'rgba(46, 204, 113, 0.15)' : 'rgba(231, 76, 60, 0.15)',
-                      color: user.payment === 'yes' ? '#2ecc71' : '#e74c3c',
+                      background: user.payment_status === 'yes' ? 'rgba(46, 204, 113, 0.15)' : 'rgba(231, 76, 60, 0.15)',
+                      color: user.payment_status === 'yes' ? '#2ecc71' : '#e74c3c',
                       fontWeight: '600'
                     }}>
-                      Payment: {user.payment === 'yes' ? 'Done' : 'Not Done'}
+                      Payment: {user.payment_status === 'yes' ? 'Done' : 'Not Done'}
                     </div>
                   </div>
                 </div>
@@ -90,6 +104,12 @@ const Admin = () => {
                   >
                     {expandedEmail === user.email ? 'Close Details' : 'View Full Audit'}
                   </button>
+                  <button
+                    style={styles.deleteBtn}
+                    onClick={() => deleteUser(user.id, user.email)}
+                  >
+                    🗑 Delete User
+                  </button>
                 </div>
 
                 {/* Expanded Details Area */}
@@ -98,7 +118,7 @@ const Admin = () => {
                     
                     <div style={styles.detailGroup}>
                       <h4 style={styles.detailTitle}>1. Basic Info</h4>
-                      <p><strong>Payment Status:</strong> <span style={{ color: user.payment === 'yes' ? '#2ecc71' : '#e74c3c', fontWeight: 'bold' }}>{user.payment === 'yes' ? 'Done' : 'Not Done'}</span></p>
+                      <p><strong>Payment Status:</strong> <span style={{ color: user.payment_status === 'yes' ? '#2ecc71' : '#e74c3c', fontWeight: 'bold' }}>{user.payment_status === 'yes' ? 'Done' : 'Not Done'}</span></p>
                       <p><strong>Age:</strong> {user.age || 'N/A'}</p>
                       <p><strong>Gender:</strong> {user.gender || 'N/A'}</p>
                       <p><strong>Height:</strong> {user.height || 'N/A'}</p>
@@ -271,6 +291,20 @@ const styles = {
     color: 'var(--primary)',
     borderRadius: '8px',
     fontWeight: '500',
+    transition: 'all 0.2s ease'
+  },
+  deleteBtn: {
+    width: '100%',
+    padding: '10px',
+    textAlign: 'center',
+    cursor: 'pointer',
+    background: 'rgba(239,68,68,0.1)',
+    border: '1px solid rgba(239,68,68,0.3)',
+    color: '#ef4444',
+    borderRadius: '8px',
+    fontWeight: '600',
+    fontSize: '13px',
+    marginTop: '8px',
     transition: 'all 0.2s ease'
   },
   expandedDetails: {

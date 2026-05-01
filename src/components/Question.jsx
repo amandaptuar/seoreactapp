@@ -21,10 +21,9 @@ const Question = () => {
     setStatus('submitting');
     
     try {
-      const payload = { ...formData };
       const { error } = await supabase
         .from('users')
-        .update(payload)
+        .update({ questions: formData })
         .eq('email', userEmail);
       
       if (error) {
@@ -58,8 +57,12 @@ const Question = () => {
 
   return (
     <section style={styles.section} className="question-section">
+      {/* Decorative background blobs */}
+      <div style={{ position: 'absolute', top: '10%', left: '-100px', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(245,158,11,0.12) 0%, transparent 70%)', borderRadius: '50%', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', bottom: '10%', right: '-100px', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(59,130,246,0.10) 0%, transparent 70%)', borderRadius: '50%', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '800px', height: '800px', background: 'radial-gradient(circle, rgba(15,23,42,0.0) 0%, rgba(245,158,11,0.04) 100%)', borderRadius: '50%', pointerEvents: 'none' }} />
       <div className="container" style={styles.container}>
-        <div className="dark-glass-panel question-form-panel">
+        <div className="question-form-panel" style={styles.formPanel}>
           <h2 style={styles.headerTitle} className="slide-up">Comprehensive Cognitive & Health Audit</h2>
           <p style={styles.headerSubtitle} className="slide-up delay-100">
             Please fill out this detailed assessment. The more accurate your answers, the better we can tailor your limitless protocol.
@@ -392,22 +395,41 @@ const styles = {
     minHeight: '100vh',
     display: 'flex',
     alignItems: 'flex-start',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    position: 'relative',
+    overflow: 'hidden',
+    background: 'linear-gradient(135deg, #020617 0%, #0F172A 40%, #1e1b4b 70%, #0F172A 100%)'
   },
   container: {
     maxWidth: '900px',
     width: '100%',
-    padding: '0 15px'
+    padding: '0 15px',
+    position: 'relative',
+    zIndex: 1
+  },
+  formPanel: {
+    background: 'rgba(255,255,255,0.04)',
+    backdropFilter: 'blur(20px)',
+    WebkitBackdropFilter: 'blur(20px)',
+    border: '1px solid rgba(255,255,255,0.08)',
+    borderRadius: '24px',
+    padding: '48px 40px',
+    boxShadow: '0 25px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)'
   },
   headerTitle: {
     fontSize: 'clamp(24px, 5vw, 36px)',
-    color: 'var(--white)',
+    color: '#fff',
     marginBottom: '10px',
-    textAlign: 'center'
+    textAlign: 'center',
+    fontWeight: '800',
+    background: 'linear-gradient(135deg, #fff 0%, #F59E0B 100%)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text'
   },
   headerSubtitle: {
     fontSize: 'clamp(15px, 3vw, 18px)',
-    color: '#ccc',
+    color: '#94A3B8',
     textAlign: 'center',
     marginBottom: '40px'
   },
@@ -417,17 +439,20 @@ const styles = {
     gap: '30px'
   },
   sectionBlock: {
-    padding: '24px',
+    padding: '28px',
     background: 'rgba(255, 255, 255, 0.03)',
-    borderRadius: 'var(--radius-sm)',
-    border: '1px solid rgba(255,255,255,0.05)'
+    borderRadius: '16px',
+    border: '1px solid rgba(255,255,255,0.07)',
+    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)'
   },
   sectionHeader: {
-    color: 'var(--primary)',
-    fontSize: '20px',
+    color: '#F59E0B',
+    fontSize: '18px',
+    fontWeight: '700',
     marginBottom: '20px',
-    borderBottom: '1px solid rgba(233, 161, 50, 0.2)',
-    paddingBottom: '10px'
+    borderBottom: '1px solid rgba(245, 158, 11, 0.2)',
+    paddingBottom: '12px',
+    letterSpacing: '0.3px'
   }
 };
 
