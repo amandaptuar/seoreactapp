@@ -131,10 +131,10 @@ const Hero = () => {
               <p style={{ margin: 0, fontSize: '13px', color: '#6B7280', fontWeight: '500' }}>
                 ⭐ Trusted by 5,000+ users across the US
               </p>
-              <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginTop: '15px' }}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#475569', background: '#f1f5f9', padding: '6px 14px', borderRadius: '20px', fontWeight: '600', border: '1px solid #e2e8f0' }}><span style={{ color: '#3B82F6' }}>🔒</span> HIPAA-Compliant</span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#475569', background: '#f1f5f9', padding: '6px 14px', borderRadius: '20px', fontWeight: '600', border: '1px solid #e2e8f0' }}><span style={{ color: '#22C55E' }}>⚡</span> Instant Results</span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#475569', background: '#f1f5f9', padding: '6px 14px', borderRadius: '20px', fontWeight: '600', border: '1px solid #e2e8f0' }}><span style={{ color: '#3B82F6' }}>🇺🇸</span> Designed for US Adults</span>
+              <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'nowrap', gap: '8px', marginTop: '15px' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11px', color: '#475569', background: '#f1f5f9', padding: '5px 11px', borderRadius: '20px', fontWeight: '600', border: '1px solid #e2e8f0', whiteSpace: 'nowrap' }}><span style={{ color: '#3B82F6' }}>🔒</span> HIPAA-Compliant</span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11px', color: '#475569', background: '#f1f5f9', padding: '5px 11px', borderRadius: '20px', fontWeight: '600', border: '1px solid #e2e8f0', whiteSpace: 'nowrap' }}><span style={{ color: '#22C55E' }}>⚡</span> Instant Results</span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11px', color: '#475569', background: '#f1f5f9', padding: '5px 11px', borderRadius: '20px', fontWeight: '600', border: '1px solid #e2e8f0', whiteSpace: 'nowrap' }}><span style={{ color: '#3B82F6' }}>🇺🇸</span> US Adults</span>
               </div>
             </div>
           </div>
@@ -205,11 +205,9 @@ const Hero = () => {
                   Takes less than 2 minutes. No credit card required. No spam.
                 </p>
 
-                <div style={{ textAlign: 'center', color: '#64748b', fontSize: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: '10px' }}>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><span style={{ color: 'var(--trust-blue)' }}>🔒</span> HIPAA-Compliant</span>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>&bull; Instant Results</span>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>&bull; US Adults</span>
-                </div>
+                <p style={{ textAlign: 'center', color: '#64748b', fontSize: '11px', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  🔒 HIPAA-Compliant &nbsp;•&nbsp; ⚡ Instant Results &nbsp;•&nbsp; 🇺🇸 US Adults
+                </p>
               </form> 
               <style>{`
                 .hero-feature-card:hover {
