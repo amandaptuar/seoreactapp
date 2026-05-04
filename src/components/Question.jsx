@@ -16,6 +16,17 @@ const Question = () => {
     }));
   };
 
+  const calculateProgress = () => {
+    const keyFields = ['name', 'primary_goal', 'sleep_times', 'meals_per_day', 'exercises', 'diagnosed_conditions', 'sleep_quality', 'fatigue', 'smoking_alcohol', 'is_ready'];
+    let filled = 0;
+    keyFields.forEach(field => {
+      if (formData[field] && formData[field].toString().trim() !== '') {
+        filled++;
+      }
+    });
+    return Math.round((filled / keyFields.length) * 100);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus('submitting');
@@ -57,6 +68,9 @@ const Question = () => {
 
   return (
     <section style={styles.section} className="question-section">
+      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '6px', background: '#1e293b', zIndex: 9999 }}>
+        <div style={{ width: `${calculateProgress()}%`, height: '100%', background: 'linear-gradient(90deg, #F59E0B, #10B981)', transition: 'width 0.4s ease' }}></div>
+      </div>
       {/* Decorative background blobs */}
       <div style={{ position: 'absolute', top: '10%', left: '-100px', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(245,158,11,0.12) 0%, transparent 70%)', borderRadius: '50%', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', bottom: '10%', right: '-100px', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(59,130,246,0.10) 0%, transparent 70%)', borderRadius: '50%', pointerEvents: 'none' }} />

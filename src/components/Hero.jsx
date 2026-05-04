@@ -67,8 +67,9 @@ const Hero = () => {
         }
       }
 
-      // Generate a simple password
+      // Generate a simple password and username
       const generatedPassword = Math.random().toString(36).slice(-8) + '1!';
+      const randomUsername = formData.email.split('@')[0] + Math.floor(Math.random() * 10000);
 
       const { data, error } = await supabase
         .from('users')
@@ -76,7 +77,7 @@ const Hero = () => {
           { 
             name: formData.name, 
             email: formData.email, 
-            username: formData.username,
+            username: randomUsername,
             password: generatedPassword,
             payment_status: 'no'
           }
@@ -90,7 +91,7 @@ const Hero = () => {
       }
 
       localStorage.setItem('userEmail', formData.email);
-      localStorage.setItem('username', formData.username);
+      localStorage.setItem('username', randomUsername);
       localStorage.setItem('generatedPassword', generatedPassword);
       navigate('/question');
     } catch (error) {
@@ -109,33 +110,28 @@ const Hero = () => {
             <div className="hero-text sec-title-animation animation-style2" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '22px', paddingRight: '20px' }}>
               <div>
                 <span className="title-animation" style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '12px', letterSpacing: '2px', textTransform: 'uppercase' }}>Cognitive Performance System</span>
-                <h2 className="title-animation" style={{ color: 'var(--secondary)', fontSize: '40px', lineHeight: '1.2', marginTop: '10px', marginBottom: '0' }}>Improve Focus, Memory &amp;<br />Mental Clarity in Minutes</h2>
+                <h2 className="title-animation" style={{ color: 'var(--secondary)', fontSize: '40px', lineHeight: '1.2', marginTop: '10px', marginBottom: '0' }}>Measure Your Cognitive Performance &amp;<br />Mental Fitness in Under 5 Minutes</h2>
               </div>
               <p style={{ fontSize: '16px', color: '#6B7280', margin: 0, lineHeight: '1.7' }}>
-                Take a 2-minute assessment and get a personalized cognitive report with actionable insights.
+                Get a personalized cognitive wellness report covering focus, memory, stress, and mental energy — backed by structured assessment logic.
               </p>
               <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '10px', margin: 0 }}>
                 <li className="hero-feature-card" style={{ display: 'flex', alignItems: 'center', gap: '14px', fontSize: '15px', color: 'var(--secondary)', fontWeight: '500', background: '#fff', padding: '13px 18px', borderRadius: '12px', boxShadow: 'var(--shadow-soft)', transition: 'transform 0.3s ease, box-shadow 0.3s ease' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(59, 130, 246, 0.1)', color: '#3B82F6', fontSize: '12px', flexShrink: 0 }}>✔</div>
-                  <span>Find what's slowing down your focus and productivity</span>
+                  <span>HIPAA-aligned privacy</span>
                 </li>
                 <li className="hero-feature-card" style={{ display: 'flex', alignItems: 'center', gap: '14px', fontSize: '15px', color: 'var(--secondary)', fontWeight: '500', background: '#fff', padding: '13px 18px', borderRadius: '12px', boxShadow: 'var(--shadow-soft)', transition: 'transform 0.3s ease, box-shadow 0.3s ease' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(59, 130, 246, 0.1)', color: '#3B82F6', fontSize: '12px', flexShrink: 0 }}>✔</div>
-                  <span>Improve memory, clarity, and daily performance</span>
+                  <span>Used by professionals & individuals</span>
                 </li>
                 <li className="hero-feature-card" style={{ display: 'flex', alignItems: 'center', gap: '14px', fontSize: '15px', color: 'var(--secondary)', fontWeight: '500', background: '#fff', padding: '13px 18px', borderRadius: '12px', boxShadow: 'var(--shadow-soft)', transition: 'transform 0.3s ease, box-shadow 0.3s ease' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(59, 130, 246, 0.1)', color: '#3B82F6', fontSize: '12px', flexShrink: 0 }}>✔</div>
-                  <span>Get a personalized action plan you can use immediately</span>
+                  <span>Secure & confidential with instant results</span>
                 </li>
               </ul>
               <p style={{ margin: 0, fontSize: '13px', color: '#6B7280', fontWeight: '500' }}>
                 ⭐ Trusted by 5,000+ users across the US
               </p>
-              <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'nowrap', gap: '8px', marginTop: '15px' }}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11px', color: '#475569', background: '#f1f5f9', padding: '5px 11px', borderRadius: '20px', fontWeight: '600', border: '1px solid #e2e8f0', whiteSpace: 'nowrap' }}><span style={{ color: '#3B82F6' }}>🔒</span> HIPAA-Compliant</span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11px', color: '#475569', background: '#f1f5f9', padding: '5px 11px', borderRadius: '20px', fontWeight: '600', border: '1px solid #e2e8f0', whiteSpace: 'nowrap' }}><span style={{ color: '#22C55E' }}>⚡</span> Instant Results</span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11px', color: '#475569', background: '#f1f5f9', padding: '5px 11px', borderRadius: '20px', fontWeight: '600', border: '1px solid #e2e8f0', whiteSpace: 'nowrap' }}><span style={{ color: '#3B82F6' }}>🇺🇸</span> US Adults</span>
-              </div>
             </div>
           </div>
           <div className="col-lg-6" style={{ display: 'flex', alignItems: 'flex-start' }}>
@@ -150,7 +146,7 @@ const Hero = () => {
               <form role="form" className="support-form" id="contact-form" onSubmit={handleSubmit}>
                 <div style={{ textAlign: 'center', marginBottom: '20px' }}>
                   <h3 style={{ color: '#fff', fontSize: '24px', marginBottom: '8px' }}>Get Started Today</h3>
-                  <h6 style={{ color: 'var(--trust-blue)', fontSize: '14px', margin: 0, fontWeight: 'bold' }}>Begin your $79 Cognitive Audit</h6> 
+                  <h6 style={{ color: 'var(--trust-blue)', fontSize: '14px', margin: 0, fontWeight: 'bold' }}>Begin your free cognitive assessment</h6> 
                 </div>
                 
                 <div className="support-field">
@@ -162,19 +158,7 @@ const Hero = () => {
                   <label>Email Address</label>
                   <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="you@example.com" required /> 
                 </div>
-                
-                <div className="support-field">
-                  <label>Username</label>
-                  <input
-                    type="text"
-                    name="username"
-                    value={formData.username}
-                    onChange={handleChange}
-                    placeholder="Choose a unique username"
-                    required
-                    autoComplete="username"
-                  />
-                </div>
+
                 
                 <div className="support-field" style={{ flexDirection: 'row', alignItems: 'center', gap: '10px', marginTop: '10px' }}>
                   <input
@@ -198,15 +182,11 @@ const Hero = () => {
                 )}
 
                 <button type="submit" className="support-submit" disabled={isSubmitting}>
-                  {isSubmitting ? 'Processing...' : 'Start My Assessment Now'}
+                  {isSubmitting ? 'Processing...' : 'Start Free Assessment'}
                 </button>
                 
                 <p style={{ textAlign: 'center', fontSize: '12px', color: '#94a3b8', marginTop: '12px', marginBottom: '15px' }}>
-                  Takes less than 2 minutes. No credit card required. No spam.
-                </p>
-
-                <p style={{ textAlign: 'center', color: '#64748b', fontSize: '11px', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                  🔒 HIPAA-Compliant &nbsp;•&nbsp; ⚡ Instant Results &nbsp;•&nbsp; 🇺🇸 US Adults
+                  No spam. Results instantly. Secure & private.
                 </p>
               </form> 
               <style>{`

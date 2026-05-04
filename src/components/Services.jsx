@@ -4,34 +4,33 @@ const steps = [
   {
     num: '01',
     icon: '📋',
-    title: 'Take the Assessment',
-    desc: 'Answer a short 2-minute questionnaire about your health and lifestyle.',
+    title: 'Answer Smart Questions',
+    desc: 'Scientifically structured to assess your mental performance.',
   },
   {
     num: '02',
     icon: '🧠',
     title: 'Get Your Cognitive Score',
-    desc: 'Receive an instant score showing your current cognitive performance level.',
+    desc: 'Instant breakdown across key brain functions.',
   },
   {
     num: '03',
     icon: '📊',
-    title: 'Receive Recommendations',
-    desc: 'Get personalized, science-backed suggestions tailored to your results.',
+    title: 'See What’s Holding You Back',
+    desc: 'Identify stress, fatigue, and focus blockers.',
   },
   {
     num: '04',
     icon: '🚀',
-    title: 'Start Improving',
-    desc: 'Follow your action plan and start seeing real performance improvements.',
+    title: 'Follow Your Action Plan',
+    desc: 'Simple steps to improve within days.',
   },
 ];
 
 const assessments = [
-  { icon: 'fa-solid fa-brain',      label: 'Mental Performance Assessment', dark: false },
+  { icon: 'fa-solid fa-brain',      label: 'Cognitive / Mental Performance', dark: false },
   { icon: 'fa-solid fa-female',     label: "Women's Health Assessment",      dark: true  },
-  { icon: 'fa-solid fa-venus-mars', label: 'Sexual Health Assessment',       dark: true  },
-  { icon: 'fa-solid fa-child',      label: 'Kids Health Assessment',         dark: false },
+  { icon: 'fa-solid fa-child',      label: 'Kids Monitoring',                dark: false },
 ];
 
 const CARD_STYLE = {

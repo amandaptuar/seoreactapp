@@ -39,6 +39,7 @@ const Pricing = () => {
                   ⏳ Limited-Time Offer
                 </div>
                 <div style={{ display: 'flex', alignItems: 'flex-end', gap: '8px', marginBottom: '6px' }}>
+                  <span style={{ fontSize: '24px', fontWeight: '500', color: '#94a3b8', textDecoration: 'line-through', paddingBottom: '12px' }}>$149</span>
                   <span style={{ fontSize: '60px', fontWeight: '800', color: '#0F172A', lineHeight: 1 }}>$79</span>
                   <span style={{ fontSize: '16px', color: '#6B7280', fontWeight: '500', paddingBottom: '8px' }}>one-time</span>
                 </div>
@@ -47,12 +48,13 @@ const Pricing = () => {
 
               {/* Features List */}
               <div style={{ padding: '28px 36px' }}>
+                <div style={{ marginBottom: '16px', fontSize: '14px', fontWeight: '700', color: '#0F172A' }}>What's Included:</div>
                 <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 28px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
                   {[
-                    'Personalized cognitive health report',
-                    'AI-powered performance insights',
-                    'Tailored action plan for your goals',
-                    'Instant results — delivered in minutes',
+                    '40+ point cognitive analysis',
+                    'Personalized report',
+                    'Risk indicators',
+                    'Action roadmap',
                   ].map((item, i) => (
                     <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#0F172A', fontSize: '15px', fontWeight: '500' }}>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '22px', height: '22px', borderRadius: '50%', background: 'rgba(59, 130, 246, 0.1)', color: '#3B82F6', fontSize: '11px', flexShrink: 0 }}>✔</div>
@@ -93,7 +95,7 @@ const Pricing = () => {
                 <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '18px', marginTop: '20px', fontSize: '12px', color: '#94a3b8' }}>
                   <span>🔒 Secure Checkout</span>
                   <span>📩 Instant Access</span>
-                  <span>🇺🇸 USA Focused</span>
+                  <span>🛡️ 7-Day Money Back Guarantee</span>
                 </div>
               </div>
             </div>

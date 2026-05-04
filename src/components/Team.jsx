@@ -5,66 +5,39 @@ const Team = () => {
     <section id="team" className="gap team-section">
       <div className="container">
         <div className="heading sec-title-animation animation-style2">
-          <span className="title-animation">Website that brings leads </span>
-          <h2 className="title-animation">Meet our awesome people </h2>
-          <p>Increase your efficiencies, and create a better experience for everyone involved. Automate your workflows with tools you use every day.</p>
+          <span className="title-animation">Backed by Science</span>
+          <h2 className="title-animation">Who Built This?</h2>
+          <p>Our cognitive assessment system was developed by top experts in neuroscience, behavioral psychology, and high-performance coaching to bring you a trusted, science-backed tool.</p>
         </div>
         <div className="row">
           <div className="col-lg-4 col-md-6">
             <div className="team">
-              <div className="expert-icon">
-                <a href="#">
-                    <i className="fa-solid fa-share-nodes"></i>
-                </a>
-                <ul className="icon-share">
-                  <li><a href="#"><i className="fa-brands fa-facebook-f"></i></a></li>
-                  <li><a href="#"><i className="flaticon-twitter"></i></a></li> 
-                </ul>
-             </div>
               <figure>
-                <img src="/assets/img/team_member_1.jpeg" alt="img" />
+                <img src="/assets/img/team_member_1.jpeg" alt="img" style={{ opacity: 0.8 }} />
               </figure>
-              <span>Expert Consultant </span>
-              <h4>Thomas Willimes</h4>
-              <a href="callto:+12344502086"><i className="fa-solid fa-mobile-screen"></i><b> +1234 450 2086</b></a>
+              <span>Collaboration</span>
+              <h4>Experts & Advisors</h4>
+              <p style={{ marginTop: '15px', color: '#64748b', fontSize: '15px', lineHeight: 1.6 }}>Developed with clinical psychologists, neuroscientists, and performance coaches who understand the brain.</p>
             </div>
           </div>
           <div className="col-lg-4 col-md-6">
             <div className="team">
-              <div className="expert-icon">
-                <a href="#">
-                    <i className="fa-solid fa-share-nodes"></i>
-                </a>
-                <ul className="icon-share">
-                  <li><a href="#"><i className="fa-brands fa-facebook-f"></i></a></li>
-                  <li><a href="#"><i className="flaticon-twitter"></i></a></li> 
-                </ul>
-             </div>
               <figure>
-                <img src="/assets/img/team_member_2.jpeg" alt="img" />
+                <img src="/assets/img/team_member_2.jpeg" alt="img" style={{ opacity: 0.8 }} />
               </figure>
-              <span>Expert Consultant </span>
-              <h4>Daniella Fermin</h4>
-              <a href="callto:+12344502086"><i className="fa-solid fa-mobile-screen"></i><b> +1234 450 2086</b></a>
+              <span>Analysis</span>
+              <h4>Our Experience</h4>
+              <p style={{ marginTop: '15px', color: '#64748b', fontSize: '15px', lineHeight: 1.6 }}>Years of analyzing behavioral patterns to create systems that optimize human performance and reduce burnout.</p>
             </div>
           </div>
           <div className="col-lg-4 col-md-6">
             <div className="team mb-0">
-              <div className="expert-icon">
-                <a href="#">
-                    <i className="fa-solid fa-share-nodes"></i>
-                </a>
-                <ul className="icon-share">
-                  <li><a href="#"><i className="fa-brands fa-facebook-f"></i></a></li>
-                  <li><a href="#"><i className="flaticon-twitter"></i></a></li> 
-                </ul>
-             </div>
               <figure>
-                <img src="/assets/img/team_member_3.jpeg" alt="img" />
+                <img src="/assets/img/team_member_3.jpeg" alt="img" style={{ opacity: 0.8 }} />
               </figure>
-              <span>Expert Consultant </span>
-              <h4>Margie Sutton</h4>
-              <a href="callto:+12344502086"><i className="fa-solid fa-mobile-screen"></i><b> +1234 450 2086</b></a>
+              <span>Security & Proof</span>
+              <h4>Why Trust Us?</h4>
+              <p style={{ marginTop: '15px', color: '#64748b', fontSize: '15px', lineHeight: 1.6 }}>Used by 5,000+ individuals across the US. We prioritize data privacy, objective metrics, and actionable protocols.</p>
             </div>
           </div>
         </div>

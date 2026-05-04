@@ -27,7 +27,12 @@ const Footer = () => {
               <div className="footer-logo">
                 <img src={limitlessLogo} alt="img" style={{ maxWidth: '250px', maxHeight: '90px', objectFit: 'contain' }} />
                 <p className="text-white">Limitless is a holistic cognitive performance system delivered directly to your phone. We eliminate the friction between data and execution.</p>
-                <ul className="social-media">
+                <div style={{ marginTop: '15px', padding: '15px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', borderLeft: '3px solid #F59E0B' }}>
+                  <p style={{ color: '#94a3b8', fontSize: '12px', margin: 0, lineHeight: 1.5 }}>
+                    <strong>Disclaimer:</strong> This is not a medical diagnosis. Our cognitive assessment is designed for informational and self-optimization purposes only.
+                  </p>
+                </div>
+                <ul className="social-media" style={{ marginTop: '20px' }}>
                   <li><a href="https://www.facebook.com/limitlessworldnet" target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-facebook-f"></i></a></li>
                   <li><a href="https://x.com/limitless1964" target="_blank" rel="noopener noreferrer"><i className="flaticon-twitter"></i></a></li>
                   <li><a href="#"><i className="flaticon-instagram"></i></a></li>
