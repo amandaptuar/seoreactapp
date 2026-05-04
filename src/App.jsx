@@ -11,7 +11,7 @@ import AdminLogin from './components/AdminLogin';
 import Admin from './components/Admin';
 import FloatingCTA from './components/FloatingCTA';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
-import ExitIntentPopup from './components/ExitIntentPopup';
+
 
 const ProtectedRoute = ({ children }) => {
 // ... existing code ...
@@ -36,7 +36,6 @@ function App() {
       <ScrollToTop />
       <FloatingCTA />
       <FloatingWhatsApp />
-      <ExitIntentPopup />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
