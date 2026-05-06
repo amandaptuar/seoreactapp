@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const PaymentSuccess = () => {
   const [status, setStatus] = useState('processing');
   const [statusMessage, setStatusMessage] = useState('Processing Payment & Analysis...');
+  const [errorMessage, setErrorMessage] = useState('We encountered an error processing your data. Please contact support.');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,14 +35,21 @@ const PaymentSuccess = () => {
         const assessmentData = userRecord.questions || {};
 
         // 3. Call backend for LLM analysis and PDF generation
-        const response = await fetch('http://localhost:3000/api/analyze', {
+        const response = await fetch('https://limitless-llm-trial-ersion-1.onrender.com/api/analyze', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, username, data: assessmentData })
         });
 
         if (!response.ok) {
-          throw new Error('Failed to analyze data');
+          let backendError = 'Failed to analyze data.';
+          try {
+            const errData = await response.json();
+            if (errData.error) backendError = errData.error;
+          } catch (e) {
+            // Ignore if not JSON
+          }
+          throw new Error(backendError);
         }
 
         const result = await response.json();
@@ -65,6 +73,7 @@ const PaymentSuccess = () => {
 
       } catch (err) {
         console.error('Payment verification or analysis error:', err);
+        setErrorMessage(err.message || 'We encountered an error processing your data. Please contact support.');
         setStatus('error');
       }
     };
@@ -122,7 +131,7 @@ const PaymentSuccess = () => {
           {status === 'error' && (
             <div>
               <h2 style={{ color: '#ef4444' }}>Verification Failed</h2>
-              <p style={{ color: '#64748b' }}>We encountered an error processing your data. Please contact support.</p>
+              <p style={{ color: '#64748b' }}>{errorMessage}</p>
               <button onClick={() => navigate('/')} style={{ marginTop: '20px', padding: '12px 24px', background: '#0F172A', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer' }}>Back to Home</button>
             </div>
           )}

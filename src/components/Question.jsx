@@ -169,19 +169,28 @@ const Question = () => {
                     <div key={q.id} style={styles.questionItem}>
                       <p style={styles.questionText}>{q.text}</p>
                       <div style={styles.radioGroup}>
-                        {[0, 1, 2, 3, 4].map((val) => (
-                          <label key={val} style={styles.radioLabel}>
-                            <input 
-                              type="radio" 
-                              name={q.id} 
-                              value={val} 
-                              required 
-                              onChange={handleChange}
-                              style={styles.radioInput}
-                            />
-                            <span style={styles.radioText}>{val}</span>
-                          </label>
-                        ))}
+                        {[0, 1, 2, 3, 4].map((val) => {
+                          const isSelected = formData[q.id] === val;
+                          return (
+                            <label 
+                              key={val} 
+                              style={{
+                                ...styles.radioLabel,
+                                ...(isSelected ? styles.radioLabelSelected : {})
+                              }}
+                            >
+                              <input 
+                                type="radio" 
+                                name={q.id} 
+                                value={val} 
+                                required 
+                                onChange={handleChange}
+                                style={{ display: 'none' }}
+                              />
+                              <span>{val}</span>
+                            </label>
+                          );
+                        })}
                       </div>
                     </div>
                   ))}
@@ -304,24 +313,31 @@ const styles = {
   },
   radioGroup: {
     display: 'flex',
-    gap: '15px',
-    flexWrap: 'wrap'
+    gap: '12px',
+    flexWrap: 'wrap',
+    marginTop: '5px'
   },
   radioLabel: {
     display: 'flex',
     alignItems: 'center',
-    gap: '5px',
+    justifyContent: 'center',
+    width: '45px',
+    height: '45px',
+    borderRadius: '12px',
+    background: 'rgba(255, 255, 255, 0.05)',
+    border: '1px solid rgba(255, 255, 255, 0.1)',
     cursor: 'pointer',
-    color: '#94A3B8'
+    color: '#94A3B8',
+    transition: 'all 0.2s ease',
+    fontSize: '16px',
+    fontWeight: '700'
   },
-  radioInput: {
-    accentColor: '#F59E0B',
-    cursor: 'pointer',
-    width: '18px',
-    height: '18px'
-  },
-  radioText: {
-    fontSize: '15px'
+  radioLabelSelected: {
+    background: 'linear-gradient(135deg, #F59E0B, #FB923C)',
+    color: '#fff',
+    borderColor: '#F59E0B',
+    boxShadow: '0 4px 15px rgba(245, 158, 11, 0.4)',
+    transform: 'scale(1.05)'
   }
 };
 

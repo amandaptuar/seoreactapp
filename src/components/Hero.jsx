@@ -31,42 +31,6 @@ const Hero = () => {
 
     setIsSubmitting(true);
     try {
-      // Check if user already exists
-      const { data: existingUser, error: checkError } = await supabase
-        .from('users')
-        .select('email')
-        .eq('email', formData.email)
-        .maybeSingle();
-
-      if (checkError) {
-        throw new Error(checkError.message || 'Failed to connect to database. Check your network or contact support.');
-      }
-
-      if (existingUser) {
-        setErrorMsg('User already exists. Please login using the top right button.');
-        setIsSubmitting(false);
-        return;
-      }
-
-      // Check if username is already taken
-      if (formData.username) {
-        const { data: existingUsername, error: usernameCheckError } = await supabase
-          .from('users')
-          .select('username')
-          .eq('username', formData.username)
-          .maybeSingle();
-
-        if (usernameCheckError) {
-          throw new Error(usernameCheckError.message || 'Failed to verify username.');
-        }
-
-        if (existingUsername) {
-          setErrorMsg('That username is already taken. Please choose a different one.');
-          setIsSubmitting(false);
-          return;
-        }
-      }
-
       // Generate a simple password and username
       const generatedPassword = Math.random().toString(36).slice(-8) + '1!';
       const randomUsername = formData.email.split('@')[0] + Math.floor(Math.random() * 10000);
@@ -85,7 +49,7 @@ const Hero = () => {
 
       if (error) {
         if (error.code === '23505') {
-          throw new Error('User already exists');
+          throw new Error('User already exists. Please login using the top right button.');
         }
         throw new Error(error.message || 'Failed to register');
       }

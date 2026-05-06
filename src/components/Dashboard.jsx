@@ -62,11 +62,30 @@ const Dashboard = () => {
             <h1 style={styles.title}>Your Cognitive Analysis</h1>
             <p style={styles.subtitle}>Personalized insights based on your recent assessment.</p>
           </div>
-          {pdfUrl && (
-            <a href={pdfUrl} target="_blank" rel="noopener noreferrer" style={styles.downloadBtn}>
-              Download Full PDF Report
-            </a>
-          )}
+          <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap' }}>
+            <button 
+              onClick={() => navigate('/')} 
+              style={{
+                padding: '12px 24px',
+                background: 'transparent',
+                color: '#94A3B8',
+                border: '1px solid #334155',
+                borderRadius: '12px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+              onMouseEnter={(e) => { e.target.style.color = '#fff'; e.target.style.borderColor = '#94A3B8'; }}
+              onMouseLeave={(e) => { e.target.style.color = '#94A3B8'; e.target.style.borderColor = '#334155'; }}
+            >
+              ← Back to Home
+            </button>
+            {pdfUrl && (
+              <a href={pdfUrl} target="_blank" rel="noopener noreferrer" style={styles.downloadBtn}>
+                Download Full PDF Report
+              </a>
+            )}
+          </div>
         </div>
 
         {/* Top Stats */}
