@@ -9,8 +9,6 @@ const Payment = () => {
   const navigate = useNavigate();
   const userEmail = localStorage.getItem('userEmail');
 
-  const stripeLink = "https://buy.stripe.com/9B68wI7Ux7bGaXugBt7ss00";
-
   const handlePayment = () => {
     setIsProcessing(true);
     // Redirect user to the Stripe Payment Link
@@ -41,6 +39,22 @@ const Payment = () => {
                </div>
             </div>
 
+            <div style={{ background: 'rgba(59, 130, 246, 0.05)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(59, 130, 246, 0.2)', marginBottom: '32px', textAlign: 'left' }}>
+              <h4 style={{ color: '#0F172A', margin: '0 0 12px 0', fontSize: '15px' }}>Important: Save your login credentials</h4>
+              <p style={{ color: '#64748B', fontSize: '13px', margin: '0 0 16px 0' }}>Your assessment answers have been securely saved. You can complete payment now, or save these details to log in and pay later.</p>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: '#fff', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
+                  <span style={{ color: '#64748B', fontWeight: '500', fontSize: '14px' }}>Username:</span>
+                  <strong style={{ color: '#0F172A', fontSize: '14px' }}>{localStorage.getItem('username')}</strong>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: '#fff', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
+                  <span style={{ color: '#64748B', fontWeight: '500', fontSize: '14px' }}>Password:</span>
+                  <strong style={{ color: '#0F172A', fontSize: '14px' }}>{localStorage.getItem('generatedPassword')}</strong>
+                </div>
+              </div>
+            </div>
+
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <button 
                 onClick={handlePayment} 
@@ -60,8 +74,48 @@ const Payment = () => {
               >
                 {isProcessing ? 'Processing...' : 'Pay $79 & Get Instant Access'}
               </button>
+
+              <button 
+                onClick={() => navigate('/payment-success')} 
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  background: '#E2E8F0',
+                  color: '#475569',
+                  border: 'none',
+                  borderRadius: '12px',
+                  fontWeight: '700',
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  marginTop: '10px'
+                }}
+              >
+                Simulate Payment (Dev Only)
+              </button>
               
-              <p style={{ fontSize: '13px', color: '#94A3B8', margin: 0 }}>
+              <button 
+                onClick={() => {
+                  localStorage.removeItem('isLoggedIn');
+                  navigate('/');
+                  window.scrollTo(0, 0);
+                }} 
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  background: 'transparent',
+                  color: '#64748B',
+                  border: '1px solid #E2E8F0',
+                  borderRadius: '12px',
+                  fontWeight: '600',
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  marginTop: '10px'
+                }}
+              >
+                Return to Home Page & Login Later
+              </button>
+
+              <p style={{ fontSize: '13px', color: '#94A3B8', margin: 0, marginTop: '16px' }}>
                 🔒 Secure 256-bit SSL encrypted payment.
               </p>
             </div>

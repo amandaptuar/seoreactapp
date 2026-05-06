@@ -84,7 +84,9 @@ const Admin = () => {
                     <div style={styles.email}>{user.email}</div>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end' }}>
-                    <div style={styles.pill}>{user.occupation || 'No Occupation'}</div>
+                    <div style={{...styles.pill, background: 'rgba(59, 130, 246, 0.15)', color: '#3B82F6'}}>
+                      @{user.username || 'No Username'}
+                    </div>
                     <div style={{
                       ...styles.pill,
                       background: user.payment_status === 'yes' ? 'rgba(46, 204, 113, 0.15)' : 'rgba(231, 76, 60, 0.15)',
@@ -93,6 +95,11 @@ const Admin = () => {
                     }}>
                       Payment: {user.payment_status === 'yes' ? 'Done' : 'Not Done'}
                     </div>
+                    {user.ai_insights && (
+                      <div style={{...styles.pill, background: 'rgba(139, 92, 246, 0.15)', color: '#8b5cf6'}}>
+                        AI Generated
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -117,66 +124,48 @@ const Admin = () => {
                   <div style={styles.expandedDetails}>
                     
                     <div style={styles.detailGroup}>
-                      <h4 style={styles.detailTitle}>1. Basic Info</h4>
+                      <h4 style={styles.detailTitle}>1. Account Details</h4>
+                      <p><strong>Username:</strong> {user.username || 'N/A'}</p>
+                      <p><strong>Password:</strong> {user.password || 'N/A'}</p>
                       <p><strong>Payment Status:</strong> <span style={{ color: user.payment_status === 'yes' ? '#2ecc71' : '#e74c3c', fontWeight: 'bold' }}>{user.payment_status === 'yes' ? 'Done' : 'Not Done'}</span></p>
-                      <p><strong>Age:</strong> {user.age || 'N/A'}</p>
-                      <p><strong>Gender:</strong> {user.gender || 'N/A'}</p>
-                      <p><strong>Height:</strong> {user.height || 'N/A'}</p>
-                      <p><strong>Weight:</strong> {user.weight || 'N/A'}</p>
-                      <p><strong>Job Type:</strong> {user.occupation_type || 'N/A'}</p>
-                      <p><strong>Lifestyle:</strong> {user.lifestyle || 'N/A'}</p>
                     </div>
 
                     <div style={styles.detailGroup}>
-                      <h4 style={styles.detailTitle}>2. Goal Identification</h4>
-                      <p><strong>Primary Goal:</strong> {user.primary_goal || 'N/A'}</p>
-                      <p><strong>Target:</strong> {user.target_goal || 'N/A'}</p>
-                      <p><strong>Timeline:</strong> {user.timeline || 'N/A'}</p>
-                      <p><strong>Past Attempts:</strong> {user.past_attempts || 'N/A'}</p>
+                      <h4 style={styles.detailTitle}>2. Questionnaire Data</h4>
+                      {user.questions ? (
+                        <>
+                           <p><strong>Total Score:</strong> {user.questions.totalScore || 'N/A'} / 112</p>
+                           <p style={{wordBreak: 'break-all'}}><strong>Raw Answers:</strong> <span style={{fontSize: '12px', color: '#888'}}>{JSON.stringify(user.questions)}</span></p>
+                        </>
+                      ) : (
+                        <p>No questionnaire data available.</p>
+                      )}
                     </div>
 
                     <div style={styles.detailGroup}>
-                      <h4 style={styles.detailTitle}>3. Daily Routine</h4>
-                      <p><strong>Sleep Schedule:</strong> {user.sleep_times || 'N/A'}</p>
-                      <p><strong>Work Hours:</strong> {user.working_hours || 'N/A'}</p>
-                      <p><strong>Activity Level:</strong> {user.physical_activity || 'N/A'}</p>
-                      <p><strong>Screen Time:</strong> {user.screen_time ? `${user.screen_time} hrs` : 'N/A'}</p>
+                      <h4 style={styles.detailTitle}>3. AI Analysis Report</h4>
+                      {user.ai_insights ? (
+                        <>
+                          <p><strong>Overall Score:</strong> {user.ai_insights.overallScore?.score || 'N/A'}</p>
+                          <p><strong>Rating Level:</strong> {user.ai_insights.overallScore?.ratingLevel || 'N/A'}</p>
+                          
+                          <p style={{marginTop: '10px', fontWeight: 'bold', color: '#fff'}}>Risk Indicators:</p>
+                          <p><strong>Stress Overload:</strong> {user.ai_insights.riskIndicators?.stressOverload || 'N/A'}</p>
+                          <p><strong>Burnout Probability:</strong> {user.ai_insights.riskIndicators?.burnoutProbability || 'N/A'}</p>
+                          <p><strong>Cognitive Fatigue:</strong> {user.ai_insights.riskIndicators?.cognitiveFatigue || 'N/A'}</p>
+
+                          <p style={{marginTop: '10px', fontWeight: 'bold', color: '#fff'}}>Key Insights:</p>
+                          <ul style={{ margin: 0, paddingLeft: '20px', color: '#ccc' }}>
+                            {user.ai_insights.keyInsights?.map((insight, idx) => (
+                              <li key={idx}>{insight}</li>
+                            ))}
+                          </ul>
+                        </>
+                      ) : (
+                        <p>No AI analysis generated yet.</p>
+                      )}
                     </div>
 
-                    <div style={styles.detailGroup}>
-                      <h4 style={styles.detailTitle}>4. Nutrition</h4>
-                      <p><strong>Meals/Day:</strong> {user.meals_per_day || 'N/A'}</p>
-                      <p><strong>Outside Food:</strong> {user.outside_food || 'N/A'}</p>
-                      <p><strong>Daily Diet:</strong> {user.daily_diet || 'N/A'}</p>
-                      <p><strong>Water Intake:</strong> {user.water_intake ? `${user.water_intake} L` : 'N/A'}</p>
-                      <p><strong>Sugars/Caffeine:</strong> {user.caffeine_sugar || 'N/A'}</p>
-                      <p><strong>Late Night Eating:</strong> {user.latenight_eating || 'N/A'}</p>
-                    </div>
-
-                    <div style={styles.detailGroup}>
-                      <h4 style={styles.detailTitle}>5. Health & Medical</h4>
-                      <p><strong>Exercise:</strong> {user.exercises === 'yes' ? `${user.exercise_type} (${user.exercise_frequency}x / week)` : 'None'}</p>
-                      <p><strong>Injuries:</strong> {user.injuries || 'None'}</p>
-                      <p><strong>Conditions:</strong> {user.diagnosed_conditions || 'None'}</p>
-                      <p><strong>Medications:</strong> {user.medications || 'None'}</p>
-                      <p><strong>Family Hist.:</strong> {user.family_history || 'None'}</p>
-                      <p><strong>Digestive:</strong> {user.digestive_issues || 'None'}</p>
-                    </div>
-
-                    <div style={styles.detailGroup}>
-                      <h4 style={styles.detailTitle}>6. Wellbeing</h4>
-                      <p><strong>Stress Level:</strong> {user.stress_level || 'N/A'} ({user.stress_reasons || 'No reason provided'})</p>
-                      <p><strong>Sleep Quality:</strong> {user.sleep_quality || 'N/A'} ({user.sleep_duration ? `${user.sleep_duration} hrs` : 'N/A'})</p>
-                      <p><strong>Fatigue:</strong> {user.fatigue || 'N/A'}</p>
-                      <p><strong>Mood Swings:</strong> {user.mood_swings || 'N/A'}</p>
-                    </div>
-
-                    <div style={styles.detailGroup}>
-                      <h4 style={styles.detailTitle}>7. Commitment</h4>
-                      <p><strong>Ready for Plan:</strong> {user.is_ready || 'N/A'}</p>
-                      <p><strong>Has 30-60mins:</strong> {user.time_commitment || 'N/A'}</p>
-                      <p><strong>Support System:</strong> {user.support_system || 'N/A'}</p>
-                    </div>
                   </div>
                 )}
               </div>

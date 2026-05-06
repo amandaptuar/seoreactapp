@@ -8,63 +8,128 @@ const Question = () => {
   const navigate = useNavigate();
   const userEmail = localStorage.getItem('userEmail');
 
+  const questionsData = [
+    {
+      section: "Focus & Attention",
+      questions: [
+        { id: "q1_1", text: "I find it difficult to concentrate on tasks." },
+        { id: "q1_2", text: "I get easily distracted while working or studying." },
+        { id: "q1_3", text: "I struggle to complete tasks without losing focus." },
+        { id: "q1_4", text: "I feel mentally “foggy” or unclear." }
+      ]
+    },
+    {
+      section: "Memory Function",
+      questions: [
+        { id: "q2_1", text: "I forget important tasks or appointments." },
+        { id: "q2_2", text: "I have trouble recalling recent information." },
+        { id: "q2_3", text: "I misplace items more often than usual." },
+        { id: "q2_4", text: "I struggle to retain new information." }
+      ]
+    },
+    {
+      section: "Mental Clarity & Decision-Making",
+      questions: [
+        { id: "q3_1", text: "I find it hard to make decisions." },
+        { id: "q3_2", text: "My thinking feels slow or unclear." },
+        { id: "q3_3", text: "I feel overwhelmed when processing information." },
+        { id: "q3_4", text: "I lack mental sharpness during daily activities." }
+      ]
+    },
+    {
+      section: "Emotional Well-being",
+      questions: [
+        { id: "q4_1", text: "I feel anxious or worried frequently." },
+        { id: "q4_2", text: "I feel low, sad, or unmotivated." },
+        { id: "q4_3", text: "I feel overwhelmed by daily responsibilities." },
+        { id: "q4_4", text: "I have mood swings or emotional instability." }
+      ]
+    },
+    {
+      section: "Stress & Resilience",
+      questions: [
+        { id: "q5_1", text: "I feel stressed most of the time." },
+        { id: "q5_2", text: "I struggle to relax or unwind." },
+        { id: "q5_3", text: "I feel mentally exhausted." },
+        { id: "q5_4", text: "I find it difficult to cope with challenges." }
+      ]
+    },
+    {
+      section: "Sleep & Recovery",
+      questions: [
+        { id: "q6_1", text: "I have trouble falling asleep." },
+        { id: "q6_2", text: "I wake up feeling tired or unrested." },
+        { id: "q6_3", text: "My sleep is interrupted or poor quality." },
+        { id: "q6_4", text: "I feel fatigued during the day." }
+      ]
+    },
+    {
+      section: "Productivity & Performance",
+      questions: [
+        { id: "q7_1", text: "My productivity has decreased recently." },
+        { id: "q7_2", text: "I struggle to stay motivated." },
+        { id: "q7_3", text: "I find it hard to manage my time effectively." },
+        { id: "q7_4", text: "I feel less efficient than usual." }
+      ]
+    }
+  ];
+
+  const totalQuestions = questionsData.reduce((acc, sec) => acc + sec.questions.length, 0);
+
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: parseInt(value, 10)
     }));
   };
 
   const calculateProgress = () => {
-    const keyFields = ['name', 'primary_goal', 'sleep_times', 'meals_per_day', 'exercises', 'diagnosed_conditions', 'sleep_quality', 'fatigue', 'smoking_alcohol', 'is_ready'];
-    let filled = 0;
-    keyFields.forEach(field => {
-      if (formData[field] && formData[field].toString().trim() !== '') {
-        filled++;
-      }
+    const answered = Object.keys(formData).filter(key => key.startsWith('q')).length;
+    return Math.round((answered / totalQuestions) * 100);
+  };
+
+  const calculateTotalScore = () => {
+    let total = 0;
+    Object.values(formData).forEach(val => {
+      if (typeof val === 'number') total += val;
     });
-    return Math.round((filled / keyFields.length) * 100);
+    return total;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (Object.keys(formData).length < totalQuestions) {
+      alert("Please answer all questions before submitting.");
+      return;
+    }
+
     setStatus('submitting');
     
+    const totalScore = calculateTotalScore();
+    const finalData = { ...formData, totalScore };
+
     try {
+      // 1. Update user data in Supabase
       const { error } = await supabase
         .from('users')
-        .update({ questions: formData })
+        .update({ questions: finalData }) // Do not set payment_status here
         .eq('email', userEmail);
       
       if (error) {
         throw new Error(error.message || 'Failed to submit audit');
       }
 
+      // Navigate to payment page to complete the flow
       navigate('/payment');
       window.scrollTo(0, 0);
+
     } catch (err) {
       console.error(err);
       setStatus('idle');
       alert("Error submitting assessment: " + err.message);
     }
   };
-
-  if (status === 'success') {
-    return (
-      <section style={styles.section} className="question-section">
-        <div className="container" style={styles.container}>
-          <div className="dark-glass-panel question-form-panel" style={{ textAlign: 'center', padding: '60px 20px' }}>
-            <div className="support-success-icon" style={{margin: '0 auto 20px'}}>✓</div>
-            <h2 style={{color: 'var(--white)', fontSize: '32px', marginBottom: '16px'}}>Assessment Submitted!</h2>
-            <p style={{color: '#ccc', fontSize: '18px'}}>
-              Thank you for providing your details. Our AI and expert team will analyze your profile and craft the perfect protocol for you.
-            </p>
-          </div>
-        </div>
-      </section>
-    );
-  }
 
   return (
     <section style={styles.section} className="question-section">
@@ -75,317 +140,54 @@ const Question = () => {
       <div style={{ position: 'absolute', top: '10%', left: '-100px', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(245,158,11,0.12) 0%, transparent 70%)', borderRadius: '50%', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', bottom: '10%', right: '-100px', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(59,130,246,0.10) 0%, transparent 70%)', borderRadius: '50%', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '800px', height: '800px', background: 'radial-gradient(circle, rgba(15,23,42,0.0) 0%, rgba(245,158,11,0.04) 100%)', borderRadius: '50%', pointerEvents: 'none' }} />
+      
       <div className="container" style={styles.container}>
         <div className="question-form-panel" style={styles.formPanel}>
-          <h2 style={styles.headerTitle} className="slide-up">Comprehensive Cognitive & Health Audit</h2>
+          <h2 style={styles.headerTitle} className="slide-up">Cognitive Health Assessment</h2>
           <p style={styles.headerSubtitle} className="slide-up delay-100">
-            Please fill out this detailed assessment. The more accurate your answers, the better we can tailor your limitless protocol.
+            Please answer each question based on how you’ve felt over the past 2 weeks.
           </p>
 
+          <div style={styles.legendBlock} className="slide-up delay-100">
+            <h4 style={{ color: '#fff', marginBottom: '10px' }}>Scale:</h4>
+            <ul style={styles.legendList}>
+              <li><strong>0</strong> = Not at all</li>
+              <li><strong>1</strong> = Rarely (1–2 days)</li>
+              <li><strong>2</strong> = Sometimes (3–5 days)</li>
+              <li><strong>3</strong> = Often (6–10 days)</li>
+              <li><strong>4</strong> = Almost Always (11–14 days)</li>
+            </ul>
+          </div>
+
           <form onSubmit={handleSubmit} style={styles.form} className="slide-up delay-200">
-            
-            {/* SECTION 1 */}
-            <div style={styles.sectionBlock}>
-              <h3 style={styles.sectionHeader}>🔹 1. Basic Information</h3>
-              <div className="question-grid">
-                <div className="support-field">
-                  <label>Name</label>
-                  <input type="text" name="name" required onChange={handleChange} />
-                </div>
-                <div className="support-field">
-                  <label>Age</label>
-                  <input type="number" name="age" required onChange={handleChange} />
-                </div>
-                <div className="support-field">
-                  <label>Gender</label>
-                  <select name="gender" required onChange={handleChange} className="country-code-select" style={{width: '100%'}}>
-                    <option value="">Select Gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                  </select>
-                </div>
-                <div className="support-field">
-                  <label>Height</label>
-                  <input type="text" name="height" placeholder="e.g., 5'10&quot; or 178cm" required onChange={handleChange} />
-                </div>
-                <div className="support-field">
-                  <label>Current Weight</label>
-                  <input type="text" name="weight" placeholder="e.g., 75 kg or 165 lbs" required onChange={handleChange} />
-                </div>
-                <div className="support-field">
-                  <label>Occupation Type</label>
-                  <select name="occupation_type" required onChange={handleChange} className="country-code-select" style={{width: '100%'}}>
-                    <option value="">Select Occupation</option>
-                    <option value="sitting">Sitting / Desk Job</option>
-                    <option value="active">Active Job</option>
-                  </select>
-                </div>
-                <div className="support-field">
-                  <label>City / Lifestyle</label>
-                  <select name="lifestyle" required onChange={handleChange} className="country-code-select" style={{width: '100%'}}>
-                    <option value="">Select Lifestyle</option>
-                    <option value="urban">Urban</option>
-                    <option value="rural">Rural</option>
-                  </select>
+            {questionsData.map((section, idx) => (
+              <div key={idx} style={styles.sectionBlock}>
+                <h3 style={styles.sectionHeader}>🔹 Section {idx + 1}: {section.section}</h3>
+                
+                <div style={styles.questionsContainer}>
+                  {section.questions.map((q) => (
+                    <div key={q.id} style={styles.questionItem}>
+                      <p style={styles.questionText}>{q.text}</p>
+                      <div style={styles.radioGroup}>
+                        {[0, 1, 2, 3, 4].map((val) => (
+                          <label key={val} style={styles.radioLabel}>
+                            <input 
+                              type="radio" 
+                              name={q.id} 
+                              value={val} 
+                              required 
+                              onChange={handleChange}
+                              style={styles.radioInput}
+                            />
+                            <span style={styles.radioText}>{val}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-            </div>
-
-            {/* SECTION 2 */}
-            <div style={styles.sectionBlock}>
-              <h3 style={styles.sectionHeader}>🔹 2. Goal Identification</h3>
-              <div className="question-grid">
-                <div className="support-field" style={{gridColumn: '1 / -1'}}>
-                  <label>What is your primary goal?</label>
-                  <select name="primary_goal" required onChange={handleChange} className="country-code-select" style={{width: '100%'}}>
-                    <option value="">Select Primary Goal</option>
-                    <option value="Weight loss">Weight loss</option>
-                    <option value="Weight gain">Weight gain</option>
-                    <option value="Inch loss">Inch loss</option>
-                    <option value="Energy boost">Energy boost</option>
-                    <option value="Medical improvement">Medical improvement</option>
-                  </select>
-                </div>
-                <div className="support-field">
-                  <label>Target weight or transformation goal</label>
-                  <input type="text" name="target_goal" required onChange={handleChange} />
-                </div>
-                <div className="support-field">
-                  <label>Timeline (how soon do you want results?)</label>
-                  <input type="text" name="timeline" placeholder="e.g. 3 months" required onChange={handleChange} />
-                </div>
-                <div className="support-field" style={{gridColumn: '1 / -1'}}>
-                  <label>Past attempts (what worked / failed?)</label>
-                  <textarea name="past_attempts" rows="2" required onChange={handleChange}></textarea>
-                </div>
-              </div>
-            </div>
-
-            {/* SECTION 3 */}
-            <div style={styles.sectionBlock}>
-              <h3 style={styles.sectionHeader}>🔹 3. Daily Routine Analysis</h3>
-              <div className="question-grid">
-                <div className="support-field">
-                  <label>Wake-up time / sleep time</label>
-                  <input type="text" name="sleep_times" placeholder="e.g. 7 AM to 11 PM" required onChange={handleChange} />
-                </div>
-                <div className="support-field">
-                  <label>Working hours</label>
-                  <input type="text" name="working_hours" placeholder="e.g. 9 AM to 6 PM" required onChange={handleChange} />
-                </div>
-                <div className="support-field">
-                  <label>Physical activity level</label>
-                  <select name="physical_activity" required onChange={handleChange} className="country-code-select" style={{width: '100%'}}>
-                    <option value="">Select Level</option>
-                    <option value="low">Low</option>
-                    <option value="moderate">Moderate</option>
-                    <option value="high">High</option>
-                  </select>
-                </div>
-                <div className="support-field">
-                  <label>Screen time (approx hours/day)</label>
-                  <input type="number" name="screen_time" placeholder="e.g. 8" required onChange={handleChange} />
-                </div>
-              </div>
-            </div>
-
-            {/* SECTION 4 */}
-            <div style={styles.sectionBlock}>
-              <h3 style={styles.sectionHeader}>🔹 4. Nutrition & Eating Habits</h3>
-              <div className="question-grid">
-                <div className="support-field">
-                  <label>Number of meals per day</label>
-                  <input type="number" name="meals_per_day" required onChange={handleChange} />
-                </div>
-                <div className="support-field">
-                  <label>Outside food frequency</label>
-                  <input type="text" name="outside_food" placeholder="e.g. 2 times a week" required onChange={handleChange} />
-                </div>
-                <div className="support-field" style={{gridColumn: '1 / -1'}}>
-                  <label>Typical daily diet (breakfast, lunch, dinner, snacks)</label>
-                  <textarea name="daily_diet" rows="2" required onChange={handleChange}></textarea>
-                </div>
-                <div className="support-field">
-                  <label>Water intake (liters/day)</label>
-                  <input type="number" step="0.1" name="water_intake" required onChange={handleChange} />
-                </div>
-                <div className="support-field">
-                  <label>Tea/coffee/sugar intake</label>
-                  <input type="text" name="caffeine_sugar" placeholder="e.g. 2 cups coffee, high sugar" required onChange={handleChange} />
-                </div>
-                <div className="support-field">
-                  <label>Late-night eating habits</label>
-                  <select name="latenight_eating" required onChange={handleChange} className="country-code-select" style={{width: '100%'}}>
-                    <option value="">Select</option>
-                    <option value="yes">Yes</option>
-                    <option value="no">No</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            {/* SECTION 5 */}
-            <div style={styles.sectionBlock}>
-              <h3 style={styles.sectionHeader}>🔹 5. Physical Activity & Fitness</h3>
-              <div className="question-grid">
-                <div className="support-field">
-                  <label>Do you exercise?</label>
-                  <select name="exercises" required onChange={handleChange} className="country-code-select" style={{width: '100%'}}>
-                    <option value="">Select</option>
-                    <option value="yes">Yes</option>
-                    <option value="no">No</option>
-                  </select>
-                </div>
-                <div className="support-field">
-                  <label>Type</label>
-                  <input type="text" name="exercise_type" placeholder="walking, gym, yoga, none" required onChange={handleChange} />
-                </div>
-                <div className="support-field">
-                  <label>Frequency (days/week)</label>
-                  <input type="number" name="exercise_frequency" placeholder="e.g. 3" required onChange={handleChange} />
-                </div>
-                <div className="support-field">
-                  <label>Any physical limitations or injuries</label>
-                  <input type="text" name="injuries" placeholder="Leave blank if none" onChange={handleChange} />
-                </div>
-              </div>
-            </div>
-
-            {/* SECTION 6 */}
-            <div style={styles.sectionBlock}>
-              <h3 style={styles.sectionHeader}>🔹 6. Medical & Health Conditions</h3>
-              <div className="question-grid">
-                <div className="support-field" style={{gridColumn: '1 / -1'}}>
-                  <label>Any diagnosed conditions (diabetes, thyroid, BP, etc.)</label>
-                  <input type="text" name="diagnosed_conditions" placeholder="Leave blank if none" onChange={handleChange} />
-                </div>
-                <div className="support-field">
-                  <label>Medications currently taking</label>
-                  <input type="text" name="medications" placeholder="Leave blank if none" onChange={handleChange} />
-                </div>
-                <div className="support-field">
-                  <label>Family medical history</label>
-                  <input type="text" name="family_history" placeholder="Leave blank if none" onChange={handleChange} />
-                </div>
-                <div className="support-field" style={{gridColumn: '1 / -1'}}>
-                  <label>Digestive issues (acidity, constipation, bloating)</label>
-                  <input type="text" name="digestive_issues" placeholder="Leave blank if none" onChange={handleChange} />
-                </div>
-              </div>
-            </div>
-
-            {/* SECTION 7 */}
-            <div style={styles.sectionBlock}>
-              <h3 style={styles.sectionHeader}>🔹 7. Sleep & Stress Analysis</h3>
-              <div className="question-grid">
-                <div className="support-field">
-                  <label>Sleep quality</label>
-                  <select name="sleep_quality" required onChange={handleChange} className="country-code-select" style={{width: '100%'}}>
-                    <option value="">Select Quality</option>
-                    <option value="good">Good</option>
-                    <option value="average">Average</option>
-                    <option value="poor">Poor</option>
-                  </select>
-                </div>
-                <div className="support-field">
-                  <label>Sleep duration (hours)</label>
-                  <input type="number" name="sleep_duration" required onChange={handleChange} />
-                </div>
-                <div className="support-field">
-                  <label>Stress level</label>
-                  <select name="stress_level" required onChange={handleChange} className="country-code-select" style={{width: '100%'}}>
-                    <option value="">Select Stress Level</option>
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
-                  </select>
-                </div>
-                <div className="support-field">
-                  <label>Main stress reasons</label>
-                  <input type="text" name="stress_reasons" placeholder="work, family, health" required onChange={handleChange} />
-                </div>
-              </div>
-            </div>
-
-            {/* SECTION 8 */}
-            <div style={styles.sectionBlock}>
-              <h3 style={styles.sectionHeader}>🔹 8. Body Symptoms</h3>
-              <div className="question-grid">
-                <div className="support-field">
-                  <label>Fatigue / low energy</label>
-                  <select name="fatigue" required onChange={handleChange} className="country-code-select" style={{width: '100%'}}>
-                    <option value="">Select Level</option>
-                    <option value="None">None</option>
-                    <option value="Sometimes">Sometimes</option>
-                    <option value="Often">Often</option>
-                  </select>
-                </div>
-                <div className="support-field">
-                  <label>Hair fall / skin issues</label>
-                  <input type="text" name="skin_hair_issues" placeholder="Specify if any" onChange={handleChange} />
-                </div>
-                <div className="support-field">
-                  <label>Cravings (sweet/salty)</label>
-                  <input type="text" name="cravings" placeholder="Specify if any" onChange={handleChange} />
-                </div>
-                <div className="support-field">
-                  <label>Mood swings</label>
-                  <select name="mood_swings" required onChange={handleChange} className="country-code-select" style={{width: '100%'}}>
-                    <option value="">Select Frequency</option>
-                    <option value="Rarely">Rarely</option>
-                    <option value="Sometimes">Sometimes</option>
-                    <option value="Frequently">Frequently</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            {/* SECTION 9 */}
-            <div style={styles.sectionBlock}>
-              <h3 style={styles.sectionHeader}>🔹 9. Lifestyle Habits</h3>
-              <div className="question-grid">
-                <div className="support-field">
-                  <label>Smoking / alcohol (if any)</label>
-                  <input type="text" name="smoking_alcohol" placeholder="Specify frequency" onChange={handleChange} />
-                </div>
-                <div className="support-field">
-                  <label>Water intake</label>
-                  <input type="text" name="water_assessment" placeholder="e.g. adequate or poor" onChange={handleChange} />
-                </div>
-                <div className="support-field">
-                  <label>Daily movement (steps approx)</label>
-                  <input type="number" name="steps" placeholder="e.g. 5000" onChange={handleChange} />
-                </div>
-              </div>
-            </div>
-
-            {/* SECTION 10 */}
-            <div style={styles.sectionBlock}>
-              <h3 style={styles.sectionHeader}>🔹 10. Commitment & Readiness</h3>
-              <div className="question-grid">
-                <div className="support-field">
-                  <label>Are you ready to follow a plan?</label>
-                  <select name="is_ready" required onChange={handleChange} className="country-code-select" style={{width: '100%'}}>
-                    <option value="">Select</option>
-                    <option value="yes">Yes</option>
-                    <option value="no">No</option>
-                  </select>
-                </div>
-                <div className="support-field">
-                  <label>Can you give 30–60 minutes daily for your health?</label>
-                  <select name="time_commitment" required onChange={handleChange} className="country-code-select" style={{width: '100%'}}>
-                    <option value="">Select</option>
-                    <option value="yes">Yes</option>
-                    <option value="no">No</option>
-                  </select>
-                </div>
-                <div className="support-field" style={{gridColumn: '1 / -1'}}>
-                  <label>Support system (family support or not)</label>
-                  <input type="text" name="support_system" placeholder="Describe your support system" required onChange={handleChange} />
-                </div>
-              </div>
-            </div>
+            ))}
 
             <button 
               type="submit" 
@@ -393,7 +195,7 @@ const Question = () => {
               disabled={status === 'submitting'}
               style={{ padding: '16px', fontSize: '18px', marginTop: '20px', opacity: status === 'submitting' ? 0.7 : 1 }}
             >
-              {status === 'submitting' ? 'Submitting Assessment...' : 'Submit Audit & Complete Registration'}
+              {status === 'submitting' ? 'Submitting Assessment...' : 'Submit Assessment & Continue'}
             </button>
           </form>
         </div>
@@ -445,7 +247,24 @@ const styles = {
     fontSize: 'clamp(15px, 3vw, 18px)',
     color: '#94A3B8',
     textAlign: 'center',
-    marginBottom: '40px'
+    marginBottom: '30px'
+  },
+  legendBlock: {
+    background: 'rgba(255, 255, 255, 0.05)',
+    padding: '20px',
+    borderRadius: '12px',
+    marginBottom: '40px',
+    border: '1px solid rgba(255,255,255,0.1)'
+  },
+  legendList: {
+    listStyle: 'none',
+    padding: 0,
+    margin: 0,
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '15px',
+    color: '#CBD5E1',
+    fontSize: '14px'
   },
   form: {
     display: 'flex',
@@ -467,6 +286,42 @@ const styles = {
     borderBottom: '1px solid rgba(245, 158, 11, 0.2)',
     paddingBottom: '12px',
     letterSpacing: '0.3px'
+  },
+  questionsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '20px'
+  },
+  questionItem: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px'
+  },
+  questionText: {
+    color: '#fff',
+    fontSize: '16px',
+    margin: 0
+  },
+  radioGroup: {
+    display: 'flex',
+    gap: '15px',
+    flexWrap: 'wrap'
+  },
+  radioLabel: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '5px',
+    cursor: 'pointer',
+    color: '#94A3B8'
+  },
+  radioInput: {
+    accentColor: '#F59E0B',
+    cursor: 'pointer',
+    width: '18px',
+    height: '18px'
+  },
+  radioText: {
+    fontSize: '15px'
   }
 };
 

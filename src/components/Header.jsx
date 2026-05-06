@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import limitlessLogo from '../assets/limitless-logo.webp';
 import LoginModal from './LoginModal';
 import EnquiryModal from './EnquiryModal';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -9,7 +10,9 @@ const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
   const [userEmail, setUserEmail] = useState('');
+  const [paymentStatus, setPaymentStatus] = useState('no');
   const [showUserDetails, setShowUserDetails] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
@@ -17,6 +20,7 @@ const Header = () => {
       setIsLoggedIn(true);
       setUsername(localStorage.getItem('username') || '');
       setUserEmail(localStorage.getItem('userEmail') || '');
+      setPaymentStatus(localStorage.getItem('paymentStatus') || 'no');
     }
   }, []);
 
@@ -52,6 +56,41 @@ const Header = () => {
           <div className="header-buttons" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '15px' }}>
             {isLoggedIn ? (
               <>
+                {paymentStatus === 'yes' ? (
+                  <button
+                    className="btn"
+                    onClick={() => navigate('/dashboard')}
+                    style={{
+                      padding: '10px 24px',
+                      background: '#10B981',
+                      color: '#fff',
+                      border: 'none',
+                      borderRadius: '8px',
+                      fontWeight: '700',
+                      fontSize: '14px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Dashboard
+                  </button>
+                ) : (
+                  <button
+                    className="btn"
+                    onClick={() => navigate('/payment')}
+                    style={{
+                      padding: '10px 24px',
+                      background: '#F59E0B',
+                      color: '#fff',
+                      border: 'none',
+                      borderRadius: '8px',
+                      fontWeight: '700',
+                      fontSize: '14px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Complete Payment
+                  </button>
+                )}
                 <button
                   className="btn"
                   onClick={handleLogout}

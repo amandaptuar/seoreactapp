@@ -40,6 +40,7 @@ const LoginModal = ({ isOpen, onClose }) => {
       localStorage.setItem('isLoggedIn', 'true');
       localStorage.setItem('userEmail', data.email);
       localStorage.setItem('username', data.username);
+      localStorage.setItem('paymentStatus', data.payment_status || 'no');
       
       setIsSuccess(true);
       setTimeout(() => {

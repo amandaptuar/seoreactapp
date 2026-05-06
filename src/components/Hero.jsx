@@ -93,6 +93,7 @@ const Hero = () => {
       localStorage.setItem('userEmail', formData.email);
       localStorage.setItem('username', randomUsername);
       localStorage.setItem('generatedPassword', generatedPassword);
+      
       navigate('/question');
     } catch (error) {
       console.error('Error saving data:', error);

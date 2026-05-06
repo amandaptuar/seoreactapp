@@ -11,6 +11,7 @@ import AdminLogin from './components/AdminLogin';
 import Admin from './components/Admin';
 import FloatingCTA from './components/FloatingCTA';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
+import Dashboard from './components/Dashboard';
 
 
 const ProtectedRoute = ({ children }) => {
@@ -53,6 +54,11 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/payment-success" element={<PaymentSuccess />} />
+        <Route path="/dashboard" element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        } />
         
         {/* Protected Admin Routes */}
         <Route path="/admin-login" element={<AdminLogin />} />

@@ -4,14 +4,13 @@ import { useNavigate } from 'react-router-dom';
 
 const PaymentSuccess = () => {
   const [status, setStatus] = useState('processing');
-  const [userData, setUserData] = useState({ username: '', password: '' });
+  const [statusMessage, setStatusMessage] = useState('Processing Payment & Analysis...');
   const navigate = useNavigate();
 
   useEffect(() => {
-    const completePayment = async () => {
+    const completePaymentAndAnalyze = async () => {
       const email = localStorage.getItem('userEmail');
       const username = localStorage.getItem('username');
-      const password = localStorage.getItem('generatedPassword');
 
       if (!email) {
         setStatus('error');
@@ -19,38 +18,59 @@ const PaymentSuccess = () => {
       }
 
       try {
-        // 1. Update database payment status since Stripe Payment Link redirected us here
-        const { error } = await supabase
+        // 1. Update database payment status
+        const { error, data: userRecord } = await supabase
           .from('users')
           .update({ payment_status: 'yes' })
-          .eq('email', email);
+          .eq('email', email)
+          .select('questions')
+          .single();
 
         if (error) throw error;
 
-        // 2. Send email with credentials via Formsubmit Autoresponse
-        await fetch('https://formsubmit.co/ajax/matrikaventures2020@gmail.com', {
+        setStatusMessage('Analyzing Assessment Data...');
+
+        // 2. Fetch assessment data to send to backend
+        const assessmentData = userRecord.questions || {};
+
+        // 3. Call backend for LLM analysis and PDF generation
+        const response = await fetch('http://localhost:3000/api/analyze', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({
-            _subject: `New User Payment Success: ${username}`,
-            email: email, // Formsubmit uses this to send the autoresponse
-            message: `User ${username} (${email}) has successfully paid and registered.`,
-            _autoresponse: `Welcome to Limitless!\n\nYour payment was successful and your account is ready.\n\nUsername: ${username}\nPassword: ${password}\n\nPlease login at the homepage to access your full report.`
-          }),
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, username, data: assessmentData })
         });
 
-        setUserData({ username, password });
+        if (!response.ok) {
+          throw new Error('Failed to analyze data');
+        }
+
+        const result = await response.json();
+        
+        // Save the result in localStorage to be used by the Dashboard
+        localStorage.setItem('assessmentReport', JSON.stringify(result.report));
+        if (result.pdfUrl) {
+           localStorage.setItem('pdfUrl', result.pdfUrl);
+        }
+
+        // Save AI insights to Supabase
+        await supabase
+          .from('users')
+          .update({ ai_insights: result.report })
+          .eq('email', email);
+
         setStatus('success');
+        
+        // Removed auto-redirect so the user has time to copy their password.
+        // They will click a button to proceed.
+
       } catch (err) {
-        console.error('Payment verification or email send error:', err);
-        // If DB update fails, don't show success. 
-        // If it's just an email error, it's safer to still show success but the DB MUST succeed.
+        console.error('Payment verification or analysis error:', err);
         setStatus('error');
       }
     };
 
-    completePayment();
-  }, []);
+    completePaymentAndAnalyze();
+  }, [navigate]);
 
   return (
     <section style={styles.section}>
@@ -59,51 +79,42 @@ const PaymentSuccess = () => {
           
           {status === 'processing' && (
             <div>
-              <h2 style={{ color: '#0F172A', fontSize: '28px' }}>Processing Payment...</h2>
-              <p style={{ color: '#64748b' }}>Just a moment while we finalize your account.</p>
+              <div className="spinner" style={styles.spinner}></div>
+              <h2 style={{ color: '#0F172A', fontSize: '28px', marginTop: '20px' }}>{statusMessage}</h2>
+              <p style={{ color: '#64748b' }}>Our AI is crafting your personalized cognitive protocol.</p>
             </div>
           )}
 
           {status === 'success' && (
             <div className="fade-in">
               <div style={{ width: '80px', height: '80px', background: '#22C55E', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', color: '#fff', fontSize: '32px' }}>✓</div>
-              <h2 style={{ color: '#0F172A', fontSize: '32px', marginBottom: '10px', fontWeight: '800' }}>Payment Success!</h2>
-              <p style={{ color: '#64748b', fontSize: '16px', marginBottom: '32px' }}>
-                Your account is ready. Use the credentials below to log in and access your report.
-              </p>
-
-              <div style={{ background: '#F8FAFC', padding: '24px', borderRadius: '16px', border: '1px solid #E2E8F0', marginBottom: '32px', textAlign: 'left' }}>
-                <div style={{ marginBottom: '20px' }}>
-                  <label style={{ display: 'block', fontSize: '12px', fontWeight: '800', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>Username</label>
-                  <div style={{ fontSize: '18px', fontWeight: '700', color: '#0F172A' }}>{userData.username}</div>
-                </div>
-                <div>
-                  <label style={{ display: 'block', fontSize: '12px', fontWeight: '800', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>Temp Password</label>
-                  <div style={{ fontSize: '20px', fontWeight: '800', color: '#F59E0B', background: '#fff', padding: '12px', borderRadius: '8px', border: '2px dashed #F59E0B', textAlign: 'center', letterSpacing: '1px' }}>
-                    {userData.password}
+              <h2 style={{ color: '#0F172A', fontSize: '32px', marginBottom: '10px', fontWeight: '800' }}>Analysis Complete!</h2>
+              
+              <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', padding: '20px', borderRadius: '12px', margin: '24px 0', textAlign: 'left' }}>
+                <p style={{ color: '#64748B', fontSize: '14px', margin: '0 0 12px 0', fontWeight: '600', textTransform: 'uppercase' }}>Save your login details:</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: '#fff', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
+                    <span style={{ color: '#64748B', fontWeight: '500' }}>Username:</span>
+                    <strong style={{ color: '#0F172A' }}>{localStorage.getItem('username')}</strong>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: '#fff', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
+                    <span style={{ color: '#64748B', fontWeight: '500' }}>Password:</span>
+                    <strong style={{ color: '#0F172A' }}>{localStorage.getItem('generatedPassword')}</strong>
                   </div>
                 </div>
+                <p style={{ color: '#EF4444', fontSize: '12px', margin: '12px 0 0 0', fontStyle: 'italic' }}>* Please save these before continuing. You will need them to log in later.</p>
               </div>
 
-              <button
+              <button 
                 onClick={() => {
+                  // Mark as logged in so header reflects status
                   localStorage.setItem('isLoggedIn', 'true');
-                  navigate('/');
-                }}
-                style={{
-                  width: '100%',
-                  padding: '16px',
-                  background: '#0F172A',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '12px',
-                  fontWeight: '700',
-                  fontSize: '16px',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 12px rgba(15,23,42,0.2)'
-                }}
+                  localStorage.setItem('paymentStatus', 'yes');
+                  navigate('/dashboard');
+                }} 
+                style={{ width: '100%', padding: '16px', background: 'linear-gradient(135deg, #F59E0B, #FB923C)', color: '#fff', border: 'none', borderRadius: '12px', fontWeight: '700', fontSize: '16px', cursor: 'pointer', boxShadow: '0 4px 14px rgba(245,158,11,0.35)' }}
               >
-                Go to Home Page
+                Go to My Dashboard →
               </button>
             </div>
           )}
@@ -111,8 +122,8 @@ const PaymentSuccess = () => {
           {status === 'error' && (
             <div>
               <h2 style={{ color: '#ef4444' }}>Verification Failed</h2>
-              <p style={{ color: '#64748b' }}>We couldn't verify your session. Please contact support.</p>
-              <button onClick={() => navigate('/')} style={{ marginTop: '20px', padding: '12px 24px', background: '#0F172A', color: '#fff', border: 'none', borderRadius: '8px' }}>Back to Home</button>
+              <p style={{ color: '#64748b' }}>We encountered an error processing your data. Please contact support.</p>
+              <button onClick={() => navigate('/')} style={{ marginTop: '20px', padding: '12px 24px', background: '#0F172A', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer' }}>Back to Home</button>
             </div>
           )}
         </div>
@@ -129,7 +140,16 @@ const styles = {
     display: 'flex',
     alignItems: 'center'
   },
-  container: { width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }
+  container: { width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '0 20px' },
+  spinner: {
+    width: '50px',
+    height: '50px',
+    border: '5px solid #E2E8F0',
+    borderTop: '5px solid #F59E0B',
+    borderRadius: '50%',
+    animation: 'spin 1s linear infinite',
+    margin: '0 auto'
+  }
 };
 
 export default PaymentSuccess;
