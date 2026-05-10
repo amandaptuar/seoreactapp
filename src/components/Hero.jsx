@@ -75,7 +75,24 @@ const Hero = () => {
             <div className="hero-text sec-title-animation animation-style2" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '22px', paddingRight: '20px' }}>
               <div>
                 <span className="title-animation" style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '12px', letterSpacing: '2px', textTransform: 'uppercase' }}>Cognitive Performance System</span>
-                <h2 className="title-animation" style={{ color: 'var(--secondary)', fontSize: '40px', lineHeight: '1.2', marginTop: '10px', marginBottom: '0' }}>Measure Your Cognitive Performance &amp;<br />Mental Fitness in Under 5 Minutes</h2>
+
+                {/* ── LIMITLESS TAGLINE ── */}
+                <p className="hero-tagline-seo" style={{ margin: '14px 0 8px', fontSize: '18px', fontWeight: '600', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.5px', fontFamily: 'var(--font-primary)', lineHeight: '1.4' }}>
+                  You don't need a magic pill, you just need{' '}
+                  <span
+                    className="seo-limitless-highlight"
+                    style={{
+                      color: 'var(--primary)',
+                      fontWeight: '800',
+                      letterSpacing: '3px',
+                      display: 'inline-block',
+                    }}
+                  >
+                    LIMITLESS
+                  </span>
+                </p>
+
+                <h2 className="title-animation" style={{ color: 'var(--secondary)', fontSize: '40px', lineHeight: '1.2', marginTop: '10px', marginBottom: '0' }}>Measure Your Cognitive Performance &<br />Mental Fitness in Under 5 Minutes</h2>
               </div>
               <p style={{ fontSize: '16px', color: '#6B7280', margin: 0, lineHeight: '1.7' }}>
                 Get a personalized cognitive wellness report covering focus, memory, stress, and mental energy — backed by structured assessment logic.
@@ -87,11 +104,11 @@ const Hero = () => {
                 </li>
                 <li className="hero-feature-card" style={{ display: 'flex', alignItems: 'center', gap: '14px', fontSize: '15px', color: 'var(--secondary)', fontWeight: '500', background: '#fff', padding: '13px 18px', borderRadius: '12px', boxShadow: 'var(--shadow-soft)', transition: 'transform 0.3s ease, box-shadow 0.3s ease' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(59, 130, 246, 0.1)', color: '#3B82F6', fontSize: '12px', flexShrink: 0 }}>✔</div>
-                  <span>Used by professionals & individuals</span>
+                  <span>Used by professionals &amp; individuals</span>
                 </li>
                 <li className="hero-feature-card" style={{ display: 'flex', alignItems: 'center', gap: '14px', fontSize: '15px', color: 'var(--secondary)', fontWeight: '500', background: '#fff', padding: '13px 18px', borderRadius: '12px', boxShadow: 'var(--shadow-soft)', transition: 'transform 0.3s ease, box-shadow 0.3s ease' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(59, 130, 246, 0.1)', color: '#3B82F6', fontSize: '12px', flexShrink: 0 }}>✔</div>
-                  <span>Secure & confidential with instant results</span>
+                  <span>Secure &amp; confidential with instant results</span>
                 </li>
               </ul>
               <p style={{ margin: 0, fontSize: '13px', color: '#6B7280', fontWeight: '500' }}>
@@ -151,10 +168,17 @@ const Hero = () => {
                 </button>
                 
                 <p style={{ textAlign: 'center', fontSize: '12px', color: '#94a3b8', marginTop: '12px', marginBottom: '15px' }}>
-                  No spam. Results instantly. Secure & private.
+                  No spam. Results instantly. Secure &amp; private.
                 </p>
               </form> 
               <style>{`
+                @keyframes seoLimitlessGlow {
+                  0%, 100% { text-shadow: 0 0 12px rgba(245,158,11,0.6), 0 0 30px rgba(245,158,11,0.3); }
+                  50% { text-shadow: 0 0 28px rgba(245,158,11,1), 0 0 55px rgba(245,158,11,0.6), 0 0 80px rgba(245,158,11,0.25); }
+                }
+                .seo-limitless-highlight {
+                  animation: seoLimitlessGlow 2.5s ease-in-out infinite;
+                }
                 .hero-feature-card:hover {
                   transform: translateY(-3px) !important;
                   box-shadow: 0 14px 24px rgba(15, 23, 42, 0.08) !important;
