@@ -27,6 +27,9 @@ const EnquiryModal = ({ isOpen, onClose }) => {
           _subject: `New Assessment Enquiry from ${formData.name}`,
           _template: 'box',
           _replyto: formData.email,
+          "Action": "Requested Details from CTA Dialogue",
+          "Full Name": formData.name,
+          "Email Address": formData.email
         }),
       });
 

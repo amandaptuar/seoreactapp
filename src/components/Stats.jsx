@@ -22,8 +22,8 @@ const Stats = () => {
         </div>
       </div>
       <ul className="shaps-img"> 
-        <li><img src="/assets/img/shaps-1.png" alt="img" /></li>
-        <li><img src="/assets/img/shaps-6.png" alt="img" /></li> 
+        <li><img src="./assets/img/shaps-1.png" alt="img" /></li>
+        <li><img src="./assets/img/shaps-6.png" alt="img" /></li> 
       </ul>
     </section>
   );

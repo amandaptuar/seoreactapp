@@ -13,7 +13,7 @@ const Blog = () => {
             <div className="blog">
               <div className="blog-img">
                 <figure>
-                  <img src="/assets/img/post_1.jpeg" alt="img" />
+                  <img src="./assets/img/post_1.jpeg" alt="img" />
                 </figure>
                 <div className="tag">
                   <span>Develoment</span>
@@ -28,7 +28,7 @@ const Blog = () => {
             <div className="blog">
               <div className="blog-img">
                 <figure>
-                  <img src="/assets/img/post_2.jpeg" alt="img" />
+                  <img src="./assets/img/post_2.jpeg" alt="img" />
                 </figure>
                 <div className="tag">
                   <span>Develoment</span>
@@ -43,7 +43,7 @@ const Blog = () => {
             <div className="blog mb-0">
               <div className="blog-img">
                 <figure>
-                  <img src="/assets/img/post_3.jpeg" alt="img" />
+                  <img src="./assets/img/post_3.jpeg" alt="img" />
                 </figure>
                 <div className="tag">
                   <span>Develoment</span>
@@ -57,7 +57,7 @@ const Blog = () => {
         </div>
       </div>
       <ul className="shaps-img"> 
-        <li><img src="/assets/img/shaps-3.png" alt="img" /></li>
+        <li><img src="./assets/img/shaps-3.png" alt="img" /></li>
        </ul>
     </section>
   );

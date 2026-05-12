@@ -52,18 +52,22 @@ const FAQ = () => {
           </div>
           <div className="col-lg-4 d-flex flex-column">
             <div className="accordion-contact">
-              <h4>Phone No: <a href="callto:+1234567890">+1 234 567 890</a></h4>
-              <h4>Email: <a href="mailto:info@limitlessworld.net">info@limitlessworld.net</a></h4>
-              <a href="#pricing" className="button btn"><span><span>Get Started</span></span></a>
+              <h4>Email: <a href="mailto:info@limitless.com">info@limitless.com</a></h4>
+              <a href="#hero-form-section" className="button btn" onClick={(e) => {
+                if (window.location.pathname === '/') {
+                  e.preventDefault();
+                  document.getElementById('hero-form-section')?.scrollIntoView({behavior: 'smooth'});
+                }
+              }}><span><span>Get Started</span></span></a>
             </div>
             <div className="accordion-img flex-grow-1 d-flex">
-              <img src="/assets/img/faq_bg.jpeg" alt="img" style={{ width: '100%', height: '100%', objectFit: 'cover', minHeight: '300px' }} />
+              <img src="./assets/img/faq_bg.jpeg" alt="img" style={{ width: '100%', height: '100%', objectFit: 'cover', minHeight: '300px' }} />
             </div>
           </div>
         </div>
       </div>
       <ul className="shaps-img">
-        <li><img src="/assets/img/shaps-3.png" alt="img" /></li> 
+        <li><img src="./assets/img/shaps-3.png" alt="img" /></li> 
       </ul>
     </section>
   );

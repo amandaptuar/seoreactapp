@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import limitlessLogo from '../assets/limitless-logo.webp';
 import LoginModal from './LoginModal';
 import EnquiryModal from './EnquiryModal';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Header = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -37,7 +37,7 @@ const Header = () => {
       <div className="container">
         <div className="top-bar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div className="logo">
-            <a href="/">
+            <Link to="/">
               <img
                 alt="logo"
                 src={limitlessLogo}
@@ -50,7 +50,7 @@ const Header = () => {
                   marginLeft: '-10px'
                 }}
               />
-            </a>
+            </Link>
           </div>
 
           <div className="header-buttons" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '15px' }}>

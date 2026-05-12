@@ -79,28 +79,28 @@ const Admin = () => {
             {users.map(user => (
               <div key={user.id} style={styles.card}>
                 <div style={styles.cardHeader}>
-                  <div>
-                    <h3 style={styles.name}>{user.name || 'Unknown User'}</h3>
-                    <div style={styles.email}>{user.email}</div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <h3 style={styles.name} title={user.name}>{user.name || 'Unknown User'}</h3>
+                    <div style={styles.email} title={user.email}>{user.email}</div>
                   </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end' }}>
-                    <div style={{...styles.pill, background: 'rgba(59, 130, 246, 0.15)', color: '#3B82F6'}}>
-                      @{user.username || 'No Username'}
-                    </div>
-                    <div style={{
-                      ...styles.pill,
-                      background: user.payment_status === 'yes' ? 'rgba(46, 204, 113, 0.15)' : 'rgba(231, 76, 60, 0.15)',
-                      color: user.payment_status === 'yes' ? '#2ecc71' : '#e74c3c',
-                      fontWeight: '600'
-                    }}>
-                      Payment: {user.payment_status === 'yes' ? 'Done' : 'Not Done'}
-                    </div>
-                    {user.ai_insights && (
-                      <div style={{...styles.pill, background: 'rgba(139, 92, 246, 0.15)', color: '#8b5cf6'}}>
-                        AI Generated
-                      </div>
-                    )}
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '15px' }}>
+                  <div style={{...styles.pill, background: 'rgba(59, 130, 246, 0.15)', color: '#3B82F6'}}>
+                    @{user.username || 'No Username'}
                   </div>
+                  <div style={{
+                    ...styles.pill,
+                    background: user.payment_status === 'yes' ? 'rgba(46, 204, 113, 0.15)' : 'rgba(231, 76, 60, 0.15)',
+                    color: user.payment_status === 'yes' ? '#2ecc71' : '#e74c3c',
+                    fontWeight: '600'
+                  }}>
+                    Payment: {user.payment_status === 'yes' ? 'Done' : 'Not Done'}
+                  </div>
+                  {user.ai_insights && (
+                    <div style={{...styles.pill, background: 'rgba(139, 92, 246, 0.15)', color: '#8b5cf6'}}>
+                      AI Generated
+                    </div>
+                  )}
                 </div>
 
                 <div style={styles.actionRow}>
@@ -250,12 +250,18 @@ const styles = {
     color: '#ffffff',
     fontSize: '24px',
     fontWeight: '600',
-    margin: '0 0 6px 0'
+    margin: '0 0 6px 0',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
   },
   email: {
     color: 'var(--primary)',
     fontSize: '14px',
-    opacity: 0.9
+    opacity: 0.9,
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
   },
   pill: {
     background: 'rgba(233, 161, 50, 0.15)',

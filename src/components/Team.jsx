@@ -13,7 +13,7 @@ const Team = () => {
           <div className="col-lg-4 col-md-6">
             <div className="team">
               <figure>
-                <img src="/assets/img/team_member_1.jpeg" alt="img" style={{ opacity: 0.8 }} />
+                <img src="./assets/img/team_member_1.jpeg" alt="img" style={{ opacity: 0.8 }} />
               </figure>
               <span>Collaboration</span>
               <h4>Experts & Advisors</h4>
@@ -23,7 +23,7 @@ const Team = () => {
           <div className="col-lg-4 col-md-6">
             <div className="team">
               <figure>
-                <img src="/assets/img/team_member_2.jpeg" alt="img" style={{ opacity: 0.8 }} />
+                <img src="./assets/img/team_member_2.jpeg" alt="img" style={{ opacity: 0.8 }} />
               </figure>
               <span>Analysis</span>
               <h4>Our Experience</h4>
@@ -33,7 +33,7 @@ const Team = () => {
           <div className="col-lg-4 col-md-6">
             <div className="team mb-0">
               <figure>
-                <img src="/assets/img/team_member_3.jpeg" alt="img" style={{ opacity: 0.8 }} />
+                <img src="./assets/img/team_member_3.jpeg" alt="img" style={{ opacity: 0.8 }} />
               </figure>
               <span>Security & Proof</span>
               <h4>Why Trust Us?</h4>
@@ -42,7 +42,7 @@ const Team = () => {
           </div>
         </div>
         <div className="center review"> 
-            <img alt="img" src="/assets/img/google-w.png" />
+            <img alt="img" src="./assets/img/google-w.png" />
              <ul className="star">
               <li><i className="fa-solid fa-star"></i></li>
               <li><i className="fa-solid fa-star"></i></li>
@@ -54,8 +54,8 @@ const Team = () => {
         </div>
       </div>
       <ul className="shaps-img">
-        <li><img src="/assets/img/shaps-3.png" alt="img" /></li>
-        <li><img src="/assets/img/shaps-5.png" alt="img" /></li> 
+        <li><img src="./assets/img/shaps-3.png" alt="img" /></li>
+        <li><img src="./assets/img/shaps-5.png" alt="img" /></li> 
       </ul>
     </section>
   );

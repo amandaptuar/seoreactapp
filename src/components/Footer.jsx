@@ -8,7 +8,7 @@ const Footer = () => {
 
   return (
     <>
-      <footer className="gap no-bottom text-white" style={{ backgroundImage: "url('/assets/img/footer_bg.jpeg')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundColor: '#18191d' }}>
+      <footer className="gap no-bottom text-white" style={{ backgroundImage: "url('./assets/img/footer_bg.jpeg')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundColor: '#18191d' }}>
         <div className="container">
           <div className="footer-try">
             <div>
@@ -43,28 +43,22 @@ const Footer = () => {
               <div className="widget-title">
                 <h3 className="text-white">Useful Links</h3>
                 <ul>
-                  <li><i className="fa-solid fa-angles-right"></i><a href="/#about" className="text-white">The Problem</a></li>
-                  <li><i className="fa-solid fa-angles-right"></i><a href="/#services" className="text-white">The Process</a></li>
-                  <li><i className="fa-solid fa-angles-right"></i><a href="/#pillars" className="text-white">Pillars</a></li>
-                  <li><i className="fa-solid fa-angles-right"></i><a href="/#pricing" className="text-white">Pricing</a></li>
+                  <li><i className="fa-solid fa-angles-right"></i><Link to="/" onClick={() => setTimeout(() => document.getElementById('about')?.scrollIntoView({behavior: 'smooth'}), 100)} className="text-white">The Problem</Link></li>
+                  <li><i className="fa-solid fa-angles-right"></i><Link to="/" onClick={() => setTimeout(() => document.getElementById('services')?.scrollIntoView({behavior: 'smooth'}), 100)} className="text-white">The Process</Link></li>
+                  <li><i className="fa-solid fa-angles-right"></i><Link to="/" onClick={() => setTimeout(() => document.getElementById('pillars')?.scrollIntoView({behavior: 'smooth'}), 100)} className="text-white">Pillars</Link></li>
+                  <li><i className="fa-solid fa-angles-right"></i><Link to="/" onClick={() => setTimeout(() => document.getElementById('pricing')?.scrollIntoView({behavior: 'smooth'}), 100)} className="text-white">Pricing</Link></li>
                 </ul>
               </div>
             </div>
             <div className="col-lg-4 col-md-6">
               <div className="widget-title">
                 <h3 className="text-white">Contact Us</h3>
-                <div className="get-in-touch">
-                  <div><i className="flaticon-map-location"></i></div>
-                  <div>
-                    <span>Phone No:</span>
-                    <h6><a href="callto:+1234567890" className="text-white">+1 234 567 890</a></h6>
-                  </div>
-                </div>
+
                 <div className="get-in-touch">
                   <div><i className="flaticon-iphone"></i></div>
                   <div>
                     <span>Email Address:</span>
-                    <h6><a href="mailto:info@limitlessworld.net" className="text-white">info@limitlessworld.net</a></h6>
+                    <h6><a href="mailto:info@limitless.com" className="text-white">info@limitless.com</a></h6>
                   </div>
                 </div>
               </div>
@@ -72,9 +66,9 @@ const Footer = () => {
           </div>
         </div>
         <ul className="shaps-img">
-          <li><img src="/assets/img/shaps-4.png" alt="img" /></li>
-          <li><img src="/assets/img/shaps-1.png" alt="img" /></li>
-          <li><img src="/assets/img/shaps-2.png" alt="img" /></li>
+          <li><img src="./assets/img/shaps-4.png" alt="img" /></li>
+          <li><img src="./assets/img/shaps-1.png" alt="img" /></li>
+          <li><img src="./assets/img/shaps-2.png" alt="img" /></li>
         </ul>
       </footer>
 

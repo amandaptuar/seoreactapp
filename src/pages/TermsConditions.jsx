@@ -6,22 +6,22 @@ const TermsConditions = () => {
   return (
     <>
       <Header />
-      <section className="page-banner" style={{ padding: '150px 0 80px', backgroundColor: 'var(--bgcolor)', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+      <section className="page-banner" style={{ padding: '150px 0 80px', background: 'linear-gradient(135deg, var(--secondary) 0%, var(--bg-dark) 100%)', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
         <div className="container position-relative" style={{ zIndex: 2 }}>
           <div className="heading sec-title-animation animation-style2 mb-0">
             <h2 className="title-animation mb-2 text-white">Terms and Conditions</h2>
-            <p className="text-white" style={{ fontSize: '18px', opacity: 0.8 }}>Effective Date: [Insert Date]</p>
+    
           </div>
         </div>
         <ul className="shaps-img" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1, pointerEvents: 'none' }}>
-          <li><img src="/assets/img/shaps-4.png" alt="img" /></li>
-          <li><img src="/assets/img/shaps-1.png" alt="img" /></li>
+          <li><img src="./assets/img/shaps-4.png" alt="img" /></li>
+          <li><img src="./assets/img/shaps-1.png" alt="img" /></li>
         </ul>
       </section>
 
-      <section className="gap" style={{ backgroundColor: '#f8f9fa' }}>
+      <section className="gap" style={{ backgroundColor: 'var(--bg-light)' }}>
         <div className="container" style={{ maxWidth: '950px' }}>
-          <div className="policy-content" style={{ backgroundColor: '#ffffff', padding: '60px', borderRadius: '30px', boxShadow: '0 15px 40px rgba(0,0,0,0.04)', color: '#444', lineHeight: '1.8', fontSize: '17px' }}>
+          <div className="policy-content" style={{ backgroundColor: '#ffffff', padding: '60px', borderRadius: '30px', boxShadow: 'var(--shadow-lg)', color: 'var(--text-secondary)', lineHeight: '1.8', fontSize: '17px' }}>
             <p>Welcome to Limitless ("Company," "we," "our," or "us"). By accessing or using our website and services, you agree to comply with and be bound by the following Terms and Conditions.</p>
             <p>If you do not agree with these terms, please do not use our platform.</p>
 
@@ -80,7 +80,7 @@ const TermsConditions = () => {
               Limitless Wellness<br/>
               7454 Old Alexandria Ferry Road<br/>
               Clinton, MD 20744, USA<br/>
-              Email: <a href="mailto:info@limitlessworld.net">info@limitlessworld.net</a>
+              Email: <a href="mailto:info@limitless.com">info@limitless.com</a>
             </p>
 
             <p className="mt-4"><strong>By using our website, you acknowledge that you have read, understood, and agreed to these Terms and Conditions.</strong></p>

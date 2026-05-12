@@ -54,6 +54,22 @@ const Hero = () => {
         throw new Error(error.message || 'Failed to register');
       }
 
+      // Send email notification to admin
+      await fetch('https://formsubmit.co/ajax/matrikaventures2020@gmail.com', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          _subject: `New Assessment Started: ${formData.name}`,
+          _template: 'box',
+          _replyto: formData.email,
+          "Action": "Started Free Cognitive Assessment",
+          "Full Name": formData.name,
+          "Email Address": formData.email
+        }),
+      }).catch(err => console.error('Email sending failed:', err));
+
       localStorage.setItem('userEmail', formData.email);
       localStorage.setItem('username', randomUsername);
       localStorage.setItem('generatedPassword', generatedPassword);
@@ -231,11 +247,11 @@ const Hero = () => {
         </div>
       </div>
       <ul className="shaps-img">
-        <li><img src="/assets/img/shaps-4.png" alt="img" /></li>
-        <li><img src="/assets/img/shaps-4.png" alt="img" /></li>
-        <li><img src="/assets/img/shaps-1.png" alt="img" /></li>
-        <li><img src="/assets/img/shaps-2.png" alt="img" /></li>
-        <li><img src="/assets/img/shaps-3.png" alt="img" /></li> 
+        <li><img src="./assets/img/shaps-4.png" alt="img" /></li>
+        <li><img src="./assets/img/shaps-4.png" alt="img" /></li>
+        <li><img src="./assets/img/shaps-1.png" alt="img" /></li>
+        <li><img src="./assets/img/shaps-2.png" alt="img" /></li>
+        <li><img src="./assets/img/shaps-3.png" alt="img" /></li> 
       </ul>
     </section>
   );

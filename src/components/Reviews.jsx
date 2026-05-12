@@ -15,7 +15,7 @@ const Reviews = () => {
             {/* Original Set */}
             <div className="clients">
               <div className="clients-img">
-                <img src="/assets/img/avatar_1.png" alt="img" />
+                <img src="./assets/img/avatar_1.png" alt="img" />
                 <div>
                   <div className="d-flex">
                     <h3>Sarah M.</h3>
@@ -34,7 +34,7 @@ const Reviews = () => {
             </div>
             <div className="clients">
               <div className="clients-img">
-                <img src="/assets/img/avatar_2.png" alt="img" />
+                <img src="./assets/img/avatar_2.png" alt="img" />
                 <div>
                   <div className="d-flex">
                     <h3>James T.</h3>
@@ -53,7 +53,7 @@ const Reviews = () => {
             </div>
             <div className="clients">
               <div className="clients-img">
-                <img src="/assets/img/avatar_1.png" alt="img" />
+                <img src="./assets/img/avatar_1.png" alt="img" />
                 <div>
                   <div className="d-flex">
                     <h3>Michael R.</h3>
@@ -72,7 +72,7 @@ const Reviews = () => {
             </div>
             <div className="clients">
               <div className="clients-img">
-                <img src="/assets/img/avatar_2.png" alt="img" />
+                <img src="./assets/img/avatar_2.png" alt="img" />
                 <div>
                   <div className="d-flex">
                     <h3>Emily C.</h3>
@@ -93,7 +93,7 @@ const Reviews = () => {
             {/* Duplicate Set for seamless marquee */}
             <div className="clients">
               <div className="clients-img">
-                <img src="/assets/img/avatar_1.png" alt="img" />
+                <img src="./assets/img/avatar_1.png" alt="img" />
                 <div>
                   <div className="d-flex">
                     <h3>Sarah M.</h3>
@@ -112,7 +112,7 @@ const Reviews = () => {
             </div>
             <div className="clients">
               <div className="clients-img">
-                <img src="/assets/img/avatar_2.png" alt="img" />
+                <img src="./assets/img/avatar_2.png" alt="img" />
                 <div>
                   <div className="d-flex">
                     <h3>James T.</h3>
@@ -131,7 +131,7 @@ const Reviews = () => {
             </div>
             <div className="clients">
               <div className="clients-img">
-                <img src="/assets/img/avatar_1.png" alt="img" />
+                <img src="./assets/img/avatar_1.png" alt="img" />
                 <div>
                   <div className="d-flex">
                     <h3>Michael R.</h3>
@@ -150,7 +150,7 @@ const Reviews = () => {
             </div>
             <div className="clients">
               <div className="clients-img">
-                <img src="/assets/img/avatar_2.png" alt="img" />
+                <img src="./assets/img/avatar_2.png" alt="img" />
                 <div>
                   <div className="d-flex">
                     <h3>Emily C.</h3>
@@ -171,8 +171,8 @@ const Reviews = () => {
         </div>
       </div>
       <ul className="shaps-img"> 
-        <li><img src="/assets/img/shaps-1.png" alt="img" /></li>
-        <li><img src="/assets/img/shaps-2.png" alt="img" /></li> 
+        <li><img src="./assets/img/shaps-1.png" alt="img" /></li>
+        <li><img src="./assets/img/shaps-2.png" alt="img" /></li> 
       </ul>
     </section>
   );
