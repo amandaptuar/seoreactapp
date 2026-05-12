@@ -224,10 +224,10 @@ a:hover {
 /* ── TABLET (≤992px) ── */
 @media (max-width: 992px) {
   .top-bar {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-    padding: 15px 10px;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px;
   }
   .navbar {
     display: none !important;
@@ -244,16 +244,19 @@ a:hover {
   }
   .logo {
     order: 1;
+    flex-shrink: 1;
   }
   .header-buttons {
     order: 2;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
   }
 }
 
 @media (max-width: 480px) {
   .header-buttons button {
-    padding: 8px 12px !important;
-    font-size: 12px !important;
+    padding: 6px 10px !important;
+    font-size: 11px !important;
   }
   
   /* Prevent overlap with Hero */
@@ -305,7 +308,7 @@ a:hover {
 /* ── SMALL MOBILE (≤480px) ── */
 @media (max-width: 480px) {
   .hero-section h2 { font-size: 24px !important; }
-  .logo img { transform: scale(1.1) !important; margin-left: -10px !important; }
+  .logo img { transform: scale(0.9) !important; margin-left: 0 !important; max-width: 130px !important; }
   #pricing span[style*="font-size: 60px"] { font-size: 42px !important; }
 
   /* Assessment Cards Text Wrap */
