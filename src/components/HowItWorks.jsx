@@ -16,7 +16,7 @@ const HowItWorks = () => {
         </div>
 
         {/* 4 Steps Row */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px', marginBottom: '80px', position: 'relative' }}>
+        <div className="how-steps-grid">
           
           {/* Step 1 */}
           <div style={{ background: '#FFFFFF', borderRadius: '16px', padding: '32px 24px', textAlign: 'center', boxShadow: '0 4px 20px rgba(0,0,0,0.03)', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column' }}>
@@ -95,7 +95,7 @@ const HowItWorks = () => {
         </div>
 
         {/* Lower Dashboard Section */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '60px', alignItems: 'center', marginBottom: '60px' }}>
+        <div className="how-dashboard-grid">
           
           {/* Left Text */}
           <div style={{ paddingRight: '20px' }}>
@@ -154,7 +154,7 @@ const HowItWorks = () => {
               <button style={{ background: '#EFF6FF', color: '#3B82F6', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '6px' }}><i className="fa-solid fa-download"></i> Download Report</button>
             </div>
             
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '24px' }}>
+            <div className="how-stats-grid">
               <div style={{ background: '#FAFAFA', borderRadius: '12px', padding: '16px', border: '1px solid #E2E8F0' }}>
                 <h6 style={{ color: '#64748B', fontSize: '11px', fontWeight: '700', margin: '0 0 8px 0' }}>Overall Cognitive Score</h6>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
@@ -199,7 +199,7 @@ const HowItWorks = () => {
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr', gap: '16px' }}>
+            <div className="how-cards-grid">
               <div style={{ border: '1px solid #E2E8F0', borderRadius: '12px', padding: '16px' }}>
                 <h6 style={{ color: '#0F172A', fontSize: '13px', fontWeight: '800', margin: '0 0 12px 0' }}>Key Insights</h6>
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -243,7 +243,7 @@ const HowItWorks = () => {
         </div>
 
         {/* Bottom Trust Banner */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '32px', flexWrap: 'wrap', padding: '24px 0', borderTop: '1px solid #E2E8F0' }}>
+        <div className="how-trust-banner">
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <img src="https://flagcdn.com/w20/us.png" alt="US" style={{ width: '20px', borderRadius: '50%' }} />
             <span style={{ fontSize: '13px', color: '#0F172A', fontWeight: '700' }}>Trusted by Thousands Across the USA</span>
@@ -273,17 +273,35 @@ const HowItWorks = () => {
       </div>
 
       <style>{`
+        /* Desktop Base */
+        .how-steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 80px; position: relative; }
+        .how-dashboard-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 60px; align-items: center; margin-bottom: 60px; }
+        .how-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+        .how-cards-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 16px; }
+        .how-trust-banner { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; padding: 24px 0; border-top: 1px solid #E2E8F0; }
+
+        /* Responsive Fixes */
         @media (max-width: 1024px) {
-          #how-it-works .container > div:nth-child(2) { grid-template-columns: repeat(2, 1fr); }
-          #how-it-works .container > div:nth-child(3) { grid-template-columns: 1fr; }
-          #how-it-works .container > div:nth-child(3) > div:last-child > div:nth-child(2) { grid-template-columns: repeat(2, 1fr); }
-          #how-it-works .container > div:nth-child(3) > div:last-child > div:nth-child(3) { grid-template-columns: repeat(2, 1fr); }
-          #how-it-works .container > div:nth-child(4) > div:nth-child(even) { display: none; }
+          .how-steps-grid { grid-template-columns: repeat(2, 1fr); }
+          .how-dashboard-grid { grid-template-columns: 1fr; gap: 40px; }
+          .how-dashboard-grid > div:first-child { padding-right: 0; text-align: center; }
+          .how-stats-grid { grid-template-columns: repeat(2, 1fr); }
+          .how-cards-grid { grid-template-columns: repeat(2, 1fr); }
+          .how-trust-banner > div:nth-child(even) { display: none; } /* hide vertical dividers */
         }
         @media (max-width: 768px) {
-          #how-it-works .container > div:nth-child(2) { grid-template-columns: 1fr; }
-          #how-it-works .container > div:nth-child(3) > div:last-child > div:nth-child(2) { grid-template-columns: 1fr; }
-          #how-it-works .container > div:nth-child(3) > div:last-child > div:nth-child(3) { grid-template-columns: 1fr; }
+          #how-it-works { padding: 60px 0 !important; }
+          #how-it-works h2 { font-size: 32px !important; }
+          #how-it-works h3 { font-size: 28px !important; }
+          .how-steps-grid { grid-template-columns: 1fr; gap: 24px; margin-bottom: 40px; }
+          .how-dashboard-grid > div:first-child > div { flex-direction: column; text-align: center; align-items: center !important; }
+          .how-stats-grid { grid-template-columns: 1fr; gap: 16px; }
+          .how-cards-grid { grid-template-columns: 1fr; gap: 16px; }
+          .how-trust-banner { gap: 16px; flex-direction: column; align-items: center; }
+        }
+        @media (max-width: 480px) {
+          #how-it-works h2 { font-size: 28px !important; }
+          #how-it-works p { font-size: 15px !important; }
         }
       `}</style>
     </section>

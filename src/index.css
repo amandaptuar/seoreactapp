@@ -1,4 +1,8 @@
 /* Global Premium Theme - Navy & Amber */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 :root {
     --primary: #F59E0B; /* Amber CTA */
     --primary-dark: #D97706; /* Darker Amber for hover */
@@ -30,6 +34,9 @@ body {
     background-color: var(--white);
     color: #444;
     font-family: var(--font-primary);
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
 }
 
 p {
@@ -291,8 +298,8 @@ a:hover {
 
 /* ── MOBILE (≤768px) ── */
 @media (max-width: 768px) {
-  .gap { padding: 60px 0 !important; }
-  .container { padding: 0 20px !important; } /* Consistent container padding */
+  .gap { padding: 40px 0 !important; }
+  .container { padding: 0 16px !important; } /* Consistent container padding */
   .hero-section h2 { font-size: 28px !important; }
   .hero-section .dark-form-card { 
     padding: 30px 20px !important;

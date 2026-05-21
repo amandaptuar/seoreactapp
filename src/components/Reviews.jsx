@@ -67,7 +67,7 @@ const Reviews = () => {
         </div>
 
         {/* Testimonials Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', marginBottom: '40px' }}>
+        <div className="reviews-cards-grid">
           {reviews.map((review, idx) => (
             <div key={idx} style={{ background: '#0F172A', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '32px', display: 'flex', flexDirection: 'column' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
@@ -106,7 +106,7 @@ const Reviews = () => {
         </div>
 
         {/* Bottom Dark Dashboard Bar */}
-        <div style={{ background: '#0F172A', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '32px 40px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px', alignItems: 'center', marginBottom: '24px' }}>
+        <div className="reviews-bottom-grid">
           
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', borderRight: '1px solid rgba(255,255,255,0.05)' }}>
             <div style={{ display: 'flex' }}>
@@ -154,7 +154,7 @@ const Reviews = () => {
         </div>
 
         {/* Highlighted Quote */}
-        <div style={{ background: '#0F172A', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', padding: '24px 40px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div className="reviews-quote-bar">
           <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
             <i className="fa-solid fa-quote-left" style={{ color: '#3B82F6', fontSize: '24px' }}></i>
             <p style={{ color: '#FFFFFF', fontSize: '15px', margin: 0, fontWeight: '500' }}>
@@ -174,18 +174,25 @@ const Reviews = () => {
       <div style={{ position: 'absolute', bottom: '-20%', right: '10%', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 70%)', zIndex: 1, pointerEvents: 'none' }}></div>
 
       <style>{`
+        /* Desktop Base */
+        .reviews-cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 40px; }
+        .reviews-bottom-grid { background: #0F172A; border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 32px 40px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; align-items: center; margin-bottom: 24px; }
+        .reviews-quote-bar { background: #0F172A; border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 24px 40px; display: flex; align-items: center; justify-content: space-between; }
+
+        /* Responsive Fixes */
         @media (max-width: 1024px) {
-          .reviews-section .container > div:nth-child(2) { grid-template-columns: repeat(2, 1fr); }
+          .reviews-cards-grid { grid-template-columns: repeat(2, 1fr); }
           .star-burst { display: none !important; }
-          .reviews-section .container > div:nth-child(4) { grid-template-columns: repeat(2, 1fr); gap: 32px; }
-          .reviews-section .container > div:nth-child(4) > div { border-right: none !important; }
+          .reviews-bottom-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+          .reviews-bottom-grid > div { border-right: none !important; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 16px; }
         }
         @media (max-width: 768px) {
-          .reviews-section .container > div:nth-child(2) { grid-template-columns: 1fr; }
-          .reviews-section h2 { font-size: 36px !important; }
-          .reviews-section .container > div:nth-child(4) { grid-template-columns: 1fr; }
-          .reviews-section .container > div:nth-child(5) { flexDirection: 'column'; gap: '16px'; textAlign: 'center'; justify-content: center; }
-          .reviews-section .container > div:nth-child(5) > div { flex-direction: column; }
+          .reviews-section { padding: 60px 0 !important; }
+          .reviews-cards-grid { grid-template-columns: 1fr; }
+          .reviews-section h2 { font-size: 32px !important; }
+          .reviews-bottom-grid { grid-template-columns: 1fr; padding: 24px !important; }
+          .reviews-quote-bar { flex-direction: column; gap: 16px; text-align: center; justify-content: center; padding: 24px !important; }
+          .reviews-quote-bar > div:first-child { flex-direction: column; }
         }
       `}</style>
     </section>

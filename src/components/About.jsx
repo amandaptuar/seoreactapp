@@ -24,7 +24,7 @@ const About = () => {
         </div>
 
         {/* 2-Column Section */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '60px', alignItems: 'flex-start', marginBottom: '60px' }}>
+        <div className="about-main-grid">
           
           {/* Left Column: Stats List */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -164,7 +164,7 @@ const About = () => {
         </div>
 
         {/* Bottom Trust Bar */}
-        <div style={{ background: '#FAFAFA', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '32px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px', alignItems: 'center' }}>
+        <div className="about-stats-grid" style={{ background: '#FAFAFA', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '32px', alignItems: 'center' }}>
           
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             <img src="https://flagcdn.com/w40/us.png" alt="US" style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover' }} />
@@ -216,13 +216,24 @@ const About = () => {
           transform: translateY(-2px);
           box-shadow: 0 6px 20px rgba(234,88,12,0.6) !important;
         }
+        /* Desktop Base */
+        .about-main-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 60px; align-items: center; margin-bottom: 60px; }
+        .about-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+
+        /* Responsive Fixes */
         @media (max-width: 1024px) {
-          #about .container > div:nth-child(2) { grid-template-columns: 1fr; }
-          #about .container > div:nth-child(3) { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+          .about-main-grid { grid-template-columns: 1fr; gap: 40px; }
+          .about-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; }
         }
         @media (max-width: 768px) {
-          #about .container > div:nth-child(3) { grid-template-columns: 1fr; }
-          #about .container > div:nth-child(2) > div:first-child > div { flex-direction: column; text-align: center; }
+          #about { padding: 60px 0 !important; }
+          #about h2 { font-size: 32px !important; }
+          .about-stats-grid { grid-template-columns: 1fr; gap: 24px; }
+          .about-main-grid > div:first-child > div { flex-direction: column; text-align: center; align-items: center !important; }
+          .about-main-grid > div:last-child { padding: 32px 24px !important; }
+        }
+        @media (max-width: 480px) {
+          #about h2 { font-size: 28px !important; }
         }
       `}</style>
     </section>

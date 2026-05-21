@@ -22,7 +22,7 @@ const Services = () => {
         </div>
 
         {/* 5 Badges Row */}
-        <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '24px', display: 'flex', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap', marginBottom: '60px', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
+        <div className="services-trust-banner">
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <img src="https://flagcdn.com/w40/us.png" alt="US" style={{ width: '40px', borderRadius: '50%' }} />
             <div>
@@ -73,7 +73,7 @@ const Services = () => {
         </div>
 
         {/* 2-Column Section */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '40px', marginBottom: '60px' }}>
+        <div className="services-main-grid">
           
           {/* Left Column: Features List */}
           <div>
@@ -134,13 +134,13 @@ const Services = () => {
           </div>
 
           {/* Right Column: Report Cards */}
-          <div>
+          <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
             <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#0F172A', marginBottom: '24px' }}>Comprehensive AI Reports for Every You</h3>
             
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px' }}>
+            <div className="services-cards-grid">
               
               {/* Card 1 */}
-              <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '24px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', boxShadow: '0 4px 10px rgba(0,0,0,0.02)' }}>
+              <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '24px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', boxShadow: '0 4px 10px rgba(0,0,0,0.02)', height: '100%' }}>
                 <i className="fa-solid fa-brain" style={{ fontSize: '36px', color: '#8B5CF6', marginBottom: '16px' }}></i>
                 <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A', marginBottom: '16px', minHeight: '40px' }}>Brain Performance<br/>Report</h5>
                 <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px 0', textAlign: 'left', fontSize: '12px', color: '#64748B', display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
@@ -154,7 +154,7 @@ const Services = () => {
               </div>
 
               {/* Card 2 */}
-              <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '24px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', boxShadow: '0 4px 10px rgba(0,0,0,0.02)' }}>
+              <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '24px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', boxShadow: '0 4px 10px rgba(0,0,0,0.02)', height: '100%' }}>
                 <i className="fa-solid fa-person-dress" style={{ fontSize: '36px', color: '#EC4899', marginBottom: '16px' }}></i>
                 <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A', marginBottom: '16px', minHeight: '40px' }}>Women's Health<br/>Report</h5>
                 <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px 0', textAlign: 'left', fontSize: '12px', color: '#64748B', display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
@@ -168,7 +168,7 @@ const Services = () => {
               </div>
 
               {/* Card 3 */}
-              <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '24px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', boxShadow: '0 4px 10px rgba(0,0,0,0.02)' }}>
+              <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '24px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', boxShadow: '0 4px 10px rgba(0,0,0,0.02)', height: '100%' }}>
                 <i className="fa-solid fa-heart-pulse" style={{ fontSize: '36px', color: '#14B8A6', marginBottom: '16px' }}></i>
                 <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A', marginBottom: '16px', minHeight: '40px' }}>Sexual Health<br/>Report</h5>
                 <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px 0', textAlign: 'left', fontSize: '12px', color: '#64748B', display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
@@ -182,7 +182,7 @@ const Services = () => {
               </div>
 
               {/* Card 4 */}
-              <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '24px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', boxShadow: '0 4px 10px rgba(0,0,0,0.02)' }}>
+              <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '24px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', boxShadow: '0 4px 10px rgba(0,0,0,0.02)', height: '100%' }}>
                 <i className="fa-solid fa-person" style={{ fontSize: '36px', color: '#3B82F6', marginBottom: '16px' }}></i>
                 <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A', marginBottom: '16px', minHeight: '40px' }}>Men's Health<br/>Report</h5>
                 <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px 0', textAlign: 'left', fontSize: '12px', color: '#64748B', display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
@@ -196,7 +196,7 @@ const Services = () => {
               </div>
 
               {/* Card 5 */}
-              <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '24px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', boxShadow: '0 4px 10px rgba(0,0,0,0.02)' }}>
+              <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '24px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', boxShadow: '0 4px 10px rgba(0,0,0,0.02)', height: '100%' }}>
                 <i className="fa-solid fa-arrow-trend-up" style={{ fontSize: '36px', color: '#F97316', marginBottom: '16px' }}></i>
                 <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A', marginBottom: '16px', minHeight: '40px' }}>Your Better Life<br/>Report</h5>
                 <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px 0', textAlign: 'left', fontSize: '12px', color: '#64748B', display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
@@ -215,10 +215,10 @@ const Services = () => {
         </div>
 
         {/* Bottom Dark Card */}
-        <div style={{ background: '#0F172A', borderRadius: '24px', padding: '40px', boxShadow: '0 20px 40px rgba(15,23,42,0.1)' }}>
+        <div className="services-bottom-bar">
           <h3 style={{ textAlign: 'center', fontSize: '24px', fontWeight: '800', color: '#FFFFFF', marginBottom: '32px' }}>Your Better Life Starts with Better Insights</h3>
           
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '24px' }}>
+          <div className="services-bottom-grid">
             
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
               <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(139, 92, 246, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#8B5CF6', fontSize: '20px', flexShrink: 0 }}>
@@ -276,22 +276,34 @@ const Services = () => {
       </div>
 
       <style>{`
+        /* Desktop Base */
+        .services-trust-banner { display: flex; justify-content: space-between; align-items: center; background: #F8FAFC; padding: 16px 24px; border-radius: 16px; border: 1px solid #E2E8F0; margin-bottom: 60px; }
+        .services-main-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 40px; margin-bottom: 60px; }
+        .services-cards-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; flex: 1; align-items: stretch; }
+        .services-bottom-bar { background: #0F172A; border-radius: 24px; padding: 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.04); position: relative; overflow: hidden; }
+        .services-bottom-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; position: relative; z-index: 2; }
+
+        /* Responsive Fixes */
         @media (max-width: 1024px) {
-          .services-section .container > div:nth-child(2) { display: grid !important; grid-template-columns: repeat(3, 1fr) !important; }
-          .services-section .container > div:nth-child(2) > div:nth-child(even) { display: none !important; } /* hide dividers */
-          .services-section .container > div:nth-child(3) { grid-template-columns: 1fr; }
-          .services-section .container > div:nth-child(3) > div:last-child > div { grid-template-columns: repeat(3, 1fr); }
-          .services-section .container > div:nth-child(4) > div { grid-template-columns: repeat(3, 1fr); gap: 32px; }
+          .services-section h2 { font-size: 36px !important; }
+          .services-trust-banner { display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 16px; }
+          .services-trust-banner > div:nth-child(even) { display: none !important; } /* hide dividers */
+          .services-main-grid { grid-template-columns: 1fr; }
+          .services-cards-grid { grid-template-columns: repeat(3, 1fr); }
+          .services-bottom-grid { grid-template-columns: repeat(3, 1fr); gap: 32px; }
         }
         @media (max-width: 768px) {
-          .services-section .container > div:nth-child(2) { grid-template-columns: repeat(2, 1fr) !important; }
-          .services-section .container > div:nth-child(3) > div:last-child > div { grid-template-columns: repeat(2, 1fr); }
-          .services-section .container > div:nth-child(4) > div { grid-template-columns: repeat(2, 1fr); }
+          .services-section { padding: 60px 0 !important; }
+          .services-section h2 { font-size: 28px !important; }
+          .services-trust-banner { grid-template-columns: repeat(2, 1fr) !important; }
+          .services-cards-grid { grid-template-columns: repeat(2, 1fr); }
+          .services-bottom-grid { grid-template-columns: repeat(2, 1fr); }
         }
         @media (max-width: 500px) {
-          .services-section .container > div:nth-child(2) { grid-template-columns: 1fr !important; }
-          .services-section .container > div:nth-child(3) > div:last-child > div { grid-template-columns: 1fr; }
-          .services-section .container > div:nth-child(4) > div { grid-template-columns: 1fr; }
+          .services-trust-banner { grid-template-columns: 1fr !important; }
+          .services-cards-grid { grid-template-columns: 1fr; }
+          .services-bottom-grid { grid-template-columns: 1fr; }
+          .services-bottom-bar { padding: 24px !important; }
         }
       `}</style>
     </section>

@@ -87,10 +87,10 @@ const Hero = () => {
       <div className="container" style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 20px' }}>
         
         {/* Top Hero Layout: Left Text / Right Form */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '60px', alignItems: 'center', marginBottom: '60px' }}>
+        <div className="hero-main-grid">
           
           {/* Left Column */}
-          <div style={{ paddingRight: '20px' }}>
+          <div className="hero-left-col">
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#E0E7FF', padding: '6px 16px', borderRadius: '30px', marginBottom: '24px' }}>
               <i className="fa-solid fa-tv" style={{ color: '#4F46E5', fontSize: '12px' }}></i>
               <span style={{ color: '#4F46E5', fontSize: '11px', fontWeight: '800', letterSpacing: '1px', textTransform: 'uppercase' }}>Cognitive Performance System</span>
@@ -108,7 +108,7 @@ const Hero = () => {
             </p>
 
             {/* 4 Feature Columns */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '40px', borderBottom: '1px solid #E2E8F0', paddingBottom: '40px' }}>
+            <div className="hero-features-grid">
               <div style={{ textAlign: 'center' }}>
                 <i className="fa-solid fa-brain" style={{ fontSize: '28px', color: '#3B82F6', marginBottom: '12px' }}></i>
                 <h4 style={{ fontSize: '20px', fontWeight: '800', color: '#0F172A', margin: '0 0 4px 0' }}>80%</h4>
@@ -132,7 +132,7 @@ const Hero = () => {
             </div>
 
             {/* Trusted Banner */}
-            <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-start', background: '#FFFFFF', padding: '20px', borderRadius: '16px', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
+            <div className="hero-trust-banner">
               <div style={{ display: 'flex', gap: '16px', flex: 1 }}>
                 <img src="https://flagcdn.com/w40/us.png" alt="USA Flag" style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
                 <div>
@@ -153,7 +153,7 @@ const Hero = () => {
           </div>
 
           {/* Right Column: Dark Form */}
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <div className="hero-right-col">
             <div className="hero-dark-form" style={{ background: '#0F172A', borderRadius: '24px', padding: '40px', width: '100%', maxWidth: '480px', boxShadow: '0 24px 48px rgba(15,23,42,0.2)', position: 'relative' }}>
               <div style={{ textAlign: 'center', marginBottom: '32px' }}>
                 <h3 style={{ color: '#FFFFFF', fontSize: '28px', fontWeight: '800', marginBottom: '8px' }}>Get Started Today</h3>
@@ -217,10 +217,10 @@ const Hero = () => {
         </div>
 
         {/* Bottom "Why Important" Bar */}
-        <div style={{ background: '#FFFFFF', borderRadius: '24px', padding: '40px', boxShadow: '0 10px 40px rgba(0,0,0,0.04)' }}>
+        <div className="hero-bottom-bar">
           <h3 style={{ textAlign: 'center', fontSize: '20px', fontWeight: '800', color: '#0F172A', marginBottom: '32px' }}>Why Cognitive Health Assessment is Important</h3>
           
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '24px' }}>
+          <div className="hero-bottom-grid">
             {/* 1 */}
             <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
               <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#F5F3FF', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -277,6 +277,16 @@ const Hero = () => {
       </div>
 
       <style>{`
+        /* Desktop Base */
+        .hero-main-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 60px; align-items: center; margin-bottom: 60px; }
+        .hero-left-col { padding-right: 20px; }
+        .hero-features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 40px; border-bottom: 1px solid #E2E8F0; padding-bottom: 40px; }
+        .hero-trust-banner { display: flex; gap: 24px; align-items: flex-start; background: #FFFFFF; padding: 20px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
+        .hero-right-col { display: flex; justify-content: center; width: 100%; }
+        .hero-bottom-bar { background: #FFFFFF; border-radius: 24px; padding: 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.04); }
+        .hero-bottom-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 24px; }
+
+        .hero-input { width: 100% !important; }
         .hero-input:focus {
           border-color: #60A5FA !important;
           box-shadow: 0 0 0 3px rgba(96,165,250,0.2);
@@ -285,17 +295,32 @@ const Hero = () => {
           transform: translateY(-2px);
           box-shadow: 0 6px 20px rgba(234,88,12,0.6) !important;
         }
+
+        /* Responsive Fixes */
         @media (max-width: 1024px) {
-          .hero-section .container > div:first-child { grid-template-columns: 1fr; gap: 40px; }
-          .hero-section .container > div:first-child > div:first-child { padding-right: 0; }
-          .hero-dark-form { margin: 0 auto; }
-          .hero-section .container > div:last-child > div { grid-template-columns: repeat(2, 1fr); }
+          .hero-main-grid { grid-template-columns: 1fr; gap: 40px; }
+          .hero-left-col { padding-right: 0; text-align: center; }
+          .hero-left-col p { margin: 0 auto 40px auto !important; }
+          .hero-features-grid { padding-bottom: 30px; margin-bottom: 30px; }
+          .hero-dark-form { margin: 0 auto; width: 100%; max-width: 500px !important; }
+          .hero-bottom-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+        }
+        @media (max-width: 768px) {
+          .hero-section { padding-top: 100px !important; padding-bottom: 40px !important; }
+          .hero-section h1 { font-size: 42px !important; }
+          .hero-trust-banner { flex-direction: column; align-items: center; text-align: center; gap: 16px; }
+          .hero-trust-banner > div:nth-child(2) { display: none; } /* Hide vertical divider */
         }
         @media (max-width: 640px) {
-          .hero-section h1 { font-size: 40px !important; }
-          .hero-section .container > div:first-child > div:first-child > div:nth-child(4) { grid-template-columns: repeat(2, 1fr); }
-          .hero-section .container > div:first-child > div:first-child > div:nth-child(4) > div { border: none !important; margin-bottom: 16px; }
-          .hero-section .container > div:last-child > div { grid-template-columns: 1fr; }
+          .hero-section h1 { font-size: 32px !important; }
+          .hero-section p { font-size: 15px !important; }
+          .hero-features-grid { grid-template-columns: 1fr; gap: 24px; border-bottom: none; padding-bottom: 0; }
+          .hero-features-grid > div { border: none !important; }
+          .hero-bottom-grid { grid-template-columns: 1fr; gap: 24px; }
+          .hero-bottom-bar { padding: 24px 20px; }
+          .hero-dark-form { padding: 32px 20px !important; }
+          /* Ensure form inputs don't overflow */
+          .hero-input { padding-left: 44px !important; font-size: 16px !important; } /* 16px prevents iOS zoom */
         }
       `}</style>
     </section>
