@@ -1,12 +1,12 @@
 import React from 'react';
 import Header from '../components/Header';
 import Hero from '../components/Hero';
-import About from '../components/About';
-import Services from '../components/Services';
 import Reviews from '../components/Reviews';
+import Services from '../components/Services';
+import About from '../components/About';
+import HowItWorks from '../components/HowItWorks';
 import FAQ from '../components/FAQ';
 import Pricing from '../components/Pricing';
-import Stats from '../components/Stats';
 import Footer from '../components/Footer';
 
 const Home = () => {
@@ -14,12 +14,12 @@ const Home = () => {
     <>
       <Header />
       <Hero />
-      <About />
-      <Services />
       <Reviews />
+      <Services />
+      <About />
+      <HowItWorks />
       <FAQ />
       <Pricing />
-      <Stats />
       <Footer />
     </>
   );

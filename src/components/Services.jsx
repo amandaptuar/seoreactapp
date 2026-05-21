@@ -1,162 +1,297 @@
 import React from 'react';
 
-const steps = [
-  {
-    num: '01',
-    icon: '📋',
-    title: 'Answer Smart Questions',
-    desc: 'Scientifically structured to assess your mental performance.',
-  },
-  {
-    num: '02',
-    icon: '🧠',
-    title: 'Get Your Cognitive Score',
-    desc: 'Instant breakdown across key brain functions.',
-  },
-  {
-    num: '03',
-    icon: '📊',
-    title: 'See What’s Holding You Back',
-    desc: 'Identify stress, fatigue, and focus blockers.',
-  },
-  {
-    num: '04',
-    icon: '🚀',
-    title: 'Follow Your Action Plan',
-    desc: 'Simple steps to improve within days.',
-  },
-];
-
-const assessments = [
-  { icon: 'fa-solid fa-brain',      label: 'Cognitive / Mental Performance', dark: false },
-  { icon: 'fa-solid fa-female',     label: "Women's Health Assessment",      dark: true  },
-  { icon: 'fa-solid fa-child',      label: 'Kids Monitoring',                dark: false },
-];
-
-const CARD_STYLE = {
-  background: '#ffffff',
-  border: '1px solid #e2e8f0',
-  borderRadius: '16px',
-  padding: '20px',
-  boxShadow: '0 4px 16px rgba(15,23,42,0.05)',
-  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-  height: '100%',
-};
-
 const Services = () => {
   return (
-    <section
-      id="services"
-      className="how-it-works"
-      style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)', padding: '80px 0' }}
-    >
-      <div className="container" style={{ maxWidth: '1140px', margin: '0 auto', padding: '0 24px' }}>
+    <section id="services" className="services-section" style={{ background: '#FAFAFA', padding: '100px 0' }}>
+      <div className="container" style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 20px' }}>
+        
+        {/* Top Header */}
+        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(59, 130, 246, 0.1)', padding: '6px 16px', borderRadius: '30px', marginBottom: '24px' }}>
+            <i className="fa-solid fa-sparkles" style={{ color: '#F59E0B', fontSize: '12px' }}></i>
+            <span style={{ color: '#3B82F6', fontSize: '11px', fontWeight: '800', letterSpacing: '1px', textTransform: 'uppercase' }}>Smart Assessments. Smarter You.</span>
+          </div>
 
-        {/* Two-column layout: How It Works | Choose Your Assessment */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '60px', alignItems: 'start' }}>
+          <h2 style={{ fontSize: '48px', fontWeight: '800', color: '#0F172A', lineHeight: '1.2', letterSpacing: '-1px', marginBottom: '16px' }}>
+            AI-Powered Assessments.<br/>
+            Personalized Reports. <span style={{ color: '#3B82F6' }}>Better Life.</span>
+          </h2>
+          <p style={{ color: '#475569', fontSize: '18px', maxWidth: '700px', margin: '0 auto' }}>
+            Limitless uses advanced AI and neuroscience to deliver deep insights that help you improve your brain performance, health, and overall well-being.
+          </p>
+        </div>
 
-          {/* ─── LEFT: HOW IT WORKS ─── */}
-          <div>
-            <div style={{ marginBottom: '28px' }}>
-              <h2 style={{ color: '#0F172A', fontSize: '30px', fontWeight: '800', marginBottom: '8px', lineHeight: 1.2 }}>
-                How It Works
-              </h2>
-              <p style={{ color: '#6B7280', fontSize: '15px', margin: 0 }}>
-                Simple 4-step process to improve your performance
-              </p>
+        {/* 5 Badges Row */}
+        <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '24px', display: 'flex', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap', marginBottom: '60px', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <img src="https://flagcdn.com/w40/us.png" alt="US" style={{ width: '40px', borderRadius: '50%' }} />
+            <div>
+              <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A', margin: '0 0 2px 0' }}>Trusted by<br/>Thousands in USA</h5>
+              <p style={{ fontSize: '11px', color: '#64748B', margin: 0 }}>Based on scientific<br/>research & data</p>
             </div>
+          </div>
+          <div style={{ width: '1px', background: '#E2E8F0' }}></div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(139, 92, 246, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#8B5CF6' }}>
+              <i className="fa-solid fa-check"></i>
+            </div>
+            <div>
+              <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A', margin: '0 0 2px 0' }}>AI & Science<br/>Combined</h5>
+              <p style={{ fontSize: '11px', color: '#64748B', margin: 0 }}>Advanced algorithms<br/>& clinical validation</p>
+            </div>
+          </div>
+          <div style={{ width: '1px', background: '#E2E8F0' }}></div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10B981' }}>
+              <i className="fa-solid fa-lock"></i>
+            </div>
+            <div>
+              <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A', margin: '0 0 2px 0' }}>100% Private<br/>& Secure</h5>
+              <p style={{ fontSize: '11px', color: '#64748B', margin: 0 }}>Your data is encrypted<br/>and never shared</p>
+            </div>
+          </div>
+          <div style={{ width: '1px', background: '#E2E8F0' }}></div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(245, 158, 11, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#F59E0B' }}>
+              <i className="fa-solid fa-bolt"></i>
+            </div>
+            <div>
+              <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A', margin: '0 0 2px 0' }}>Instant Results<br/>in Minutes</h5>
+              <p style={{ fontSize: '11px', color: '#64748B', margin: 0 }}>Get your detailed AI<br/>report instantly</p>
+            </div>
+          </div>
+          <div style={{ width: '1px', background: '#E2E8F0' }}></div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(59, 130, 246, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3B82F6' }}>
+              <i className="fa-solid fa-check-double"></i>
+            </div>
+            <div>
+              <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A', margin: '0 0 2px 0' }}>Actionable<br/>Recommendations</h5>
+              <p style={{ fontSize: '11px', color: '#64748B', margin: 0 }}>Personalized steps to<br/>improve your life</p>
+            </div>
+          </div>
+        </div>
 
-            {/* Step cards — full-width column, equal size */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px' }}>
-              {steps.map((step) => (
-                <div
-                  key={step.num}
-                  className="services-step-card"
-                  style={{ ...CARD_STYLE, display: 'flex', alignItems: 'center', gap: '16px', padding: '16px 20px' }}
-                >
-                  {/* Step badge */}
-                  <div style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    minWidth: '42px', height: '42px', borderRadius: '50%',
-                    background: 'rgba(59,130,246,0.1)', color: '#3B82F6',
-                    fontWeight: '800', fontSize: '13px', flexShrink: 0,
-                  }}>
-                    {step.num}
-                  </div>
-                  {/* Icon */}
-                  <div style={{ fontSize: '20px', flexShrink: 0 }}>{step.icon}</div>
-                  {/* Text */}
-                  <div>
-                    <p style={{ margin: 0, fontWeight: '700', fontSize: '14px', color: '#0F172A' }}>{step.title}</p>
-                    <p style={{ margin: '3px 0 0', fontSize: '13px', color: '#6B7280', lineHeight: 1.5 }}>{step.desc}</p>
-                  </div>
+        {/* 2-Column Section */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '40px', marginBottom: '60px' }}>
+          
+          {/* Left Column: Features List */}
+          <div>
+            <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#0F172A', marginBottom: '24px' }}>Features of Limitless AI Assessments</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              
+              <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '20px', display: 'flex', gap: '16px', alignItems: 'center', boxShadow: '0 4px 10px rgba(0,0,0,0.02)' }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(139, 92, 246, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#8B5CF6', fontSize: '20px', flexShrink: 0 }}>
+                  <i className="fa-solid fa-brain"></i>
                 </div>
-              ))}
+                <div>
+                  <h5 style={{ fontSize: '15px', fontWeight: '700', color: '#0F172A', margin: '0 0 4px 0' }}>AI-Powered Deep Analysis</h5>
+                  <p style={{ fontSize: '13px', color: '#64748B', margin: 0, lineHeight: '1.4' }}>Advanced AI analyzes 50+ cognitive & behavioral factors to generate accurate insights.</p>
+                </div>
+              </div>
+
+              <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '20px', display: 'flex', gap: '16px', alignItems: 'center', boxShadow: '0 4px 10px rgba(0,0,0,0.02)' }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10B981', fontSize: '20px', flexShrink: 0 }}>
+                  <i className="fa-solid fa-bullseye"></i>
+                </div>
+                <div>
+                  <h5 style={{ fontSize: '15px', fontWeight: '700', color: '#0F172A', margin: '0 0 4px 0' }}>Science-Backed Accuracy</h5>
+                  <p style={{ fontSize: '13px', color: '#64748B', margin: 0, lineHeight: '1.4' }}>Built on neuroscience, psychology & clinical research for reliable and meaningful results.</p>
+                </div>
+              </div>
+
+              <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '20px', display: 'flex', gap: '16px', alignItems: 'center', boxShadow: '0 4px 10px rgba(0,0,0,0.02)' }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(245, 158, 11, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#F59E0B', fontSize: '20px', flexShrink: 0 }}>
+                  <i className="fa-solid fa-chart-line"></i>
+                </div>
+                <div>
+                  <h5 style={{ fontSize: '15px', fontWeight: '700', color: '#0F172A', margin: '0 0 4px 0' }}>Instant, Easy & Convenient</h5>
+                  <p style={{ fontSize: '13px', color: '#64748B', margin: 0, lineHeight: '1.4' }}>Complete your assessment in under 5 minutes and get results instantly.</p>
+                </div>
+              </div>
+
+              <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '20px', display: 'flex', gap: '16px', alignItems: 'center', boxShadow: '0 4px 10px rgba(0,0,0,0.02)' }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(59, 130, 246, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3B82F6', fontSize: '20px', flexShrink: 0 }}>
+                  <i className="fa-solid fa-shield-halved"></i>
+                </div>
+                <div>
+                  <h5 style={{ fontSize: '15px', fontWeight: '700', color: '#0F172A', margin: '0 0 4px 0' }}>100% Private & Secure</h5>
+                  <p style={{ fontSize: '13px', color: '#64748B', margin: 0, lineHeight: '1.4' }}>Your privacy is our priority. Your data is encrypted, secure, and never shared.</p>
+                </div>
+              </div>
+
+              <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '20px', display: 'flex', gap: '16px', alignItems: 'center', boxShadow: '0 4px 10px rgba(0,0,0,0.02)' }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(236, 72, 153, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#EC4899', fontSize: '20px', flexShrink: 0 }}>
+                  <i className="fa-regular fa-heart"></i>
+                </div>
+                <div>
+                  <h5 style={{ fontSize: '15px', fontWeight: '700', color: '#0F172A', margin: '0 0 4px 0' }}>Personalized Action Plan</h5>
+                  <p style={{ fontSize: '13px', color: '#64748B', margin: 0, lineHeight: '1.4' }}>Get customized recommendations and daily practices to improve your brain and life.</p>
+                </div>
+              </div>
+
             </div>
           </div>
 
-          {/* ─── RIGHT: CHOOSE YOUR ASSESSMENT ─── */}
+          {/* Right Column: Report Cards */}
           <div>
-            <div style={{ marginBottom: '28px' }}>
-              <h2 style={{ color: '#0F172A', fontSize: '30px', fontWeight: '800', marginBottom: '8px', lineHeight: 1.2 }}>
-                Choose Your Assessment
-              </h2>
-              <p style={{ color: '#6B7280', fontSize: '15px', margin: 0 }}>
-                Each assessment is tailored to a specific performance area.
-              </p>
-            </div>
+            <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#0F172A', marginBottom: '24px' }}>Comprehensive AI Reports for Every You</h3>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px' }}>
+              
+              {/* Card 1 */}
+              <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '24px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', boxShadow: '0 4px 10px rgba(0,0,0,0.02)' }}>
+                <i className="fa-solid fa-brain" style={{ fontSize: '36px', color: '#8B5CF6', marginBottom: '16px' }}></i>
+                <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A', marginBottom: '16px', minHeight: '40px' }}>Brain Performance<br/>Report</h5>
+                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px 0', textAlign: 'left', fontSize: '12px', color: '#64748B', display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
+                  <li><span style={{ color: '#8B5CF6', marginRight: '6px' }}>•</span> Cognitive Score</li>
+                  <li><span style={{ color: '#8B5CF6', marginRight: '6px' }}>•</span> Memory & Focus</li>
+                  <li><span style={{ color: '#8B5CF6', marginRight: '6px' }}>•</span> Attention Span</li>
+                  <li><span style={{ color: '#8B5CF6', marginRight: '6px' }}>•</span> Reaction Time</li>
+                  <li><span style={{ color: '#8B5CF6', marginRight: '6px' }}>•</span> Mental Clarity</li>
+                </ul>
+                <button style={{ width: '100%', padding: '10px', background: '#8B5CF6', color: '#FFF', border: 'none', borderRadius: '8px', fontSize: '13px', fontWeight: '700', cursor: 'pointer' }}>Get Report</button>
+              </div>
 
-            {/* 2×2 grid — equal size cards */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-              {assessments.map((a, i) => (
-                <div
-                  key={i}
-                  className="services-assessment-card"
-                  style={{
-                    ...CARD_STYLE,
-                    background: a.dark ? '#0F172A' : '#ffffff',
-                    border: a.dark ? 'none' : '1px solid #e2e8f0',
-                    padding: '24px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '14px',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <i
-                    className={a.icon}
-                    style={{ fontSize: '32px', color: a.dark ? '#F59E0B' : '#3B82F6' }}
-                  />
-                  <h4 style={{ color: a.dark ? '#fff' : '#0F172A', fontSize: '15px', fontWeight: '700', margin: 0, lineHeight: 1.4 }}>
-                    {a.label}
-                  </h4>
-                </div>
-              ))}
+              {/* Card 2 */}
+              <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '24px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', boxShadow: '0 4px 10px rgba(0,0,0,0.02)' }}>
+                <i className="fa-solid fa-person-dress" style={{ fontSize: '36px', color: '#EC4899', marginBottom: '16px' }}></i>
+                <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A', marginBottom: '16px', minHeight: '40px' }}>Women's Health<br/>Report</h5>
+                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px 0', textAlign: 'left', fontSize: '12px', color: '#64748B', display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
+                  <li><span style={{ color: '#EC4899', marginRight: '6px' }}>•</span> Hormonal Balance</li>
+                  <li><span style={{ color: '#EC4899', marginRight: '6px' }}>•</span> Stress & Mood</li>
+                  <li><span style={{ color: '#EC4899', marginRight: '6px' }}>•</span> Energy Levels</li>
+                  <li><span style={{ color: '#EC4899', marginRight: '6px' }}>•</span> Sleep Quality</li>
+                  <li><span style={{ color: '#EC4899', marginRight: '6px' }}>•</span> Menstrual Insights</li>
+                </ul>
+                <button style={{ width: '100%', padding: '10px', background: '#EC4899', color: '#FFF', border: 'none', borderRadius: '8px', fontSize: '13px', fontWeight: '700', cursor: 'pointer' }}>Get Report</button>
+              </div>
+
+              {/* Card 3 */}
+              <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '24px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', boxShadow: '0 4px 10px rgba(0,0,0,0.02)' }}>
+                <i className="fa-solid fa-heart-pulse" style={{ fontSize: '36px', color: '#14B8A6', marginBottom: '16px' }}></i>
+                <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A', marginBottom: '16px', minHeight: '40px' }}>Sexual Health<br/>Report</h5>
+                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px 0', textAlign: 'left', fontSize: '12px', color: '#64748B', display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
+                  <li><span style={{ color: '#14B8A6', marginRight: '6px' }}>•</span> Performance Health</li>
+                  <li><span style={{ color: '#14B8A6', marginRight: '6px' }}>•</span> Hormonal Insights</li>
+                  <li><span style={{ color: '#14B8A6', marginRight: '6px' }}>•</span> Libido & Wellness</li>
+                  <li><span style={{ color: '#14B8A6', marginRight: '6px' }}>•</span> Confidence Score</li>
+                  <li><span style={{ color: '#14B8A6', marginRight: '6px' }}>•</span> Personal Guidance</li>
+                </ul>
+                <button style={{ width: '100%', padding: '10px', background: '#14B8A6', color: '#FFF', border: 'none', borderRadius: '8px', fontSize: '13px', fontWeight: '700', cursor: 'pointer' }}>Get Report</button>
+              </div>
+
+              {/* Card 4 */}
+              <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '24px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', boxShadow: '0 4px 10px rgba(0,0,0,0.02)' }}>
+                <i className="fa-solid fa-person" style={{ fontSize: '36px', color: '#3B82F6', marginBottom: '16px' }}></i>
+                <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A', marginBottom: '16px', minHeight: '40px' }}>Men's Health<br/>Report</h5>
+                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px 0', textAlign: 'left', fontSize: '12px', color: '#64748B', display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
+                  <li><span style={{ color: '#3B82F6', marginRight: '6px' }}>•</span> Testosterone Levels</li>
+                  <li><span style={{ color: '#3B82F6', marginRight: '6px' }}>•</span> Energy & Stamina</li>
+                  <li><span style={{ color: '#3B82F6', marginRight: '6px' }}>•</span> Stress & Recovery</li>
+                  <li><span style={{ color: '#3B82F6', marginRight: '6px' }}>•</span> Muscle & Fitness</li>
+                  <li><span style={{ color: '#3B82F6', marginRight: '6px' }}>•</span> Men's Wellness</li>
+                </ul>
+                <button style={{ width: '100%', padding: '10px', background: '#3B82F6', color: '#FFF', border: 'none', borderRadius: '8px', fontSize: '13px', fontWeight: '700', cursor: 'pointer' }}>Get Report</button>
+              </div>
+
+              {/* Card 5 */}
+              <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '24px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', boxShadow: '0 4px 10px rgba(0,0,0,0.02)' }}>
+                <i className="fa-solid fa-arrow-trend-up" style={{ fontSize: '36px', color: '#F97316', marginBottom: '16px' }}></i>
+                <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A', marginBottom: '16px', minHeight: '40px' }}>Your Better Life<br/>Report</h5>
+                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px 0', textAlign: 'left', fontSize: '12px', color: '#64748B', display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
+                  <li><span style={{ color: '#F97316', marginRight: '6px' }}>•</span> Productivity Boost</li>
+                  <li><span style={{ color: '#F97316', marginRight: '6px' }}>•</span> Emotional Balance</li>
+                  <li><span style={{ color: '#F97316', marginRight: '6px' }}>•</span> Goal Achievement</li>
+                  <li><span style={{ color: '#F97316', marginRight: '6px' }}>•</span> Habit Optimization</li>
+                  <li><span style={{ color: '#F97316', marginRight: '6px' }}>•</span> Life Quality Score</li>
+                </ul>
+                <button style={{ width: '100%', padding: '10px', background: '#F97316', color: '#FFF', border: 'none', borderRadius: '8px', fontSize: '13px', fontWeight: '700', cursor: 'pointer' }}>Get Report</button>
+              </div>
+
             </div>
           </div>
 
         </div>
+
+        {/* Bottom Dark Card */}
+        <div style={{ background: '#0F172A', borderRadius: '24px', padding: '40px', boxShadow: '0 20px 40px rgba(15,23,42,0.1)' }}>
+          <h3 style={{ textAlign: 'center', fontSize: '24px', fontWeight: '800', color: '#FFFFFF', marginBottom: '32px' }}>Your Better Life Starts with Better Insights</h3>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '24px' }}>
+            
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(139, 92, 246, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#8B5CF6', fontSize: '20px', flexShrink: 0 }}>
+                <i className="fa-solid fa-brain"></i>
+              </div>
+              <div>
+                <h5 style={{ color: '#FFFFFF', fontSize: '15px', fontWeight: '700', margin: '0 0 4px 0' }}>Think Better</h5>
+                <p style={{ color: '#94A3B8', fontSize: '12px', margin: 0, lineHeight: '1.4' }}>Improve memory, focus, and decision-making.</p>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10B981', fontSize: '20px', flexShrink: 0 }}>
+                <i className="fa-solid fa-bolt"></i>
+              </div>
+              <div>
+                <h5 style={{ color: '#FFFFFF', fontSize: '15px', fontWeight: '700', margin: '0 0 4px 0' }}>Feel Better</h5>
+                <p style={{ color: '#94A3B8', fontSize: '12px', margin: 0, lineHeight: '1.4' }}>Reduce stress, balance mood, and boost energy.</p>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(236, 72, 153, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#EC4899', fontSize: '20px', flexShrink: 0 }}>
+                <i className="fa-regular fa-heart"></i>
+              </div>
+              <div>
+                <h5 style={{ color: '#FFFFFF', fontSize: '15px', fontWeight: '700', margin: '0 0 4px 0' }}>Perform Better</h5>
+                <p style={{ color: '#94A3B8', fontSize: '12px', margin: 0, lineHeight: '1.4' }}>Enhance productivity, creativity, and confidence.</p>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(59, 130, 246, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3B82F6', fontSize: '20px', flexShrink: 0 }}>
+                <i className="fa-regular fa-user"></i>
+              </div>
+              <div>
+                <h5 style={{ color: '#FFFFFF', fontSize: '15px', fontWeight: '700', margin: '0 0 4px 0' }}>Live Better</h5>
+                <p style={{ color: '#94A3B8', fontSize: '12px', margin: 0, lineHeight: '1.4' }}>Build healthy habits and a better lifestyle.</p>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(245, 158, 11, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#F59E0B', fontSize: '20px', flexShrink: 0 }}>
+                <i className="fa-solid fa-medal"></i>
+              </div>
+              <div>
+                <h5 style={{ color: '#FFFFFF', fontSize: '15px', fontWeight: '700', margin: '0 0 4px 0' }}>Be Your Best</h5>
+                <p style={{ color: '#94A3B8', fontSize: '12px', margin: 0, lineHeight: '1.4' }}>Unlock your full potential and live your best life.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
       </div>
 
       <style>{`
-        .services-step-card:hover {
-          transform: translateY(-3px) !important;
-          box-shadow: 0 10px 24px rgba(15,23,42,0.08) !important;
+        @media (max-width: 1024px) {
+          .services-section .container > div:nth-child(2) { display: grid !important; grid-template-columns: repeat(3, 1fr) !important; }
+          .services-section .container > div:nth-child(2) > div:nth-child(even) { display: none !important; } /* hide dividers */
+          .services-section .container > div:nth-child(3) { grid-template-columns: 1fr; }
+          .services-section .container > div:nth-child(3) > div:last-child > div { grid-template-columns: repeat(3, 1fr); }
+          .services-section .container > div:nth-child(4) > div { grid-template-columns: repeat(3, 1fr); gap: 32px; }
         }
-        .services-assessment-card:hover {
-          transform: translateY(-4px) !important;
-          box-shadow: 0 12px 28px rgba(15,23,42,0.1) !important;
+        @media (max-width: 768px) {
+          .services-section .container > div:nth-child(2) { grid-template-columns: repeat(2, 1fr) !important; }
+          .services-section .container > div:nth-child(3) > div:last-child > div { grid-template-columns: repeat(2, 1fr); }
+          .services-section .container > div:nth-child(4) > div { grid-template-columns: repeat(2, 1fr); }
         }
-        @media (max-width: 992px) {
-          #services .container > div {
-            grid-template-columns: 1fr !important;
-            gap: 48px !important;
-          }
-        }
-        @media (max-width: 576px) {
-          #services .container > div > div:last-child > div:last-child {
-            grid-template-columns: 1fr !important;
-          }
+        @media (max-width: 500px) {
+          .services-section .container > div:nth-child(2) { grid-template-columns: 1fr !important; }
+          .services-section .container > div:nth-child(3) > div:last-child > div { grid-template-columns: 1fr; }
+          .services-section .container > div:nth-child(4) > div { grid-template-columns: 1fr; }
         }
       `}</style>
     </section>

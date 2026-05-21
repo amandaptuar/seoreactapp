@@ -7,7 +7,6 @@ const Hero = () => {
     name: '',
     email: '',
     phone: '',
-    username: '',
     agreeTerms: false
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -17,7 +16,7 @@ const Hero = () => {
   const handleChange = (e) => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
     setFormData({ ...formData, [e.target.name]: value });
-    if (errorMsg) setErrorMsg(''); // Clear error on typing
+    if (errorMsg) setErrorMsg('');
   };
 
   const handleSubmit = async (e) => {
@@ -25,13 +24,12 @@ const Hero = () => {
     setErrorMsg('');
 
     if (!formData.agreeTerms) {
-      setErrorMsg("You must agree to the terms and conditions");
+      setErrorMsg("You must agree to the Terms and Conditions");
       return;
     }
 
     setIsSubmitting(true);
     try {
-      // Generate a simple password and username
       const generatedPassword = Math.random().toString(36).slice(-8) + '1!';
       const randomUsername = formData.email.split('@')[0] + Math.floor(Math.random() * 10000);
 
@@ -54,19 +52,20 @@ const Hero = () => {
         throw new Error(error.message || 'Failed to register');
       }
 
-      // Send email notification to admin
       await fetch('https://formsubmit.co/ajax/matrikaventures2020@gmail.com', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
+          phone: formData.phone,
           _subject: `New Assessment Started: ${formData.name}`,
           _template: 'box',
           _replyto: formData.email,
           "Action": "Started Free Cognitive Assessment",
           "Full Name": formData.name,
-          "Email Address": formData.email
+          "Email Address": formData.email,
+          "Phone": formData.phone
         }),
       }).catch(err => console.error('Email sending failed:', err));
 
@@ -84,175 +83,221 @@ const Hero = () => {
   };
 
   return (
-    <section className="hero-section" id="hero-form-section" style={{ background: 'radial-gradient(circle at 30% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 50%), linear-gradient(135deg, var(--bg-light) 0%, var(--bg-alternate) 100%)' }}>
-      <div className="container">
-        <div className="row">
-          <div className="col-lg-6" style={{ display: 'flex', alignItems: 'stretch' }}>
-            <div className="hero-text sec-title-animation animation-style2" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '22px', paddingRight: '20px' }}>
-              <div>
-                <span className="title-animation" style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '12px', letterSpacing: '2px', textTransform: 'uppercase' }}>Cognitive Performance System</span>
-
-                {/* ── LIMITLESS TAGLINE ── */}
-                <p className="hero-tagline-seo" style={{ margin: '14px 0 8px', fontSize: '18px', fontWeight: '600', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.5px', fontFamily: 'var(--font-primary)', lineHeight: '1.4' }}>
-                  You don't need a magic pill, you just need{' '}
-                  <span
-                    className="seo-limitless-highlight"
-                    style={{
-                      color: 'var(--primary)',
-                      fontWeight: '800',
-                      letterSpacing: '3px',
-                      display: 'inline-block',
-                    }}
-                  >
-                    LIMITLESS
-                  </span>
-                </p>
-
-                <h2 className="title-animation" style={{ color: 'var(--secondary)', fontSize: '40px', lineHeight: '1.2', marginTop: '10px', marginBottom: '0' }}>Measure Your Cognitive Performance &<br />Mental Fitness in Under 5 Minutes</h2>
-              </div>
-              <p style={{ fontSize: '16px', color: '#6B7280', margin: 0, lineHeight: '1.7' }}>
-                Get a personalized cognitive wellness report covering focus, memory, stress, and mental energy — backed by structured assessment logic.
-              </p>
-              <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '10px', margin: 0 }}>
-                <li className="hero-feature-card" style={{ display: 'flex', alignItems: 'center', gap: '14px', fontSize: '15px', color: 'var(--secondary)', fontWeight: '500', background: '#fff', padding: '13px 18px', borderRadius: '12px', boxShadow: 'var(--shadow-soft)', transition: 'transform 0.3s ease, box-shadow 0.3s ease' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(59, 130, 246, 0.1)', color: '#3B82F6', fontSize: '12px', flexShrink: 0 }}>✔</div>
-                  <span>HIPAA-aligned privacy</span>
-                </li>
-                <li className="hero-feature-card" style={{ display: 'flex', alignItems: 'center', gap: '14px', fontSize: '15px', color: 'var(--secondary)', fontWeight: '500', background: '#fff', padding: '13px 18px', borderRadius: '12px', boxShadow: 'var(--shadow-soft)', transition: 'transform 0.3s ease, box-shadow 0.3s ease' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(59, 130, 246, 0.1)', color: '#3B82F6', fontSize: '12px', flexShrink: 0 }}>✔</div>
-                  <span>Used by professionals &amp; individuals</span>
-                </li>
-                <li className="hero-feature-card" style={{ display: 'flex', alignItems: 'center', gap: '14px', fontSize: '15px', color: 'var(--secondary)', fontWeight: '500', background: '#fff', padding: '13px 18px', borderRadius: '12px', boxShadow: 'var(--shadow-soft)', transition: 'transform 0.3s ease, box-shadow 0.3s ease' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(59, 130, 246, 0.1)', color: '#3B82F6', fontSize: '12px', flexShrink: 0 }}>✔</div>
-                  <span>Secure &amp; confidential with instant results</span>
-                </li>
-              </ul>
-              <p style={{ margin: 0, fontSize: '13px', color: '#6B7280', fontWeight: '500' }}>
-                ⭐ Trusted by 5,000+ users across the US
-              </p>
+    <section className="hero-section" id="hero-form-section" style={{ background: 'linear-gradient(180deg, #F0F4FF 0%, #FAFAFA 100%)', paddingTop: '120px', paddingBottom: '60px' }}>
+      <div className="container" style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 20px' }}>
+        
+        {/* Top Hero Layout: Left Text / Right Form */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '60px', alignItems: 'center', marginBottom: '60px' }}>
+          
+          {/* Left Column */}
+          <div style={{ paddingRight: '20px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#E0E7FF', padding: '6px 16px', borderRadius: '30px', marginBottom: '24px' }}>
+              <i className="fa-solid fa-tv" style={{ color: '#4F46E5', fontSize: '12px' }}></i>
+              <span style={{ color: '#4F46E5', fontSize: '11px', fontWeight: '800', letterSpacing: '1px', textTransform: 'uppercase' }}>Cognitive Performance System</span>
             </div>
+
+            <h1 style={{ fontSize: '56px', fontWeight: '800', color: '#0F172A', lineHeight: '1.1', marginBottom: '24px', letterSpacing: '-1px' }}>
+              Discover Your True <br/>
+              <span style={{ background: 'linear-gradient(90deg, #3B82F6 0%, #8B5CF6 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                Cognitive Potential
+              </span>
+            </h1>
+
+            <p style={{ fontSize: '18px', color: '#475569', lineHeight: '1.6', marginBottom: '40px', maxWidth: '540px' }}>
+              Limitless helps you understand your brain, improve focus, reduce stress, and unlock peak mental performance — backed by science, built for real life.
+            </p>
+
+            {/* 4 Feature Columns */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '40px', borderBottom: '1px solid #E2E8F0', paddingBottom: '40px' }}>
+              <div style={{ textAlign: 'center' }}>
+                <i className="fa-solid fa-brain" style={{ fontSize: '28px', color: '#3B82F6', marginBottom: '12px' }}></i>
+                <h4 style={{ fontSize: '20px', fontWeight: '800', color: '#0F172A', margin: '0 0 4px 0' }}>80%</h4>
+                <p style={{ fontSize: '12px', color: '#64748B', margin: 0, lineHeight: '1.4' }}>of mental performance is trainable</p>
+              </div>
+              <div style={{ textAlign: 'center', borderLeft: '1px solid #E2E8F0', borderRight: '1px solid #E2E8F0' }}>
+                <i className="fa-regular fa-clock" style={{ fontSize: '28px', color: '#22C55E', marginBottom: '12px' }}></i>
+                <h4 style={{ fontSize: '20px', fontWeight: '800', color: '#0F172A', margin: '0 0 4px 0' }}>5 Minutes</h4>
+                <p style={{ fontSize: '12px', color: '#64748B', margin: 0, lineHeight: '1.4' }}>is all it takes to get your results</p>
+              </div>
+              <div style={{ textAlign: 'center', borderRight: '1px solid #E2E8F0' }}>
+                <i className="fa-solid fa-chart-bar" style={{ fontSize: '28px', color: '#F59E0B', marginBottom: '12px' }}></i>
+                <h4 style={{ fontSize: '16px', fontWeight: '800', color: '#0F172A', margin: '0 0 4px 0', minHeight: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Science-Backed</h4>
+                <p style={{ fontSize: '12px', color: '#64748B', margin: 0, lineHeight: '1.4' }}>assessment developed by experts</p>
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <i className="fa-solid fa-shield-halved" style={{ fontSize: '28px', color: '#3B82F6', marginBottom: '12px' }}></i>
+                <h4 style={{ fontSize: '20px', fontWeight: '800', color: '#0F172A', margin: '0 0 4px 0' }}>100%</h4>
+                <p style={{ fontSize: '12px', color: '#64748B', margin: 0, lineHeight: '1.4' }}>private, secure & HIPAA-aligned</p>
+              </div>
+            </div>
+
+            {/* Trusted Banner */}
+            <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-start', background: '#FFFFFF', padding: '20px', borderRadius: '16px', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
+              <div style={{ display: 'flex', gap: '16px', flex: 1 }}>
+                <img src="https://flagcdn.com/w40/us.png" alt="USA Flag" style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
+                <div>
+                  <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A', margin: '0 0 4px 0' }}>Trusted by thousands across the USA</h5>
+                  <p style={{ fontSize: '13px', color: '#64748B', margin: 0 }}>Take control of your cognitive health today.</p>
+                </div>
+              </div>
+              <div style={{ width: '1px', background: '#E2E8F0', height: '40px' }}></div>
+              <div style={{ flex: 1 }}>
+                <div style={{ display: 'flex', gap: '4px', color: '#F59E0B', fontSize: '14px', marginBottom: '4px' }}>
+                  <i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i>
+                  <span style={{ color: '#0F172A', fontWeight: '700', marginLeft: '4px' }}>4.8/5</span>
+                </div>
+                <p style={{ fontSize: '13px', color: '#64748B', margin: 0 }}>From 2,300+ assessments across the United States</p>
+              </div>
+            </div>
+
           </div>
-          <div className="col-lg-6" style={{ display: 'flex', alignItems: 'flex-start' }}>
-            <div className="dark-form-card" style={{ 
-              background: 'linear-gradient(135deg, #0F172A 0%, #020617 100%)', 
-              borderRadius: '24px', 
-              boxShadow: '0 20px 40px rgba(0,0,0,0.5), 0 0 30px rgba(15, 23, 42, 0.4)', 
-              padding: '28px 42px',
-              border: '1px solid rgba(255,255,255,0.08)',
-              width: '100%'
-            }}>
-              <form role="form" className="support-form" id="contact-form" onSubmit={handleSubmit}>
-                <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-                  <h3 style={{ color: '#fff', fontSize: '24px', marginBottom: '8px' }}>Get Started Today</h3>
-                  <h6 style={{ color: 'var(--trust-blue)', fontSize: '14px', margin: 0, fontWeight: 'bold' }}>Begin your free cognitive assessment</h6> 
-                </div>
+
+          {/* Right Column: Dark Form */}
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div className="hero-dark-form" style={{ background: '#0F172A', borderRadius: '24px', padding: '40px', width: '100%', maxWidth: '480px', boxShadow: '0 24px 48px rgba(15,23,42,0.2)', position: 'relative' }}>
+              <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+                <h3 style={{ color: '#FFFFFF', fontSize: '28px', fontWeight: '800', marginBottom: '8px' }}>Get Started Today</h3>
+                <p style={{ color: '#60A5FA', fontSize: '15px', fontWeight: '600', margin: 0 }}>Begin your free cognitive assessment</p>
+              </div>
+              
+              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 
-                <div className="support-field">
-                  <label>Full Name</label>
-                  <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Your full name" required /> 
-                </div>
-                
-                <div className="support-field">
-                  <label>Email Address</label>
-                  <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="you@example.com" required /> 
+                <div style={{ position: 'relative' }}>
+                  <i className="fa-regular fa-user" style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }}></i>
+                  <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Full Name" required 
+                         style={{ width: '100%', background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '16px 16px 16px 44px', color: '#FFF', fontSize: '15px', outline: 'none' }} className="hero-input" />
                 </div>
 
-                
-                <div className="support-field" style={{ flexDirection: 'row', alignItems: 'center', gap: '10px', marginTop: '10px' }}>
-                  <input
-                    id="register-agreeTerms"
-                    type="checkbox"
-                    name="agreeTerms"
-                    checked={formData.agreeTerms}
-                    onChange={handleChange}
-                    required
-                    style={{ width: 'auto', cursor: 'pointer', margin: 0 }}
-                  />
-                  <label htmlFor="register-agreeTerms" style={{ textTransform: 'none', cursor: 'pointer', margin: 0, fontSize: '14px', color: '#64748b' }}>
-                    I agree to the Terms and Conditions
+                <div style={{ position: 'relative' }}>
+                  <i className="fa-regular fa-envelope" style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }}></i>
+                  <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email Address" required 
+                         style={{ width: '100%', background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '16px 16px 16px 44px', color: '#FFF', fontSize: '15px', outline: 'none' }} className="hero-input" />
+                </div>
+
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '0 16px', color: '#FFF', width: '110px', flexShrink: 0 }}>
+                    <i className="fa-solid fa-phone" style={{ color: '#94A3B8' }}></i>
+                    <img src="https://flagcdn.com/w20/us.png" alt="US" style={{ width: '18px' }}/>
+                    <span style={{ fontSize: '14px' }}>+1</span>
+                  </div>
+                  <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone Number (Optional)" 
+                         style={{ flex: 1, background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '16px', color: '#FFF', fontSize: '15px', outline: 'none' }} className="hero-input" />
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginTop: '4px' }}>
+                  <input id="agree-terms" type="checkbox" name="agreeTerms" checked={formData.agreeTerms} onChange={handleChange} required 
+                         style={{ marginTop: '4px', cursor: 'pointer' }} />
+                  <label htmlFor="agree-terms" style={{ color: '#94A3B8', fontSize: '13px', lineHeight: '1.5', cursor: 'pointer', margin: 0 }}>
+                    I agree to the <a href="/terms" style={{ color: '#60A5FA', textDecoration: 'none' }}>Terms and Conditions</a> and <a href="/privacy" style={{ color: '#60A5FA', textDecoration: 'none' }}>Privacy Policy</a>
                   </label>
                 </div>
 
                 {errorMsg && (
-                  <div style={{ color: '#ef4444', fontSize: '14px', textAlign: 'center', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '8px', padding: '10px' }}>
-                    ⚠️ {errorMsg}
+                  <div style={{ color: '#EF4444', fontSize: '13px', background: 'rgba(239,68,68,0.1)', padding: '10px', borderRadius: '8px', textAlign: 'center' }}>
+                    {errorMsg}
                   </div>
                 )}
 
-                <button type="submit" className="support-submit" disabled={isSubmitting}>
+                <button type="submit" disabled={isSubmitting} style={{ 
+                  background: 'linear-gradient(90deg, #F97316 0%, #EA580C 100%)', color: '#FFF', border: 'none', borderRadius: '12px', padding: '18px', fontSize: '16px', fontWeight: '700', cursor: 'pointer', marginTop: '8px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', boxShadow: '0 4px 14px rgba(234,88,12,0.4)', transition: 'transform 0.2s'
+                }} className="hero-btn">
                   {isSubmitting ? 'Processing...' : 'Start Free Assessment'}
+                  {!isSubmitting && <i className="fa-solid fa-arrow-right"></i>}
                 </button>
-                
-                <p style={{ textAlign: 'center', fontSize: '12px', color: '#94a3b8', marginTop: '12px', marginBottom: '15px' }}>
-                  No spam. Results instantly. Secure &amp; private.
-                </p>
-              </form> 
-              <style>{`
-                @keyframes seoLimitlessGlow {
-                  0%, 100% { text-shadow: 0 0 12px rgba(245,158,11,0.6), 0 0 30px rgba(245,158,11,0.3); }
-                  50% { text-shadow: 0 0 28px rgba(245,158,11,1), 0 0 55px rgba(245,158,11,0.6), 0 0 80px rgba(245,158,11,0.25); }
-                }
-                .seo-limitless-highlight {
-                  animation: seoLimitlessGlow 2.5s ease-in-out infinite;
-                }
-                .hero-feature-card:hover {
-                  transform: translateY(-3px) !important;
-                  box-shadow: 0 14px 24px rgba(15, 23, 42, 0.08) !important;
-                }
-                .dark-form-card .support-field label {
-                  color: #94a3b8;
-                }
-                .dark-form-card .support-field input,
-                .dark-form-card .support-field select {
-                  background: #1F2937;
-                  border: 1px solid rgba(255,255,255,0.08);
-                  color: #fff;
-                }
-                .dark-form-card .support-field select option {
-                  background: #1F2937;
-                  color: #fff;
-                }
-                .dark-form-card .support-field input:focus,
-                .dark-form-card .support-field select:focus {
-                  border-color: var(--primary);
-                  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.15);
-                  outline: none;
-                }
-                .dark-form-card .support-field input::placeholder {
-                  color: #64748b;
-                }
-                .dark-form-card .support-submit {
-                  background: var(--gradient-cta);
-                  color: #fff;
-                  border: none;
-                  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
-                }
-                .dark-form-card .support-submit:hover {
-                  transform: translateY(-2px);
-                  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6);
-                }
-                .shaps-img {
-                  z-index: 0 !important;
-                }
-                .shaps-img li, .shaps-img li img {
-                  z-index: 0 !important;
-                }
-                .hero-section .row {
-                  position: relative;
-                  z-index: 1;
-                }
-              `}</style>
+
+                <div style={{ textAlign: 'center', marginTop: '8px' }}>
+                  <span style={{ color: '#94A3B8', fontSize: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+                    <i className="fa-solid fa-lock" style={{ fontSize: '11px' }}></i> No spam. Results instantly. Secure & private.
+                  </span>
+                </div>
+
+              </form>
             </div>
           </div>
         </div>
+
+        {/* Bottom "Why Important" Bar */}
+        <div style={{ background: '#FFFFFF', borderRadius: '24px', padding: '40px', boxShadow: '0 10px 40px rgba(0,0,0,0.04)' }}>
+          <h3 style={{ textAlign: 'center', fontSize: '20px', fontWeight: '800', color: '#0F172A', marginBottom: '32px' }}>Why Cognitive Health Assessment is Important</h3>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '24px' }}>
+            {/* 1 */}
+            <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#F5F3FF', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <i className="fa-solid fa-brain" style={{ fontSize: '20px', color: '#8B5CF6' }}></i>
+              </div>
+              <div>
+                <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A', margin: '0 0 6px 0' }}>Early Detection</h5>
+                <p style={{ fontSize: '12px', color: '#64748B', margin: 0, lineHeight: '1.5' }}>Identify cognitive decline early and take action before it affects your daily life.</p>
+              </div>
+            </div>
+            {/* 2 */}
+            <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#ECFDF5', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <i className="fa-solid fa-bullseye" style={{ fontSize: '20px', color: '#10B981' }}></i>
+              </div>
+              <div>
+                <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A', margin: '0 0 6px 0' }}>Improve Focus</h5>
+                <p style={{ fontSize: '12px', color: '#64748B', margin: 0, lineHeight: '1.5' }}>Understand your attention levels and train your brain to stay sharp and productive.</p>
+              </div>
+            </div>
+            {/* 3 */}
+            <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#FFF7ED', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <i className="fa-regular fa-face-smile" style={{ fontSize: '20px', color: '#F97316' }}></i>
+              </div>
+              <div>
+                <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A', margin: '0 0 6px 0' }}>Reduce Stress</h5>
+                <p style={{ fontSize: '12px', color: '#64748B', margin: 0, lineHeight: '1.5' }}>Measure mental fatigue and stress levels to build a healthier, balanced mind.</p>
+              </div>
+            </div>
+            {/* 4 */}
+            <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#EFF6FF', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <i className="fa-solid fa-bolt" style={{ fontSize: '20px', color: '#3B82F6' }}></i>
+              </div>
+              <div>
+                <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A', margin: '0 0 6px 0' }}>Boost Performance</h5>
+                <p style={{ fontSize: '12px', color: '#64748B', margin: 0, lineHeight: '1.5' }}>Enhance memory, reaction time, and mental clarity for peak performance.</p>
+              </div>
+            </div>
+            {/* 5 */}
+            <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#FDF2F8', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <i className="fa-regular fa-heart" style={{ fontSize: '20px', color: '#EC4899' }}></i>
+              </div>
+              <div>
+                <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A', margin: '0 0 6px 0' }}>Track Progress</h5>
+                <p style={{ fontSize: '12px', color: '#64748B', margin: 0, lineHeight: '1.5' }}>Monitor your cognitive health over time and see meaningful improvements.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
-      <ul className="shaps-img">
-        <li><img src="./assets/img/shaps-4.png" alt="img" /></li>
-        <li><img src="./assets/img/shaps-4.png" alt="img" /></li>
-        <li><img src="./assets/img/shaps-1.png" alt="img" /></li>
-        <li><img src="./assets/img/shaps-2.png" alt="img" /></li>
-        <li><img src="./assets/img/shaps-3.png" alt="img" /></li> 
-      </ul>
+
+      <style>{`
+        .hero-input:focus {
+          border-color: #60A5FA !important;
+          box-shadow: 0 0 0 3px rgba(96,165,250,0.2);
+        }
+        .hero-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(234,88,12,0.6) !important;
+        }
+        @media (max-width: 1024px) {
+          .hero-section .container > div:first-child { grid-template-columns: 1fr; gap: 40px; }
+          .hero-section .container > div:first-child > div:first-child { padding-right: 0; }
+          .hero-dark-form { margin: 0 auto; }
+          .hero-section .container > div:last-child > div { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 640px) {
+          .hero-section h1 { font-size: 40px !important; }
+          .hero-section .container > div:first-child > div:first-child > div:nth-child(4) { grid-template-columns: repeat(2, 1fr); }
+          .hero-section .container > div:first-child > div:first-child > div:nth-child(4) > div { border: none !important; margin-bottom: 16px; }
+          .hero-section .container > div:last-child > div { grid-template-columns: 1fr; }
+        }
+      `}</style>
     </section>
   );
 };
