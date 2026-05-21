@@ -135,7 +135,7 @@ const Admin = () => {
                       {user.questions ? (
                         <>
                            <p><strong>Total Score:</strong> {user.questions.totalScore || 'N/A'} / 112</p>
-                           <p style={{wordBreak: 'break-all'}}><strong>Raw Answers:</strong> <span style={{fontSize: '12px', color: '#888'}}>{JSON.stringify(user.questions)}</span></p>
+                           <p style={{wordBreak: 'break-all'}}><strong>Raw Answers:</strong> <span style={{fontSize: '14px', color: '#888'}}>{JSON.stringify(user.questions)}</span></p>
                         </>
                       ) : (
                         <p>No questionnaire data available.</p>
@@ -198,7 +198,7 @@ const styles = {
   },
   title: {
     color: '#ffffff',
-    fontSize: '36px',
+    fontSize: '43px',
     fontWeight: '600',
     letterSpacing: '-0.5px',
     margin: 0
@@ -248,7 +248,7 @@ const styles = {
   },
   name: {
     color: '#ffffff',
-    fontSize: '24px',
+    fontSize: '29px',
     fontWeight: '600',
     margin: '0 0 6px 0',
     whiteSpace: 'nowrap',
@@ -257,7 +257,7 @@ const styles = {
   },
   email: {
     color: 'var(--primary)',
-    fontSize: '14px',
+    fontSize: '17px',
     opacity: 0.9,
     whiteSpace: 'nowrap',
     overflow: 'hidden',
@@ -268,7 +268,7 @@ const styles = {
     color: 'var(--primary)',
     padding: '4px 10px',
     borderRadius: '20px',
-    fontSize: '12px',
+    fontSize: '14px',
     whiteSpace: 'nowrap'
   },
   actionRow: {
@@ -298,7 +298,7 @@ const styles = {
     color: '#ef4444',
     borderRadius: '8px',
     fontWeight: '600',
-    fontSize: '13px',
+    fontSize: '16px',
     marginTop: '8px',
     transition: 'all 0.2s ease'
   },
@@ -309,7 +309,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     gap: '20px',
-    fontSize: '14px',
+    fontSize: '17px',
     lineHeight: '1.6',
     color: '#ccc'
   },
@@ -320,7 +320,7 @@ const styles = {
   },
   detailTitle: {
     color: '#fff',
-    fontSize: '16px',
+    fontSize: '19px',
     margin: '0 0 8px 0',
     borderBottom: '1px solid rgba(255,255,255,0.05)',
     paddingBottom: '4px'

@@ -54,6 +54,10 @@ const Header = () => {
           </div>
 
           <div className="header-buttons" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '15px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginRight: '10px', display: window.innerWidth > 992 ? 'flex' : 'none' }} className="header-phone">
+              <i className="fa-solid fa-phone" style={{ color: '#0F172A', fontSize: '18px' }}></i>
+              <a href="tel:+17025550147" style={{ color: '#0F172A', fontWeight: '700', fontSize: '17px', textDecoration: 'none' }}>+1 (702) 555-0147</a>
+            </div>
             {isLoggedIn ? (
               <>
                 {paymentStatus === 'yes' ? (
@@ -67,7 +71,7 @@ const Header = () => {
                       border: 'none',
                       borderRadius: '8px',
                       fontWeight: '700',
-                      fontSize: '14px',
+                      fontSize: '17px',
                       cursor: 'pointer'
                     }}
                   >
@@ -84,7 +88,7 @@ const Header = () => {
                       border: 'none',
                       borderRadius: '8px',
                       fontWeight: '700',
-                      fontSize: '14px',
+                      fontSize: '17px',
                       cursor: 'pointer'
                     }}
                   >
@@ -101,7 +105,7 @@ const Header = () => {
                     border: 'none',
                     borderRadius: '8px',
                     fontWeight: '700',
-                    fontSize: '14px',
+                    fontSize: '17px',
                     cursor: 'pointer'
                   }}
                 >
@@ -111,7 +115,7 @@ const Header = () => {
                   <div 
                     onClick={() => setShowUserDetails(!showUserDetails)}
                     style={{
-                      width: '40px', height: '40px', borderRadius: '50%', background: '#0F172A', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
+                      width: '40px', height: '40px', borderRadius: '50%', background: '#0F172A', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
                     }}
                     title="User Profile"
                   >
@@ -119,8 +123,8 @@ const Header = () => {
                   </div>
                   {showUserDetails && (
                     <div style={{ position: 'absolute', top: '50px', right: '0', background: '#fff', borderRadius: '12px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)', padding: '16px', minWidth: '200px', zIndex: 10002, border: '1px solid #e2e8f0' }}>
-                      <p style={{ margin: '0 0 4px', fontWeight: '700', color: '#0F172A', fontSize: '15px' }}>{username}</p>
-                      <p style={{ margin: 0, color: '#64748b', fontSize: '13px', wordBreak: 'break-all' }}>{userEmail}</p>
+                      <p style={{ margin: '0 0 4px', fontWeight: '700', color: '#0F172A', fontSize: '18px' }}>{username}</p>
+                      <p style={{ margin: 0, color: '#64748b', fontSize: '16px', wordBreak: 'break-all' }}>{userEmail}</p>
                     </div>
                   )}
                 </div>
@@ -137,7 +141,7 @@ const Header = () => {
                     border: 'none',
                     borderRadius: '8px',
                     fontWeight: '700',
-                    fontSize: '14px',
+                    fontSize: '17px',
                     cursor: 'pointer'
                   }}
                 >
@@ -154,7 +158,7 @@ const Header = () => {
                     background: '#D97706',
                     color: '#fff',
                     fontWeight: '700',
-                    fontSize: '14px',
+                    fontSize: '17px',
                     padding: '12px 24px',
                     borderRadius: '8px',
                     border: 'none',

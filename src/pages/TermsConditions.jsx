@@ -21,7 +21,7 @@ const TermsConditions = () => {
 
       <section className="gap" style={{ backgroundColor: 'var(--bg-light)' }}>
         <div className="container" style={{ maxWidth: '950px' }}>
-          <div className="policy-content" style={{ backgroundColor: '#ffffff', padding: '60px', borderRadius: '30px', boxShadow: 'var(--shadow-lg)', color: 'var(--text-secondary)', lineHeight: '1.8', fontSize: '17px' }}>
+          <div className="policy-content" style={{ backgroundColor: '#ffffff', padding: '60px', borderRadius: '30px', boxShadow: 'var(--shadow-lg)', color: 'var(--text-secondary)', lineHeight: '1.8', fontSize: '20px' }}>
             <p>Welcome to Limitless ("Company," "we," "our," or "us"). By accessing or using our website and services, you agree to comply with and be bound by the following Terms and Conditions.</p>
             <p>If you do not agree with these terms, please do not use our platform.</p>
 

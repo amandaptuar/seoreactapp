@@ -202,7 +202,7 @@ const Question = () => {
               type="submit" 
               className="btn btn-primary support-submit"
               disabled={status === 'submitting'}
-              style={{ padding: '16px', fontSize: '18px', marginTop: '20px', opacity: status === 'submitting' ? 0.7 : 1 }}
+              style={{ padding: '16px', fontSize: '22px', marginTop: '20px', opacity: status === 'submitting' ? 0.7 : 1 }}
             >
               {status === 'submitting' ? 'Submitting Assessment...' : 'Submit Assessment & Continue'}
             </button>
@@ -273,7 +273,7 @@ const styles = {
     flexWrap: 'wrap',
     gap: '15px',
     color: '#CBD5E1',
-    fontSize: '14px'
+    fontSize: '17px'
   },
   form: {
     display: 'flex',
@@ -289,7 +289,7 @@ const styles = {
   },
   sectionHeader: {
     color: '#F59E0B',
-    fontSize: '18px',
+    fontSize: '22px',
     fontWeight: '700',
     marginBottom: '20px',
     borderBottom: '1px solid rgba(245, 158, 11, 0.2)',
@@ -308,7 +308,7 @@ const styles = {
   },
   questionText: {
     color: '#fff',
-    fontSize: '16px',
+    fontSize: '19px',
     margin: 0
   },
   radioGroup: {
@@ -329,7 +329,7 @@ const styles = {
     cursor: 'pointer',
     color: '#94A3B8',
     transition: 'all 0.2s ease',
-    fontSize: '16px',
+    fontSize: '19px',
     fontWeight: '700'
   },
   radioLabelSelected: {

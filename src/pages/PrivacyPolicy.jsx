@@ -20,7 +20,7 @@ const PrivacyPolicy = () => {
 
       <section className="gap" style={{ backgroundColor: 'var(--bg-light)' }}>
         <div className="container" style={{ maxWidth: '950px' }}>
-          <div className="policy-content" style={{ backgroundColor: '#ffffff', padding: '60px', borderRadius: '30px', boxShadow: 'var(--shadow-lg)', color: 'var(--text-secondary)', lineHeight: '1.8', fontSize: '17px' }}>
+          <div className="policy-content" style={{ backgroundColor: '#ffffff', padding: '60px', borderRadius: '30px', boxShadow: 'var(--shadow-lg)', color: 'var(--text-secondary)', lineHeight: '1.8', fontSize: '20px' }}>
             <p>Limitless ("we," "our," or "us") operates as a digital wellness platform providing online health assessments, including Mental Health Assessment, Women’s Health Assessment, Sexual Health Assessment, and related services (collectively, the "Services").</p>
             <p>We are committed to protecting your privacy and ensuring the security of your personal information in compliance with applicable laws in the United States.</p>
             

@@ -83,7 +83,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="hero-section" id="hero-form-section" style={{ backgroundImage: "url('/img/ChatGPT Image May 21, 2026, 11_56_32 AM.png')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', paddingTop: '120px', paddingBottom: '60px' }}>
+    <section className="hero-section" id="hero-form-section" style={{ backgroundImage: "url('/img/ChatGPT Image May 21, 2026, 11_56_32 AM.png')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', paddingTop: '160px', paddingBottom: '100px', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
       <div className="container" style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 20px' }}>
         
         {/* Top Hero Layout: Left Text / Right Form */}
@@ -92,42 +92,42 @@ const Hero = () => {
           {/* Left Column */}
           <div className="hero-left-col">
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#E0E7FF', padding: '6px 16px', borderRadius: '30px', marginBottom: '24px' }}>
-              <i className="fa-solid fa-tv" style={{ color: '#4F46E5', fontSize: '12px' }}></i>
-              <span style={{ color: '#4F46E5', fontSize: '11px', fontWeight: '800', letterSpacing: '1px', textTransform: 'uppercase' }}>Cognitive Performance System</span>
+              <i className="fa-solid fa-tv" style={{ color: '#4F46E5', fontSize: '14px' }}></i>
+              <span style={{ color: '#4F46E5', fontSize: '13px', fontWeight: '800', letterSpacing: '1px', textTransform: 'uppercase' }}>Cognitive Performance System</span>
             </div>
 
-            <h1 style={{ fontSize: '56px', fontWeight: '800', color: '#0F172A', lineHeight: '1.1', marginBottom: '24px', letterSpacing: '-1px' }}>
+            <h1 style={{ fontSize: '67px', fontWeight: '800', color: '#0F172A', lineHeight: '1.1', marginBottom: '24px', letterSpacing: '-1px' }}>
               Discover Your True <br/>
               <span style={{ background: 'linear-gradient(90deg, #3B82F6 0%, #8B5CF6 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                 Cognitive Potential
               </span>
             </h1>
 
-            <p style={{ fontSize: '18px', color: '#475569', lineHeight: '1.6', marginBottom: '40px', maxWidth: '540px' }}>
+            <p style={{ fontSize: '22px', color: '#475569', lineHeight: '1.6', marginBottom: '20px', maxWidth: '540px' }}>
               Limitless helps you understand your brain, improve focus, reduce stress, and unlock peak mental performance — backed by science, built for real life.
             </p>
 
             {/* 4 Feature Columns */}
             <div className="hero-features-grid">
               <div style={{ textAlign: 'center' }}>
-                <i className="fa-solid fa-brain" style={{ fontSize: '28px', color: '#3B82F6', marginBottom: '12px' }}></i>
-                <h4 style={{ fontSize: '20px', fontWeight: '800', color: '#0F172A', margin: '0 0 4px 0' }}>80%</h4>
-                <p style={{ fontSize: '12px', color: '#64748B', margin: 0, lineHeight: '1.4' }}>of mental performance is trainable</p>
+                <i className="fa-solid fa-brain" style={{ fontSize: '34px', color: '#3B82F6', marginBottom: '12px' }}></i>
+                <h4 style={{ fontSize: '24px', fontWeight: '800', color: '#0F172A', margin: '0 0 4px 0' }}>80%</h4>
+                <p style={{ fontSize: '14px', color: '#64748B', margin: 0, lineHeight: '1.4' }}>of mental performance is trainable</p>
               </div>
               <div style={{ textAlign: 'center', borderLeft: '1px solid #E2E8F0', borderRight: '1px solid #E2E8F0' }}>
-                <i className="fa-regular fa-clock" style={{ fontSize: '28px', color: '#22C55E', marginBottom: '12px' }}></i>
-                <h4 style={{ fontSize: '20px', fontWeight: '800', color: '#0F172A', margin: '0 0 4px 0' }}>5 Minutes</h4>
-                <p style={{ fontSize: '12px', color: '#64748B', margin: 0, lineHeight: '1.4' }}>is all it takes to get your results</p>
+                <i className="fa-regular fa-clock" style={{ fontSize: '34px', color: '#22C55E', marginBottom: '12px' }}></i>
+                <h4 style={{ fontSize: '24px', fontWeight: '800', color: '#0F172A', margin: '0 0 4px 0' }}>5 Minutes</h4>
+                <p style={{ fontSize: '14px', color: '#64748B', margin: 0, lineHeight: '1.4' }}>is all it takes to get your results</p>
               </div>
               <div style={{ textAlign: 'center', borderRight: '1px solid #E2E8F0' }}>
-                <i className="fa-solid fa-chart-bar" style={{ fontSize: '28px', color: '#F59E0B', marginBottom: '12px' }}></i>
-                <h4 style={{ fontSize: '16px', fontWeight: '800', color: '#0F172A', margin: '0 0 4px 0', minHeight: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Science-Backed</h4>
-                <p style={{ fontSize: '12px', color: '#64748B', margin: 0, lineHeight: '1.4' }}>assessment developed by experts</p>
+                <i className="fa-solid fa-chart-bar" style={{ fontSize: '34px', color: '#F59E0B', marginBottom: '12px' }}></i>
+                <h4 style={{ fontSize: '19px', fontWeight: '800', color: '#0F172A', margin: '0 0 4px 0', minHeight: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Science-Backed</h4>
+                <p style={{ fontSize: '14px', color: '#64748B', margin: 0, lineHeight: '1.4' }}>assessment developed by experts</p>
               </div>
               <div style={{ textAlign: 'center' }}>
-                <i className="fa-solid fa-shield-halved" style={{ fontSize: '28px', color: '#3B82F6', marginBottom: '12px' }}></i>
-                <h4 style={{ fontSize: '20px', fontWeight: '800', color: '#0F172A', margin: '0 0 4px 0' }}>100%</h4>
-                <p style={{ fontSize: '12px', color: '#64748B', margin: 0, lineHeight: '1.4' }}>private, secure & HIPAA-aligned</p>
+                <i className="fa-solid fa-shield-halved" style={{ fontSize: '34px', color: '#3B82F6', marginBottom: '12px' }}></i>
+                <h4 style={{ fontSize: '24px', fontWeight: '800', color: '#0F172A', margin: '0 0 4px 0' }}>100%</h4>
+                <p style={{ fontSize: '14px', color: '#64748B', margin: 0, lineHeight: '1.4' }}>private, secure & HIPAA-aligned</p>
               </div>
             </div>
 
@@ -136,17 +136,17 @@ const Hero = () => {
               <div style={{ display: 'flex', gap: '16px', flex: 1 }}>
                 <img src="https://flagcdn.com/w40/us.png" alt="USA Flag" style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
                 <div>
-                  <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A', margin: '0 0 4px 0' }}>Trusted by thousands across the USA</h5>
-                  <p style={{ fontSize: '13px', color: '#64748B', margin: 0 }}>Take control of your cognitive health today.</p>
+                  <h5 style={{ fontSize: '17px', fontWeight: '700', color: '#0F172A', margin: '0 0 4px 0' }}>Trusted by thousands across the USA</h5>
+                  <p style={{ fontSize: '16px', color: '#64748B', margin: 0 }}>Take control of your cognitive health today.</p>
                 </div>
               </div>
               <div style={{ width: '1px', background: '#E2E8F0', height: '40px' }}></div>
               <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', gap: '4px', color: '#F59E0B', fontSize: '14px', marginBottom: '4px' }}>
+                <div style={{ display: 'flex', gap: '4px', color: '#F59E0B', fontSize: '17px', marginBottom: '4px' }}>
                   <i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i>
                   <span style={{ color: '#0F172A', fontWeight: '700', marginLeft: '4px' }}>4.8/5</span>
                 </div>
-                <p style={{ fontSize: '13px', color: '#64748B', margin: 0 }}>From 2,300+ assessments across the United States</p>
+                <p style={{ fontSize: '16px', color: '#64748B', margin: 0 }}>From 2,300+ assessments across the United States</p>
               </div>
             </div>
 
@@ -155,9 +155,9 @@ const Hero = () => {
           {/* Right Column: Dark Form */}
           <div className="hero-right-col">
             <div className="hero-dark-form" style={{ background: '#0F172A', borderRadius: '24px', padding: '40px', width: '100%', maxWidth: '480px', boxShadow: '0 24px 48px rgba(15,23,42,0.2)', position: 'relative' }}>
-              <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-                <h3 style={{ color: '#FFFFFF', fontSize: '28px', fontWeight: '800', marginBottom: '8px' }}>Get Started Today</h3>
-                <p style={{ color: '#60A5FA', fontSize: '15px', fontWeight: '600', margin: 0 }}>Begin your free cognitive assessment</p>
+              <div style={{ textAlign: 'center', marginBottom: '16px' }}>
+                <h3 style={{ color: '#FFFFFF', fontSize: '34px', fontWeight: '800', marginBottom: '8px' }}>Get Started Today</h3>
+                <p style={{ color: '#60A5FA', fontSize: '18px', fontWeight: '600', margin: 0 }}>Begin your free cognitive assessment</p>
               </div>
               
               <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -165,49 +165,49 @@ const Hero = () => {
                 <div style={{ position: 'relative' }}>
                   <i className="fa-regular fa-user" style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }}></i>
                   <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Full Name" required 
-                         style={{ width: '100%', background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '16px 16px 16px 44px', color: '#FFF', fontSize: '15px', outline: 'none' }} className="hero-input" />
+                         style={{ width: '100%', background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '16px 16px 16px 44px', color: '#FFF', fontSize: '18px', outline: 'none' }} className="hero-input" />
                 </div>
 
                 <div style={{ position: 'relative' }}>
                   <i className="fa-regular fa-envelope" style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }}></i>
                   <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email Address" required 
-                         style={{ width: '100%', background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '16px 16px 16px 44px', color: '#FFF', fontSize: '15px', outline: 'none' }} className="hero-input" />
+                         style={{ width: '100%', background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '16px 16px 16px 44px', color: '#FFF', fontSize: '18px', outline: 'none' }} className="hero-input" />
                 </div>
 
                 <div style={{ display: 'flex', gap: '8px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '0 16px', color: '#FFF', width: '110px', flexShrink: 0 }}>
                     <i className="fa-solid fa-phone" style={{ color: '#94A3B8' }}></i>
                     <img src="https://flagcdn.com/w20/us.png" alt="US" style={{ width: '18px' }}/>
-                    <span style={{ fontSize: '14px' }}>+1</span>
+                    <span style={{ fontSize: '17px' }}>+1</span>
                   </div>
                   <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone Number (Optional)" 
-                         style={{ flex: 1, background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '16px', color: '#FFF', fontSize: '15px', outline: 'none' }} className="hero-input" />
+                         style={{ flex: 1, background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '16px', color: '#FFF', fontSize: '18px', outline: 'none' }} className="hero-input" />
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginTop: '4px' }}>
                   <input id="agree-terms" type="checkbox" name="agreeTerms" checked={formData.agreeTerms} onChange={handleChange} required 
                          style={{ marginTop: '4px', cursor: 'pointer' }} />
-                  <label htmlFor="agree-terms" style={{ color: '#94A3B8', fontSize: '13px', lineHeight: '1.5', cursor: 'pointer', margin: 0 }}>
+                  <label htmlFor="agree-terms" style={{ color: '#94A3B8', fontSize: '16px', lineHeight: '1.5', cursor: 'pointer', margin: 0 }}>
                     I agree to the <a href="/terms" style={{ color: '#60A5FA', textDecoration: 'none' }}>Terms and Conditions</a> and <a href="/privacy" style={{ color: '#60A5FA', textDecoration: 'none' }}>Privacy Policy</a>
                   </label>
                 </div>
 
                 {errorMsg && (
-                  <div style={{ color: '#EF4444', fontSize: '13px', background: 'rgba(239,68,68,0.1)', padding: '10px', borderRadius: '8px', textAlign: 'center' }}>
+                  <div style={{ color: '#EF4444', fontSize: '16px', background: 'rgba(239,68,68,0.1)', padding: '10px', borderRadius: '8px', textAlign: 'center' }}>
                     {errorMsg}
                   </div>
                 )}
 
                 <button type="submit" disabled={isSubmitting} style={{ 
-                  background: 'linear-gradient(90deg, #F97316 0%, #EA580C 100%)', color: '#FFF', border: 'none', borderRadius: '12px', padding: '18px', fontSize: '16px', fontWeight: '700', cursor: 'pointer', marginTop: '8px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', boxShadow: '0 4px 14px rgba(234,88,12,0.4)', transition: 'transform 0.2s'
+                  background: 'linear-gradient(90deg, #F97316 0%, #EA580C 100%)', color: '#FFF', border: 'none', borderRadius: '12px', padding: '18px', fontSize: '19px', fontWeight: '700', cursor: 'pointer', marginTop: '8px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', boxShadow: '0 4px 14px rgba(234,88,12,0.4)', transition: 'transform 0.2s'
                 }} className="hero-btn">
                   {isSubmitting ? 'Processing...' : 'Start Free Assessment'}
                   {!isSubmitting && <i className="fa-solid fa-arrow-right"></i>}
                 </button>
 
                 <div style={{ textAlign: 'center', marginTop: '8px' }}>
-                  <span style={{ color: '#94A3B8', fontSize: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
-                    <i className="fa-solid fa-lock" style={{ fontSize: '11px' }}></i> No spam. Results instantly. Secure & private.
+                  <span style={{ color: '#94A3B8', fontSize: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+                    <i className="fa-solid fa-lock" style={{ fontSize: '13px' }}></i> No spam. Results instantly. Secure & private.
                   </span>
                 </div>
 
@@ -218,57 +218,57 @@ const Hero = () => {
 
         {/* Bottom "Why Important" Bar */}
         <div className="hero-bottom-bar">
-          <h3 style={{ textAlign: 'center', fontSize: '20px', fontWeight: '800', color: '#0F172A', marginBottom: '32px' }}>Why Cognitive Health Assessment is Important</h3>
+          <h3 style={{ textAlign: 'center', fontSize: '24px', fontWeight: '800', color: '#0F172A', marginBottom: '16px' }}>Why Cognitive Health Assessment is Important</h3>
           
           <div className="hero-bottom-grid">
             {/* 1 */}
             <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
               <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#F5F3FF', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <i className="fa-solid fa-brain" style={{ fontSize: '20px', color: '#8B5CF6' }}></i>
+                <i className="fa-solid fa-brain" style={{ fontSize: '24px', color: '#8B5CF6' }}></i>
               </div>
               <div>
-                <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A', margin: '0 0 6px 0' }}>Early Detection</h5>
-                <p style={{ fontSize: '12px', color: '#64748B', margin: 0, lineHeight: '1.5' }}>Identify cognitive decline early and take action before it affects your daily life.</p>
+                <h5 style={{ fontSize: '17px', fontWeight: '700', color: '#0F172A', margin: '0 0 6px 0' }}>Early Detection</h5>
+                <p style={{ fontSize: '14px', color: '#64748B', margin: 0, lineHeight: '1.5' }}>Identify cognitive decline early and take action before it affects your daily life.</p>
               </div>
             </div>
             {/* 2 */}
             <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
               <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#ECFDF5', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <i className="fa-solid fa-bullseye" style={{ fontSize: '20px', color: '#10B981' }}></i>
+                <i className="fa-solid fa-bullseye" style={{ fontSize: '24px', color: '#10B981' }}></i>
               </div>
               <div>
-                <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A', margin: '0 0 6px 0' }}>Improve Focus</h5>
-                <p style={{ fontSize: '12px', color: '#64748B', margin: 0, lineHeight: '1.5' }}>Understand your attention levels and train your brain to stay sharp and productive.</p>
+                <h5 style={{ fontSize: '17px', fontWeight: '700', color: '#0F172A', margin: '0 0 6px 0' }}>Improve Focus</h5>
+                <p style={{ fontSize: '14px', color: '#64748B', margin: 0, lineHeight: '1.5' }}>Understand your attention levels and train your brain to stay sharp and productive.</p>
               </div>
             </div>
             {/* 3 */}
             <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
               <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#FFF7ED', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <i className="fa-regular fa-face-smile" style={{ fontSize: '20px', color: '#F97316' }}></i>
+                <i className="fa-regular fa-face-smile" style={{ fontSize: '24px', color: '#F97316' }}></i>
               </div>
               <div>
-                <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A', margin: '0 0 6px 0' }}>Reduce Stress</h5>
-                <p style={{ fontSize: '12px', color: '#64748B', margin: 0, lineHeight: '1.5' }}>Measure mental fatigue and stress levels to build a healthier, balanced mind.</p>
+                <h5 style={{ fontSize: '17px', fontWeight: '700', color: '#0F172A', margin: '0 0 6px 0' }}>Reduce Stress</h5>
+                <p style={{ fontSize: '14px', color: '#64748B', margin: 0, lineHeight: '1.5' }}>Measure mental fatigue and stress levels to build a healthier, balanced mind.</p>
               </div>
             </div>
             {/* 4 */}
             <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
               <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#EFF6FF', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <i className="fa-solid fa-bolt" style={{ fontSize: '20px', color: '#3B82F6' }}></i>
+                <i className="fa-solid fa-bolt" style={{ fontSize: '24px', color: '#3B82F6' }}></i>
               </div>
               <div>
-                <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A', margin: '0 0 6px 0' }}>Boost Performance</h5>
-                <p style={{ fontSize: '12px', color: '#64748B', margin: 0, lineHeight: '1.5' }}>Enhance memory, reaction time, and mental clarity for peak performance.</p>
+                <h5 style={{ fontSize: '17px', fontWeight: '700', color: '#0F172A', margin: '0 0 6px 0' }}>Boost Performance</h5>
+                <p style={{ fontSize: '14px', color: '#64748B', margin: 0, lineHeight: '1.5' }}>Enhance memory, reaction time, and mental clarity for peak performance.</p>
               </div>
             </div>
             {/* 5 */}
             <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
               <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#FDF2F8', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <i className="fa-regular fa-heart" style={{ fontSize: '20px', color: '#EC4899' }}></i>
+                <i className="fa-regular fa-heart" style={{ fontSize: '24px', color: '#EC4899' }}></i>
               </div>
               <div>
-                <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A', margin: '0 0 6px 0' }}>Track Progress</h5>
-                <p style={{ fontSize: '12px', color: '#64748B', margin: 0, lineHeight: '1.5' }}>Monitor your cognitive health over time and see meaningful improvements.</p>
+                <h5 style={{ fontSize: '17px', fontWeight: '700', color: '#0F172A', margin: '0 0 6px 0' }}>Track Progress</h5>
+                <p style={{ fontSize: '14px', color: '#64748B', margin: 0, lineHeight: '1.5' }}>Monitor your cognitive health over time and see meaningful improvements.</p>
               </div>
             </div>
           </div>
@@ -278,9 +278,9 @@ const Hero = () => {
 
       <style>{`
         /* Desktop Base */
-        .hero-main-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 60px; align-items: center; margin-bottom: 60px; }
+        .hero-main-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 60px; align-items: center; margin-bottom: 20px; }
         .hero-left-col { padding-right: 20px; }
-        .hero-features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 40px; border-bottom: 1px solid #E2E8F0; padding-bottom: 40px; }
+        .hero-features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; border-bottom: 1px solid #E2E8F0; padding-bottom: 20px; }
         .hero-trust-banner { display: flex; gap: 24px; align-items: flex-start; background: #FFFFFF; padding: 20px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
         .hero-right-col { display: flex; justify-content: center; width: 100%; }
         .hero-bottom-bar { background: #FFFFFF; border-radius: 24px; padding: 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.04); }
@@ -301,7 +301,7 @@ const Hero = () => {
           .hero-main-grid { grid-template-columns: 1fr; gap: 40px; }
           .hero-left-col { padding-right: 0; text-align: center; }
           .hero-left-col p { margin: 0 auto 40px auto !important; }
-          .hero-features-grid { padding-bottom: 30px; margin-bottom: 30px; }
+          .hero-features-grid { padding-bottom: 15px; margin-bottom: 15px; }
           .hero-dark-form { margin: 0 auto; width: 100%; max-width: 500px !important; }
           .hero-bottom-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
         }

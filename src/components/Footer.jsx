@@ -28,7 +28,7 @@ const Footer = () => {
                 <img src={limitlessLogo} alt="img" style={{ maxWidth: '250px', maxHeight: '90px', objectFit: 'contain' }} />
                 <p className="text-white">Limitless is a holistic cognitive performance system delivered directly to your phone. We eliminate the friction between data and execution.</p>
                 <div style={{ marginTop: '15px', padding: '15px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', borderLeft: '3px solid #F59E0B' }}>
-                  <p style={{ color: '#94a3b8', fontSize: '12px', margin: 0, lineHeight: 1.5 }}>
+                  <p style={{ color: '#94a3b8', fontSize: '14px', margin: 0, lineHeight: 1.5 }}>
                     <strong>Disclaimer:</strong> This is not a medical diagnosis. Our cognitive assessment is designed for informational and self-optimization purposes only.
                   </p>
                 </div>
@@ -57,6 +57,13 @@ const Footer = () => {
                 <div className="get-in-touch">
                   <div><i className="flaticon-iphone"></i></div>
                   <div>
+                    <span>Phone Number:</span>
+                    <h6><a href="tel:+17025550147" className="text-white">+1 (702) 555-0147</a></h6>
+                  </div>
+                </div>
+                <div className="get-in-touch" style={{ marginTop: '15px' }}>
+                  <div><i className="fa-regular fa-envelope"></i></div>
+                  <div>
                     <span>Email Address:</span>
                     <h6><a href="mailto:info@limitless.com" className="text-white">info@limitless.com</a></h6>
                   </div>
@@ -75,17 +82,17 @@ const Footer = () => {
       <div className="bottom-bar" style={{ backgroundColor: '#0d0d0d', padding: '20px 0' }}>
         <div className="container">
           <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
-            <p className="text-white mb-0" style={{ fontSize: '14px' }}>Limitless Holistic Cognition © 2026. All Rights Reserved.</p>
+            <p className="text-white mb-0" style={{ fontSize: '17px' }}>Limitless Holistic Cognition © 2026. All Rights Reserved.</p>
             <div className="d-flex align-items-center gap-3">
-              <Link to="/privacy-policy" className="text-white" style={{ fontSize: '14px', textDecoration: 'none' }}>Privacy Policy</Link>
-              <span className="text-white" style={{ fontSize: '14px' }}>|</span>
-              <Link to="/terms-conditions" className="text-white" style={{ fontSize: '14px', textDecoration: 'none' }}>Terms of Condition</Link>
+              <Link to="/privacy-policy" className="text-white" style={{ fontSize: '17px', textDecoration: 'none' }}>Privacy Policy</Link>
+              <span className="text-white" style={{ fontSize: '17px' }}>|</span>
+              <Link to="/terms-conditions" className="text-white" style={{ fontSize: '17px', textDecoration: 'none' }}>Terms of Condition</Link>
             </div>
             <ul className="social-media d-flex mb-0" style={{ gap: '15px', listStyle: 'none', padding: 0, margin: 0 }}>
-              <li><a href="https://www.facebook.com/limitlessworldnet" target="_blank" rel="noopener noreferrer" className="text-white" style={{ fontSize: '16px' }}><i className="fa-brands fa-facebook-f"></i></a></li>
-              <li><a href="https://x.com/limitless1964" target="_blank" rel="noopener noreferrer" className="text-white" style={{ fontSize: '16px' }}><i className="fa-brands fa-twitter"></i></a></li>
-              <li><a href="#" className="text-white" style={{ fontSize: '16px' }}><i className="fa-brands fa-instagram"></i></a></li>
-              <li><a href="#" className="text-white" style={{ fontSize: '16px' }}><i className="fa-brands fa-linkedin-in"></i></a></li>
+              <li><a href="https://www.facebook.com/limitlessworldnet" target="_blank" rel="noopener noreferrer" className="text-white" style={{ fontSize: '19px' }}><i className="fa-brands fa-facebook-f"></i></a></li>
+              <li><a href="https://x.com/limitless1964" target="_blank" rel="noopener noreferrer" className="text-white" style={{ fontSize: '19px' }}><i className="fa-brands fa-twitter"></i></a></li>
+              <li><a href="#" className="text-white" style={{ fontSize: '19px' }}><i className="fa-brands fa-instagram"></i></a></li>
+              <li><a href="#" className="text-white" style={{ fontSize: '19px' }}><i className="fa-brands fa-linkedin-in"></i></a></li>
             </ul>
           </div>
         </div>

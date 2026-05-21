@@ -106,15 +106,15 @@ const Dashboard = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
               <div>
                 <strong style={{ color: '#E2E8F0' }}>Stress Overload</strong>
-                <p style={{ margin: '5px 0 0', color: '#94A3B8', fontSize: '14px' }}>{report.riskIndicators.stressOverload}</p>
+                <p style={{ margin: '5px 0 0', color: '#94A3B8', fontSize: '17px' }}>{report.riskIndicators.stressOverload}</p>
               </div>
               <div>
                 <strong style={{ color: '#E2E8F0' }}>Burnout Probability</strong>
-                <p style={{ margin: '5px 0 0', color: '#94A3B8', fontSize: '14px' }}>{report.riskIndicators.burnoutProbability}</p>
+                <p style={{ margin: '5px 0 0', color: '#94A3B8', fontSize: '17px' }}>{report.riskIndicators.burnoutProbability}</p>
               </div>
               <div>
                 <strong style={{ color: '#E2E8F0' }}>Cognitive Fatigue</strong>
-                <p style={{ margin: '5px 0 0', color: '#94A3B8', fontSize: '14px' }}>{report.riskIndicators.cognitiveFatigue}</p>
+                <p style={{ margin: '5px 0 0', color: '#94A3B8', fontSize: '17px' }}>{report.riskIndicators.cognitiveFatigue}</p>
               </div>
             </div>
           </div>
@@ -216,7 +216,7 @@ const styles = {
     gap: '20px'
   },
   title: {
-    fontSize: '32px',
+    fontSize: '38px',
     fontWeight: '800',
     margin: '0 0 10px 0',
     background: 'linear-gradient(90deg, #fff, #94A3B8)',
@@ -226,7 +226,7 @@ const styles = {
   subtitle: {
     color: '#94A3B8',
     margin: 0,
-    fontSize: '16px'
+    fontSize: '19px'
   },
   downloadBtn: {
     padding: '12px 24px',
@@ -262,7 +262,7 @@ const styles = {
     border: '1px solid rgba(255, 255, 255, 0.05)'
   },
   cardTitle: {
-    fontSize: '18px',
+    fontSize: '22px',
     fontWeight: '700',
     color: '#F59E0B',
     margin: '0 0 20px 0',
@@ -280,19 +280,19 @@ const styles = {
     margin: '0 auto 20px'
   },
   scoreText: {
-    fontSize: '36px',
+    fontSize: '43px',
     fontWeight: '800',
     color: '#fff'
   },
   scoreMax: {
-    fontSize: '16px',
+    fontSize: '19px',
     color: '#94A3B8',
     marginLeft: '5px',
     marginTop: '10px'
   },
   ratingText: (level) => ({
     textAlign: 'center',
-    fontSize: '18px',
+    fontSize: '22px',
     fontWeight: '600',
     color: level.includes('Excellent') || level.includes('Good') ? '#10B981' : 
            level.includes('Risk') || level.includes('Critical') ? '#EF4444' : '#F59E0B'
@@ -307,7 +307,7 @@ const styles = {
   },
   listItem: {
     color: '#E2E8F0',
-    fontSize: '15px',
+    fontSize: '18px',
     display: 'flex',
     alignItems: 'flex-start',
     gap: '10px',

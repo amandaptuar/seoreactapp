@@ -5,18 +5,18 @@ const Pricing = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return(
     <>
-      <section id="pricing" className="gap no-top" style={{ background: 'linear-gradient(180deg, #EEF2FF 0%, #F8FAFC 100%)', padding: '80px 0' }}>
+      <section id="pricing" className="gap no-top" style={{ background: 'linear-gradient(180deg, #EEF2FF 0%, #F8FAFC 100%)', padding: '20px 0' }}>
       <div className="container">
 
         {/* Section Header */}
         <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-          <span style={{ display: 'inline-block', background: 'rgba(245, 158, 11, 0.1)', color: '#D97706', fontSize: '13px', fontWeight: '700', letterSpacing: '1.5px', textTransform: 'uppercase', padding: '6px 16px', borderRadius: '20px', marginBottom: '16px' }}>
+          <span style={{ display: 'inline-block', background: 'rgba(245, 158, 11, 0.1)', color: '#D97706', fontSize: '16px', fontWeight: '700', letterSpacing: '1.5px', textTransform: 'uppercase', padding: '6px 16px', borderRadius: '20px', marginBottom: '16px' }}>
             Simple Pricing
           </span>
-          <h2 style={{ color: '#0F172A', fontSize: '36px', fontWeight: '800', marginBottom: '12px', lineHeight: 1.2 }}>
+          <h2 style={{ color: '#0F172A', fontSize: '43px', fontWeight: '800', marginBottom: '12px', lineHeight: 1.2 }}>
             One Assessment. Real Results.
           </h2>
-          <p style={{ color: '#6B7280', fontSize: '17px', maxWidth: '480px', margin: '0 auto' }}>
+          <p style={{ color: '#6B7280', fontSize: '20px', maxWidth: '480px', margin: '0 auto' }}>
             Discover what's impacting your energy, focus, and performance — in under 2 minutes.
           </p>
         </div>
@@ -35,20 +35,20 @@ const Pricing = () => {
 
               {/* Card Top */}
               <div style={{ padding: '36px 36px 28px', borderBottom: '1px solid #f1f5f9' }}>
-                <div style={{ display: 'inline-block', background: 'rgba(245, 158, 11, 0.1)', color: '#D97706', fontSize: '12px', fontWeight: '700', letterSpacing: '1px', textTransform: 'uppercase', padding: '5px 14px', borderRadius: '20px', marginBottom: '20px' }}>
+                <div style={{ display: 'inline-block', background: 'rgba(245, 158, 11, 0.1)', color: '#D97706', fontSize: '14px', fontWeight: '700', letterSpacing: '1px', textTransform: 'uppercase', padding: '5px 14px', borderRadius: '20px', marginBottom: '20px' }}>
                   ⏳ Limited-Time Offer
                 </div>
                 <div style={{ display: 'flex', alignItems: 'flex-end', gap: '8px', marginBottom: '6px' }}>
-                  <span style={{ fontSize: '24px', fontWeight: '500', color: '#94a3b8', textDecoration: 'line-through', paddingBottom: '12px' }}>$149</span>
-                  <span style={{ fontSize: '60px', fontWeight: '800', color: '#0F172A', lineHeight: 1 }}>$79</span>
-                  <span style={{ fontSize: '16px', color: '#6B7280', fontWeight: '500', paddingBottom: '8px' }}>one-time</span>
+                  <span style={{ fontSize: '29px', fontWeight: '500', color: '#94a3b8', textDecoration: 'line-through', paddingBottom: '12px' }}>$149</span>
+                  <span style={{ fontSize: '72px', fontWeight: '800', color: '#0F172A', lineHeight: 1 }}>$79</span>
+                  <span style={{ fontSize: '19px', color: '#6B7280', fontWeight: '500', paddingBottom: '8px' }}>one-time</span>
                 </div>
-                <p style={{ color: '#6B7280', fontSize: '15px', margin: 0 }}>Full Cognitive Performance Assessment</p>
+                <p style={{ color: '#6B7280', fontSize: '18px', margin: 0 }}>Full Cognitive Performance Assessment</p>
               </div>
 
               {/* Features List */}
               <div style={{ padding: '28px 36px' }}>
-                <div style={{ marginBottom: '16px', fontSize: '14px', fontWeight: '700', color: '#0F172A' }}>What's Included:</div>
+                <div style={{ marginBottom: '16px', fontSize: '17px', fontWeight: '700', color: '#0F172A' }}>What's Included:</div>
                 <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 28px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
                   {[
                     '40+ point cognitive analysis',
@@ -56,8 +56,8 @@ const Pricing = () => {
                     'Risk indicators',
                     'Action roadmap',
                   ].map((item, i) => (
-                    <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#0F172A', fontSize: '15px', fontWeight: '500' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '22px', height: '22px', borderRadius: '50%', background: 'rgba(59, 130, 246, 0.1)', color: '#3B82F6', fontSize: '11px', flexShrink: 0 }}>✔</div>
+                    <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#0F172A', fontSize: '18px', fontWeight: '500' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '22px', height: '22px', borderRadius: '50%', background: 'rgba(59, 130, 246, 0.1)', color: '#3B82F6', fontSize: '13px', flexShrink: 0 }}>✔</div>
                       {item}
                     </li>
                   ))}
@@ -74,7 +74,7 @@ const Pricing = () => {
                     border: 'none',
                     borderRadius: '12px',
                     fontWeight: '700',
-                    fontSize: '16px',
+                    fontSize: '19px',
                     cursor: 'pointer',
                     boxShadow: '0 4px 14px rgba(245, 158, 11, 0.4)',
                     display: 'block'
@@ -92,7 +92,7 @@ const Pricing = () => {
                 </button>
 
                 {/* Trust indicators */}
-                <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '18px', marginTop: '20px', fontSize: '12px', color: '#94a3b8' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '18px', marginTop: '20px', fontSize: '14px', color: '#94a3b8' }}>
                   <span>🔒 Secure Checkout</span>
                   <span>📩 Instant Access</span>
                   <span>🛡️ 7-Day Money Back Guarantee</span>
@@ -106,7 +106,7 @@ const Pricing = () => {
         <div className="row justify-content-center mt-5">
           <div className="col-lg-8">
             <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-              <h2 style={{ color: '#0F172A', fontSize: '28px', fontWeight: '800' }}>Frequently Asked Questions</h2>
+              <h2 style={{ color: '#0F172A', fontSize: '34px', fontWeight: '800' }}>Frequently Asked Questions</h2>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {[
@@ -116,8 +116,8 @@ const Pricing = () => {
                 { q: 'Is this medically approved?', a: 'Our assessment is based on cognitive science principles, but is not a medical diagnosis.' },
               ].map((item, i) => (
                 <div key={i} style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '22px 28px', boxShadow: '0 4px 12px rgba(15,23,42,0.04)' }}>
-                  <h5 style={{ color: '#0F172A', marginBottom: '8px', fontSize: '16px', fontWeight: '700' }}>Q: {item.q}</h5>
-                  <p style={{ color: '#6B7280', margin: 0, fontSize: '14px' }}>A: {item.a}</p>
+                  <h5 style={{ color: '#0F172A', marginBottom: '8px', fontSize: '19px', fontWeight: '700' }}>Q: {item.q}</h5>
+                  <p style={{ color: '#6B7280', margin: 0, fontSize: '17px' }}>A: {item.a}</p>
                 </div>
               ))}
             </div>
