@@ -28,7 +28,7 @@ const FAQ = () => {
   ];
 
   return (
-    <section id="pillars" className="gap accordion-section">
+    <section id="pillars" className="gap accordion-section" style={{ padding: '40px 0' }}>
       <div className="container">
         <div className="row">
           <div className="col-lg-8">

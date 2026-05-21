@@ -2,7 +2,7 @@ import React from 'react';
 
 const About = () => {
   return (
-    <section id="about" style={{ background: '#FFFFFF', padding: '20px 0' }}>
+    <section id="about" style={{ background: '#FFFFFF', padding: '40px 0' }}>
       <div className="container" style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 20px' }}>
         
         {/* Top Header */}

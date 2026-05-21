@@ -2,7 +2,7 @@ import React from 'react';
 
 const HowItWorks = () => {
   return (
-    <section id="how-it-works" style={{ background: '#F8FAFC', padding: '20px 0' }}>
+    <section id="how-it-works" style={{ background: '#F8FAFC', padding: '40px 0' }}>
       <div className="container" style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 20px' }}>
         
         {/* Top Header */}
@@ -278,7 +278,7 @@ const HowItWorks = () => {
         .how-dashboard-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 60px; align-items: center; margin-bottom: 60px; }
         .how-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
         .how-cards-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 16px; }
-        .how-trust-banner { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; padding: 24px 0; border-top: 1px solid #E2E8F0; }
+        .how-trust-banner { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; padding: 10px 0; border-top: 1px solid #E2E8F0; }
 
         /* Responsive Fixes */
         @media (max-width: 1024px) {
@@ -290,7 +290,7 @@ const HowItWorks = () => {
           .how-trust-banner > div:nth-child(even) { display: none; } /* hide vertical dividers */
         }
         @media (max-width: 768px) {
-          #how-it-works { padding: 60px 0 !important; }
+          #how-it-works { padding: 40px 0 !important; }
           #how-it-works h2 { font-size: 32px !important; }
           #how-it-works h3 { font-size: 28px !important; }
           .how-steps-grid { grid-template-columns: 1fr; gap: 24px; margin-bottom: 40px; }

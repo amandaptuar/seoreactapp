@@ -38,7 +38,7 @@ const Reviews = () => {
   ];
 
   return (
-    <section className="reviews-section" style={{ background: '#020617', padding: '20px 0', position: 'relative', overflow: 'hidden' }}>
+    <section className="reviews-section" style={{ background: '#020617', padding: '40px 0', position: 'relative', overflow: 'hidden' }}>
       <div className="container" style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 20px', position: 'relative', zIndex: 2 }}>
         
         <div style={{ textAlign: 'center', marginBottom: '20px', position: 'relative' }}>

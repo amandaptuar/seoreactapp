@@ -5,7 +5,7 @@ const Pricing = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return(
     <>
-      <section id="pricing" className="gap no-top" style={{ background: 'linear-gradient(180deg, #EEF2FF 0%, #F8FAFC 100%)', padding: '20px 0' }}>
+      <section id="pricing" className="gap no-top" style={{ background: 'linear-gradient(180deg, #EEF2FF 0%, #F8FAFC 100%)', padding: '40px 0' }}>
       <div className="container">
 
         {/* Section Header */}

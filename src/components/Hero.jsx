@@ -83,7 +83,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="hero-section" id="hero-form-section" style={{ backgroundImage: "url('/img/ChatGPT Image May 21, 2026, 11_56_32 AM.png')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', paddingTop: '160px', paddingBottom: '100px', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+    <section className="hero-section" id="hero-form-section" style={{ backgroundImage: "url('/img/ChatGPT Image May 21, 2026, 11_56_32 AM.png')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', paddingTop: '160px', paddingBottom: '40px', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
       <div className="container" style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 20px' }}>
         
         {/* Top Hero Layout: Left Text / Right Form */}
