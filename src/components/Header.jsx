@@ -33,98 +33,76 @@ const Header = () => {
   };
 
   return (
-    <header id="stickyHeader" style={{ background: '#FFFFFF', borderBottom: '1px solid rgba(0,0,0,0.08)', padding: '12px 0', position: 'fixed', width: '100%', top: 0, zIndex: 10001 }}>
-      <div className="container">
-        <div className="top-bar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div className="logo">
-            <Link to="/">
-              <img
-                alt="logo"
-                src={limitlessLogo}
-                style={{
-                  maxWidth: '180px',
-                  maxHeight: '60px',
-                  objectFit: 'contain',
-                  transform: 'scale(1.4)',
-                  transformOrigin: 'left center',
-                  marginLeft: '-10px'
-                }}
-              />
-            </Link>
+    <div style={{ display: 'flex', justifyContent: 'center', width: '100%', position: 'fixed', top: '20px', zIndex: 10001, padding: '0 20px' }}>
+      <header id="stickyHeader" style={{ 
+        background: '#040B16', 
+        borderRadius: '20px', 
+        padding: '16px 32px', 
+        width: '100%', 
+        maxWidth: '1440px', 
+        boxShadow: '0 10px 40px rgba(0,0,0,0.2)',
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'space-between'
+      }}>
+        
+        {/* Left Side: Logo */}
+        <div className="logo" style={{ display: 'flex', alignItems: 'center' }}>
+          <Link to="/">
+            <img
+              alt="logo"
+              src={limitlessLogo}
+              style={{
+                maxWidth: '180px',
+                maxHeight: '50px',
+                objectFit: 'contain',
+              }}
+            />
+          </Link>
+        </div>
+
+        {/* Right Side: Contact & Actions */}
+        <div className="header-buttons" style={{ display: 'flex', flexWrap: 'nowrap', alignItems: 'center', gap: '24px' }}>
+          
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }} className="header-phone">
+            <i className="fa-solid fa-phone" style={{ color: '#60A5FA', fontSize: '20px' }}></i>
+            <a href="tel:+17025550147" style={{ color: '#FFFFFF', fontWeight: '600', fontSize: '19px', textDecoration: 'none' }}>+1 (702) 555-0147</a>
           </div>
 
-          <div className="header-buttons" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '15px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginRight: '10px', display: window.innerWidth > 992 ? 'flex' : 'none' }} className="header-phone">
-              <i className="fa-solid fa-phone" style={{ color: '#FFFFFF', fontSize: '18px' }}></i>
-              <a href="tel:+17025550147" style={{ color: '#FFFFFF', fontWeight: '700', fontSize: '17px', textDecoration: 'none' }}>+1 (702) 555-0147</a>
-            </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             {isLoggedIn ? (
               <>
                 {paymentStatus === 'yes' ? (
                   <button
-                    className="btn"
                     onClick={() => navigate('/dashboard')}
-                    style={{
-                      padding: '10px 24px',
-                      background: '#10B981',
-                      color: '#fff',
-                      border: 'none',
-                      borderRadius: '8px',
-                      fontWeight: '700',
-                      fontSize: '17px',
-                      cursor: 'pointer'
-                    }}
+                    style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '12px', padding: '12px 24px', color: '#FFF', fontSize: '18px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', transition: 'all 0.2s' }}
                   >
-                    Dashboard
+                    <i className="fa-solid fa-chart-line"></i> Dashboard
                   </button>
                 ) : (
                   <button
-                    className="btn"
                     onClick={() => navigate('/payment')}
-                    style={{
-                      padding: '10px 24px',
-                      background: '#F59E0B',
-                      color: '#fff',
-                      border: 'none',
-                      borderRadius: '8px',
-                      fontWeight: '700',
-                      fontSize: '17px',
-                      cursor: 'pointer'
-                    }}
+                    style={{ background: 'linear-gradient(90deg, #F97316 0%, #EA580C 100%)', border: 'none', borderRadius: '12px', padding: '12px 24px', color: '#FFF', fontSize: '18px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 14px rgba(234,88,12,0.4)' }}
                   >
-                    Complete Payment
+                    <i className="fa-solid fa-credit-card"></i> Pay Now
                   </button>
                 )}
-                <button
-                  className="btn"
-                  onClick={handleLogout}
-                  style={{
-                    padding: '10px 24px',
-                    background: '#ef4444',
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: '8px',
-                    fontWeight: '700',
-                    fontSize: '17px',
-                    cursor: 'pointer'
-                  }}
-                >
-                  Logout
-                </button>
+                
                 <div style={{ position: 'relative' }}>
                   <div 
                     onClick={() => setShowUserDetails(!showUserDetails)}
-                    style={{
-                      width: '40px', height: '40px', borderRadius: '50%', background: '#0F172A', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
-                    }}
+                    style={{ width: '46px', height: '46px', borderRadius: '12px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.2s' }}
                     title="User Profile"
                   >
                     {username ? username.charAt(0).toUpperCase() : '👤'}
                   </div>
                   {showUserDetails && (
-                    <div style={{ position: 'absolute', top: '50px', right: '0', background: '#fff', borderRadius: '12px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)', padding: '16px', minWidth: '200px', zIndex: 10002, border: '1px solid #e2e8f0' }}>
-                      <p style={{ margin: '0 0 4px', fontWeight: '700', color: '#0F172A', fontSize: '18px' }}>{username}</p>
-                      <p style={{ margin: 0, color: '#64748b', fontSize: '16px', wordBreak: 'break-all' }}>{userEmail}</p>
+                    <div style={{ position: 'absolute', top: '60px', right: '0', background: '#FFFFFF', borderRadius: '16px', boxShadow: '0 10px 40px rgba(0,0,0,0.2)', padding: '20px', minWidth: '220px', zIndex: 10002 }}>
+                      <p style={{ margin: '0 0 4px', fontWeight: '800', color: '#0F172A', fontSize: '20px' }}>{username}</p>
+                      <p style={{ margin: '0 0 16px', color: '#64748B', fontSize: '16px', wordBreak: 'break-all' }}>{userEmail}</p>
+                      <button onClick={handleLogout} style={{ width: '100%', padding: '10px', background: '#FEE2E2', color: '#EF4444', border: 'none', borderRadius: '8px', fontWeight: '700', cursor: 'pointer' }}>
+                        Logout
+                      </button>
                     </div>
                   )}
                 </div>
@@ -132,51 +110,50 @@ const Header = () => {
             ) : (
               <>
                 <button
-                  className="btn"
                   onClick={() => setIsLoginOpen(true)}
-                  style={{
-                    padding: '10px 24px',
-                    background: '#0F172A',
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: '8px',
-                    fontWeight: '700',
-                    fontSize: '17px',
-                    cursor: 'pointer'
-                  }}
+                  style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '12px', padding: '12px 24px', color: '#FFF', fontSize: '18px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', transition: 'all 0.2s' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
                 >
-                  Login
+                  <i className="fa-regular fa-user"></i> Login
                 </button>
                 <button
                   onClick={() => {
                     const el = document.getElementById('hero-form-section');
-                    if (el) {
-                      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
+                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
                   }}
-                  style={{
-                    background: '#D97706',
-                    color: '#fff',
-                    fontWeight: '700',
-                    fontSize: '17px',
-                    padding: '12px 24px',
-                    borderRadius: '8px',
-                    border: 'none',
-                    cursor: 'pointer',
-                    boxShadow: '0 4px 14px rgba(217, 119, 6, 0.4)'
-                  }}
+                  style={{ background: 'linear-gradient(90deg, #F97316 0%, #EA580C 100%)', border: 'none', borderRadius: '12px', padding: '12px 24px', color: '#FFF', fontSize: '18px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 14px rgba(234,88,12,0.4)', transition: 'transform 0.2s' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(234,88,12,0.6)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(234,88,12,0.4)'; }}
                 >
-                  Start Assessment
+                  <i className="fa-solid fa-rocket"></i> Start Assessment
                 </button>
               </>
             )}
           </div>
         </div>
-      </div>
+      </header>
+
+      {/* Global CSS for Header Responsiveness */}
+      <style>{`
+        @media (max-width: 992px) {
+          .header-phone { display: none !important; }
+        }
+        @media (max-width: 640px) {
+          #stickyHeader { padding: 12px 16px !important; }
+          .header-buttons button { padding: 10px 16px !important; font-size: 14px !important; }
+          .header-buttons button i { font-size: 14px !important; }
+          .logo img { max-width: 140px !important; }
+        }
+        @media (max-width: 480px) {
+          .header-buttons { gap: 8px !important; }
+          .header-buttons button { padding: 8px 12px !important; font-size: 12px !important; gap: 4px !important; }
+        }
+      `}</style>
 
       <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
       <EnquiryModal isOpen={isEnquiryOpen} onClose={() => setIsEnquiryOpen(false)} />
-    </header>
+    </div>
   );
 };
 

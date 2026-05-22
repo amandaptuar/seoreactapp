@@ -89,18 +89,18 @@ const PaymentSuccess = () => {
           {status === 'processing' && (
             <div>
               <div className="spinner" style={styles.spinner}></div>
-              <h2 style={{ color: '#0F172A', fontSize: '34px', marginTop: '20px' }}>{statusMessage}</h2>
+              <h2 style={{ color: '#0F172A', fontSize: '36px', marginTop: '20px' }}>{statusMessage}</h2>
               <p style={{ color: '#64748b' }}>Our AI is crafting your personalized cognitive protocol.</p>
             </div>
           )}
 
           {status === 'success' && (
             <div className="fade-in">
-              <div style={{ width: '80px', height: '80px', background: '#22C55E', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', color: '#fff', fontSize: '38px' }}>✓</div>
-              <h2 style={{ color: '#0F172A', fontSize: '38px', marginBottom: '10px', fontWeight: '800' }}>Analysis Complete!</h2>
+              <div style={{ width: '80px', height: '80px', background: '#22C55E', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', color: '#fff', fontSize: '40px' }}>✓</div>
+              <h2 style={{ color: '#0F172A', fontSize: '40px', marginBottom: '10px', fontWeight: '800' }}>Analysis Complete!</h2>
               
               <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', padding: '20px', borderRadius: '12px', margin: '24px 0', textAlign: 'left' }}>
-                <p style={{ color: '#64748B', fontSize: '17px', margin: '0 0 12px 0', fontWeight: '600', textTransform: 'uppercase' }}>Save your login details:</p>
+                <p style={{ color: '#64748B', fontSize: '19px', margin: '0 0 12px 0', fontWeight: '600', textTransform: 'uppercase' }}>Save your login details:</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: '#fff', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
                     <span style={{ color: '#64748B', fontWeight: '500' }}>Username:</span>
@@ -111,7 +111,7 @@ const PaymentSuccess = () => {
                     <strong style={{ color: '#0F172A' }}>{localStorage.getItem('generatedPassword')}</strong>
                   </div>
                 </div>
-                <p style={{ color: '#EF4444', fontSize: '14px', margin: '12px 0 0 0', fontStyle: 'italic' }}>* Please save these before continuing. You will need them to log in later.</p>
+                <p style={{ color: '#EF4444', fontSize: '16px', margin: '12px 0 0 0', fontStyle: 'italic' }}>* Please save these before continuing. You will need them to log in later.</p>
               </div>
 
               <button 
@@ -121,7 +121,7 @@ const PaymentSuccess = () => {
                   localStorage.setItem('paymentStatus', 'yes');
                   navigate('/dashboard');
                 }} 
-                style={{ width: '100%', padding: '16px', background: 'linear-gradient(135deg, #F59E0B, #FB923C)', color: '#fff', border: 'none', borderRadius: '12px', fontWeight: '700', fontSize: '19px', cursor: 'pointer', boxShadow: '0 4px 14px rgba(245,158,11,0.35)' }}
+                style={{ width: '100%', padding: '16px', background: 'linear-gradient(135deg, #F59E0B, #FB923C)', color: '#fff', border: 'none', borderRadius: '12px', fontWeight: '700', fontSize: '21px', cursor: 'pointer', boxShadow: '0 4px 14px rgba(245,158,11,0.35)' }}
               >
                 Go to My Dashboard →
               </button>

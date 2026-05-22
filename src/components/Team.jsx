@@ -17,7 +17,7 @@ const Team = () => {
               </figure>
               <span>Collaboration</span>
               <h4>Experts & Advisors</h4>
-              <p style={{ marginTop: '15px', color: '#64748b', fontSize: '18px', lineHeight: 1.6 }}>Developed with clinical psychologists, neuroscientists, and performance coaches who understand the brain.</p>
+              <p style={{ marginTop: '15px', color: '#64748b', fontSize: '20px', lineHeight: 1.6 }}>Developed with clinical psychologists, neuroscientists, and performance coaches who understand the brain.</p>
             </div>
           </div>
           <div className="col-lg-4 col-md-6">
@@ -27,7 +27,7 @@ const Team = () => {
               </figure>
               <span>Analysis</span>
               <h4>Our Experience</h4>
-              <p style={{ marginTop: '15px', color: '#64748b', fontSize: '18px', lineHeight: 1.6 }}>Years of analyzing behavioral patterns to create systems that optimize human performance and reduce burnout.</p>
+              <p style={{ marginTop: '15px', color: '#64748b', fontSize: '20px', lineHeight: 1.6 }}>Years of analyzing behavioral patterns to create systems that optimize human performance and reduce burnout.</p>
             </div>
           </div>
           <div className="col-lg-4 col-md-6">
@@ -37,7 +37,7 @@ const Team = () => {
               </figure>
               <span>Security & Proof</span>
               <h4>Why Trust Us?</h4>
-              <p style={{ marginTop: '15px', color: '#64748b', fontSize: '18px', lineHeight: 1.6 }}>Used by 5,000+ individuals across the US. We prioritize data privacy, objective metrics, and actionable protocols.</p>
+              <p style={{ marginTop: '15px', color: '#64748b', fontSize: '20px', lineHeight: 1.6 }}>Used by 5,000+ individuals across the US. We prioritize data privacy, objective metrics, and actionable protocols.</p>
             </div>
           </div>
         </div>

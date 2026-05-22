@@ -36,15 +36,15 @@ const ExitIntentPopup = () => {
       }}>
         <button 
           onClick={() => setIsVisible(false)}
-          style={{ position: 'absolute', top: '15px', right: '15px', background: 'none', border: 'none', fontSize: '29px', color: '#94a3b8', cursor: 'pointer' }}
+          style={{ position: 'absolute', top: '15px', right: '15px', background: 'none', border: 'none', fontSize: '31px', color: '#94a3b8', cursor: 'pointer' }}
         >
           &times;
         </button>
-        <div style={{ fontSize: '58px', marginBottom: '15px' }}>🧠</div>
-        <h2 style={{ color: '#0F172A', fontSize: '34px', fontWeight: '800', marginBottom: '15px', lineHeight: 1.2 }}>
+        <div style={{ fontSize: '60px', marginBottom: '15px' }}>🧠</div>
+        <h2 style={{ color: '#0F172A', fontSize: '36px', fontWeight: '800', marginBottom: '15px', lineHeight: 1.2 }}>
           Wait! Get your free cognitive score before leaving.
         </h2>
-        <p style={{ color: '#6B7280', fontSize: '19px', marginBottom: '25px' }}>
+        <p style={{ color: '#6B7280', fontSize: '21px', marginBottom: '25px' }}>
           It only takes 2 minutes to discover what's holding back your focus and energy.
         </p>
         <button
@@ -54,7 +54,7 @@ const ExitIntentPopup = () => {
           }}
           style={{
             width: '100%', padding: '16px', background: 'linear-gradient(135deg, #F59E0B, #FB923C)',
-            color: '#ffffff', border: 'none', borderRadius: '12px', fontWeight: '700', fontSize: '22px',
+            color: '#ffffff', border: 'none', borderRadius: '12px', fontWeight: '700', fontSize: '24px',
             cursor: 'pointer', boxShadow: '0 4px 14px rgba(245, 158, 11, 0.4)'
           }}
         >
@@ -62,7 +62,7 @@ const ExitIntentPopup = () => {
         </button>
         <button 
           onClick={() => setIsVisible(false)}
-          style={{ marginTop: '15px', background: 'none', border: 'none', color: '#94a3b8', fontSize: '17px', cursor: 'pointer', textDecoration: 'underline' }}
+          style={{ marginTop: '15px', background: 'none', border: 'none', color: '#94a3b8', fontSize: '19px', cursor: 'pointer', textDecoration: 'underline' }}
         >
           No thanks, I'll pass
         </button>

@@ -23,8 +23,8 @@ const Payment = () => {
         <div className="dark-glass-panel" style={{ textAlign: 'center', padding: '60px 30px', maxWidth: '600px', margin: '0 auto', background: '#fff', border: '1px solid #e2e8f0', boxShadow: '0 20px 40px rgba(0,0,0,0.05)' }}>
           
           <div className="slide-up">
-            <h2 style={{ color: '#0F172A', fontSize: '38px', marginBottom: '16px', fontWeight: '800' }}>Complete Your Payment</h2>
-            <p style={{ color: '#64748b', fontSize: '20px', marginBottom: '32px' }}>
+            <h2 style={{ color: '#0F172A', fontSize: '40px', marginBottom: '16px', fontWeight: '800' }}>Complete Your Payment</h2>
+            <p style={{ color: '#64748b', fontSize: '22px', marginBottom: '32px' }}>
               Final step: Pay the one-time fee of <strong>$79</strong> to unlock your full cognitive report and personalized action plan.
             </p>
 
@@ -35,22 +35,22 @@ const Payment = () => {
                </div>
                <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid #E2E8F0', paddingTop: '10px' }}>
                  <span style={{ fontWeight: '700', color: '#0F172A' }}>Total</span>
-                 <span style={{ fontWeight: '800', color: '#0F172A', fontSize: '24px' }}>$79.00</span>
+                 <span style={{ fontWeight: '800', color: '#0F172A', fontSize: '26px' }}>$79.00</span>
                </div>
             </div>
 
             <div style={{ background: 'rgba(59, 130, 246, 0.05)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(59, 130, 246, 0.2)', marginBottom: '32px', textAlign: 'left' }}>
-              <h4 style={{ color: '#0F172A', margin: '0 0 12px 0', fontSize: '18px' }}>Important: Save your login credentials</h4>
-              <p style={{ color: '#64748B', fontSize: '16px', margin: '0 0 16px 0' }}>Your assessment answers have been securely saved. You can complete payment now, or save these details to log in and pay later.</p>
+              <h4 style={{ color: '#0F172A', margin: '0 0 12px 0', fontSize: '20px' }}>Important: Save your login credentials</h4>
+              <p style={{ color: '#64748B', fontSize: '18px', margin: '0 0 16px 0' }}>Your assessment answers have been securely saved. You can complete payment now, or save these details to log in and pay later.</p>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: '#fff', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
-                  <span style={{ color: '#64748B', fontWeight: '500', fontSize: '17px' }}>Username:</span>
-                  <strong style={{ color: '#0F172A', fontSize: '17px' }}>{localStorage.getItem('username')}</strong>
+                  <span style={{ color: '#64748B', fontWeight: '500', fontSize: '19px' }}>Username:</span>
+                  <strong style={{ color: '#0F172A', fontSize: '19px' }}>{localStorage.getItem('username')}</strong>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: '#fff', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
-                  <span style={{ color: '#64748B', fontWeight: '500', fontSize: '17px' }}>Password:</span>
-                  <strong style={{ color: '#0F172A', fontSize: '17px' }}>{localStorage.getItem('generatedPassword')}</strong>
+                  <span style={{ color: '#64748B', fontWeight: '500', fontSize: '19px' }}>Password:</span>
+                  <strong style={{ color: '#0F172A', fontSize: '19px' }}>{localStorage.getItem('generatedPassword')}</strong>
                 </div>
               </div>
             </div>
@@ -67,7 +67,7 @@ const Payment = () => {
                   border: 'none',
                   borderRadius: '12px',
                   fontWeight: '700',
-                  fontSize: '19px',
+                  fontSize: '21px',
                   cursor: isProcessing ? 'not-allowed' : 'pointer',
                   boxShadow: '0 4px 14px rgba(245, 158, 11, 0.35)'
                 }}
@@ -85,7 +85,7 @@ const Payment = () => {
                   border: 'none',
                   borderRadius: '12px',
                   fontWeight: '700',
-                  fontSize: '17px',
+                  fontSize: '19px',
                   cursor: 'pointer',
                   marginTop: '10px'
                 }}
@@ -107,7 +107,7 @@ const Payment = () => {
                   border: '1px solid #E2E8F0',
                   borderRadius: '12px',
                   fontWeight: '600',
-                  fontSize: '17px',
+                  fontSize: '19px',
                   cursor: 'pointer',
                   marginTop: '10px'
                 }}
@@ -115,7 +115,7 @@ const Payment = () => {
                 Return to Home Page & Login Later
               </button>
 
-              <p style={{ fontSize: '16px', color: '#94A3B8', margin: 0, marginTop: '16px' }}>
+              <p style={{ fontSize: '18px', color: '#94A3B8', margin: 0, marginTop: '16px' }}>
                 🔒 Secure 256-bit SSL encrypted payment.
               </p>
             </div>
