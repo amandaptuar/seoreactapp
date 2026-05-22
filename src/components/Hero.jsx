@@ -83,8 +83,8 @@ const Hero = () => {
           </div>
 
           {/* Right Form */}
-          <div style={{ display: 'flex', justifyContent: 'flex-end', position: 'relative' }}>
-            <div style={{ background: '#FFFFFF', borderRadius: '24px', padding: '32px', boxShadow: '0 20px 40px rgba(0,0,0,0.06)', border: '1px solid #E2E8F0', width: '100%', maxWidth: '500px' }}>
+          <div className="hero-form-wrapper w-full" style={{ display: 'flex', justifyContent: 'flex-end', position: 'relative' }}>
+            <div className="w-full" style={{ background: '#FFFFFF', borderRadius: '24px', padding: '32px', boxShadow: '0 20px 40px rgba(0,0,0,0.06)', border: '1px solid #E2E8F0', width: '100%', maxWidth: '500px' }}>
               <h3 style={{ fontSize: '26px', fontWeight: '800', color: '#0F172A', marginBottom: '8px' }}>Start Your Journey</h3>
               <p style={{ fontSize: '16px', color: '#64748B', marginBottom: '24px' }}>Enter your details to take your first cognitive assessment.</p>
               
@@ -165,14 +165,30 @@ const Hero = () => {
 
       <style>{`
         @media (max-width: 1024px) {
-          .hero-section > .container > div:first-child { grid-template-columns: 1fr; text-align: center; }
+          .hero-section > .container > div:first-child { grid-template-columns: 1fr !important; gap: 40px !important; text-align: center; }
           .hero-section h1, .hero-section h2 { text-align: center; }
           .hero-section p { margin: 0 auto 40px; }
-          .hero-section > .container > div:first-child > div:first-child { padding-right: 0; display: flex; flex-direction: column; align-items: center; }
+          .hero-section > .container > div:first-child > div:first-child { padding-right: 0 !important; display: flex; flex-direction: column; align-items: center; }
           .hero-section > .container > div:first-child > div:first-child > div { text-align: left; }
-          .hero-section > .container > div:last-child { flex-wrap: wrap; gap: 24px; justify-content: center; }
-          .hero-section > .container > div:last-child > div { min-width: 200px; }
-          .hero-section > .container > div:last-child > div.bg-E2E8F0 { display: none; } /* hide dividers */
+          .hero-section > .container > div:last-child { justify-content: center; }
+        }
+        @media (max-width: 768px) {
+          .hero-section { padding-top: 120px !important; padding-bottom: 40px !important; }
+          .hero-section h1 { font-size: 40px !important; line-height: 1.2 !important; }
+          .hero-section h2 { font-size: 26px !important; }
+          .hero-section p { font-size: 18px !important; }
+          
+          /* Bottom stats bar */
+          .hero-section > .container > div:last-child { 
+            flex-direction: column !important; 
+            align-items: center !important; 
+            text-align: center !important; 
+            padding: 24px !important;
+          }
+          .hero-section > .container > div:last-child > div { width: 100%; justify-content: center !important; flex-direction: column !important; gap: 12px !important; }
+          .hero-section > .container > div:last-child > div[style*="width: '1px'"] { display: none !important; }
+          .hero-form-wrapper { justify-content: center !important; margin-top: 24px; padding: 0 16px; width: 100% !important; }
+          .hero-form-wrapper > div { padding: 24px !important; }
         }
       `}</style>
     </section>

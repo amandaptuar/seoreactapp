@@ -3,6 +3,26 @@
     box-sizing: border-box;
 }
 
+/* Global anti-overflow safety */
+html, body {
+    overflow-x: hidden !important;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Custom Tailwind-like Utilities */
+.w-full { width: 100% !important; }
+.max-w-full { max-width: 100% !important; }
+.overflow-hidden { overflow: hidden !important; }
+.object-cover { object-fit: cover !important; }
+
+/* Responsive Flex Utilities */
+.flex-col-mobile { display: flex; flex-direction: column !important; }
+@media (min-width: 769px) {
+    .md\:flex-row { flex-direction: row !important; }
+}
+
 :root {
     --primary: #F59E0B; /* Amber CTA */
     --primary-dark: #D97706; /* Darker Amber for hover */

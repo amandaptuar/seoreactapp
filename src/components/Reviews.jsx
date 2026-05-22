@@ -173,8 +173,11 @@ const Reviews = () => {
           .reviews-cards-grid { grid-template-columns: repeat(2, 1fr) !important; }
         }
         @media (max-width: 768px) {
-          .reviews-stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .reviews-stats-grid { grid-template-columns: 1fr !important; }
           .reviews-cards-grid { grid-template-columns: 1fr !important; }
+          #reviews { padding: 60px 0 !important; }
+          #reviews h2 { font-size: 32px !important; line-height: 1.2 !important; }
+          .container { padding: 0 16px !important; }
         }
       `}</style>
     </section>

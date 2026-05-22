@@ -173,11 +173,11 @@ const HowItWorks = () => {
       </div>
 
       {/* --- BOTTOM SECTION (scroll3.jpeg) --- */}
-      <div className="container" style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 20px' }}>
-        <div className="report-main-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '60px', alignItems: 'center' }}>
+      <div className="container overflow-hidden w-full max-w-full" style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 20px' }}>
+        <div className="report-main-grid w-full" style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '60px', alignItems: 'center' }}>
           
           {/* Left Text */}
-          <div>
+          <div style={{ paddingLeft: '20px' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#EFF6FF', padding: '6px 16px', borderRadius: '30px', marginBottom: '20px' }}>
               <i className="fa-regular fa-star" style={{ color: '#3B82F6', fontSize: '16px' }}></i>
               <span style={{ color: '#3B82F6', fontSize: '15px', fontWeight: '800', letterSpacing: '1px', textTransform: 'uppercase' }}>WHAT LIMITLESS OFFERS</span>
@@ -226,7 +226,7 @@ const HowItWorks = () => {
           </div>
 
           {/* Right Dashboard Mockup */}
-          <div style={{ background: '#FFF', borderRadius: '24px', padding: '32px', boxShadow: '0 20px 40px rgba(0,0,0,0.08)', border: '1px solid #F1F5F9' }}>
+          <div style={{ background: '#FFF', borderRadius: '24px', padding: '32px', boxShadow: '0 20px 40px rgba(0,0,0,0.08)', border: '1px solid #F1F5F9', width: '100%', maxWidth: '900px', margin: '0 auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
               <h3 style={{ fontSize: '26px', fontWeight: '800', color: '#0F172A', margin: 0 }}>Your AI Report Overview</h3>
               <div style={{ color: '#3B82F6', fontSize: '16px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px', background: '#EFF6FF', padding: '8px 16px', borderRadius: '8px' }}>
@@ -235,7 +235,7 @@ const HowItWorks = () => {
             </div>
 
             {/* Score Cards Row */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '24px' }}>
+            <div className="report-cards-grid-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '24px' }}>
               <div style={{ border: '1px solid #E2E8F0', borderRadius: '16px', padding: '20px', background: '#FFF' }}>
                 <div style={{ fontSize: '15px', color: '#64748B', fontWeight: '600', marginBottom: '8px' }}>Overall Cognitive Score</div>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '16px' }}>
@@ -281,7 +281,7 @@ const HowItWorks = () => {
             </div>
 
             {/* Bottom 3 Columns Row */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '24px' }}>
+            <div className="report-cards-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '24px' }}>
               
               <div style={{ background: '#F8FAFC', borderRadius: '16px', padding: '20px' }}>
                 <h5 style={{ fontSize: '18px', fontWeight: '800', color: '#0F172A', marginBottom: '16px' }}>Key Insights</h5>
@@ -335,7 +335,7 @@ const HowItWorks = () => {
             </div>
 
             {/* Bottom Inner Trust Bar */}
-            <div style={{ background: '#F8FAFC', borderRadius: '16px', padding: '20px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', border: '1px solid #E2E8F0' }}>
+            <div className="report-trust-grid" style={{ background: '#F8FAFC', borderRadius: '16px', padding: '20px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', border: '1px solid #E2E8F0' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div style={{ color: '#3B82F6', fontSize: '26px' }}><i className="fa-solid fa-shield-halved"></i></div>
                 <div>
@@ -371,6 +371,15 @@ const HowItWorks = () => {
         }
         @media (max-width: 768px) {
           .steps-grid { grid-template-columns: 1fr !important; }
+          #how-it-works { padding: 60px 0 !important; }
+          #how-it-works h2 { font-size: 32px !important; line-height: 1.2 !important; }
+          .container { padding: 0 16px !important; }
+          .report-cards-grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
+          .report-cards-grid-3 { grid-template-columns: 1fr !important; }
+          .report-trust-grid { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 480px) {
+          .report-cards-grid-4 { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </section>

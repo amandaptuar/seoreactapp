@@ -194,6 +194,11 @@ const About = () => {
           .problem-card > div:first-child { flex-direction: column; align-items: center; text-align: center; margin-bottom: 20px; }
           .problem-card h4, .problem-card p { max-width: 100% !important; }
         }
+        @media (max-width: 768px) {
+          #about { padding: 60px 0 !important; }
+          #about h2 { font-size: 32px !important; line-height: 1.3 !important; }
+          .problem-card { padding: 24px !important; }
+        }
       `}</style>
     </section>
   );

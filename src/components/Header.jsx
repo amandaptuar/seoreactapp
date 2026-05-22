@@ -53,8 +53,8 @@ const Header = () => {
               alt="logo"
               src={limitlessLogo}
               style={{
-                maxWidth: '180px',
-                maxHeight: '50px',
+                maxWidth: '240px',
+                maxHeight: '65px',
                 objectFit: 'contain',
               }}
             />
