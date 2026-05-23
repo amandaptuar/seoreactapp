@@ -6,6 +6,7 @@ import About from '../components/About';
 import HowItWorks from '../components/HowItWorks';
 import Pricing from '../components/Pricing';
 import Footer from '../components/Footer';
+import DeepInsights from '../components/DeepInsights';
 
 const Home = () => {
   return (
@@ -13,8 +14,9 @@ const Home = () => {
       <Header />
       <Hero />
       <About />
-      <HowItWorks />
+      <DeepInsights />
       <Reviews />
+      <HowItWorks />
       <Pricing />
       <Footer />
     </>

@@ -23,7 +23,7 @@ const About = () => {
         <div className="about-main-grid">
           
           {/* Left Column: 4 Problem Cards */}
-          <div className="about-left-col" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div className="about-left-col" style={{ display: 'flex', flexDirection: 'column', gap: '20px', justifyContent: 'space-between', height: '100%' }}>
             
             {/* Card 1 */}
             <div className="problem-card" style={{ background: '#FFF', borderRadius: '20px', padding: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 4px 20px rgba(0,0,0,0.03)', border: '1px solid #F1F5F9' }}>
