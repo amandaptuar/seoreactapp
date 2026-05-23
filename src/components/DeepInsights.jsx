@@ -2,8 +2,8 @@ import React from 'react';
 
 const DeepInsights = () => {
   return (
-    <section id="deep-insights" style={{ background: '#F8FAFC', padding: '15px 0', fontFamily: "'Inter', sans-serif" }}>
-      <div className="container overflow-hidden w-full" style={{ maxWidth: '1300px', margin: '0 auto', padding: '0 20px' }}>
+    <section id="deep-insights" style={{ background: '#F8FAFC', padding: '80px 0 15px 0', fontFamily: "'Inter', sans-serif" }}>
+      <div className="container overflow-hidden w-full" style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 20px' }}>
         <div className="report-main-grid w-full" style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '60px', alignItems: 'center' }}>
           
           {/* Left Text */}

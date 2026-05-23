@@ -48,7 +48,7 @@ const Header = () => {
         
         {/* Left Side: Logo */}
         <div className="logo" style={{ display: 'flex', alignItems: 'center' }}>
-          <Link to="/">
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
             <img
               alt="logo"
               src={limitlessLogo}
@@ -58,6 +58,10 @@ const Header = () => {
                 objectFit: 'contain',
               }}
             />
+            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginLeft: '12px' }}>
+              <span style={{ color: '#FFF', fontSize: '28px', fontWeight: '800', lineHeight: '1', letterSpacing: '1px', margin: 0 }}>LIMITLESS</span>
+              <span style={{ color: '#F97316', fontSize: '12px', fontWeight: '800', letterSpacing: '1px', marginTop: '4px', textTransform: 'uppercase' }}>UNLOCK YOUR TRUE POTENTIAL</span>
+            </div>
           </Link>
         </div>
 
@@ -115,7 +119,7 @@ const Header = () => {
                   onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
                 >
-                  <i className="fa-regular fa-user"></i> Login
+                  <i className="fa-regular fa-user"></i> SIGN-IN
                 </button>
                 <button
                   onClick={() => {
