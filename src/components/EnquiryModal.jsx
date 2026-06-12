@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import './EnquiryModal.css';
-
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/supabase';
+import bcrypt from 'bcryptjs';
 
 const EnquiryModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({ name: '', email: '', age: '', gender: '' });
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -21,7 +23,47 @@ const EnquiryModal = ({ isOpen, onClose }) => {
     setErrorMsg('');
 
     try {
-      // 1. Generate questions from Limitless API
+      // 1. Generate temp password and hash
+      const generatedPassword = Math.random().toString(36).slice(-8).toUpperCase();
+      const passwordHash = await bcrypt.hash(generatedPassword, 10);
+
+      // 2. Insert User into Supabase FIRST (To catch duplicate emails immediately)
+      let dbUserId = null;
+      
+      const { data: newUser, error: insertErr } = await supabase
+        .from('users')
+        .insert([{
+          name: formData.name,
+          email: formData.email,
+          temp_password: generatedPassword,
+          password_hash: passwordHash,
+          password_reset_required: true,
+          payment_status: 'pending',
+        }])
+        .select('id')
+        .single();
+
+      if (insertErr) {
+        // Postgres error code 23505 means Unique Constraint Violation
+        const errString = JSON.stringify(insertErr).toLowerCase();
+        const isDuplicate = insertErr.code === '23505' || 
+                            errString.includes('duplicate') || 
+                            errString.includes('unique') || 
+                            errString.includes('already exists');
+
+        if (isDuplicate) {
+          setErrorMsg('This email is already registered. Please log in instead.');
+          setIsSubmitting(false);
+          return; // Halts the flow completely before generating AI questions
+        }
+        
+        console.warn('Supabase insert error details:', insertErr);
+        throw new Error(`DB Error: ${insertErr.message || insertErr.details || 'Unknown error'}`);
+      }
+      
+      dbUserId = newUser.id;
+
+      // 3. Generate questions from Limitless API
       let genderForApi = formData.gender;
 
       const apiResponse = await fetch('/api/v1/generate-questions', {
@@ -33,10 +75,8 @@ const EnquiryModal = ({ isOpen, onClose }) => {
       if (!apiResponse.ok) throw new Error('Failed to generate assessment questions.');
 
       const questionsData = await apiResponse.json();
-      localStorage.setItem('assessmentId', questionsData.assessmentId);
-      localStorage.setItem('assessmentSections', JSON.stringify(questionsData.sections));
 
-      // 2. FormSubmit notification (fire and forget)
+      // 4. FormSubmit notification (fire and forget)
       fetch('https://formsubmit.co/ajax/info@limitlessworld.net', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
@@ -47,8 +87,9 @@ const EnquiryModal = ({ isOpen, onClose }) => {
         }),
       }).catch(() => {});
 
-      // 3. Save to localStorage
-      const generatedPassword = Math.random().toString(36).slice(-6);
+      // 5. Save to localStorage
+      localStorage.setItem('assessmentId', questionsData.assessmentId);
+      localStorage.setItem('assessmentSections', JSON.stringify(questionsData.sections));
       localStorage.setItem('userEmail', formData.email);
       localStorage.setItem('username', formData.email);
       localStorage.setItem('name', formData.name);
@@ -56,8 +97,10 @@ const EnquiryModal = ({ isOpen, onClose }) => {
       localStorage.setItem('userGender', formData.gender);
       localStorage.setItem('generatedPassword', generatedPassword);
       localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('passwordResetRequired', 'true');
+      if (dbUserId) localStorage.setItem('userId', dbUserId);
 
-      // 4. Navigate to questions
+      // 6. Navigate to questions
       onClose();
       navigate('/question');
       window.scrollTo(0, 0);
@@ -126,14 +169,14 @@ const EnquiryModal = ({ isOpen, onClose }) => {
               </div>
 
               {errorMsg && (
-                <div style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '8px', padding: '10px 14px', color: '#ef4444', fontSize: '20px' }}>
+                <div style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '8px', padding: '10px 14px', color: '#ef4444', fontSize: '15px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '8px' }}>
                   ⚠️ {errorMsg}
                 </div>
               )}
 
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || isLoggedIn}
                 style={{
                   padding: '14px',
                   background: 'linear-gradient(135deg, #F59E0B, #FB923C)',
@@ -142,13 +185,13 @@ const EnquiryModal = ({ isOpen, onClose }) => {
                   borderRadius: '10px',
                   fontWeight: '700',
                   fontSize: '22px',
-                  cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                  cursor: (isSubmitting || isLoggedIn) ? 'not-allowed' : 'pointer',
                   boxShadow: '0 4px 14px rgba(245,158,11,0.35)',
                   marginTop: '4px',
-                  opacity: isSubmitting ? 0.7 : 1
+                  opacity: (isSubmitting || isLoggedIn) ? 0.7 : 1
                 }}
               >
-                {isSubmitting ? 'Starting...' : 'Start Assessment →'}
+                {isLoggedIn ? 'You are already logged in' : isSubmitting ? 'Starting...' : 'Start Assessment →'}
               </button>
 
               <p style={{ textAlign: 'center', fontSize: '18px', color: '#94a3b8', margin: 0 }}>

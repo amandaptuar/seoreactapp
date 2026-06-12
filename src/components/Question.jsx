@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import { useNavigate } from 'react-router-dom';
 
 const Question = () => {
@@ -92,8 +91,6 @@ const Question = () => {
 
       const analysisResult = await analyzeResponse.json();
       localStorage.setItem('analysisReport', JSON.stringify(analysisResult));
-
-
 
       // Navigate to payment page to complete the flow
       navigate('/payment');

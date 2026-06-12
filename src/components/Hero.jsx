@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/supabase';
+import bcrypt from 'bcryptjs';
 const Hero = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -11,6 +12,8 @@ const Hero = () => {
 
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState('');
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -19,20 +22,56 @@ const Hero = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+    setFormError('');
+
     try {
-      // Generate a temporary password for the user to log in later
-      const generatedPassword = Math.random().toString(36).slice(-6);
+      // 1. Generate temp password
+      const generatedPassword = Math.random().toString(36).slice(-8).toUpperCase();
+      const passwordHash = await bcrypt.hash(generatedPassword, 10);
 
-      // Generate Questions from Limitless API
-      let genderForApi = formData.gender;
+      // 2. Insert User into Supabase FIRST (To catch duplicate emails immediately)
+      let dbUserId = null;
+      
+      const { data: newUser, error: insertErr } = await supabase
+        .from('users')
+        .insert([{
+          name: formData.name,
+          email: formData.email,
+          temp_password: generatedPassword,
+          password_hash: passwordHash,
+          password_reset_required: true,
+          payment_status: 'pending',
+        }])
+        .select('id')
+        .single();
 
+      if (insertErr) {
+        // Postgres error code 23505 means Unique Constraint Violation
+        // Also fallback to string matching in case Supabase returns the error differently
+        const errString = JSON.stringify(insertErr).toLowerCase();
+        const isDuplicate = insertErr.code === '23505' || 
+                            errString.includes('duplicate') || 
+                            errString.includes('unique') || 
+                            errString.includes('already exists');
+
+        if (isDuplicate) {
+          setFormError('This email is already registered. Please log in instead.');
+          setIsSubmitting(false);
+          return; // Halts the flow completely before generating AI questions
+        }
+        console.warn('Supabase insert error details:', insertErr);
+        throw new Error(`DB Error: ${insertErr.message || insertErr.details || JSON.stringify(insertErr)}`);
+      }
+      
+      dbUserId = newUser.id;
+
+      // 3. Generate Questions from Limitless API
       const apiResponse = await fetch("/api/v1/generate-questions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           age: parseInt(formData.age, 10),
-          gender: genderForApi,
+          gender: formData.gender,
           locale: "en"
         })
       });
@@ -44,10 +83,10 @@ const Hero = () => {
       }
 
       const questionsData = await apiResponse.json();
+
+      // 4. Save everything to localStorage (source of truth for UI)
       localStorage.setItem('assessmentId', questionsData.assessmentId);
       localStorage.setItem('assessmentSections', JSON.stringify(questionsData.sections));
-
-      // Save to localStorage
       localStorage.setItem('userEmail', formData.email);
       localStorage.setItem('username', formData.email);
       localStorage.setItem('name', formData.name);
@@ -55,14 +94,15 @@ const Hero = () => {
       localStorage.setItem('userGender', formData.gender);
       localStorage.setItem('generatedPassword', generatedPassword);
       localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('passwordResetRequired', 'true');
+      if (dbUserId) localStorage.setItem('userId', dbUserId);
 
-      // Navigate to questions
       navigate('/question');
       window.scrollTo(0, 0);
 
     } catch (error) {
       console.error('Error:', error);
-      alert('An error occurred while saving your details. Please try again.');
+      setFormError(error.message || 'An error occurred while saving your details. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -165,8 +205,15 @@ const Hero = () => {
                     </select>
                   </div>
                 </div>
-                <button type="submit" disabled={isSubmitting} style={{ width: '100%', padding: '16px', background: 'linear-gradient(135deg, #3B82F6, #2563EB)', color: '#FFF', border: 'none', borderRadius: '12px', fontSize: '20px', fontWeight: '700', cursor: isSubmitting ? 'not-allowed' : 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', boxShadow: '0 8px 24px rgba(59,130,246,0.3)', transition: 'all 0.2s', marginTop: '8px', opacity: isSubmitting ? 0.7 : 1 }} onMouseEnter={(e) => { if(!isSubmitting) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 12px 32px rgba(59,130,246,0.4)'; } }} onMouseLeave={(e) => { if(!isSubmitting) { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(59,130,246,0.3)'; } }}>
-                  {isSubmitting ? 'Starting...' : <>Start Free Assessment <i className="fa-solid fa-arrow-right"></i></>}
+
+                {formError && (
+                  <div style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '8px', padding: '12px', color: '#ef4444', fontSize: '16px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    ⚠️ {formError}
+                  </div>
+                )}
+
+                <button type="submit" disabled={isSubmitting || isLoggedIn} style={{ width: '100%', padding: '16px', background: 'linear-gradient(135deg, #3B82F6, #2563EB)', color: '#FFF', border: 'none', borderRadius: '12px', fontSize: '20px', fontWeight: '700', cursor: (isSubmitting || isLoggedIn) ? 'not-allowed' : 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', boxShadow: '0 8px 24px rgba(59,130,246,0.3)', transition: 'all 0.2s', marginTop: '8px', opacity: (isSubmitting || isLoggedIn) ? 0.7 : 1 }} onMouseEnter={(e) => { if(!isSubmitting && !isLoggedIn) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 12px 32px rgba(59,130,246,0.4)'; } }} onMouseLeave={(e) => { if(!isSubmitting && !isLoggedIn) { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(59,130,246,0.3)'; } }}>
+                  {isLoggedIn ? 'You are already logged in' : isSubmitting ? 'Starting...' : <>Start Free Assessment <i className="fa-solid fa-arrow-right"></i></>}
                 </button>
               </form>
             </div>

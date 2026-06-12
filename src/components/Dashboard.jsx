@@ -5,9 +5,12 @@ import {
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid,
   Cell
 } from 'recharts';
+import { supabase } from '../lib/supabase';
+import { sendPdfEmail } from '../lib/emailService';
 
 const Dashboard = () => {
   const [report, setReport] = useState(null);
+  const [pdfUrl, setPdfUrl] = useState(null);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const navigate = useNavigate();
 
@@ -16,12 +19,37 @@ const Dashboard = () => {
       const email = localStorage.getItem('userEmail');
       if (!email) { navigate('/'); return; }
       try {
+        // 1. Try localStorage first (fast)
         const savedReport = localStorage.getItem('analysisReport');
         if (savedReport) {
           setReport(JSON.parse(savedReport));
-        } else {
-          navigate('/');
+          return;
         }
+
+        // 2. Always fetch latest from Supabase to check if PDF was already generated
+        const userId = localStorage.getItem('userId');
+        if (userId) {
+          const { data: assessment } = await supabase
+            .from('assessments')
+            .select('report_json, pdf_url')
+            .eq('user_id', userId)
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .single();
+
+          if (assessment) {
+            if (assessment.report_json && !savedReport) {
+              localStorage.setItem('analysisReport', JSON.stringify(assessment.report_json));
+              setReport(assessment.report_json);
+            }
+            if (assessment.pdf_url) {
+              setPdfUrl(assessment.pdf_url);
+            }
+            return;
+          }
+        }
+
+        navigate('/');
       } catch (err) {
         console.error('Error loading dashboard data:', err);
         navigate('/');
@@ -31,6 +59,12 @@ const Dashboard = () => {
   }, [navigate]);
 
   const handleGeneratePdf = async () => {
+    // If the PDF has already been generated, simply open the saved link
+    if (pdfUrl) {
+      window.open(pdfUrl, '_blank');
+      return;
+    }
+
     setIsGeneratingPdf(true);
     try {
       const response = await fetch('/api/v1/generate-pdf', {
@@ -40,14 +74,51 @@ const Dashboard = () => {
       });
       if (!response.ok) throw new Error('PDF generation failed');
       const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
+
+      // 1. Trigger browser download
+      const fileName = `Limitless_Cognitive_Report_${new Date().toISOString().split('T')[0]}.pdf`;
+      const downloadUrl = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `Limitless_Cognitive_Report_${new Date().toISOString().split('T')[0]}.pdf`);
+      link.href = downloadUrl;
+      link.setAttribute('download', fileName);
       document.body.appendChild(link);
       link.click();
       link.parentNode.removeChild(link);
-      window.URL.revokeObjectURL(url);
+      window.URL.revokeObjectURL(downloadUrl);
+
+      // 2. Upload PDF to Supabase Storage (non-blocking)
+      const userId = localStorage.getItem('userId');
+      if (userId) {
+        try {
+          const storagePath = `${userId}/${fileName}`;
+          const { error: uploadErr } = await supabase.storage
+            .from('pdf-reports')
+            .upload(storagePath, blob, { contentType: 'application/pdf', upsert: true });
+
+          if (!uploadErr) {
+            const { data: { publicUrl } } = supabase.storage
+              .from('pdf-reports')
+              .getPublicUrl(storagePath);
+
+            // 3. Save PDF URL to assessments table
+            await supabase
+              .from('assessments')
+              .update({ pdf_url: publicUrl })
+              .eq('user_id', userId);
+
+            setPdfUrl(publicUrl);
+
+            // 4. Send PDF link via email
+            await sendPdfEmail({
+              name: localStorage.getItem('name') || 'User',
+              email: localStorage.getItem('userEmail'),
+              pdfUrl: publicUrl,
+            });
+          }
+        } catch (storageErr) {
+          console.warn('PDF storage/email (non-fatal):', storageErr);
+        }
+      }
     } catch (error) {
       console.error(error);
       alert('Failed to generate PDF. Please try again.');
@@ -159,7 +230,7 @@ const Dashboard = () => {
               {isGeneratingPdf ? (
                 <><div style={{ width: '16px', height: '16px', border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} /> Generating…</>
               ) : (
-                <><span>⬇</span> Download PDF</>
+                <>{pdfUrl ? '📄 View PDF' : '⬇ Download PDF'}</>
               )}
             </button>
           </div>
