@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 
+import { useNavigate } from 'react-router-dom';
 const Hero = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    message: ''
+    age: '',
+    gender: ''
   });
+
+  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -13,7 +18,54 @@ const Hero = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    alert('Thank you! We will contact you soon.');
+    setIsSubmitting(true);
+    
+    try {
+      // Generate a temporary password for the user to log in later
+      const generatedPassword = Math.random().toString(36).slice(-6);
+
+      // Generate Questions from Limitless API
+      let genderForApi = formData.gender;
+
+      const apiResponse = await fetch("/api/v1/generate-questions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          age: parseInt(formData.age, 10),
+          gender: genderForApi,
+          locale: "en"
+        })
+      });
+
+      if (!apiResponse.ok) {
+        const errData = await apiResponse.json();
+        console.error("API Error:", errData);
+        throw new Error('Failed to generate assessment questions');
+      }
+
+      const questionsData = await apiResponse.json();
+      localStorage.setItem('assessmentId', questionsData.assessmentId);
+      localStorage.setItem('assessmentSections', JSON.stringify(questionsData.sections));
+
+      // Save to localStorage
+      localStorage.setItem('userEmail', formData.email);
+      localStorage.setItem('username', formData.email);
+      localStorage.setItem('name', formData.name);
+      localStorage.setItem('userAge', formData.age);
+      localStorage.setItem('userGender', formData.gender);
+      localStorage.setItem('generatedPassword', generatedPassword);
+      localStorage.setItem('isLoggedIn', 'true');
+
+      // Navigate to questions
+      navigate('/question');
+      window.scrollTo(0, 0);
+
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while saving your details. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -25,13 +77,13 @@ const Hero = () => {
           
           {/* Left Text */}
           <div style={{ paddingRight: '40px' }}>
-            <h1 style={{ fontSize: '66px', fontWeight: '800', color: '#0F172A', lineHeight: '1.1', marginBottom: '24px', letterSpacing: '-2px' }}>
+            <h1 style={{ fontSize: '68px', fontWeight: '800', color: '#0F172A', lineHeight: '1.1', marginBottom: '24px', letterSpacing: '-2px' }}>
               We Are <span style={{ color: '#3B82F6' }}>Limitless</span>
             </h1>
-            <h2 style={{ fontSize: '34px', fontWeight: '700', color: '#0F172A', marginBottom: '24px', lineHeight: '1.3' }}>
+            <h2 style={{ fontSize: '36px', fontWeight: '700', color: '#0F172A', marginBottom: '24px', lineHeight: '1.3' }}>
               Science. Technology. Human Potential.
             </h2>
-            <p style={{ fontSize: '20px', color: '#475569', lineHeight: '1.6', marginBottom: '40px', maxWidth: '600px' }}>
+            <p style={{ fontSize: '22px', color: '#475569', lineHeight: '1.6', marginBottom: '40px', maxWidth: '600px' }}>
               Limitless is a science-backed cognitive performance platform designed to help you understand your mind, optimize your mental energy, and unlock your true potential.
             </p>
 
@@ -40,31 +92,31 @@ const Hero = () => {
               
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
                 <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#EFF6FF', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <i className="fa-solid fa-brain" style={{ color: '#3B82F6', fontSize: '20px' }}></i>
+                  <i className="fa-solid fa-brain" style={{ color: '#3B82F6', fontSize: '22px' }}></i>
                 </div>
                 <div>
-                  <h4 style={{ fontSize: '20px', fontWeight: '700', color: '#0F172A', margin: '0 0 4px 0' }}>Understand Your Brain</h4>
-                  <p style={{ fontSize: '16px', color: '#64748B', margin: 0, lineHeight: '1.5' }}>Get unparalleled insights into your cognitive health and mental fitness.</p>
+                  <h4 style={{ fontSize: '22px', fontWeight: '700', color: '#0F172A', margin: '0 0 4px 0' }}>Understand Your Brain</h4>
+                  <p style={{ fontSize: '18px', color: '#64748B', margin: 0, lineHeight: '1.5' }}>Get unparalleled insights into your cognitive health and mental fitness.</p>
                 </div>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
                 <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#ECFDF5', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <i className="fa-solid fa-bullseye" style={{ color: '#10B981', fontSize: '20px' }}></i>
+                  <i className="fa-solid fa-bullseye" style={{ color: '#10B981', fontSize: '22px' }}></i>
                 </div>
                 <div>
-                  <h4 style={{ fontSize: '20px', fontWeight: '700', color: '#0F172A', margin: '0 0 4px 0' }}>Improve What Matters</h4>
-                  <p style={{ fontSize: '16px', color: '#64748B', margin: 0, lineHeight: '1.5' }}>Target stress, focus, memory, and energy with personalized action plans.</p>
+                  <h4 style={{ fontSize: '22px', fontWeight: '700', color: '#0F172A', margin: '0 0 4px 0' }}>Improve What Matters</h4>
+                  <p style={{ fontSize: '18px', color: '#64748B', margin: 0, lineHeight: '1.5' }}>Target stress, focus, memory, and energy with personalized action plans.</p>
                 </div>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
                 <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#FFFBEB', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <i className="fa-solid fa-chart-line" style={{ color: '#F59E0B', fontSize: '20px' }}></i>
+                  <i className="fa-solid fa-chart-line" style={{ color: '#F59E0B', fontSize: '22px' }}></i>
                 </div>
                 <div>
-                  <h4 style={{ fontSize: '20px', fontWeight: '700', color: '#0F172A', margin: '0 0 4px 0' }}>Unlock Peak Performance</h4>
-                  <p style={{ fontSize: '16px', color: '#64748B', margin: 0, lineHeight: '1.5' }}>Elevate your life with ongoing tracking and scientifically proven interventions.</p>
+                  <h4 style={{ fontSize: '22px', fontWeight: '700', color: '#0F172A', margin: '0 0 4px 0' }}>Unlock Peak Performance</h4>
+                  <p style={{ fontSize: '18px', color: '#64748B', margin: 0, lineHeight: '1.5' }}>Elevate your life with ongoing tracking and scientifically proven interventions.</p>
                 </div>
               </div>
 
@@ -72,10 +124,10 @@ const Hero = () => {
 
             {/* Buttons */}
             <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
-              <button style={{ background: '#0F172A', border: 'none', borderRadius: '30px', padding: '16px 32px', color: '#FFF', fontSize: '18px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 4px 14px rgba(15,23,42,0.4)', transition: 'transform 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
-                Watch How It Works <i className="fa-solid fa-play" style={{ fontSize: '16px' }}></i>
+              <button style={{ background: '#0F172A', border: 'none', borderRadius: '30px', padding: '16px 32px', color: '#FFF', fontSize: '20px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 4px 14px rgba(15,23,42,0.4)', transition: 'transform 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
+                Watch How It Works <i className="fa-solid fa-play" style={{ fontSize: '18px' }}></i>
               </button>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#475569', fontSize: '17px', fontWeight: '600' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#475569', fontSize: '19px', fontWeight: '600' }}>
                 <i className="fa-solid fa-shield-alt" style={{ color: '#10B981' }}></i> Science-Backed & Trusted
               </div>
             </div>
@@ -85,32 +137,36 @@ const Hero = () => {
           {/* Right Form */}
           <div className="hero-form-wrapper w-full" style={{ display: 'flex', justifyContent: 'flex-end', position: 'relative' }}>
             <div className="w-full" style={{ background: '#FFFFFF', borderRadius: '24px', padding: '32px', boxShadow: '0 20px 40px rgba(0,0,0,0.06)', border: '1px solid #E2E8F0', width: '100%', maxWidth: '500px' }}>
-              <h3 style={{ fontSize: '26px', fontWeight: '800', color: '#0F172A', marginBottom: '8px' }}>Start Your Journey</h3>
-              <p style={{ fontSize: '16px', color: '#64748B', marginBottom: '24px' }}>Enter your details to take your first cognitive assessment.</p>
+              <h3 style={{ fontSize: '28px', fontWeight: '800', color: '#0F172A', marginBottom: '8px' }}>Start Your Journey</h3>
+              <p style={{ fontSize: '18px', color: '#64748B', marginBottom: '24px' }}>Enter your details to take your first cognitive assessment.</p>
               
               <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: '1 1 200px' }}>
-                    <label style={{ fontSize: '13px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '1px' }}>Full Name</label>
-                    <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="John Doe" style={{ width: '100%', padding: '14px', borderRadius: '12px', border: '1px solid #E2E8F0', fontSize: '16px', background: '#F8FAFC' }} required />
+                    <label style={{ fontSize: '15px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '1px' }}>Full Name</label>
+                    <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="John Doe" style={{ width: '100%', padding: '14px', borderRadius: '12px', border: '1px solid #E2E8F0', fontSize: '18px', background: '#F8FAFC' }} required />
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: '1 1 200px' }}>
-                    <label style={{ fontSize: '13px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '1px' }}>Email Address</label>
-                    <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="john@example.com" style={{ width: '100%', padding: '14px', borderRadius: '12px', border: '1px solid #E2E8F0', fontSize: '16px', background: '#F8FAFC' }} required />
+                    <label style={{ fontSize: '15px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '1px' }}>Email Address</label>
+                    <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="john@example.com" style={{ width: '100%', padding: '14px', borderRadius: '12px', border: '1px solid #E2E8F0', fontSize: '18px', background: '#F8FAFC' }} required />
                   </div>
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  <label style={{ fontSize: '13px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '1px' }}>What do you want to improve?</label>
-                  <select name="message" value={formData.message} onChange={handleChange} style={{ width: '100%', padding: '14px', borderRadius: '12px', border: '1px solid #E2E8F0', fontSize: '16px', background: '#F8FAFC', color: '#0F172A' }} required>
-                    <option value="">Select a focus area</option>
-                    <option value="focus">Focus & Attention</option>
-                    <option value="memory">Memory & Recall</option>
-                    <option value="stress">Stress Management</option>
-                    <option value="sleep">Sleep Quality</option>
-                  </select>
+                <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: '1 1 100px' }}>
+                    <label style={{ fontSize: '15px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '1px' }}>Age (18-25)</label>
+                    <input type="number" name="age" value={formData.age} onChange={handleChange} min="18" max="25" placeholder="22" style={{ width: '100%', padding: '14px', borderRadius: '12px', border: '1px solid #E2E8F0', fontSize: '18px', background: '#F8FAFC' }} required />
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: '1 1 100px' }}>
+                    <label style={{ fontSize: '15px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '1px' }}>Gender</label>
+                    <select name="gender" value={formData.gender} onChange={handleChange} style={{ width: '100%', padding: '14px', borderRadius: '12px', border: '1px solid #E2E8F0', fontSize: '18px', background: '#F8FAFC', color: '#0F172A' }} required>
+                      <option value="">Select Gender</option>
+                      <option value="female">Female</option>
+                      <option value="male">Male</option>
+                    </select>
+                  </div>
                 </div>
-                <button type="submit" style={{ width: '100%', padding: '16px', background: 'linear-gradient(135deg, #3B82F6, #2563EB)', color: '#FFF', border: 'none', borderRadius: '12px', fontSize: '18px', fontWeight: '700', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', boxShadow: '0 8px 24px rgba(59,130,246,0.3)', transition: 'all 0.2s', marginTop: '8px' }} onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 12px 32px rgba(59,130,246,0.4)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(59,130,246,0.3)'; }}>
-                  Start Free Assessment <i className="fa-solid fa-arrow-right"></i>
+                <button type="submit" disabled={isSubmitting} style={{ width: '100%', padding: '16px', background: 'linear-gradient(135deg, #3B82F6, #2563EB)', color: '#FFF', border: 'none', borderRadius: '12px', fontSize: '20px', fontWeight: '700', cursor: isSubmitting ? 'not-allowed' : 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', boxShadow: '0 8px 24px rgba(59,130,246,0.3)', transition: 'all 0.2s', marginTop: '8px', opacity: isSubmitting ? 0.7 : 1 }} onMouseEnter={(e) => { if(!isSubmitting) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 12px 32px rgba(59,130,246,0.4)'; } }} onMouseLeave={(e) => { if(!isSubmitting) { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(59,130,246,0.3)'; } }}>
+                  {isSubmitting ? 'Starting...' : <>Start Free Assessment <i className="fa-solid fa-arrow-right"></i></>}
                 </button>
               </form>
             </div>
@@ -122,40 +178,40 @@ const Hero = () => {
         <div style={{ background: '#FFF', borderRadius: '24px', padding: '32px 40px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 20px 40px rgba(0,0,0,0.06)', border: '1px solid #F1F5F9', marginTop: '20px', flexWrap: 'wrap', gap: '20px' }}>
           
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#EFF6FF', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3B82F6', fontSize: '20px' }}><i className="fa-solid fa-users"></i></div>
+            <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#EFF6FF', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3B82F6', fontSize: '22px' }}><i className="fa-solid fa-users"></i></div>
             <div>
-              <h5 style={{ fontSize: '20px', fontWeight: '800', color: '#0F172A', margin: '0 0 4px 0' }}>2,300+</h5>
-              <p style={{ fontSize: '16px', color: '#64748B', margin: 0, lineHeight: '1.3' }}>Assessments Completed<br/>Across the USA</p>
+              <h5 style={{ fontSize: '22px', fontWeight: '800', color: '#0F172A', margin: '0 0 4px 0' }}>2,300+</h5>
+              <p style={{ fontSize: '18px', color: '#64748B', margin: 0, lineHeight: '1.3' }}>Assessments Completed<br/>Across the USA</p>
             </div>
           </div>
 
           <div style={{ width: '1px', height: '40px', background: '#E2E8F0' }}></div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#F3E8FF', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#A855F7', fontSize: '20px' }}><i className="fa-solid fa-flask"></i></div>
+            <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#F3E8FF', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#A855F7', fontSize: '22px' }}><i className="fa-solid fa-flask"></i></div>
             <div>
-              <h5 style={{ fontSize: '20px', fontWeight: '800', color: '#0F172A', margin: '0 0 4px 0' }}>Science-Backed</h5>
-              <p style={{ fontSize: '16px', color: '#64748B', margin: 0, lineHeight: '1.3' }}>Built by psychologists,<br/>researchers & experts</p>
+              <h5 style={{ fontSize: '22px', fontWeight: '800', color: '#0F172A', margin: '0 0 4px 0' }}>Science-Backed</h5>
+              <p style={{ fontSize: '18px', color: '#64748B', margin: 0, lineHeight: '1.3' }}>Built by psychologists,<br/>researchers & experts</p>
             </div>
           </div>
 
           <div style={{ width: '1px', height: '40px', background: '#E2E8F0' }}></div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#ECFDF5', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10B981', fontSize: '20px' }}><i className="fa-solid fa-shield-alt"></i></div>
+            <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#ECFDF5', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10B981', fontSize: '22px' }}><i className="fa-solid fa-shield-alt"></i></div>
             <div>
-              <h5 style={{ fontSize: '20px', fontWeight: '800', color: '#0F172A', margin: '0 0 4px 0' }}>100% Secure</h5>
-              <p style={{ fontSize: '16px', color: '#64748B', margin: 0, lineHeight: '1.3' }}>Your data is private,<br/>encrypted & protected</p>
+              <h5 style={{ fontSize: '22px', fontWeight: '800', color: '#0F172A', margin: '0 0 4px 0' }}>100% Secure</h5>
+              <p style={{ fontSize: '18px', color: '#64748B', margin: 0, lineHeight: '1.3' }}>Your data is private,<br/>encrypted & protected</p>
             </div>
           </div>
 
           <div style={{ width: '1px', height: '40px', background: '#E2E8F0' }}></div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#FFFBEB', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#F59E0B', fontSize: '20px' }}><i className="fa-solid fa-star"></i></div>
+            <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#FFFBEB', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#F59E0B', fontSize: '22px' }}><i className="fa-solid fa-star"></i></div>
             <div>
-              <h5 style={{ fontSize: '20px', fontWeight: '800', color: '#0F172A', margin: '0 0 4px 0' }}>4.8 / 5</h5>
-              <p style={{ fontSize: '16px', color: '#64748B', margin: 0, lineHeight: '1.3' }}>Average Rating<br/>From Our Users</p>
+              <h5 style={{ fontSize: '22px', fontWeight: '800', color: '#0F172A', margin: '0 0 4px 0' }}>4.8 / 5</h5>
+              <p style={{ fontSize: '18px', color: '#64748B', margin: 0, lineHeight: '1.3' }}>Average Rating<br/>From Our Users</p>
             </div>
           </div>
 

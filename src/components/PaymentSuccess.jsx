@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../supabaseClient';
+
 import { useNavigate } from 'react-router-dom';
 
 const PaymentSuccess = () => {
   const [status, setStatus] = useState('processing');
   const [statusMessage, setStatusMessage] = useState('Processing Payment & Analysis...');
   const [errorMessage, setErrorMessage] = useState('We encountered an error processing your data. Please contact support.');
+  const [isNavigating, setIsNavigating] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,60 +20,16 @@ const PaymentSuccess = () => {
       }
 
       try {
-        // 1. Update database payment status
-        const { error, data: userRecord } = await supabase
-          .from('users')
-          .update({ payment_status: 'yes' })
-          .eq('email', email)
-          .select('questions')
-          .single();
+        // Mock updating payment status in DB by setting it directly to success state
 
-        if (error) throw error;
-
-        setStatusMessage('Analyzing Assessment Data...');
-
-        // 2. Fetch assessment data to send to backend
-        const assessmentData = userRecord.questions || {};
-
-        // 3. Call backend for LLM analysis and PDF generation
-        const response = await fetch('https://limitless-llm-trial-ersion-1.onrender.com/api/analyze', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, username, data: assessmentData })
-        });
-
-        if (!response.ok) {
-          let backendError = 'Failed to analyze data.';
-          try {
-            const errData = await response.json();
-            if (errData.error) backendError = errData.error;
-          } catch (e) {
-            // Ignore if not JSON
-          }
-          throw new Error(backendError);
-        }
-
-        const result = await response.json();
-        
-        // Save the result in localStorage to be used by the Dashboard
-        localStorage.setItem('assessmentReport', JSON.stringify(result.report));
-        if (result.pdfUrl) {
-           localStorage.setItem('pdfUrl', result.pdfUrl);
-        }
-
-        // Save AI insights to Supabase
-        await supabase
-          .from('users')
-          .update({ ai_insights: result.report })
-          .eq('email', email);
-
+        // Analysis is already completed in Question.jsx and saved to Supabase/localStorage
         setStatus('success');
         
         // Removed auto-redirect so the user has time to copy their password.
         // They will click a button to proceed.
 
       } catch (err) {
-        console.error('Payment verification or analysis error:', err);
+        console.error('Payment verification error:', err);
         setErrorMessage(err.message || 'We encountered an error processing your data. Please contact support.');
         setStatus('error');
       }
@@ -89,41 +46,45 @@ const PaymentSuccess = () => {
           {status === 'processing' && (
             <div>
               <div className="spinner" style={styles.spinner}></div>
-              <h2 style={{ color: '#0F172A', fontSize: '36px', marginTop: '20px' }}>{statusMessage}</h2>
+              <h2 style={{ color: '#0F172A', fontSize: '38px', marginTop: '20px' }}>{statusMessage}</h2>
               <p style={{ color: '#64748b' }}>Our AI is crafting your personalized cognitive protocol.</p>
             </div>
           )}
 
           {status === 'success' && (
             <div className="fade-in">
-              <div style={{ width: '80px', height: '80px', background: '#22C55E', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', color: '#fff', fontSize: '40px' }}>✓</div>
-              <h2 style={{ color: '#0F172A', fontSize: '40px', marginBottom: '10px', fontWeight: '800' }}>Analysis Complete!</h2>
+              <div style={{ width: '80px', height: '80px', background: '#22C55E', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', color: '#fff', fontSize: '42px' }}>✓</div>
+              <h2 style={{ color: '#0F172A', fontSize: '42px', marginBottom: '10px', fontWeight: '800' }}>Analysis Complete!</h2>
               
               <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', padding: '20px', borderRadius: '12px', margin: '24px 0', textAlign: 'left' }}>
-                <p style={{ color: '#64748B', fontSize: '19px', margin: '0 0 12px 0', fontWeight: '600', textTransform: 'uppercase' }}>Save your login details:</p>
+                <p style={{ color: '#64748B', fontSize: '21px', margin: '0 0 12px 0', fontWeight: '600', textTransform: 'uppercase' }}>Save your login details:</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: '#fff', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
                     <span style={{ color: '#64748B', fontWeight: '500' }}>Username:</span>
-                    <strong style={{ color: '#0F172A' }}>{localStorage.getItem('username')}</strong>
+                    <strong style={{ color: '#0F172A' }}>{localStorage.getItem('userEmail')}</strong>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: '#fff', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
                     <span style={{ color: '#64748B', fontWeight: '500' }}>Password:</span>
                     <strong style={{ color: '#0F172A' }}>{localStorage.getItem('generatedPassword')}</strong>
                   </div>
                 </div>
-                <p style={{ color: '#EF4444', fontSize: '16px', margin: '12px 0 0 0', fontStyle: 'italic' }}>* Please save these before continuing. You will need them to log in later.</p>
+                <p style={{ color: '#EF4444', fontSize: '18px', margin: '12px 0 0 0', fontStyle: 'italic' }}>* Please save these before continuing. You will need them to log in later.</p>
               </div>
 
               <button 
+                disabled={isNavigating}
                 onClick={() => {
+                  setIsNavigating(true);
                   // Mark as logged in so header reflects status
                   localStorage.setItem('isLoggedIn', 'true');
                   localStorage.setItem('paymentStatus', 'yes');
-                  navigate('/dashboard');
+                  setTimeout(() => {
+                    navigate('/dashboard');
+                  }, 1200);
                 }} 
-                style={{ width: '100%', padding: '16px', background: 'linear-gradient(135deg, #F59E0B, #FB923C)', color: '#fff', border: 'none', borderRadius: '12px', fontWeight: '700', fontSize: '21px', cursor: 'pointer', boxShadow: '0 4px 14px rgba(245,158,11,0.35)' }}
+                style={{ width: '100%', padding: '16px', background: 'linear-gradient(135deg, #F59E0B, #FB923C)', color: '#fff', border: 'none', borderRadius: '12px', fontWeight: '700', fontSize: '23px', cursor: isNavigating ? 'not-allowed' : 'pointer', boxShadow: '0 4px 14px rgba(245,158,11,0.35)', opacity: isNavigating ? 0.7 : 1 }}
               >
-                Go to My Dashboard →
+                {isNavigating ? 'Loading Dashboard...' : 'Go to My Dashboard →'}
               </button>
             </div>
           )}

@@ -52,7 +52,7 @@ const FAQ = () => {
           </div>
           <div className="col-lg-4 d-flex flex-column">
             <div className="accordion-contact">
-              <h4>Email: <a href="mailto:info@limitless.com">info@limitless.com</a></h4>
+              <h4>Email: <a href="mailto:info@limitlessworld.net">info@limitlessworld.net</a></h4>
               <a href="#hero-form-section" className="button btn" onClick={(e) => {
                 if (window.location.pathname === '/') {
                   e.preventDefault();

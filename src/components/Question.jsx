@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { supabase } from '../supabaseClient';
+
 import { useNavigate } from 'react-router-dom';
 
 const Question = () => {
@@ -8,71 +8,23 @@ const Question = () => {
   const navigate = useNavigate();
   const userEmail = localStorage.getItem('userEmail');
 
-  const questionsData = [
-    {
-      section: "Focus & Attention",
-      questions: [
-        { id: "q1_1", text: "I find it difficult to concentrate on tasks." },
-        { id: "q1_2", text: "I get easily distracted while working or studying." },
-        { id: "q1_3", text: "I struggle to complete tasks without losing focus." },
-        { id: "q1_4", text: "I feel mentally “foggy” or unclear." }
-      ]
-    },
-    {
-      section: "Memory Function",
-      questions: [
-        { id: "q2_1", text: "I forget important tasks or appointments." },
-        { id: "q2_2", text: "I have trouble recalling recent information." },
-        { id: "q2_3", text: "I misplace items more often than usual." },
-        { id: "q2_4", text: "I struggle to retain new information." }
-      ]
-    },
-    {
-      section: "Mental Clarity & Decision-Making",
-      questions: [
-        { id: "q3_1", text: "I find it hard to make decisions." },
-        { id: "q3_2", text: "My thinking feels slow or unclear." },
-        { id: "q3_3", text: "I feel overwhelmed when processing information." },
-        { id: "q3_4", text: "I lack mental sharpness during daily activities." }
-      ]
-    },
-    {
-      section: "Emotional Well-being",
-      questions: [
-        { id: "q4_1", text: "I feel anxious or worried frequently." },
-        { id: "q4_2", text: "I feel low, sad, or unmotivated." },
-        { id: "q4_3", text: "I feel overwhelmed by daily responsibilities." },
-        { id: "q4_4", text: "I have mood swings or emotional instability." }
-      ]
-    },
-    {
-      section: "Stress & Resilience",
-      questions: [
-        { id: "q5_1", text: "I feel stressed most of the time." },
-        { id: "q5_2", text: "I struggle to relax or unwind." },
-        { id: "q5_3", text: "I feel mentally exhausted." },
-        { id: "q5_4", text: "I find it difficult to cope with challenges." }
-      ]
-    },
-    {
-      section: "Sleep & Recovery",
-      questions: [
-        { id: "q6_1", text: "I have trouble falling asleep." },
-        { id: "q6_2", text: "I wake up feeling tired or unrested." },
-        { id: "q6_3", text: "My sleep is interrupted or poor quality." },
-        { id: "q6_4", text: "I feel fatigued during the day." }
-      ]
-    },
-    {
-      section: "Productivity & Performance",
-      questions: [
-        { id: "q7_1", text: "My productivity has decreased recently." },
-        { id: "q7_2", text: "I struggle to stay motivated." },
-        { id: "q7_3", text: "I find it hard to manage my time effectively." },
-        { id: "q7_4", text: "I feel less efficient than usual." }
-      ]
+  const [questionsData, setQuestionsData] = useState([]);
+
+  React.useEffect(() => {
+    const stored = localStorage.getItem('assessmentSections');
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        const mapped = parsed.map(s => ({
+          section: s.title,
+          questions: s.items
+        }));
+        setQuestionsData(mapped);
+      } catch (e) {
+        console.error("Error parsing sections", e);
+      }
     }
-  ];
+  }, []);
 
   const totalQuestions = questionsData.reduce((acc, sec) => acc + sec.questions.length, 0);
 
@@ -85,7 +37,8 @@ const Question = () => {
   };
 
   const calculateProgress = () => {
-    const answered = Object.keys(formData).filter(key => key.startsWith('q')).length;
+    const answered = Object.keys(formData).filter(key => key.startsWith('q') || key.startsWith('S')).length;
+    if (totalQuestions === 0) return 0;
     return Math.round((answered / totalQuestions) * 100);
   };
 
@@ -110,15 +63,37 @@ const Question = () => {
     const finalData = { ...formData, totalScore };
 
     try {
-      // 1. Update user data in Supabase
-      const { error } = await supabase
-        .from('users')
-        .update({ questions: finalData }) // Do not set payment_status here
-        .eq('email', userEmail);
-      
-      if (error) {
-        throw new Error(error.message || 'Failed to submit audit');
+      const apiResponses = Object.entries(formData).map(([key, value]) => ({
+        itemId: key,
+        value: value
+      }));
+
+      const assessmentId = localStorage.getItem('assessmentId');
+      const age = parseInt(localStorage.getItem('userAge'), 10) || 22;
+      let gender = localStorage.getItem('userGender') || 'prefer-not-to-say';
+      if (gender === 'prefer_not_to_say') gender = 'prefer-not-to-say';
+
+      const analyzeResponse = await fetch("/api/v1/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          assessmentId: assessmentId || "fallback-id",
+          age: age,
+          gender: gender,
+          responses: apiResponses
+        })
+      });
+
+      if (!analyzeResponse.ok) {
+        const errData = await analyzeResponse.json();
+        console.error("Analyze Error:", errData);
+        throw new Error('Failed to analyze assessment');
       }
+
+      const analysisResult = await analyzeResponse.json();
+      localStorage.setItem('analysisReport', JSON.stringify(analysisResult));
+
+
 
       // Navigate to payment page to complete the flow
       navigate('/payment');
@@ -202,7 +177,7 @@ const Question = () => {
               type="submit" 
               className="btn btn-primary support-submit"
               disabled={status === 'submitting'}
-              style={{ padding: '16px', fontSize: '24px', marginTop: '20px', opacity: status === 'submitting' ? 0.7 : 1 }}
+              style={{ padding: '16px', fontSize: '26px', marginTop: '20px', opacity: status === 'submitting' ? 0.7 : 1 }}
             >
               {status === 'submitting' ? 'Submitting Assessment...' : 'Submit Assessment & Continue'}
             </button>
@@ -273,7 +248,7 @@ const styles = {
     flexWrap: 'wrap',
     gap: '15px',
     color: '#CBD5E1',
-    fontSize: '19px'
+    fontSize: '21px'
   },
   form: {
     display: 'flex',
@@ -289,7 +264,7 @@ const styles = {
   },
   sectionHeader: {
     color: '#F59E0B',
-    fontSize: '24px',
+    fontSize: '26px',
     fontWeight: '700',
     marginBottom: '20px',
     borderBottom: '1px solid rgba(245, 158, 11, 0.2)',
@@ -308,7 +283,7 @@ const styles = {
   },
   questionText: {
     color: '#fff',
-    fontSize: '21px',
+    fontSize: '23px',
     margin: 0
   },
   radioGroup: {
@@ -329,7 +304,7 @@ const styles = {
     cursor: 'pointer',
     color: '#94A3B8',
     transition: 'all 0.2s ease',
-    fontSize: '21px',
+    fontSize: '23px',
     fontWeight: '700'
   },
   radioLabelSelected: {

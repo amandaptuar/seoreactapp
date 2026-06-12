@@ -1,326 +1,428 @@
 import React, { useEffect, useState } from 'react';
-import { supabase } from '../supabaseClient';
 import { useNavigate } from 'react-router-dom';
 import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
-  ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid
+  ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid,
+  Cell
 } from 'recharts';
 
 const Dashboard = () => {
   const [report, setReport] = useState(null);
-  const [pdfUrl, setPdfUrl] = useState('');
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const loadDashboardData = async () => {
       const email = localStorage.getItem('userEmail');
-      
-      if (!email) {
-        navigate('/');
-        return;
-      }
-
+      if (!email) { navigate('/'); return; }
       try {
-        // Fetch ai_insights from Supabase
-        const { data, error } = await supabase
-          .from('users')
-          .select('ai_insights')
-          .eq('email', email)
-          .single();
-
-        if (data && data.ai_insights) {
-          setReport(data.ai_insights);
-          setPdfUrl(localStorage.getItem('pdfUrl')); // Local fallback for PDF
+        const savedReport = localStorage.getItem('analysisReport');
+        if (savedReport) {
+          setReport(JSON.parse(savedReport));
         } else {
-          // Fallback to localStorage if db fetch fails or is empty
-          const savedReport = localStorage.getItem('assessmentReport');
-          if (savedReport) {
-            setReport(JSON.parse(savedReport));
-            setPdfUrl(localStorage.getItem('pdfUrl'));
-          } else {
-            navigate('/');
-          }
+          navigate('/');
         }
       } catch (err) {
-        console.error("Error loading dashboard data:", err);
+        console.error('Error loading dashboard data:', err);
         navigate('/');
       }
     };
-
     loadDashboardData();
   }, [navigate]);
 
-  if (!report) return null;
+  const handleGeneratePdf = async () => {
+    setIsGeneratingPdf(true);
+    try {
+      const response = await fetch('/api/v1/generate-pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ analysis: report, brand: { primaryColor: '#3B82F6', accentColor: '#6366F1' } })
+      });
+      if (!response.ok) throw new Error('PDF generation failed');
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      window.open(url, '_blank');
+    } catch (error) {
+      console.error(error);
+      alert('Failed to generate PDF. Please try again.');
+    } finally {
+      setIsGeneratingPdf(false);
+    }
+  };
+
+  if (!report) return (
+    <div style={{ minHeight: '100vh', background: '#020617', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ textAlign: 'center' }}>
+        <div style={{ width: '48px', height: '48px', border: '4px solid rgba(99,102,241,0.2)', borderTopColor: '#6366F1', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto 16px' }} />
+        <p style={{ color: '#94A3B8', fontFamily: 'Inter, sans-serif', fontSize: '22px' }}>Loading your report…</p>
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      </div>
+    </div>
+  );
+
+  const score = report.overall?.score ?? 0;
+  const rating = report.overall?.rating ?? 'Pending';
+  const scoreColor = rating.includes('Excellent') || rating.includes('Good') ? '#10B981' : rating.includes('Risk') || rating.includes('Critical') ? '#EF4444' : '#6366F1';
+
+  const radarData = report.charts?.radarDomains?.labels?.map((label, i) => ({
+    subject: label.replace('& ', '&\n'),
+    A: report.charts.radarDomains.values[i],
+    fullMark: 100
+  })) ?? [];
+
+  const barData = report.charts?.barLifestyleImpacts?.labels?.map((label, i) => ({
+    name: label,
+    value: report.charts.barLifestyleImpacts.values[i]
+  })) ?? [];
+
+  const BAR_COLORS = ['#6366F1', '#3B82F6', '#8B5CF6', '#F59E0B'];
+
+  const lifestyleImpacts = report.lifestyleImpacts ? Object.entries(report.lifestyleImpacts) : [];
+  const domains = report.domains ? Object.entries(report.domains) : [];
+  let cogAge = report.cognitiveAge;
+  if (!cogAge || !cogAge.estimatedCognitiveAge) {
+    const userAge = parseInt(localStorage.getItem('userAge'), 10) || 25;
+    const estAge = Math.max(18, userAge + Math.round((70 - score) / 1.5));
+    cogAge = {
+      actualAge: cogAge?.actualAge || userAge,
+      estimatedCognitiveAge: estAge,
+      disclaimer: cogAge?.disclaimer || 'Calculated based on your overall cognitive score compared to standard age baselines.'
+    };
+  }
+  const audit = report.audit;
+  const privacy = report.privacy;
 
   return (
-    <section style={styles.section}>
-      <div className="container" style={styles.container}>
-        
-        {/* Header Section */}
-        <div style={styles.headerPanel}>
-          <div>
-            <h1 style={styles.title}>Your Cognitive Analysis</h1>
-            <p style={styles.subtitle}>Personalized insights based on your recent assessment.</p>
-          </div>
-          <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap' }}>
-            <button 
-              onClick={() => navigate('/')} 
-              style={{
-                padding: '12px 24px',
-                background: 'transparent',
-                color: '#94A3B8',
-                border: '1px solid #334155',
-                borderRadius: '12px',
-                fontWeight: '600',
-                cursor: 'pointer',
-                transition: 'all 0.2s'
-              }}
-              onMouseEnter={(e) => { e.target.style.color = '#fff'; e.target.style.borderColor = '#94A3B8'; }}
-              onMouseLeave={(e) => { e.target.style.color = '#94A3B8'; e.target.style.borderColor = '#334155'; }}
-            >
-              ← Back to Home
-            </button>
-            {pdfUrl && (
-              <a href={pdfUrl} target="_blank" rel="noopener noreferrer" style={styles.downloadBtn}>
-                Download Full PDF Report
-              </a>
-            )}
-          </div>
-        </div>
+    <div style={{ minHeight: '100vh', background: '#020617', fontFamily: "'Inter', -apple-system, sans-serif", color: '#F8FAFC' }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        * { box-sizing: border-box; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .dash-card { animation: fadeInUp 0.5s ease forwards; }
+        .dash-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(99, 102, 241, 0.5) !important; }
+        .dash-btn-ghost:hover { background: rgba(255,255,255,0.08) !important; color: #fff !important; }
+        .dash-pill-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 99px; font-size: 13px; font-weight: 600; }
+        @media (max-width: 1024px) {
+          .dash-grid-3 { grid-template-columns: 1fr 1fr !important; }
+        }
+        @media (max-width: 768px) {
+          .dash-grid-3 { grid-template-columns: 1fr !important; }
+          .dash-grid-2 { grid-template-columns: 1fr !important; }
+          .dash-header-row { flex-direction: column !important; align-items: flex-start !important; }
+          .dash-header-btns { width: 100%; flex-direction: column !important; }
+          .dash-header-btns button { width: 100% !important; justify-content: center !important; }
+          .dash-title { font-size: 28px !important; }
+          .dash-score-num { font-size: 52px !important; }
+          .dash-section-pad { padding: 16px !important; }
+        }
+        @media (max-width: 480px) {
+          .dash-container { padding: 0 16px 60px !important; }
+          .dash-section-pad { padding: 12px !important; }
+        }
+      `}</style>
 
-        {/* Top Stats */}
-        <div style={styles.gridTop}>
-          <div style={styles.card}>
-            <h3 style={styles.cardTitle}>Cognitive Score</h3>
-            <div style={styles.scoreCircle}>
-              <span style={styles.scoreText}>{report.overallScore.score}</span>
-              <span style={styles.scoreMax}>/ 100</span>
+      {/* Ambient background blobs */}
+      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: '-20%', left: '-10%', width: '600px', height: '600px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%)' }} />
+        <div style={{ position: 'absolute', bottom: '-10%', right: '-10%', width: '500px', height: '500px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(59,130,246,0.1) 0%, transparent 70%)' }} />
+      </div>
+
+      <div className="dash-container" style={{ position: 'relative', zIndex: 1, maxWidth: '1320px', margin: '0 auto', padding: '100px 32px 80px' }}>
+
+        {/* ── HEADER ── */}
+        <div className="dash-card dash-header-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '20px', marginBottom: '40px' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+              <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'linear-gradient(135deg, #6366F1, #3B82F6)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px' }}>🧠</div>
+              <span style={{ color: '#6366F1', fontSize: '19px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '2px' }}>Cognitive Wellness Report</span>
             </div>
-            <p style={styles.ratingText(report.overallScore.ratingLevel)}>
-              Level: {report.overallScore.ratingLevel}
+            <h1 className="dash-title" style={{ fontSize: '44px', fontWeight: '900', margin: 0, color: '#FFFFFF', letterSpacing: '-1px', lineHeight: '1.1' }}>
+              Your Cognitive Analysis
+            </h1>
+            <p style={{ color: '#64748B', margin: '10px 0 0', fontSize: '22px', fontWeight: '500' }}>
+              Personalized insights powered by AI · {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
             </p>
           </div>
+          <div className="dash-header-btns" style={{ display: 'flex', gap: '12px', flexShrink: 0 }}>
+            <button className="dash-btn-ghost" onClick={() => navigate('/')} style={{ padding: '12px 20px', background: 'rgba(255,255,255,0.04)', color: '#94A3B8', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', fontWeight: '600', fontSize: '21px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', transition: 'all 0.2s', fontFamily: 'inherit' }}>
+              ← Home
+            </button>
+            <button className="dash-btn-primary" onClick={handleGeneratePdf} disabled={isGeneratingPdf} style={{ padding: '12px 24px', background: 'linear-gradient(135deg, #6366F1, #3B82F6)', color: '#fff', border: 'none', borderRadius: '12px', fontWeight: '700', fontSize: '21px', cursor: isGeneratingPdf ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', gap: '8px', transition: 'all 0.3s', opacity: isGeneratingPdf ? 0.7 : 1, boxShadow: '0 8px 24px rgba(99,102,241,0.35)', fontFamily: 'inherit' }}>
+              {isGeneratingPdf ? (
+                <><div style={{ width: '16px', height: '16px', border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} /> Generating…</>
+              ) : (
+                <><span>⬇</span> Download PDF</>
+              )}
+            </button>
+          </div>
+        </div>
 
-          <div style={styles.card}>
-            <h3 style={styles.cardTitle}>Risk Indicators</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-              <div>
-                <strong style={{ color: '#E2E8F0' }}>Stress Overload</strong>
-                <p style={{ margin: '5px 0 0', color: '#94A3B8', fontSize: '19px' }}>{report.riskIndicators.stressOverload}</p>
+        {/* ── SCORE HERO SECTION ── */}
+        <div className="dash-card" style={{ background: 'linear-gradient(135deg, rgba(99,102,241,0.15) 0%, rgba(30,41,59,0.6) 60%)', border: '1px solid rgba(99,102,241,0.25)', borderRadius: '28px', padding: '40px', marginBottom: '28px', backdropFilter: 'blur(20px)', boxShadow: '0 20px 60px rgba(0,0,0,0.4)' }}>
+          <div className="dash-grid-3" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '24px', alignItems: 'center' }}>
+            
+            {/* Big Score */}
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ width: '160px', height: '160px', borderRadius: '50%', background: `conic-gradient(${scoreColor} ${score * 3.6}deg, rgba(255,255,255,0.05) 0deg)`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', position: 'relative' }}>
+                <div style={{ width: '130px', height: '130px', borderRadius: '50%', background: '#0F172A', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                  <span className="dash-score-num" style={{ fontSize: '54px', fontWeight: '900', color: '#fff', lineHeight: 1 }}>{score}</span>
+                  <span style={{ fontSize: '19px', color: '#64748B', fontWeight: '600' }}>/ 100</span>
+                </div>
               </div>
-              <div>
-                <strong style={{ color: '#E2E8F0' }}>Burnout Probability</strong>
-                <p style={{ margin: '5px 0 0', color: '#94A3B8', fontSize: '19px' }}>{report.riskIndicators.burnoutProbability}</p>
-              </div>
-              <div>
-                <strong style={{ color: '#E2E8F0' }}>Cognitive Fatigue</strong>
-                <p style={{ margin: '5px 0 0', color: '#94A3B8', fontSize: '19px' }}>{report.riskIndicators.cognitiveFatigue}</p>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: `rgba(${scoreColor === '#10B981' ? '16,185,129' : scoreColor === '#EF4444' ? '239,68,68' : '99,102,241'}, 0.15)`, padding: '6px 16px', borderRadius: '99px', border: `1px solid ${scoreColor}40` }}>
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: scoreColor }} />
+                <span style={{ color: scoreColor, fontWeight: '700', fontSize: '21px' }}>{rating}</span>
               </div>
             </div>
-          </div>
 
-          <div style={styles.card}>
-            <h3 style={styles.cardTitle}>Key Insights</h3>
-            <ul style={styles.list}>
-              {report.keyInsights.map((insight, idx) => (
-                <li key={idx} style={styles.listItem}>
-                  <span style={styles.bullet}>•</span> {insight}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        {/* Charts Section */}
-        <div style={styles.chartPanel}>
-          <h3 style={styles.cardTitle}>Cognitive Functions Profile</h3>
-          <div style={{ height: '400px', width: '100%' }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <RadarChart cx="50%" cy="50%" outerRadius="80%" data={report.chartData}>
-                <PolarGrid stroke="#334155" />
-                <PolarAngleAxis dataKey="subject" tick={{ fill: '#94A3B8', fontSize: 12 }} />
-                <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fill: '#475569' }} />
-                <Radar name="Score" dataKey="A" stroke="#F59E0B" fill="#F59E0B" fillOpacity={0.5} />
-                <Tooltip contentStyle={{ backgroundColor: '#0F172A', border: '1px solid #334155' }} />
-              </RadarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        {/* Bottom Section */}
-        <div style={styles.gridBottom}>
-          <div style={styles.card}>
-            <h3 style={styles.cardTitle}>Personalized Recommendations</h3>
-            <ul style={styles.list}>
-              {report.personalizedRecommendations.map((rec, idx) => (
-                <li key={idx} style={styles.listItem}>
-                  <span style={styles.check}>✓</span> {rec}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div style={styles.card}>
-            <h3 style={styles.cardTitle}>Improvement Plan</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <div>
-                <h4 style={{ color: '#10B981', margin: '0 0 10px 0' }}>7-Day Action Plan</h4>
-                <ul style={styles.list}>
-                  {report.improvementPlan.day7.map((action, idx) => (
-                    <li key={idx} style={styles.listItem}><span style={styles.bullet}>•</span> {action}</li>
-                  ))}
-                </ul>
+            {/* Risk Indicators */}
+            <div>
+              <p style={{ color: '#64748B', fontSize: '18px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1.5px', margin: '0 0 16px' }}>Risk Indicators</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {(report.riskIndicators ?? []).length > 0 ? report.riskIndicators.map((r, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '12px 14px', background: 'rgba(239,68,68,0.08)', borderRadius: '10px', border: '1px solid rgba(239,68,68,0.2)' }}>
+                    <span style={{ color: '#EF4444', flexShrink: 0, marginTop: '1px' }}>⚠</span>
+                    <span style={{ color: '#E2E8F0', fontSize: '20px', lineHeight: '1.5', fontWeight: '500' }}>{r}</span>
+                  </div>
+                )) : (
+                  <div style={{ padding: '12px 14px', background: 'rgba(16,185,129,0.08)', borderRadius: '10px', border: '1px solid rgba(16,185,129,0.2)', color: '#10B981', fontSize: '20px', fontWeight: '600' }}>✓ No significant risks detected</div>
+                )}
               </div>
-              <div>
-                <h4 style={{ color: '#3B82F6', margin: '0 0 10px 0' }}>30-Day Roadmap</h4>
-                <ul style={styles.list}>
-                  {report.improvementPlan.day30.map((action, idx) => (
-                    <li key={idx} style={styles.listItem}><span style={styles.bullet}>•</span> {action}</li>
-                  ))}
-                </ul>
+            </div>
+
+            {/* Key Strengths */}
+            <div>
+              <p style={{ color: '#64748B', fontSize: '18px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1.5px', margin: '0 0 16px' }}>Key Strengths</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {(report.strengths ?? []).map((s, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '12px 14px', background: 'rgba(16,185,129,0.08)', borderRadius: '10px', border: '1px solid rgba(16,185,129,0.2)' }}>
+                    <span style={{ color: '#10B981', flexShrink: 0 }}>★</span>
+                    <span style={{ color: '#E2E8F0', fontSize: '20px', lineHeight: '1.5', fontWeight: '500' }}>{s}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
-        
+
+        {/* ── DOMAIN SCORES ── */}
+        {domains.length > 0 && (
+          <div className="dash-card" style={{ background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '24px', padding: '32px', marginBottom: '28px', backdropFilter: 'blur(20px)', boxShadow: '0 10px 40px rgba(0,0,0,0.3)' }}>
+            <h2 style={{ color: '#94A3B8', fontSize: '18px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '2px', margin: '0 0 24px' }}>Domain Scores</h2>
+            <div className="dash-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
+              {domains.map(([key, val], i) => {
+                const pct = Math.round(val);
+                const col = pct >= 75 ? '#10B981' : pct >= 50 ? '#6366F1' : '#EF4444';
+                return (
+                  <div key={i} style={{ padding: '20px', background: 'rgba(255,255,255,0.03)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.06)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                      <span style={{ color: '#94A3B8', fontSize: '19px', fontWeight: '600', textTransform: 'capitalize' }}>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                      <span style={{ color: col, fontSize: '21px', fontWeight: '800' }}>{pct}</span>
+                    </div>
+                    <div style={{ height: '6px', background: 'rgba(255,255,255,0.06)', borderRadius: '99px', overflow: 'hidden' }}>
+                      <div style={{ height: '100%', width: `${pct}%`, background: col, borderRadius: '99px', transition: 'width 1s ease' }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* ── CHARTS ── */}
+        <div className="dash-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '28px' }}>
+          
+          {/* Radar Chart */}
+          <div className="dash-card" style={{ background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '24px', padding: '32px', backdropFilter: 'blur(20px)', boxShadow: '0 10px 40px rgba(0,0,0,0.3)' }}>
+            <h2 style={{ color: '#94A3B8', fontSize: '18px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '2px', margin: '0 0 24px' }}>Cognitive Functions Profile</h2>
+            <div style={{ height: '340px' }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <RadarChart cx="50%" cy="50%" outerRadius="58%" data={radarData}>
+                  <defs>
+                    <radialGradient id="radarGrad" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stopColor="#6366F1" stopOpacity={0.6} />
+                      <stop offset="100%" stopColor="#3B82F6" stopOpacity={0.2} />
+                    </radialGradient>
+                  </defs>
+                  <PolarGrid stroke="rgba(255,255,255,0.06)" />
+                  <PolarAngleAxis dataKey="subject" tick={{ fill: '#64748B', fontSize: 15, fontWeight: 600, fontFamily: 'Inter, sans-serif' }} />
+                  <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fill: '#334155', fontSize: 13 }} axisLine={false} tickCount={5} />
+                  <Radar name="Score" dataKey="A" stroke="#6366F1" fill="url(#radarGrad)" strokeWidth={2} dot={{ fill: '#6366F1', r: 3 }} />
+                  <Tooltip contentStyle={{ background: '#0F172A', border: '1px solid rgba(99,102,241,0.3)', borderRadius: '10px', color: '#F8FAFC', fontSize: '20px', fontFamily: 'Inter, sans-serif' }} itemStyle={{ color: '#6366F1', fontWeight: 700 }} labelStyle={{ color: '#94A3B8', marginBottom: '4px' }} />
+                </RadarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* Bar Chart */}
+          <div className="dash-card" style={{ background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '24px', padding: '32px', backdropFilter: 'blur(20px)', boxShadow: '0 10px 40px rgba(0,0,0,0.3)' }}>
+            <h2 style={{ color: '#94A3B8', fontSize: '18px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '2px', margin: '0 0 24px' }}>Lifestyle Impact Scores</h2>
+            <div style={{ height: '340px' }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={barData} margin={{ top: 8, right: 8, left: -20, bottom: 60 }}>
+                  <defs>
+                    {BAR_COLORS.map((c, i) => (
+                      <linearGradient key={i} id={`bg${i}`} x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor={c} stopOpacity={0.9} />
+                        <stop offset="100%" stopColor={c} stopOpacity={0.3} />
+                      </linearGradient>
+                    ))}
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
+                  <XAxis dataKey="name" tick={{ fill: '#64748B', fontSize: 16, fontWeight: 600, fontFamily: 'Inter, sans-serif' }} interval={0} angle={-30} textAnchor="end" axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fill: '#64748B', fontSize: 15, fontFamily: 'Inter, sans-serif' }} axisLine={false} tickLine={false} domain={[0, 100]} />
+                  <Tooltip contentStyle={{ background: '#0F172A', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', color: '#F8FAFC', fontSize: '20px', fontFamily: 'Inter, sans-serif' }} itemStyle={{ fontWeight: 700 }} cursor={{ fill: 'rgba(255,255,255,0.03)' }} />
+                  <Bar dataKey="value" radius={[6, 6, 0, 0]} maxBarSize={52}>
+                    {barData.map((_, i) => (
+                      <Cell key={i} fill={`url(#bg${i % BAR_COLORS.length})`} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
+
+        {/* ── COGNITIVE AGE ROW ── */}
+        <div className="dash-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '24px', marginBottom: '28px' }}>
+
+          {/* Cognitive Age */}
+          {cogAge && (
+            <div className="dash-card" style={{ background: 'rgba(15,23,42,0.7)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '24px', padding: '32px', backdropFilter: 'blur(20px)', boxShadow: '0 10px 40px rgba(0,0,0,0.3)' }}>
+              <h2 style={{ color: '#94A3B8', fontSize: '18px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '2px', margin: '0 0 24px' }}>🧬 Cognitive Age Estimate</h2>
+              <div style={{ display: 'flex', gap: '20px', alignItems: 'stretch', flexWrap: 'wrap' }}>
+                <div style={{ flex: 1, textAlign: 'center', padding: '20px', background: 'rgba(99,102,241,0.08)', borderRadius: '16px', border: '1px solid rgba(99,102,241,0.15)' }}>
+                  <p style={{ color: '#64748B', fontSize: '17px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', margin: '0 0 8px' }}>Actual Age</p>
+                  <p style={{ color: '#FFFFFF', fontSize: '46px', fontWeight: '900', margin: 0, lineHeight: 1 }}>{cogAge.actualAge}</p>
+                  <p style={{ color: '#64748B', fontSize: '18px', margin: '4px 0 0' }}>years old</p>
+                </div>
+                <div style={{ flex: 1, textAlign: 'center', padding: '20px', background: cogAge.estimatedCognitiveAge ? 'rgba(16,185,129,0.08)' : 'rgba(255,255,255,0.03)', borderRadius: '16px', border: `1px solid ${cogAge.estimatedCognitiveAge ? 'rgba(16,185,129,0.2)' : 'rgba(255,255,255,0.06)'}` }}>
+                  <p style={{ color: '#64748B', fontSize: '17px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', margin: '0 0 8px' }}>Cognitive Age</p>
+                  <p style={{ color: cogAge.estimatedCognitiveAge ? '#10B981' : '#475569', fontSize: '46px', fontWeight: '900', margin: 0, lineHeight: 1 }}>
+                    {cogAge.estimatedCognitiveAge ?? '—'}
+                  </p>
+                  <p style={{ color: '#64748B', fontSize: '18px', margin: '4px 0 0' }}>{cogAge.estimatedCognitiveAge ? 'estimated' : 'not calculated'}</p>
+                </div>
+              </div>
+              {cogAge.disclaimer && (
+                <p style={{ color: '#475569', fontSize: '18px', margin: '16px 0 0', lineHeight: '1.6', fontStyle: 'italic' }}>ⓘ {cogAge.disclaimer}</p>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* ── BOTTOM: RECOMMENDATIONS + LIFESTYLE ── */}
+        <div className="dash-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '28px' }}>
+          
+          {/* Recommendations */}
+          <div className="dash-card" style={{ background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '24px', padding: '32px', backdropFilter: 'blur(20px)', boxShadow: '0 10px 40px rgba(0,0,0,0.3)' }}>
+            <h2 style={{ color: '#94A3B8', fontSize: '18px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '2px', margin: '0 0 24px' }}>Personalized Recommendations</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {(report.recommendations ?? []).map((rec, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', padding: '14px 16px', background: 'rgba(99,102,241,0.06)', borderRadius: '12px', border: '1px solid rgba(99,102,241,0.12)' }}>
+                  <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'rgba(99,102,241,0.2)', border: '1px solid rgba(99,102,241,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#6366F1', fontSize: '19px', fontWeight: '800' }}>{i + 1}</div>
+                  <span style={{ color: '#CBD5E1', fontSize: '20px', lineHeight: '1.6', fontWeight: '500' }}>{rec}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Lifestyle Assessment */}
+          <div className="dash-card" style={{ background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '24px', padding: '32px', backdropFilter: 'blur(20px)', boxShadow: '0 10px 40px rgba(0,0,0,0.3)' }}>
+            <h2 style={{ color: '#94A3B8', fontSize: '18px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '2px', margin: '0 0 24px' }}>Lifestyle Assessment</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              {lifestyleImpacts.map(([key, val], i) => {
+                const levelColor = val === 'High' ? '#EF4444' : val === 'Moderate' ? '#F59E0B' : '#10B981';
+                const bgColor = val === 'High' ? 'rgba(239,68,68,0.08)' : val === 'Moderate' ? 'rgba(245,158,11,0.08)' : 'rgba(16,185,129,0.08)';
+                const borderColor = val === 'High' ? 'rgba(239,68,68,0.2)' : val === 'Moderate' ? 'rgba(245,158,11,0.2)' : 'rgba(16,185,129,0.2)';
+                return (
+                  <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 18px', background: bgColor, borderRadius: '12px', border: `1px solid ${borderColor}` }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: levelColor, boxShadow: `0 0 6px ${levelColor}` }} />
+                      <span style={{ color: '#E2E8F0', fontSize: '21px', fontWeight: '600' }}>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                    </div>
+                    <span style={{ background: `${levelColor}20`, color: levelColor, border: `1px solid ${levelColor}50`, padding: '4px 14px', borderRadius: '99px', fontSize: '19px', fontWeight: '700' }}>{val}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* ── AUDIT + PRIVACY ROW ── */}
+        {(audit || privacy) && (
+          <div className="dash-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '28px' }}>
+
+            {/* Audit */}
+            {audit && (
+              <div className="dash-card" style={{ background: 'rgba(15,23,42,0.5)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '20px', padding: '28px', backdropFilter: 'blur(20px)' }}>
+                <h2 style={{ color: '#64748B', fontSize: '17px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '2px', margin: '0 0 20px', display: 'flex', alignItems: 'center', gap: '8px' }}>🔍 Audit Metadata</h2>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {[
+                    ['Rules Version', audit.rules_version],
+                    ['Age Cohort', audit.age_cohort],
+                    ['Clamped Values', (audit.clamped_values ?? []).length === 0 ? 'None' : audit.clamped_values.join(', ')],
+                    ['Imputation Notes', (audit.imputation_notes ?? []).length === 0 ? 'None' : audit.imputation_notes.join(', ')],
+                    ['Insufficient Sections', (audit.insufficient_sections ?? []).length === 0 ? 'None' : audit.insufficient_sections.join(', ')],
+                  ].map(([label, val], i) => (
+                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', gap: '12px' }}>
+                      <span style={{ color: '#475569', fontSize: '19px', fontWeight: '600' }}>{label}</span>
+                      <span style={{ color: '#94A3B8', fontSize: '19px', fontWeight: '700', textAlign: 'right' }}>{val ?? '—'}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Privacy */}
+            {privacy && (
+              <div className="dash-card" style={{ background: 'rgba(15,23,42,0.5)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '20px', padding: '28px', backdropFilter: 'blur(20px)' }}>
+                <h2 style={{ color: '#64748B', fontSize: '17px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '2px', margin: '0 0 20px' }}>🔐 Privacy & Data</h2>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                  {privacy.dataCollected && (
+                    <div>
+                      <p style={{ color: '#475569', fontSize: '17px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', margin: '0 0 8px' }}>Data Collected</p>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                        {privacy.dataCollected.map((d, i) => (
+                          <span key={i} style={{ padding: '3px 12px', background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: '99px', color: '#94A3B8', fontSize: '18px', fontWeight: '600' }}>{d}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {privacy.storagePolicy && (
+                    <div>
+                      <p style={{ color: '#475569', fontSize: '17px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', margin: '0 0 8px' }}>Storage Policy</p>
+                      <p style={{ color: '#64748B', fontSize: '19px', margin: 0, lineHeight: '1.6' }}>{privacy.storagePolicy}</p>
+                    </div>
+                  )}
+                  {privacy.hipaaNote && (
+                    <div style={{ padding: '12px 14px', background: 'rgba(16,185,129,0.06)', borderRadius: '10px', border: '1px solid rgba(16,185,129,0.15)' }}>
+                      <p style={{ color: '#475569', fontSize: '17px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', margin: '0 0 6px' }}>HIPAA Note</p>
+                      <p style={{ color: '#64748B', fontSize: '19px', margin: 0, lineHeight: '1.6' }}>{privacy.hipaaNote}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── DISCLAIMERS ── */}
+        {(report.disclaimers ?? []).length > 0 && (
+          <div className="dash-card" style={{ background: 'rgba(15, 23, 42, 0.5)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '20px', padding: '24px 32px', backdropFilter: 'blur(20px)' }}>
+            <p style={{ color: '#475569', fontSize: '18px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1.5px', margin: '0 0 12px' }}>Disclaimers</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              {report.disclaimers.map((d, i) => (
+                <p key={i} style={{ color: '#475569', fontSize: '19px', margin: 0, lineHeight: '1.6' }}>• {d}</p>
+              ))}
+            </div>
+          </div>
+        )}
+
       </div>
-    </section>
+    </div>
   );
-};
-
-const styles = {
-  section: {
-    padding: '120px 0 80px',
-    minHeight: '100vh',
-    background: '#020617', // Dark theme for premium feel
-    color: '#fff',
-    fontFamily: "'Inter', sans-serif"
-  },
-  container: {
-    maxWidth: '1200px',
-    margin: '0 auto',
-    padding: '0 20px',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '30px'
-  },
-  headerPanel: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    background: 'rgba(255, 255, 255, 0.03)',
-    padding: '30px',
-    borderRadius: '20px',
-    border: '1px solid rgba(255, 255, 255, 0.05)',
-    flexWrap: 'wrap',
-    gap: '20px'
-  },
-  title: {
-    fontSize: '40px',
-    fontWeight: '800',
-    margin: '0 0 10px 0',
-    background: 'linear-gradient(90deg, #fff, #94A3B8)',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent'
-  },
-  subtitle: {
-    color: '#94A3B8',
-    margin: 0,
-    fontSize: '21px'
-  },
-  downloadBtn: {
-    padding: '12px 24px',
-    background: 'linear-gradient(135deg, #F59E0B, #FB923C)',
-    color: '#fff',
-    textDecoration: 'none',
-    fontWeight: '700',
-    borderRadius: '12px',
-    transition: 'transform 0.2s',
-    display: 'inline-block'
-  },
-  gridTop: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-    gap: '24px'
-  },
-  gridBottom: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
-    gap: '24px'
-  },
-  card: {
-    background: 'rgba(255, 255, 255, 0.02)',
-    padding: '30px',
-    borderRadius: '20px',
-    border: '1px solid rgba(255, 255, 255, 0.05)',
-    backdropFilter: 'blur(10px)'
-  },
-  chartPanel: {
-    background: 'rgba(255, 255, 255, 0.02)',
-    padding: '30px',
-    borderRadius: '20px',
-    border: '1px solid rgba(255, 255, 255, 0.05)'
-  },
-  cardTitle: {
-    fontSize: '24px',
-    fontWeight: '700',
-    color: '#F59E0B',
-    margin: '0 0 20px 0',
-    textTransform: 'uppercase',
-    letterSpacing: '1px'
-  },
-  scoreCircle: {
-    width: '120px',
-    height: '120px',
-    borderRadius: '50%',
-    border: '8px solid #F59E0B',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    margin: '0 auto 20px'
-  },
-  scoreText: {
-    fontSize: '45px',
-    fontWeight: '800',
-    color: '#fff'
-  },
-  scoreMax: {
-    fontSize: '21px',
-    color: '#94A3B8',
-    marginLeft: '5px',
-    marginTop: '10px'
-  },
-  ratingText: (level) => ({
-    textAlign: 'center',
-    fontSize: '24px',
-    fontWeight: '600',
-    color: level.includes('Excellent') || level.includes('Good') ? '#10B981' : 
-           level.includes('Risk') || level.includes('Critical') ? '#EF4444' : '#F59E0B'
-  }),
-  list: {
-    listStyle: 'none',
-    padding: 0,
-    margin: 0,
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '12px'
-  },
-  listItem: {
-    color: '#E2E8F0',
-    fontSize: '20px',
-    display: 'flex',
-    alignItems: 'flex-start',
-    gap: '10px',
-    lineHeight: '1.5'
-  },
-  bullet: {
-    color: '#F59E0B',
-    fontWeight: 'bold'
-  },
-  check: {
-    color: '#10B981',
-    fontWeight: 'bold'
-  }
 };
 
 export default Dashboard;

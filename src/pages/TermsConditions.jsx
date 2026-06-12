@@ -80,7 +80,7 @@ const TermsConditions = () => {
               Limitless Wellness<br/>
               7454 Old Alexandria Ferry Road<br/>
               Clinton, MD 20744, USA<br/>
-              Email: <a href="mailto:info@limitless.com">info@limitless.com</a>
+              Email: <a href="mailto:info@limitlessworld.net">info@limitlessworld.net</a>
             </p>
 
             <p className="mt-4"><strong>By using our website, you acknowledge that you have read, understood, and agreed to these Terms and Conditions.</strong></p>

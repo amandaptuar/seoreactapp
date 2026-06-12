@@ -181,7 +181,7 @@ const Pricing = () => {
           <div className="row justify-content-center">
             <div className="col-lg-8">
               <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-                <h2 style={{ color: '#0F172A', fontSize: '36px', fontWeight: '800' }}>Frequently Asked Questions</h2>
+                <h2 style={{ color: '#0F172A', fontSize: '38px', fontWeight: '800' }}>Frequently Asked Questions</h2>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {[
@@ -191,8 +191,8 @@ const Pricing = () => {
                   { q: 'Is this medically approved?', a: 'Our assessment is based on cognitive science principles, but is not a medical diagnosis.' },
                 ].map((item, i) => (
                   <div key={i} style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '22px 28px', boxShadow: '0 4px 12px rgba(15,23,42,0.04)' }}>
-                    <h5 style={{ color: '#0F172A', marginBottom: '8px', fontSize: '21px', fontWeight: '700' }}>Q: {item.q}</h5>
-                    <p style={{ color: '#6B7280', margin: 0, fontSize: '19px' }}>A: {item.a}</p>
+                    <h5 style={{ color: '#0F172A', marginBottom: '8px', fontSize: '23px', fontWeight: '700' }}>Q: {item.q}</h5>
+                    <p style={{ color: '#6B7280', margin: 0, fontSize: '21px' }}>A: {item.a}</p>
                   </div>
                 ))}
               </div>

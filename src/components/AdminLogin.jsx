@@ -13,7 +13,7 @@ const AdminLogin = () => {
     if (username === 'admin' && password === 'limitlessadmin') {
       localStorage.setItem('adminLoggedIn', 'true');
       navigate('/admin');
-    } else if (username === 'admin@limitless.com' && password === 'limitlessadmin') {
+    } else if (username === 'admin@limitlessworld.net' && password === 'limitlessadmin') {
       localStorage.setItem('adminLoggedIn', 'true');
       navigate('/admin');
     } else {
@@ -95,7 +95,7 @@ const styles = {
     color: '#ffffff',
     textAlign: 'center',
     marginBottom: '30px',
-    fontSize: '36px',
+    fontSize: '38px',
   },
   form: {
     display: 'flex',
@@ -109,7 +109,7 @@ const styles = {
   },
   label: {
     color: '#ccc',
-    fontSize: '19px',
+    fontSize: '21px',
   },
   input: {
     padding: '12px',
@@ -117,18 +117,18 @@ const styles = {
     border: '1px solid rgba(255,255,255,0.1)',
     background: 'rgba(0,0,0,0.3)',
     color: '#fff',
-    fontSize: '21px',
+    fontSize: '23px',
     outline: 'none',
   },
   submitBtn: {
     marginTop: '10px',
     width: '100%',
     padding: '14px',
-    fontSize: '21px',
+    fontSize: '23px',
   },
   errorMsg: {
     color: '#ff6b6b',
-    fontSize: '19px',
+    fontSize: '21px',
     textAlign: 'center',
     background: 'rgba(255,107,107,0.08)',
     border: '1px solid rgba(255,107,107,0.2)',

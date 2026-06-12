@@ -92,7 +92,7 @@ const PrivacyPolicy = () => {
               <li>Request correction or deletion</li>
               <li>Opt-out of communications</li>
             </ul>
-            <p>To exercise your rights, contact us at: <a href="mailto:info@limitless.com">info@limitless.com</a></p>
+            <p>To exercise your rights, contact us at: <a href="mailto:info@limitlessworld.net">info@limitlessworld.net</a></p>
 
             <h4 className="mt-4 mb-3" style={{ color: 'var(--main-color)', fontWeight: '700', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>7. Cookies Policy</h4>
             <p>We use cookies and similar technologies to enhance user experience, analyze traffic, and improve our services.</p>
@@ -113,7 +113,7 @@ const PrivacyPolicy = () => {
               Limitless Wellness<br/>
               7454 Old Alexandria Ferry Road<br/>
               Clinton, MD 20744, USA<br/>
-              Email: <a href="mailto:info@limitless.com">info@limitless.com</a>
+              Email: <a href="mailto:info@limitlessworld.net">info@limitlessworld.net</a>
             </p>
           </div>
         </div>
