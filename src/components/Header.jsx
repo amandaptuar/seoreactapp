@@ -7,21 +7,24 @@ import { useNavigate, Link } from 'react-router-dom';
 const Header = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState('');
-  const [userEmail, setUserEmail] = useState('');
-  const [paymentStatus, setPaymentStatus] = useState('no');
+  const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem('isLoggedIn') === 'true');
+  const [username, setUsername] = useState(() => localStorage.getItem('username') || '');
+  const [userEmail, setUserEmail] = useState(() => localStorage.getItem('userEmail') || '');
+  const [paymentStatus, setPaymentStatus] = useState(() => localStorage.getItem('paymentStatus') || 'no');
   const [showUserDetails, setShowUserDetails] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Keep this just in case other tabs change localStorage
     const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
     if (loggedIn) {
       setIsLoggedIn(true);
       setUsername(localStorage.getItem('username') || '');
       setUserEmail(localStorage.getItem('userEmail') || '');
       setPaymentStatus(localStorage.getItem('paymentStatus') || 'no');
+    } else {
+      setIsLoggedIn(false);
     }
   }, []);
 

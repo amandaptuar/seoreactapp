@@ -40,8 +40,14 @@ const Dashboard = () => {
       });
       if (!response.ok) throw new Error('PDF generation failed');
       const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      window.open(url, '_blank');
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `Limitless_Cognitive_Report_${new Date().toISOString().split('T')[0]}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error(error);
       alert('Failed to generate PDF. Please try again.');
@@ -99,7 +105,8 @@ const Dashboard = () => {
         * { box-sizing: border-box; }
         @keyframes spin { to { transform: rotate(360deg); } }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .dash-card { animation: fadeInUp 0.5s ease forwards; }
+        .dash-card { animation: fadeInUp 0.5s ease forwards; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .dash-card:hover { transform: translateY(-4px); box-shadow: 0 24px 48px rgba(15,23,42,0.1) !important; }
         .dash-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(99, 102, 241, 0.5) !important; }
         .dash-btn-ghost:hover { background: rgba(255,255,255,0.08) !important; color: #fff !important; }
         .dash-pill-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 99px; font-size: 13px; font-weight: 600; }
@@ -134,21 +141,21 @@ const Dashboard = () => {
         <div className="dash-card dash-header-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '20px', marginBottom: '40px' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'linear-gradient(135deg, #6366F1, #3B82F6)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px' }}>🧠</div>
+              <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'linear-gradient(135deg, #F59E0B, #FB923C)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px' }}>🧠</div>
               <span style={{ color: '#6366F1', fontSize: '19px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '2px' }}>Cognitive Wellness Report</span>
             </div>
-            <h1 className="dash-title" style={{ fontSize: '44px', fontWeight: '900', margin: 0, color: '#FFFFFF', letterSpacing: '-1px', lineHeight: '1.1' }}>
+            <h1 className="dash-title" style={{ fontSize: '44px', fontWeight: '900', margin: 0, color: '#F8FAFC', letterSpacing: '-1px', lineHeight: '1.1' }}>
               Your Cognitive Analysis
             </h1>
-            <p style={{ color: '#64748B', margin: '10px 0 0', fontSize: '22px', fontWeight: '500' }}>
+            <p style={{ color: '#94A3B8', margin: '10px 0 0', fontSize: '22px', fontWeight: '500' }}>
               Personalized insights powered by AI · {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
             </p>
           </div>
           <div className="dash-header-btns" style={{ display: 'flex', gap: '12px', flexShrink: 0 }}>
-            <button className="dash-btn-ghost" onClick={() => navigate('/')} style={{ padding: '12px 20px', background: 'rgba(255,255,255,0.04)', color: '#94A3B8', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', fontWeight: '600', fontSize: '21px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', transition: 'all 0.2s', fontFamily: 'inherit' }}>
+            <button className="dash-btn-ghost" onClick={() => navigate('/')} style={{ padding: '12px 20px', background: 'rgba(15, 23, 42, 0.7)', color: '#94A3B8', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '12px', fontWeight: '600', fontSize: '21px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', transition: 'all 0.2s', fontFamily: 'inherit' }}>
               ← Home
             </button>
-            <button className="dash-btn-primary" onClick={handleGeneratePdf} disabled={isGeneratingPdf} style={{ padding: '12px 24px', background: 'linear-gradient(135deg, #6366F1, #3B82F6)', color: '#fff', border: 'none', borderRadius: '12px', fontWeight: '700', fontSize: '21px', cursor: isGeneratingPdf ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', gap: '8px', transition: 'all 0.3s', opacity: isGeneratingPdf ? 0.7 : 1, boxShadow: '0 8px 24px rgba(99,102,241,0.35)', fontFamily: 'inherit' }}>
+            <button className="dash-btn-primary" onClick={handleGeneratePdf} disabled={isGeneratingPdf} style={{ padding: '12px 24px', background: 'linear-gradient(135deg, #6366F1, #3B82F6)', color: '#FFFFFF', border: 'none', borderRadius: '12px', fontWeight: '700', fontSize: '21px', cursor: isGeneratingPdf ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', gap: '8px', transition: 'all 0.3s', opacity: isGeneratingPdf ? 0.7 : 1, boxShadow: '0 8px 24px rgba(99,102,241,0.35)', fontFamily: 'inherit' }}>
               {isGeneratingPdf ? (
                 <><div style={{ width: '16px', height: '16px', border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} /> Generating…</>
               ) : (
@@ -159,15 +166,15 @@ const Dashboard = () => {
         </div>
 
         {/* ── SCORE HERO SECTION ── */}
-        <div className="dash-card" style={{ background: 'linear-gradient(135deg, rgba(99,102,241,0.15) 0%, rgba(30,41,59,0.6) 60%)', border: '1px solid rgba(99,102,241,0.25)', borderRadius: '28px', padding: '40px', marginBottom: '28px', backdropFilter: 'blur(20px)', boxShadow: '0 20px 60px rgba(0,0,0,0.4)' }}>
+        <div className="dash-card" style={{ background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(99,102,241,0.25)', borderRadius: '28px', padding: '40px', marginBottom: '28px', backdropFilter: 'blur(20px)', boxShadow: '0 20px 60px rgba(0,0,0,0.4)' }}>
           <div className="dash-grid-3" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '24px', alignItems: 'center' }}>
             
             {/* Big Score */}
             <div style={{ textAlign: 'center' }}>
               <div style={{ width: '160px', height: '160px', borderRadius: '50%', background: `conic-gradient(${scoreColor} ${score * 3.6}deg, rgba(255,255,255,0.05) 0deg)`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', position: 'relative' }}>
-                <div style={{ width: '130px', height: '130px', borderRadius: '50%', background: '#0F172A', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                  <span className="dash-score-num" style={{ fontSize: '54px', fontWeight: '900', color: '#fff', lineHeight: 1 }}>{score}</span>
-                  <span style={{ fontSize: '19px', color: '#64748B', fontWeight: '600' }}>/ 100</span>
+                <div style={{ width: '130px', height: '130px', borderRadius: '50%', background: 'rgba(15, 23, 42, 0.7)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                  <span className="dash-score-num" style={{ fontSize: '54px', fontWeight: '900', color: '#F8FAFC', lineHeight: 1 }}>{score}</span>
+                  <span style={{ fontSize: '19px', color: '#94A3B8', fontWeight: '600' }}>/ 100</span>
                 </div>
               </div>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: `rgba(${scoreColor === '#10B981' ? '16,185,129' : scoreColor === '#EF4444' ? '239,68,68' : '99,102,241'}, 0.15)`, padding: '6px 16px', borderRadius: '99px', border: `1px solid ${scoreColor}40` }}>
@@ -178,7 +185,7 @@ const Dashboard = () => {
 
             {/* Risk Indicators */}
             <div>
-              <p style={{ color: '#64748B', fontSize: '18px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1.5px', margin: '0 0 16px' }}>Risk Indicators</p>
+              <p style={{ color: '#94A3B8', fontSize: '18px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1.5px', margin: '0 0 16px' }}>Risk Indicators</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {(report.riskIndicators ?? []).length > 0 ? report.riskIndicators.map((r, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '12px 14px', background: 'rgba(239,68,68,0.08)', borderRadius: '10px', border: '1px solid rgba(239,68,68,0.2)' }}>
@@ -193,7 +200,7 @@ const Dashboard = () => {
 
             {/* Key Strengths */}
             <div>
-              <p style={{ color: '#64748B', fontSize: '18px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1.5px', margin: '0 0 16px' }}>Key Strengths</p>
+              <p style={{ color: '#94A3B8', fontSize: '18px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1.5px', margin: '0 0 16px' }}>Key Strengths</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {(report.strengths ?? []).map((s, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '12px 14px', background: 'rgba(16,185,129,0.08)', borderRadius: '10px', border: '1px solid rgba(16,185,129,0.2)' }}>
@@ -215,12 +222,12 @@ const Dashboard = () => {
                 const pct = Math.round(val);
                 const col = pct >= 75 ? '#10B981' : pct >= 50 ? '#6366F1' : '#EF4444';
                 return (
-                  <div key={i} style={{ padding: '20px', background: 'rgba(255,255,255,0.03)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.06)' }}>
+                  <div key={i} style={{ padding: '20px', background: 'rgba(255,255,255,0.03)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.07)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
                       <span style={{ color: '#94A3B8', fontSize: '19px', fontWeight: '600', textTransform: 'capitalize' }}>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                       <span style={{ color: col, fontSize: '21px', fontWeight: '800' }}>{pct}</span>
                     </div>
-                    <div style={{ height: '6px', background: 'rgba(255,255,255,0.06)', borderRadius: '99px', overflow: 'hidden' }}>
+                    <div style={{ height: '6px', background: '#E2E8F0', borderRadius: '99px', overflow: 'hidden' }}>
                       <div style={{ height: '100%', width: `${pct}%`, background: col, borderRadius: '99px', transition: 'width 1s ease' }} />
                     </div>
                   </div>
@@ -249,7 +256,7 @@ const Dashboard = () => {
                   <PolarAngleAxis dataKey="subject" tick={{ fill: '#64748B', fontSize: 15, fontWeight: 600, fontFamily: 'Inter, sans-serif' }} />
                   <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fill: '#334155', fontSize: 13 }} axisLine={false} tickCount={5} />
                   <Radar name="Score" dataKey="A" stroke="#6366F1" fill="url(#radarGrad)" strokeWidth={2} dot={{ fill: '#6366F1', r: 3 }} />
-                  <Tooltip contentStyle={{ background: '#0F172A', border: '1px solid rgba(99,102,241,0.3)', borderRadius: '10px', color: '#F8FAFC', fontSize: '20px', fontFamily: 'Inter, sans-serif' }} itemStyle={{ color: '#6366F1', fontWeight: 700 }} labelStyle={{ color: '#94A3B8', marginBottom: '4px' }} />
+                  <Tooltip contentStyle={{ background: '#0F172A', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '10px', color: '#F8FAFC', fontSize: '20px', fontFamily: 'Inter, sans-serif' }} itemStyle={{ color: '#6366F1', fontWeight: 700 }} labelStyle={{ color: '#94A3B8', marginBottom: '4px' }} />
                 </RadarChart>
               </ResponsiveContainer>
             </div>
@@ -269,10 +276,10 @@ const Dashboard = () => {
                       </linearGradient>
                     ))}
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
                   <XAxis dataKey="name" tick={{ fill: '#64748B', fontSize: 16, fontWeight: 600, fontFamily: 'Inter, sans-serif' }} interval={0} angle={-30} textAnchor="end" axisLine={false} tickLine={false} />
                   <YAxis tick={{ fill: '#64748B', fontSize: 15, fontFamily: 'Inter, sans-serif' }} axisLine={false} tickLine={false} domain={[0, 100]} />
-                  <Tooltip contentStyle={{ background: '#0F172A', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', color: '#F8FAFC', fontSize: '20px', fontFamily: 'Inter, sans-serif' }} itemStyle={{ fontWeight: 700 }} cursor={{ fill: 'rgba(255,255,255,0.03)' }} />
+                  <Tooltip contentStyle={{ background: '#0F172A', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '10px', color: '#F8FAFC', fontSize: '20px', fontFamily: 'Inter, sans-serif' }} itemStyle={{ fontWeight: 700 }} cursor={{ fill: 'rgba(255,255,255,0.05)' }} />
                   <Bar dataKey="value" radius={[6, 6, 0, 0]} maxBarSize={52}>
                     {barData.map((_, i) => (
                       <Cell key={i} fill={`url(#bg${i % BAR_COLORS.length})`} />
@@ -289,20 +296,20 @@ const Dashboard = () => {
 
           {/* Cognitive Age */}
           {cogAge && (
-            <div className="dash-card" style={{ background: 'rgba(15,23,42,0.7)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '24px', padding: '32px', backdropFilter: 'blur(20px)', boxShadow: '0 10px 40px rgba(0,0,0,0.3)' }}>
+            <div className="dash-card" style={{ background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '24px', padding: '32px', backdropFilter: 'blur(20px)', boxShadow: '0 10px 40px rgba(0,0,0,0.3)' }}>
               <h2 style={{ color: '#94A3B8', fontSize: '18px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '2px', margin: '0 0 24px' }}>🧬 Cognitive Age Estimate</h2>
               <div style={{ display: 'flex', gap: '20px', alignItems: 'stretch', flexWrap: 'wrap' }}>
                 <div style={{ flex: 1, textAlign: 'center', padding: '20px', background: 'rgba(99,102,241,0.08)', borderRadius: '16px', border: '1px solid rgba(99,102,241,0.15)' }}>
-                  <p style={{ color: '#64748B', fontSize: '17px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', margin: '0 0 8px' }}>Actual Age</p>
-                  <p style={{ color: '#FFFFFF', fontSize: '46px', fontWeight: '900', margin: 0, lineHeight: 1 }}>{cogAge.actualAge}</p>
-                  <p style={{ color: '#64748B', fontSize: '18px', margin: '4px 0 0' }}>years old</p>
+                  <p style={{ color: '#94A3B8', fontSize: '17px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', margin: '0 0 8px' }}>Actual Age</p>
+                  <p style={{ color: '#F8FAFC', fontSize: '46px', fontWeight: '900', margin: 0, lineHeight: 1 }}>{cogAge.actualAge}</p>
+                  <p style={{ color: '#94A3B8', fontSize: '18px', margin: '4px 0 0' }}>years old</p>
                 </div>
-                <div style={{ flex: 1, textAlign: 'center', padding: '20px', background: cogAge.estimatedCognitiveAge ? 'rgba(16,185,129,0.08)' : 'rgba(255,255,255,0.03)', borderRadius: '16px', border: `1px solid ${cogAge.estimatedCognitiveAge ? 'rgba(16,185,129,0.2)' : 'rgba(255,255,255,0.06)'}` }}>
-                  <p style={{ color: '#64748B', fontSize: '17px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', margin: '0 0 8px' }}>Cognitive Age</p>
+                <div style={{ flex: 1, textAlign: 'center', padding: '20px', background: cogAge.estimatedCognitiveAge ? 'rgba(16,185,129,0.08)' : 'rgba(255,255,255,0.03)', borderRadius: '16px', border: `1px solid ${cogAge.estimatedCognitiveAge ? 'rgba(16,185,129,0.2)' : '#E2E8F0'}` }}>
+                  <p style={{ color: '#94A3B8', fontSize: '17px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', margin: '0 0 8px' }}>Cognitive Age</p>
                   <p style={{ color: cogAge.estimatedCognitiveAge ? '#10B981' : '#475569', fontSize: '46px', fontWeight: '900', margin: 0, lineHeight: 1 }}>
                     {cogAge.estimatedCognitiveAge ?? '—'}
                   </p>
-                  <p style={{ color: '#64748B', fontSize: '18px', margin: '4px 0 0' }}>{cogAge.estimatedCognitiveAge ? 'estimated' : 'not calculated'}</p>
+                  <p style={{ color: '#94A3B8', fontSize: '18px', margin: '4px 0 0' }}>{cogAge.estimatedCognitiveAge ? 'estimated' : 'not calculated'}</p>
                 </div>
               </div>
               {cogAge.disclaimer && (
@@ -356,8 +363,8 @@ const Dashboard = () => {
 
             {/* Audit */}
             {audit && (
-              <div className="dash-card" style={{ background: 'rgba(15,23,42,0.5)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '20px', padding: '28px', backdropFilter: 'blur(20px)' }}>
-                <h2 style={{ color: '#64748B', fontSize: '17px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '2px', margin: '0 0 20px', display: 'flex', alignItems: 'center', gap: '8px' }}>🔍 Audit Metadata</h2>
+              <div className="dash-card" style={{ background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '20px', padding: '28px', backdropFilter: 'blur(20px)' }}>
+                <h2 style={{ color: '#94A3B8', fontSize: '17px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '2px', margin: '0 0 20px', display: 'flex', alignItems: 'center', gap: '8px' }}>🔍 Audit Metadata</h2>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   {[
                     ['Rules Version', audit.rules_version],
@@ -366,7 +373,7 @@ const Dashboard = () => {
                     ['Imputation Notes', (audit.imputation_notes ?? []).length === 0 ? 'None' : audit.imputation_notes.join(', ')],
                     ['Insufficient Sections', (audit.insufficient_sections ?? []).length === 0 ? 'None' : audit.insufficient_sections.join(', ')],
                   ].map(([label, val], i) => (
-                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', gap: '12px' }}>
+                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', background: '#020617', borderRadius: '8px', gap: '12px' }}>
                       <span style={{ color: '#475569', fontSize: '19px', fontWeight: '600' }}>{label}</span>
                       <span style={{ color: '#94A3B8', fontSize: '19px', fontWeight: '700', textAlign: 'right' }}>{val ?? '—'}</span>
                     </div>
@@ -377,8 +384,8 @@ const Dashboard = () => {
 
             {/* Privacy */}
             {privacy && (
-              <div className="dash-card" style={{ background: 'rgba(15,23,42,0.5)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '20px', padding: '28px', backdropFilter: 'blur(20px)' }}>
-                <h2 style={{ color: '#64748B', fontSize: '17px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '2px', margin: '0 0 20px' }}>🔐 Privacy & Data</h2>
+              <div className="dash-card" style={{ background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '20px', padding: '28px', backdropFilter: 'blur(20px)' }}>
+                <h2 style={{ color: '#94A3B8', fontSize: '17px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '2px', margin: '0 0 20px' }}>🔐 Privacy & Data</h2>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                   {privacy.dataCollected && (
                     <div>
@@ -393,13 +400,13 @@ const Dashboard = () => {
                   {privacy.storagePolicy && (
                     <div>
                       <p style={{ color: '#475569', fontSize: '17px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', margin: '0 0 8px' }}>Storage Policy</p>
-                      <p style={{ color: '#64748B', fontSize: '19px', margin: 0, lineHeight: '1.6' }}>{privacy.storagePolicy}</p>
+                      <p style={{ color: '#94A3B8', fontSize: '19px', margin: 0, lineHeight: '1.6' }}>{privacy.storagePolicy}</p>
                     </div>
                   )}
                   {privacy.hipaaNote && (
                     <div style={{ padding: '12px 14px', background: 'rgba(16,185,129,0.06)', borderRadius: '10px', border: '1px solid rgba(16,185,129,0.15)' }}>
                       <p style={{ color: '#475569', fontSize: '17px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', margin: '0 0 6px' }}>HIPAA Note</p>
-                      <p style={{ color: '#64748B', fontSize: '19px', margin: 0, lineHeight: '1.6' }}>{privacy.hipaaNote}</p>
+                      <p style={{ color: '#94A3B8', fontSize: '19px', margin: 0, lineHeight: '1.6' }}>{privacy.hipaaNote}</p>
                     </div>
                   )}
                 </div>
@@ -410,7 +417,7 @@ const Dashboard = () => {
 
         {/* ── DISCLAIMERS ── */}
         {(report.disclaimers ?? []).length > 0 && (
-          <div className="dash-card" style={{ background: 'rgba(15, 23, 42, 0.5)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '20px', padding: '24px 32px', backdropFilter: 'blur(20px)' }}>
+          <div className="dash-card" style={{ background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '20px', padding: '24px 32px', backdropFilter: 'blur(20px)' }}>
             <p style={{ color: '#475569', fontSize: '18px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1.5px', margin: '0 0 12px' }}>Disclaimers</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
               {report.disclaimers.map((d, i) => (
