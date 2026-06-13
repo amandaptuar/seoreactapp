@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/supabase';
 
 const Question = () => {
   const [formData, setFormData] = useState({});
@@ -91,6 +92,19 @@ const Question = () => {
 
       const analysisResult = await analyzeResponse.json();
       localStorage.setItem('analysisReport', JSON.stringify(analysisResult));
+
+      // Save assessment report JSON to users table immediately so it's not lost
+      const userId = localStorage.getItem('userId');
+      if (userId) {
+        try {
+          await supabase
+            .from('users')
+            .update({ report_json: analysisResult })
+            .eq('id', userId);
+        } catch (dbErr) {
+          console.error("Error saving assessment to DB:", dbErr);
+        }
+      }
 
       // Navigate to payment page to complete the flow
       navigate('/payment');

@@ -18,32 +18,20 @@ const PaymentSuccess = () => {
         const userId = localStorage.getItem('userId');
         const reportJson = localStorage.getItem('analysisReport');
 
-        // 1. Update payment_status to 'paid' in users table
+        // 1. Update payment_status and report_json in users table
         if (userId) {
+          const updates = { payment_status: 'paid' };
+          if (reportJson) {
+            try {
+              updates.report_json = JSON.parse(reportJson);
+            } catch (e) {
+              console.warn("Could not parse reportJson in PaymentSuccess");
+            }
+          }
           await supabase
             .from('users')
-            .update({ payment_status: 'paid' })
+            .update(updates)
             .eq('id', userId);
-        }
-
-        // 2. Save assessment report JSON to assessments table
-        if (userId && reportJson) {
-          const { data: existing } = await supabase
-            .from('assessments')
-            .select('id')
-            .eq('user_id', userId)
-            .single();
-
-          if (existing) {
-            await supabase
-              .from('assessments')
-              .update({ report_json: JSON.parse(reportJson) })
-              .eq('id', existing.id);
-          } else {
-            await supabase
-              .from('assessments')
-              .insert([{ user_id: userId, report_json: JSON.parse(reportJson) }]);
-          }
         }
         // 3. Send Credentials Email
         try {

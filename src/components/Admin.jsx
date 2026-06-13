@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/supabase';
 
 const Admin = () => {
   const [users, setUsers] = useState([]);
@@ -16,7 +17,20 @@ const Admin = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      setUsers([]);
+      const { data: usersData, error: usersError } = await supabase
+        .from('users')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (usersError) throw usersError;
+
+      const mappedUsers = usersData.map(user => ({
+        ...user,
+        ai_insights: user.report_json || null,
+        pdf_url: user.pdf_url || null,
+      }));
+
+      setUsers(mappedUsers);
       setLoading(false);
     } catch (err) {
       setError(err.message);
@@ -34,9 +48,19 @@ const Admin = () => {
   };
 
   const deleteUser = async (userId, userEmail) => {
-    if (window.confirm('Are you sure you want to delete this user?')) {
+    if (window.confirm(`Are you sure you want to delete user ${userEmail}?`)) {
       try {
-        setUsers(users.filter(u => u.id !== userId));
+        // We append .select() so Supabase returns the deleted row.
+        // If it returns an empty array, it means RLS silently blocked the delete.
+        const { data, error } = await supabase.from('users').delete().eq('id', userId).select();
+        
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+          alert('Could not delete user. This is usually because Row Level Security (RLS) is enabled on the "users" table but no DELETE policy exists. Please add a DELETE policy in your Supabase dashboard.');
+        } else {
+          setUsers(users.filter(u => u.id !== userId));
+        }
       } catch (err) {
         alert('Error deleting user: ' + err.message);
       }
@@ -76,19 +100,24 @@ const Admin = () => {
                 </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '15px' }}>
                   <div style={{...styles.pill, background: 'rgba(59, 130, 246, 0.15)', color: '#3B82F6'}}>
-                    @{user.username || 'No Username'}
+                    @{user.email || 'No Email'}
                   </div>
                   <div style={{
                     ...styles.pill,
-                    background: user.payment_status === 'yes' ? 'rgba(46, 204, 113, 0.15)' : 'rgba(231, 76, 60, 0.15)',
-                    color: user.payment_status === 'yes' ? '#2ecc71' : '#e74c3c',
+                    background: user.payment_status === 'paid' ? 'rgba(46, 204, 113, 0.15)' : 'rgba(231, 76, 60, 0.15)',
+                    color: user.payment_status === 'paid' ? '#2ecc71' : '#e74c3c',
                     fontWeight: '600'
                   }}>
-                    Payment: {user.payment_status === 'yes' ? 'Done' : 'Not Done'}
+                    Payment: {user.payment_status === 'paid' ? 'Done' : 'Not Done'}
                   </div>
                   {user.ai_insights && (
                     <div style={{...styles.pill, background: 'rgba(139, 92, 246, 0.15)', color: '#8b5cf6'}}>
                       AI Generated
+                    </div>
+                  )}
+                  {user.pdf_url && (
+                    <div style={{...styles.pill, background: 'rgba(236, 72, 153, 0.15)', color: '#ec4899'}}>
+                      PDF Generated
                     </div>
                   )}
                 </div>
@@ -115,46 +144,113 @@ const Admin = () => {
                     
                     <div style={styles.detailGroup}>
                       <h4 style={styles.detailTitle}>1. Account Details</h4>
-                      <p><strong>Username:</strong> {user.username || 'N/A'}</p>
-                      <p><strong>Password:</strong> {user.password || 'N/A'}</p>
-                      <p><strong>Payment Status:</strong> <span style={{ color: user.payment_status === 'yes' ? '#2ecc71' : '#e74c3c', fontWeight: 'bold' }}>{user.payment_status === 'yes' ? 'Done' : 'Not Done'}</span></p>
+                      <p><strong>Email:</strong> {user.email || 'N/A'}</p>
+                      <p><strong>Password:</strong> {user.temp_password || 'N/A'}</p>
+                      <p><strong>Payment Status:</strong> <span style={{ color: user.payment_status === 'paid' ? '#2ecc71' : '#e74c3c', fontWeight: 'bold' }}>{user.payment_status === 'paid' ? 'Done' : 'Not Done'}</span></p>
+                      <p><strong>PDF Generated:</strong> <span style={{ color: user.pdf_url ? '#2ecc71' : '#e74c3c', fontWeight: 'bold' }}>{user.pdf_url ? 'Yes' : 'No'}</span></p>
                     </div>
 
                     <div style={styles.detailGroup}>
-                      <h4 style={styles.detailTitle}>2. Questionnaire Data</h4>
-                      {user.questions ? (
-                        <>
-                           <p><strong>Total Score:</strong> {user.questions.totalScore || 'N/A'} / 112</p>
-                           <p style={{wordBreak: 'break-all'}}><strong>Raw Answers:</strong> <span style={{fontSize: '18px', color: '#888'}}>{JSON.stringify(user.questions)}</span></p>
-                        </>
+                      <h4 style={styles.detailTitle}>2. User PDF Report</h4>
+                      {user.pdf_url ? (
+                        <div style={{ marginTop: '10px' }}>
+                          <p style={{ marginBottom: '15px' }}>The user has generated their personalized cognitive assessment report.</p>
+                          <a 
+                            href={user.pdf_url} 
+                            target="_blank" 
+                            rel="noreferrer" 
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '10px',
+                              padding: '12px 24px',
+                              background: 'rgba(59, 130, 246, 0.1)',
+                              color: '#3B82F6',
+                              border: '1px solid rgba(59, 130, 246, 0.3)',
+                              borderRadius: '8px',
+                              textDecoration: 'none',
+                              fontWeight: '600',
+                              fontSize: '19px',
+                              transition: 'all 0.2s ease'
+                            }}
+                          >
+                            📄 View / Download PDF Report
+                          </a>
+                        </div>
                       ) : (
-                        <p>No questionnaire data available.</p>
+                        <p>No PDF report generated yet.</p>
                       )}
                     </div>
 
-                    <div style={styles.detailGroup}>
-                      <h4 style={styles.detailTitle}>3. AI Analysis Report</h4>
-                      {user.ai_insights ? (
-                        <>
-                          <p><strong>Overall Score:</strong> {user.ai_insights.overallScore?.score || 'N/A'}</p>
-                          <p><strong>Rating Level:</strong> {user.ai_insights.overallScore?.ratingLevel || 'N/A'}</p>
-                          
-                          <p style={{marginTop: '10px', fontWeight: 'bold', color: '#fff'}}>Risk Indicators:</p>
-                          <p><strong>Stress Overload:</strong> {user.ai_insights.riskIndicators?.stressOverload || 'N/A'}</p>
-                          <p><strong>Burnout Probability:</strong> {user.ai_insights.riskIndicators?.burnoutProbability || 'N/A'}</p>
-                          <p><strong>Cognitive Fatigue:</strong> {user.ai_insights.riskIndicators?.cognitiveFatigue || 'N/A'}</p>
+                    {user.ai_insights && (
+                      <div style={styles.detailGroup}>
+                        <h4 style={styles.detailTitle}>3. Dashboard Analytics</h4>
+                        
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginTop: '10px' }}>
+                          <div style={{ background: 'rgba(255,255,255,0.05)', padding: '15px', borderRadius: '10px' }}>
+                            <p><strong>Overall Score:</strong> <span style={{fontSize: '24px', fontWeight: 'bold', color: '#10B981'}}>{user.ai_insights.overall?.score || 'N/A'}</span> / 100</p>
+                            <p><strong>Rating Level:</strong> {user.ai_insights.overall?.rating || 'N/A'}</p>
+                          </div>
+                          <div style={{ background: 'rgba(255,255,255,0.05)', padding: '15px', borderRadius: '10px' }}>
+                            <p><strong>Actual Age:</strong> {user.ai_insights.cognitiveAge?.actualAge || 'N/A'}</p>
+                            <p><strong>Cognitive Age:</strong> <span style={{fontSize: '24px', fontWeight: 'bold', color: '#3B82F6'}}>{user.ai_insights.cognitiveAge?.estimatedCognitiveAge || 'N/A'}</span></p>
+                          </div>
+                        </div>
 
-                          <p style={{marginTop: '10px', fontWeight: 'bold', color: '#fff'}}>Key Insights:</p>
+                        <div style={{ marginTop: '20px' }}>
+                          <p style={{fontWeight: 'bold', color: '#fff'}}>Risk Indicators:</p>
                           <ul style={{ margin: 0, paddingLeft: '20px', color: '#ccc' }}>
-                            {user.ai_insights.keyInsights?.map((insight, idx) => (
-                              <li key={idx}>{insight}</li>
-                            ))}
+                            {user.ai_insights.riskIndicators?.length ? user.ai_insights.riskIndicators.map((r, idx) => (
+                              <li key={idx}>{r}</li>
+                            )) : <li>No significant risks detected</li>}
                           </ul>
-                        </>
-                      ) : (
-                        <p>No AI analysis generated yet.</p>
-                      )}
-                    </div>
+                        </div>
+
+                        <div style={{ marginTop: '20px' }}>
+                          <p style={{fontWeight: 'bold', color: '#fff'}}>Key Strengths:</p>
+                          <ul style={{ margin: 0, paddingLeft: '20px', color: '#ccc' }}>
+                            {user.ai_insights.strengths?.length ? user.ai_insights.strengths.map((s, idx) => (
+                              <li key={idx}>{s}</li>
+                            )) : <li>No key strengths highlighted</li>}
+                          </ul>
+                        </div>
+
+                        <div style={{ marginTop: '20px' }}>
+                          <p style={{fontWeight: 'bold', color: '#fff'}}>Domain Scores:</p>
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '10px' }}>
+                            {user.ai_insights.domains && Object.entries(user.ai_insights.domains).map(([key, val], idx) => (
+                              <div key={idx} style={{ background: 'rgba(99,102,241,0.15)', border: '1px solid rgba(99,102,241,0.3)', padding: '8px 12px', borderRadius: '8px', color: '#6366F1' }}>
+                                <strong>{key.replace(/([A-Z])/g, ' $1').trim()}:</strong> {Math.round(val)}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div style={{ marginTop: '20px' }}>
+                          <p style={{fontWeight: 'bold', color: '#fff'}}>Lifestyle Impacts:</p>
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '10px' }}>
+                            {user.ai_insights.lifestyleImpacts && Object.entries(user.ai_insights.lifestyleImpacts).map(([key, val], idx) => {
+                               const color = val === 'High' ? '#EF4444' : val === 'Moderate' ? '#F59E0B' : '#10B981';
+                               const bgColor = val === 'High' ? 'rgba(239,68,68,0.15)' : val === 'Moderate' ? 'rgba(245,158,11,0.15)' : 'rgba(16,185,129,0.15)';
+                               return (
+                                <div key={idx} style={{ background: bgColor, border: `1px solid ${color}`, padding: '8px 12px', borderRadius: '8px', color: color }}>
+                                  <strong>{key.replace(/([A-Z])/g, ' $1').trim()}:</strong> {val}
+                                </div>
+                               );
+                            })}
+                          </div>
+                        </div>
+
+                        <div style={{ marginTop: '20px' }}>
+                          <p style={{fontWeight: 'bold', color: '#fff'}}>Personalized Recommendations:</p>
+                          <ul style={{ margin: 0, paddingLeft: '20px', color: '#ccc' }}>
+                            {user.ai_insights.recommendations?.length ? user.ai_insights.recommendations.map((rec, idx) => (
+                              <li key={idx} style={{ marginBottom: '5px' }}>{rec}</li>
+                            )) : <li>No recommendations generated</li>}
+                          </ul>
+                        </div>
+                      </div>
+                    )}
 
                   </div>
                 )}

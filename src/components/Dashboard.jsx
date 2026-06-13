@@ -18,40 +18,42 @@ const Dashboard = () => {
     const loadDashboardData = async () => {
       const email = localStorage.getItem('userEmail');
       if (!email) { navigate('/'); return; }
-      try {
-        // 1. Try localStorage first (fast)
-        const savedReport = localStorage.getItem('analysisReport');
-        if (savedReport) {
-          setReport(JSON.parse(savedReport));
-          return;
-        }
+      
+      let hasReport = false;
+      
+      // 1. Try localStorage first (fast)
+      const savedReport = localStorage.getItem('analysisReport');
+      if (savedReport) {
+        setReport(JSON.parse(savedReport));
+        hasReport = true;
+      }
 
-        // 2. Always fetch latest from Supabase to check if PDF was already generated
-        const userId = localStorage.getItem('userId');
-        if (userId) {
+      // 2. Always fetch latest from Supabase to check if PDF was already generated
+      const userId = localStorage.getItem('userId');
+      if (userId) {
+        try {
           const { data: assessment } = await supabase
-            .from('assessments')
+            .from('users')
             .select('report_json, pdf_url')
-            .eq('user_id', userId)
-            .order('created_at', { ascending: false })
-            .limit(1)
-            .single();
+            .eq('id', userId)
+            .maybeSingle();
 
           if (assessment) {
-            if (assessment.report_json && !savedReport) {
+            if (assessment.report_json && !hasReport) {
               localStorage.setItem('analysisReport', JSON.stringify(assessment.report_json));
               setReport(assessment.report_json);
+              hasReport = true;
             }
             if (assessment.pdf_url) {
               setPdfUrl(assessment.pdf_url);
             }
-            return;
           }
+        } catch (err) {
+          console.error('Error fetching assessment from DB:', err);
         }
+      }
 
-        navigate('/');
-      } catch (err) {
-        console.error('Error loading dashboard data:', err);
+      if (!hasReport) {
         navigate('/');
       }
     };
@@ -100,11 +102,11 @@ const Dashboard = () => {
               .from('pdf-reports')
               .getPublicUrl(storagePath);
 
-            // 3. Save PDF URL to assessments table
+            // 3. Save PDF URL to users table
             await supabase
-              .from('assessments')
+              .from('users')
               .update({ pdf_url: publicUrl })
-              .eq('user_id', userId);
+              .eq('id', userId);
 
             setPdfUrl(publicUrl);
 
