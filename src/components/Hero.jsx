@@ -164,7 +164,7 @@ const Hero = () => {
 
             {/* Buttons */}
             <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
-              <button style={{ background: '#0F172A', border: 'none', borderRadius: '30px', padding: '16px 32px', color: '#FFF', fontSize: '20px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 4px 14px rgba(15,23,42,0.4)', transition: 'transform 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
+              <button onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })} style={{ background: '#0F172A', border: 'none', borderRadius: '30px', padding: '16px 32px', color: '#FFF', fontSize: '20px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 4px 14px rgba(15,23,42,0.4)', transition: 'transform 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
                 Watch How It Works <i className="fa-solid fa-play" style={{ fontSize: '18px' }}></i>
               </button>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#475569', fontSize: '19px', fontWeight: '600' }}>
