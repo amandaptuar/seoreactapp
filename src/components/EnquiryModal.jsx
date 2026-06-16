@@ -29,7 +29,7 @@ const EnquiryModal = ({ isOpen, onClose }) => {
 
       // 2. Insert User into Supabase FIRST (To catch duplicate emails immediately)
       let dbUserId = null;
-      
+
       const { data: newUser, error: insertErr } = await supabase
         .from('users')
         .insert([{
@@ -46,21 +46,21 @@ const EnquiryModal = ({ isOpen, onClose }) => {
       if (insertErr) {
         // Postgres error code 23505 means Unique Constraint Violation
         const errString = JSON.stringify(insertErr).toLowerCase();
-        const isDuplicate = insertErr.code === '23505' || 
-                            errString.includes('duplicate') || 
-                            errString.includes('unique') || 
-                            errString.includes('already exists');
+        const isDuplicate = insertErr.code === '23505' ||
+          errString.includes('duplicate') ||
+          errString.includes('unique') ||
+          errString.includes('already exists');
 
         if (isDuplicate) {
           setErrorMsg('This email is already registered. Please log in instead.');
           setIsSubmitting(false);
           return; // Halts the flow completely before generating AI questions
         }
-        
+
         console.warn('Supabase insert error details:', insertErr);
         throw new Error(`DB Error: ${insertErr.message || insertErr.details || 'Unknown error'}`);
       }
-      
+
       dbUserId = newUser.id;
 
       // 3. Generate questions from Limitless API
@@ -85,7 +85,7 @@ const EnquiryModal = ({ isOpen, onClose }) => {
           _subject: `New Assessment Enquiry from ${formData.name}`,
           _template: 'box', _replyto: formData.email
         }),
-      }).catch(() => {});
+      }).catch(() => { });
 
       // 5. Save to localStorage
       localStorage.setItem('assessmentId', questionsData.assessmentId);

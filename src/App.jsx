@@ -9,6 +9,7 @@ import Payment from './components/Payment';
 import PaymentSuccess from './components/PaymentSuccess';
 import AdminLogin from './components/AdminLogin';
 import Admin from './components/Admin';
+import AdminUserDetail from './components/AdminUserDetail';
 import FloatingCTA from './components/FloatingCTA';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 import Dashboard from './components/Dashboard';
@@ -65,6 +66,11 @@ function App() {
         <Route path="/admin" element={
           <AdminProtectedRoute>
             <Admin />
+          </AdminProtectedRoute>
+        } />
+        <Route path="/admin/user/:id" element={
+          <AdminProtectedRoute>
+            <AdminUserDetail />
           </AdminProtectedRoute>
         } />
       </Routes>

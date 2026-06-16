@@ -17,7 +17,7 @@ const Blog = () => {
                 </figure>
                 <div className="tag">
                   <span>Develoment</span>
-                  <a href="#">Dec 24, 2024 <span><i className="flaticon-message"></i>26</span></a> 
+                  <a href="#">Dec 24, 2024 <span><i className="flaticon-message"></i>26</span></a>
                 </div>
               </div>
               <a href="#">Components you need to create a professional</a>
@@ -32,7 +32,7 @@ const Blog = () => {
                 </figure>
                 <div className="tag">
                   <span>Develoment</span>
-                  <a href="#">Dec 24, 2024 <span><i className="flaticon-message"></i>26</span></a> 
+                  <a href="#">Dec 24, 2024 <span><i className="flaticon-message"></i>26</span></a>
                 </div>
               </div>
               <a href="#">Components you need to create a professional</a>
@@ -47,7 +47,7 @@ const Blog = () => {
                 </figure>
                 <div className="tag">
                   <span>Develoment</span>
-                  <a href="#">Dec 24, 2024 <span><i className="flaticon-message"></i>26</span></a> 
+                  <a href="#">Dec 24, 2024 <span><i className="flaticon-message"></i>26</span></a>
                 </div>
               </div>
               <a href="#">Components you need to create a professional</a>
@@ -56,9 +56,9 @@ const Blog = () => {
           </div>
         </div>
       </div>
-      <ul className="shaps-img"> 
+      <ul className="shaps-img">
         <li><img src="./assets/img/shaps-3.png" alt="img" /></li>
-       </ul>
+      </ul>
     </section>
   );
 };

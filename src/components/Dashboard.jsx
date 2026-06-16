@@ -18,9 +18,9 @@ const Dashboard = () => {
     const loadDashboardData = async () => {
       const email = localStorage.getItem('userEmail');
       if (!email) { navigate('/'); return; }
-      
+
       let hasReport = false;
-      
+
       // 1. Try localStorage first (fast)
       const savedReport = localStorage.getItem('analysisReport');
       if (savedReport) {
@@ -241,7 +241,7 @@ const Dashboard = () => {
         {/* ── SCORE HERO SECTION ── */}
         <div className="dash-card" style={{ background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(99,102,241,0.25)', borderRadius: '28px', padding: '40px', marginBottom: '28px', backdropFilter: 'blur(20px)', boxShadow: '0 20px 60px rgba(0,0,0,0.4)' }}>
           <div className="dash-grid-3" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '24px', alignItems: 'center' }}>
-            
+
             {/* Big Score */}
             <div style={{ textAlign: 'center' }}>
               <div style={{ width: '160px', height: '160px', borderRadius: '50%', background: `conic-gradient(${scoreColor} ${score * 3.6}deg, rgba(255,255,255,0.05) 0deg)`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', position: 'relative' }}>
@@ -312,7 +312,7 @@ const Dashboard = () => {
 
         {/* ── CHARTS ── */}
         <div className="dash-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '28px' }}>
-          
+
           {/* Radar Chart */}
           <div className="dash-card" style={{ background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '24px', padding: '32px', backdropFilter: 'blur(20px)', boxShadow: '0 10px 40px rgba(0,0,0,0.3)' }}>
             <h2 style={{ color: '#94A3B8', fontSize: '18px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '2px', margin: '0 0 24px' }}>Cognitive Functions Profile</h2>
@@ -394,7 +394,7 @@ const Dashboard = () => {
 
         {/* ── BOTTOM: RECOMMENDATIONS + LIFESTYLE ── */}
         <div className="dash-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '28px' }}>
-          
+
           {/* Recommendations */}
           <div className="dash-card" style={{ background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '24px', padding: '32px', backdropFilter: 'blur(20px)', boxShadow: '0 10px 40px rgba(0,0,0,0.3)' }}>
             <h2 style={{ color: '#94A3B8', fontSize: '18px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '2px', margin: '0 0 24px' }}>Personalized Recommendations</h2>

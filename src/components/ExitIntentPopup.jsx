@@ -16,7 +16,7 @@ const ExitIntentPopup = () => {
     };
 
     document.addEventListener('mouseleave', handleMouseLeave);
-    
+
     return () => {
       document.removeEventListener('mouseleave', handleMouseLeave);
     };
@@ -34,7 +34,7 @@ const ExitIntentPopup = () => {
         background: '#ffffff', borderRadius: '24px', padding: '40px', maxWidth: '500px', width: '90%',
         textAlign: 'center', position: 'relative', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)'
       }}>
-        <button 
+        <button
           onClick={() => setIsVisible(false)}
           style={{ position: 'absolute', top: '15px', right: '15px', background: 'none', border: 'none', fontSize: '33px', color: '#94a3b8', cursor: 'pointer' }}
         >
@@ -60,7 +60,7 @@ const ExitIntentPopup = () => {
         >
           Take the Free Assessment
         </button>
-        <button 
+        <button
           onClick={() => setIsVisible(false)}
           style={{ marginTop: '15px', background: 'none', border: 'none', color: '#94a3b8', fontSize: '21px', cursor: 'pointer', textDecoration: 'underline' }}
         >
