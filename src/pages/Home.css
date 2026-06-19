@@ -1,0 +1,1883 @@
+:root {
+  --navy: #0a0e23;
+  --navy-deep: #060919;
+  --bg-light: #f3f5f9;
+  --bg-section: #eef1f7;
+  --purple: #7c3aed;
+  --blue: #2563eb;
+  --grad-btn: linear-gradient(90deg, #7c3aed 0%, #2563eb 100%);
+  --orange: #f97316;
+  --text-dark: #111530;
+  --text-muted: #6b7280;
+  --text-light-muted: #9aa3b8;
+  --card-radius: 16px;
+  --green: #16a34a;
+  --red: #ef4444;
+}
+
+.limitless-home {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-light);
+  color: var(--text-dark);
+  -webkit-font-smoothing: antialiased;
+  width: 100%;
+  overflow-x: hidden;
+}
+.limitless-home * {
+  box-sizing: border-box;
+}
+.limitless-home img {
+  max-width: 100%;
+  display: block;
+}
+.limitless-home a {
+  text-decoration: none;
+  color: inherit;
+}
+.limitless-home ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.limitless-home .wrap {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+.limitless-home .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 26px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  border: none;
+  white-space: nowrap;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.limitless-home .btn:hover {
+  transform: translateY(-2px);
+}
+.limitless-home .btn-gradient {
+  background: var(--grad-btn);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(99, 60, 226, 0.35);
+}
+.limitless-home .btn-outline {
+  background: transparent;
+  color: #fff;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+}
+.limitless-home .btn-outline:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.limitless-home .btn-outline-dark {
+  background: transparent;
+  color: var(--navy);
+  border: 1.5px solid #d8dce6;
+}
+.limitless-home .btn-orange {
+  background: #f97316;
+  color: #fff;
+}
+.limitless-home .section-eyebrow {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 36px;
+}
+
+/* ===== HEADER ===== */
+.limitless-home header {
+  background: var(--navy-deep);
+  padding: 20px 0;
+}
+.limitless-home .header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.limitless-home .logo-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.limitless-home .logo-mark {
+  width: 34px;
+  height: 34px;
+}
+.limitless-home .logo-text-group {
+  line-height: 1.1;
+}
+.limitless-home .logo-text {
+  color: #fff;
+  font-weight: 800;
+  font-size: 19px;
+  letter-spacing: 0.5px;
+}
+.limitless-home .logo-sub {
+  color: var(--orange);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.limitless-home nav {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.limitless-home nav a {
+  color: #cbd2e6;
+  font-size: 14.5px;
+  font-weight: 500;
+  padding-bottom: 4px;
+}
+.limitless-home nav a.active {
+  color: #fff;
+  border-bottom: 2px solid #3b82f6;
+}
+.limitless-home .header-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.limitless-home .phone-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  font-size: 14.5px;
+  font-weight: 500;
+}
+
+/* ===== HERO ===== */
+.limitless-home .hero {
+  background-color: var(--navy-deep);
+  background-image: url('/dummy/image copy.png');
+  background-size: cover;
+  background-position: 65% center;
+  background-repeat: no-repeat;
+  position: relative;
+  overflow: hidden;
+  min-height: 600px;
+}
+.limitless-home .hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(6, 9, 25, 0.95) 0%,
+    rgba(6, 9, 25, 0.85) 38%,
+    rgba(6, 9, 25, 0.30) 60%,
+    rgba(6, 9, 25, 0.05) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+.limitless-home .hero .wrap {
+  position: relative;
+  z-index: 1;
+}
+.limitless-home .hero-inner {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+.limitless-home .hero-left {
+  flex: 0 0 46%;
+}
+.limitless-home .hero-right {
+  flex: 1;
+  position: relative;
+}
+.limitless-home .hero-left h1 {
+  font-size: 44px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.18;
+  margin-bottom: 6px;
+}
+.limitless-home .hero-left h1 .grad {
+  background: linear-gradient(90deg, #a855f7, #3b82f6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.limitless-home .hero-left p {
+  color: #aab0c6;
+  font-size: 15.5px;
+  line-height: 1.6;
+  margin: 18px 0;
+  max-width: 480px;
+}
+.limitless-home .hero-btn-row {
+  display: flex;
+  gap: 14px;
+  margin: 26px 0 22px;
+  flex-wrap: wrap;
+}
+.limitless-home .hero-meta {
+  display: flex;
+  gap: 26px;
+  flex-wrap: wrap;
+}
+.limitless-home .hero-meta span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #9aa3c0;
+  font-size: 13.5px;
+  font-weight: 500;
+}
+.limitless-home .hero-meta svg {
+  width: 15px;
+  height: 15px;
+}
+
+.limitless-home .brain-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 460px;
+  width: 100%;
+}
+.limitless-home .brain-img {
+  width: 100%;
+  max-width: 420px;
+  filter: drop-shadow(0 0 60px rgba(80, 120, 255, 0.45));
+}
+.limitless-home .orbit-badge {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  z-index: 2;
+}
+.limitless-home .orbit-badge .circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(14, 22, 60, 0.88);
+  border: 1.5px solid rgba(120, 160, 255, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 4px 16px rgba(60, 100, 255, 0.25);
+}
+.limitless-home .orbit-badge .circle svg {
+  width: 22px;
+  height: 22px;
+}
+.limitless-home .orbit-badge span.label {
+  color: #dfe3f0;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.7);
+}
+/* Badges clustered around the brain center */
+.limitless-home .badge-memory   { top: 8%;  left: calc(20% - 70px); }
+.limitless-home .badge-focus    { top: 38%; left: calc(8% - 70px);  }
+.limitless-home .badge-clarity  { top: 68%; left: calc(20% - 70px); }
+.limitless-home .badge-stress   { top: 8%;  right: calc(12% + 100px); }
+.limitless-home .badge-energy   { top: 38%; right: calc(4% + 100px);  }
+.limitless-home .badge-wellbeing{ top: 68%; right: calc(12% + 100px); }
+
+/* ===== REVEALS CARD ===== */
+.limitless-home .reveals-section {
+  margin-top: -60px;
+  position: relative;
+  z-index: 5;
+}
+.limitless-home .reveals-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px 30px 34px;
+  box-shadow: 0 20px 50px rgba(20, 30, 60, 0.08);
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+.limitless-home .reveal-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+}
+.limitless-home .reveal-item {
+  flex: 1;
+  text-align: center;
+  padding: 0 10px;
+  position: relative;
+}
+.limitless-home .reveal-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 1px;
+  background: #ecedf2;
+}
+.limitless-home .reveal-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px;
+}
+.limitless-home .reveal-item h4 {
+  font-size: 14.5px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.limitless-home .reveal-item p {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ===== SECTION GENERIC ===== */
+.limitless-home .section {
+}
+.limitless-home .section-light {
+  background: var(--bg-light);
+}
+
+/* ===== AUDIENCE ===== */
+.limitless-home .audience-section {
+  padding-top: 20px;
+}
+.limitless-home .audience-grid {
+  display: flex;
+  gap: 18px;
+  margin-top: -20px;
+  margin-bottom: 50px;
+  flex-wrap: wrap;
+}
+.limitless-home .audience-card {
+  flex: 1;
+  min-width: 150px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 26px 18px;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(20, 30, 60, 0.05);
+}
+.limitless-home .audience-card .ic-svg {
+  width: 32px;
+  height: 32px;
+  margin-bottom: 16px;
+  display: inline-block;
+}
+.limitless-home .audience-card h4 {
+  font-size: 14.5px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.limitless-home .audience-card p {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ===== CHALLENGES ===== */
+.limitless-home .challenge-wrap {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  margin: 0 auto;
+  align-items: stretch;
+}
+.limitless-home .text-cols-container {
+  display: flex;
+  flex: 1.8;
+  gap: 20px;
+  position: relative;
+}
+.limitless-home .challenge-col, 
+.limitless-home .after-col {
+  flex: 1;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+}
+.limitless-home .col-header {
+  padding: 18px 24px;
+  border-radius: 10px 10px 0 0;
+}
+.limitless-home .dark-header {
+  background: #0a0e23;
+}
+.limitless-home .dark-header h4 {
+  color: #fff !important;
+}
+.limitless-home .green-header {
+  background: #dcfce7;
+}
+.limitless-home .green-header h4 {
+  color: #0f172a !important;
+}
+.limitless-home .col-header h4 {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0;
+}
+.limitless-home .challenge-list,
+.limitless-home .after-list {
+  padding: 24px;
+  margin: 0;
+  list-style: none;
+}
+.limitless-home .challenge-list li,
+.limitless-home .after-list li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 13.5px;
+  padding: 10px 0;
+  font-weight: 600;
+  color: #1e293b;
+}
+.limitless-home .arrow-divider {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+.limitless-home .challenge-photo {
+  flex: 1;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.limitless-home .challenge-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.limitless-home .flex-shrink-0 {
+  flex-shrink: 0;
+}
+
+/* ===== REPORT CARD SECTION ===== */
+.limitless-home .report-grid-new {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.limitless-home .report-mockup-wrapper {
+  display: flex;
+  gap: 16px;
+  flex: 2;
+  min-width: 320px;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+.limitless-home .report-dark-card-new {
+  background: #0a0e23;
+  border-radius: 16px;
+  padding: 24px;
+  color: #fff;
+  width: 240px;
+  flex: 1;
+  min-width: 240px;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.limitless-home .dark-card-header {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin-bottom: 24px;
+  color: #fff !important;
+}
+.limitless-home .report-dark-card-new h5 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #fff !important;
+}
+.limitless-home .report-dark-card-new .sub-text {
+  font-size: 11px;
+  color: #9aa3c0 !important;
+  margin-bottom: 16px;
+}
+.limitless-home .circular-score-new {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  margin-bottom: 20px;
+}
+.limitless-home .score-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.limitless-home .score-inner h2 {
+  font-size: 34px;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1;
+  color: #fff !important;
+}
+.limitless-home .score-inner .eval-text {
+  font-size: 11px;
+  color: #10b981;
+  font-weight: 700;
+  margin-top: 6px;
+}
+.limitless-home .report-dark-card-new .desc-text {
+  font-size: 11px;
+  color: #aab0c6;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+.limitless-home .btn-blue-rounded {
+  width: 100%;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.limitless-home .report-white-box-new {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 24px rgba(20, 30, 60, 0.05);
+  display: flex;
+  gap: 24px;
+  flex: 1;
+  align-items: center;
+}
+.limitless-home .stats-list-new {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+.limitless-home .stat-item-new {
+  background: #fff;
+  border: 1px solid #f1f5f9;
+  border-radius: 12px;
+  padding: 16px 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+.limitless-home .stat-item-new h6 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+.limitless-home .stat-val-row {
+  display: flex;
+  align-items: baseline;
+}
+.limitless-home .stat-val-row .big-num {
+  font-size: 32px;
+  font-weight: 800;
+  color: #0f172a;
+}
+.limitless-home .stat-val-row .small-num {
+  font-size: 14px;
+  color: #94a3b8;
+  font-weight: 500;
+  margin-left: 4px;
+  margin-right: 14px;
+}
+.limitless-home .status-good-new {
+  font-size: 13px;
+  font-weight: 700;
+  color: #10b981;
+}
+.limitless-home .status-low-new {
+  font-size: 13px;
+  font-weight: 700;
+  color: #f97316;
+}
+
+.limitless-home .radar-chart-new {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.limitless-home .see-get-new {
+  flex: 1;
+  min-width: 300px;
+  padding-left: 20px;
+}
+.limitless-home .see-get-new h3 {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 12px;
+}
+.limitless-home .see-get-new p {
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+.limitless-home .see-get-new ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px 0;
+}
+.limitless-home .see-get-new li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+  padding: 8px 0;
+}
+.limitless-home .btn-purple-rounded {
+  background: linear-gradient(90deg, #818cf8, #3b82f6);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* ===== EXPERTS & PRIVACY ===== */
+.limitless-home .experts-row-new {
+  display: flex;
+  gap: 24px;
+}
+.limitless-home .experts-card-new {
+  flex: 3;
+  background: #fff;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+  display: flex;
+  flex-direction: column;
+}
+.limitless-home .experts-card-new h3 {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 32px;
+}
+.limitless-home .experts-icons-new {
+  display: flex;
+  justify-content: space-between;
+}
+.limitless-home .expert-item-new {
+  flex: 1;
+  text-align: center;
+  padding: 0 12px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.limitless-home .expert-item-new:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 1px;
+  background: #f1f5f9;
+}
+.limitless-home .expert-icon-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.limitless-home .expert-item-new h5 {
+  font-size: 13px;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 6px;
+}
+.limitless-home .expert-item-new p {
+  font-size: 11px;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.limitless-home .privacy-card-new {
+  flex: 1.2;
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 32px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.limitless-home .privacy-icon {
+  flex-shrink: 0;
+}
+.limitless-home .privacy-text h4 {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.3;
+  margin-bottom: 12px;
+}
+.limitless-home .privacy-text p {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* ===== HOW IT WORKS ===== */
+.limitless-home .steps-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px 30px;
+  box-shadow: 0 4px 14px rgba(20, 30, 60, 0.05);
+}
+.limitless-home .steps-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.limitless-home .step-item {
+  flex: 1;
+  text-align: center;
+  padding: 0 6px;
+}
+.limitless-home .step-icon-wrap {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 16px;
+}
+.limitless-home .step-num {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 11.5px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+.limitless-home .step-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.limitless-home .step-item h5 {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.limitless-home .step-item p {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+.limitless-home .step-arrow {
+  flex: 0 0 30px;
+  padding-top: 24px;
+  color: #94a3b8;
+  font-size: 18px;
+  text-align: center;
+}
+
+/* ===== BENEFITS ===== */
+.limitless-home .benefits-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px 30px;
+  box-shadow: 0 4px 14px rgba(20, 30, 60, 0.05);
+  display: flex;
+  justify-content: space-between;
+}
+.limitless-home .benefit-item {
+  flex: 1;
+  text-align: center;
+  padding: 0 10px;
+  position: relative;
+}
+.limitless-home .benefit-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 1px;
+  background: #eee;
+}
+.limitless-home .benefit-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px;
+}
+.limitless-home .benefit-item h5 {
+  font-size: 13.5px;
+  font-weight: 700;
+  margin-bottom: 7px;
+  line-height: 1.3;
+}
+.limitless-home .benefit-item p {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ===== TESTIMONIALS & STATS NEW ===== */
+.limitless-home .testi-card-new {
+  background: #0b1120;
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  gap: 16px;
+}
+.limitless-home .testi-item-new {
+  flex: 1;
+  background: #111827;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+.limitless-home .testi-avatar-new {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 16px rgba(59, 130, 246, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+.limitless-home .testi-content-new {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.limitless-home .testi-stars-new {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 12px;
+}
+.limitless-home .testi-quote-new {
+  font-size: 13px;
+  color: #cbd5e1;
+  line-height: 1.5;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+.limitless-home .testi-name-new {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 2px;
+}
+.limitless-home .testi-loc-new {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.limitless-home .stats-bar-new {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px 32px;
+  margin-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+}
+.limitless-home .stat-new {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  padding: 8px 16px;
+}
+.limitless-home .stat-new:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 1px;
+  background: #f1f5f9;
+}
+.limitless-home .stat-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.limitless-home .stat-text-new {
+  display: flex;
+  flex-direction: column;
+}
+.limitless-home .big-new {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 2px;
+}
+.limitless-home .lbl-new {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* ===== SCIENCE TRUST ===== */
+.limitless-home .trust-wrap {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+  background: #fff;
+  border-radius: 18px;
+  padding: 30px;
+  box-shadow: 0 4px 14px rgba(20, 30, 60, 0.05);
+}
+.limitless-home .trust-blurb {
+  flex: 0 0 26%;
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  display: flex;
+  align-items: center;
+}
+.limitless-home .trust-stats {
+  flex: 1;
+  display: flex;
+}
+.limitless-home .trust-stat {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 14px;
+  position: relative;
+}
+.limitless-home .trust-stat:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 6px;
+  bottom: 6px;
+  width: 1px;
+  background: #eee;
+}
+.limitless-home .trust-stat .icon-circ {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.limitless-home .trust-stat .big {
+  font-size: 18px;
+  font-weight: 800;
+}
+.limitless-home .trust-stat .lbl {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+
+/* ===== FAQ ===== */
+.limitless-home .faq-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 20px;
+}
+.limitless-home .faq-item {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(20, 30, 60, 0.04);
+}
+.limitless-home .faq-item .left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.limitless-home .faq-ic {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #f0e9fe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 14px;
+}
+.limitless-home .faq-item .chev {
+  color: #9aa3c0;
+}
+
+/* ===== CTA ===== */
+.limitless-home .cta-section {
+  background: linear-gradient(120deg, #150b35, #0a0e23 60%);
+  position: relative;
+  overflow: hidden;
+}
+.limitless-home .cta-inner {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+.limitless-home .cta-brain {
+  flex: 0 0 18%;
+}
+.limitless-home .cta-text {
+  flex: 1;
+}
+.limitless-home .cta-text h2 {
+  color: #fff;
+  font-size: 30px;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+.limitless-home .cta-text p {
+  color: #b6bcd4;
+  font-size: 14px;
+  margin-bottom: 22px;
+}
+.limitless-home .cta-btn-row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.limitless-home .cta-photo-wrap {
+  flex: 0 0 28%;
+  position: relative;
+}
+.limitless-home .cta-photo-wrap img {
+  border-radius: 16px;
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+}
+.limitless-home .cta-badge {
+  position: absolute;
+  right: -14px;
+  bottom: -18px;
+  background: #1c2148;
+  border-radius: 14px;
+  padding: 16px 18px;
+  color: #fff;
+  width: 170px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+}
+.limitless-home .cta-badge h6 {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 6px;
+}
+.limitless-home .cta-badge .count {
+  font-size: 13px;
+  color: #9aa3c0;
+  margin-bottom: 8px;
+}
+.limitless-home .avatar-stack {
+  display: flex;
+}
+.limitless-home .avatar-stack img {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #1c2148;
+  margin-left: -8px;
+  object-fit: cover;
+}
+.limitless-home .avatar-stack img:first-child {
+  margin-left: 0;
+}
+
+/* ===== FOOTER ===== */
+.limitless-home footer {
+  background: var(--navy-deep);
+  padding: 46px 0 24px;
+}
+.limitless-home .footer-grid {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex-wrap: wrap;
+}
+.limitless-home .footer-brand {
+  flex: 0 0 28%;
+}
+.limitless-home .footer-brand p {
+  color: #8b91ab;
+  font-size: 12.5px;
+  line-height: 1.6;
+  margin: 14px 0 18px;
+}
+.limitless-home .social-row {
+  display: flex;
+  gap: 10px;
+}
+.limitless-home .social-row a {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 13px;
+}
+.limitless-home .footer-col h6 {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.limitless-home .footer-col a {
+  display: block;
+  color: #9aa3c0;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+.limitless-home .footer-contact p {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: #9aa3c0;
+  font-size: 13px;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+.limitless-home .footer-bottom {
+  text-align: center;
+  color: #7b819c;
+  font-size: 12px;
+  padding-top: 20px;
+}
+.limitless-home .footer-col {
+  flex: 0 0 14%;
+}
+.limitless-home .footer-contact {
+  flex: 0 0 22%;
+}
+
+/* =========================================================
+   RESPONSIVENESS (MOBILE & TABLET) 
+========================================================= */
+@media (max-width: 1024px) {
+  .limitless-home .hero-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+  .limitless-home .hero-left h1 {
+    font-size: 36px;
+  }
+  .limitless-home .hero-left p {
+    margin: 18px auto;
+  }
+  .limitless-home .hero-btn-row {
+    justify-content: center;
+  }
+  .limitless-home .hero-meta {
+    justify-content: center;
+  }
+  .limitless-home .brain-wrap {
+    min-height: 380px;
+  }
+  
+  .limitless-home .report-grid {
+    flex-direction: column;
+  }
+  .limitless-home .report-mid-stack {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .limitless-home .stat-card {
+    flex: 1;
+    min-width: 150px;
+  }
+  
+  .limitless-home .trust-wrap {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .limitless-home .wrap {
+    padding: 0 20px;
+  }
+  .limitless-home .header-inner {
+    flex-wrap: wrap;
+  }
+  .limitless-home nav {
+    display: none; /* simple mobile: hide nav or implement hamburger later */
+  }
+  .limitless-home .phone-line {
+    display: none;
+  }
+  .limitless-home .header-right {
+    gap: 10px;
+  }
+  
+  .limitless-home .reveal-container {
+    flex-direction: column;
+  }
+  .limitless-home .reveal-item:not(:last-child)::after {
+    width: 100%;
+    height: 1px;
+    bottom: -10px;
+    top: auto;
+    right: auto;
+  }
+  .limitless-home .reveal-item {
+    margin-bottom: 20px;
+  }
+  
+  .limitless-home .challenge-wrap {
+    flex-direction: column;
+  }
+  .limitless-home .arrow-divider {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+  
+  .limitless-home .experts-row {
+    flex-direction: column;
+  }
+  .limitless-home .experts-icons {
+    flex-wrap: wrap;
+  }
+  .limitless-home .expert-item {
+    flex: 1 1 45%;
+    margin-bottom: 20px;
+  }
+  .limitless-home .expert-item:not(:last-child)::after {
+    display: none;
+  }
+
+  .limitless-home .steps-row {
+    flex-direction: column;
+    align-items: center;
+  }
+  .limitless-home .step-arrow {
+    transform: rotate(90deg);
+    padding-top: 0;
+    padding-bottom: 24px;
+  }
+  
+  .limitless-home .benefits-card {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .limitless-home .benefit-item:not(:last-child)::after {
+    display: none;
+  }
+  
+  .limitless-home .testi-card {
+    flex-direction: column;
+  }
+  
+  .limitless-home .trust-stats {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .limitless-home .trust-stat:not(:last-child)::after {
+    display: none;
+  }
+  
+  .limitless-home .faq-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .limitless-home .cta-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+  .limitless-home .cta-brain, 
+  .limitless-home .cta-photo-wrap {
+    display: none; /* Hide illustrative images on mobile for cleaner CTA */
+  }
+  .limitless-home .cta-btn-row {
+    justify-content: center;
+  }
+  
+  .limitless-home .footer-grid {
+    flex-direction: column;
+  }
+  .limitless-home .footer-brand {
+    flex: 0 0 100%;
+  }
+}
+
+
+/* REFINED PROFESSIONAL TYPOGRAPHY & SPACING */
+.limitless-home section {
+  padding: 20px 0;
+}
+
+.limitless-home h1, .limitless-home .hero-left h1 {
+  font-size: 52px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -1px;
+}
+
+.limitless-home h2, .limitless-home .section-title, .limitless-home .cta-text-new h2 {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.limitless-home h3, .limitless-home .see-get-new h3, .limitless-home .experts-card-new h3 {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.limitless-home h4, .limitless-home .audience-card h4, .limitless-home .reveal-item h4 {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.limitless-home h5, .limitless-home .report-dark-card-new h5, .limitless-home .expert-item-new h5 {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.limitless-home h6, .limitless-home .cta-badge-new h6, .limitless-home .stat-item-new h6 {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.limitless-home p, .limitless-home .body-text {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #475569;
+}
+
+.limitless-home .hero-left p, .limitless-home .cta-text-new p {
+  font-size: 18px;
+  font-weight: 400;
+  color: #64748b;
+}
+
+.limitless-home .small-text, .limitless-home .sub-text, .limitless-home .lbl-new, .limitless-home .testi-quote-new, .limitless-home .privacy-text p {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #64748b;
+}
+
+.limitless-home .btn {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .limitless-home h1, .limitless-home .hero-left h1 { font-size: 40px; }
+  .limitless-home h2 { font-size: 28px; }
+  .limitless-home h3 { font-size: 24px; }
+  .limitless-home h4, .limitless-home h5 { font-size: 18px; }
+  .limitless-home p { font-size: 15px; }
+}
+
+/* Fix Hero overlap with Navbar */
+.limitless-home .hero {
+  padding-top: 140px !important;
+}
+
+/* Specific Component Fixes */
+.limitless-home .big-new, .limitless-home .big {
+  font-size: 32px;
+  font-weight: 800;
+  color: #0f172a;
+}
+.limitless-home .lbl-new, .limitless-home .lbl {
+  font-size: 15px;
+  color: #64748b;
+  font-weight: 500;
+  line-height: 1.4;
+}
+.limitless-home .faq-item {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+}
+.limitless-home .section-eyebrow {
+  font-size: 16px;
+  font-weight: 700;
+  color: #3b82f6;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.limitless-home .section-subtitle {
+  font-size: 18px;
+  font-weight: 400;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+/* CTA Component Styles */
+.limitless-home .cta-text-new {
+  flex: 1 1 400px;
+  max-width: 500px;
+  margin-left: 600px;
+}
+
+.limitless-home .cta-badge-new {
+  flex: 0 0 auto;
+  width: 280px;
+  background: rgba(11, 14, 39, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 16px;
+  padding: 24px;
+  color: #fff;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  margin-right: 5%;
+}
+
+/* Comprehensive Mobile Overrides */
+@media (max-width: 768px) {
+  /* Reset CTA Margins and flex */
+  .limitless-home .cta-text-new {
+    margin-left: 0;
+    max-width: 100%;
+    flex: 1 1 100%;
+    text-align: center;
+  }
+  .limitless-home .cta-badge-new {
+    margin-right: 0;
+    width: 100%;
+    max-width: 400px;
+    margin: 20px auto 0;
+  }
+  .limitless-home .cta-btn-row-new {
+    justify-content: center;
+  }
+  
+}
+
+
+/* Universal Mobile Stacking Fixes */
+@media (max-width: 768px) {
+  /* Challenge/Compare Section */
+  .limitless-home .challenge-wrap,
+  .limitless-home .compare-container,
+  .limitless-home .compare-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+  .limitless-home .challenge-col {
+    width: 100% !important;
+    margin-bottom: 20px;
+  }
+  .limitless-home .arrow-divider {
+    transform: rotate(90deg) !important;
+    margin: 20px auto !important;
+    position: static !important;
+  }
+
+  /* Built by Experts Section */
+  .limitless-home .experts-row,
+  .limitless-home .experts-icons,
+  .limitless-home .expert-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 20px !important;
+  }
+  .limitless-home .expert-item-new,
+  .limitless-home .expert-item {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Testimonials */
+  .limitless-home .testi-row,
+  .limitless-home .testi-grid,
+  .limitless-home .testi-cards {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+  }
+  .limitless-home .testi-card-new,
+  .limitless-home .testi-card {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Trust Stats */
+  .limitless-home .trust-stats,
+  .limitless-home .stat-row,
+  .limitless-home .stats-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+    width: 100% !important;
+  }
+  .limitless-home .trust-stat,
+  .limitless-home .stat-item-new {
+    width: 100% !important;
+    max-width: 100% !important;
+    text-align: center;
+    align-items: center;
+  }
+
+  /* Science Section */
+  .limitless-home .col-header,
+  .limitless-home .science-grid,
+  .limitless-home .benefits-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+  .limitless-home .reveal-container,
+  .limitless-home .reveal-row {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  
+  /* Ensure images in these sections scale */
+  .limitless-home img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+}
+
+/* Exact Overrides for Vertical Mobile Stacking */
+@media (max-width: 768px) {
+  /* Challenge Section */
+  .limitless-home .challenge-wrap,
+  .limitless-home .text-cols-container {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 20px !important;
+  }
+  .limitless-home .challenge-photo {
+    width: 100% !important;
+    min-height: 200px !important;
+    margin-top: 20px;
+  }
+
+  /* Experts Section */
+  .limitless-home .experts-row-new,
+  .limitless-home .experts-card-new,
+  .limitless-home .experts-icons-new {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    align-items: center;
+    gap: 20px !important;
+  }
+  .limitless-home .expert-item-new {
+    width: 100% !important;
+    text-align: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  /* Testimonials */
+  .limitless-home .testi-card-new {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+  }
+  .limitless-home .testi-item-new {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* Trust Stats & Science */
+  .limitless-home .trust-wrap,
+  .limitless-home .trust-stats {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+    width: 100% !important;
+  }
+  .limitless-home .trust-stat {
+    width: 100% !important;
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* Fix for the main stats bar section */
+@media (max-width: 768px) {
+  .limitless-home .stats-bar-new {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 20px !important;
+  }
+  .limitless-home .stat-new {
+    width: 100% !important;
+    justify-content: flex-start;
+  }
+}
+
+/* Constrain Navbar Width */
+.limitless-home header {
+  display: flex;
+  justify-content: center;
+}
+.limitless-home .header-inner {
+  max-width: 100% !important;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Hamburger Menu Styles */
+.limitless-home .header-right {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-left: auto;
+}
+
+.limitless-home .hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 21px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 50;
+  margin-left: auto;
+}
+
+.limitless-home .hamburger span {
+  width: 100%;
+  height: 3px;
+  background-color: #1e293b;
+  border-radius: 10px;
+  transition: all 0.3s linear;
+  position: relative;
+  transform-origin: 1px;
+}
+
+/* Mobile Menu Overrides */
+@media (max-width: 768px) {
+  .limitless-home .hamburger {
+    display: flex;
+  }
+  
+  .limitless-home .header-right {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100px;
+    left: 20px;
+    right: 20px;
+    background: #0f172a;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    z-index: 40;
+    gap: 20px;
+    text-align: center;
+  }
+  
+  .limitless-home .header-right.mobile-open {
+    display: flex;
+  }
+  
+  .limitless-home .header-right.mobile-open .btn {
+    width: 100%;
+    color: #fff !important;
+  }
+}
+
+/* Navbar Height and Full Width */
+.limitless-home header {
+  padding: 5px 0 !important;
+}
+.limitless-home .header-inner {
+  max-width: 100% !important;
+  padding: 0 40px;
+}
+@media (max-width: 768px) {
+  .limitless-home .header-inner {
+    padding: 0 20px;
+  }
+}
+
+
+
+
+
+/* ===== HERO BOTTOM SPACING FIX ===== */
+.limitless-home .hero .wrap {
+  padding-bottom: 80px !important;
+}
+
+.limitless-home .reveals-section {
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .limitless-home .orbit-badge {
+    display: none !important;
+  }
+}
+
+/* Hero Meta White Color Fix */
+.limitless-home .hero-meta span {
+  color: #fff !important;
+}
+
+/* Remove Empty Space on Mobile Hero */
+@media (max-width: 768px) {
+  .limitless-home .hero-right {
+    display: none !important;
+  }
+}
+
+/* ===== PROFESSIONAL MOBILE MENU & BURGER ICON ===== */
+.limitless-home .hamburger span {
+  background-color: #fff !important; /* Make burger icon white */
+}
+
+/* Optional: Animated Hamburger */
+.limitless-home .hamburger.open span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.limitless-home .hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+.limitless-home .hamburger.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -8px);
+}
+
+@media (max-width: 768px) {
+  .limitless-home header {
+    position: relative;
+    z-index: 999;
+  }
+  .limitless-home .header-right {
+    top: 90px !important; /* Just below header */
+    background: rgba(15, 23, 42, 0.98) !important; /* Solid dark background */
+    backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6) !important;
+    z-index: 1000 !important;
+    padding: 24px !important;
+    gap: 16px !important;
+    transform: translateY(-10px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    display: flex !important; /* Override display: none to allow transition */
+  }
+  
+  .limitless-home .header-right:not(.mobile-open) {
+    visibility: hidden;
+  }
+
+  .limitless-home .header-right.mobile-open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+  }
+  
+  .limitless-home .header-right.mobile-open .btn {
+    width: 100% !important;
+    justify-content: center !important;
+    height: 52px !important;
+  }
+}
+
+/* Reduce top padding on Hero in mobile */
+@media (max-width: 768px) {
+  .limitless-home .hero {
+    padding-top: 40px !important;
+  }
+}

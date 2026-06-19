@@ -13,6 +13,8 @@ import AdminUserDetail from './components/AdminUserDetail';
 import FloatingCTA from './components/FloatingCTA';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 import Dashboard from './components/Dashboard';
+import RegistrationSuccess from './components/RegistrationSuccess';
+import SampleDashboard from './pages/SampleDashboard';
 
 
 const ProtectedRoute = ({ children }) => {
@@ -55,6 +57,8 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/payment-success" element={<PaymentSuccess />} />
+        <Route path="/registration-success" element={<RegistrationSuccess />} />
+        <Route path="/sample-report" element={<SampleDashboard />} />
         <Route path="/dashboard" element={
           <ProtectedRoute>
             <Dashboard />

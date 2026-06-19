@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import limitlessLogo from '../assets/limitless-logo.webp';
+import { Link, useNavigate } from 'react-router-dom';
 
 const RegistrationSuccess = () => {
   const [credentials, setCredentials] = useState({ name: '', username: '', password: '' });
+  const navigate = useNavigate();
 
   useEffect(() => {
     setCredentials({
@@ -36,7 +36,7 @@ const RegistrationSuccess = () => {
       {/* Logo */}
       <div style={{ marginBottom: '48px', display: 'flex', alignItems: 'center', gap: '14px' }}>
         <Link to="/">
-          <img src={limitlessLogo} alt="Limitless Logo" style={{ maxHeight: '55px', objectFit: 'contain' }} />
+          <img src="/img/limitless-logo.webp" alt="Limitless Logo" style={{ maxHeight: '55px', objectFit: 'contain' }} />
         </Link>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <span style={{ color: '#FFF', fontSize: '26px', fontWeight: '800', letterSpacing: '1px', lineHeight: 1 }}>LIMITLESS</span>
@@ -178,20 +178,34 @@ const RegistrationSuccess = () => {
           </div>
 
           {/* Back to home button */}
-          <Link to="/" style={{ textDecoration: 'none', display: 'block' }}>
-            <button style={{
+          <button
+            onClick={() => navigate('/dashboard')}
+            style={{
               width: '100%', padding: '18px',
-              background: 'linear-gradient(90deg, #F97316, #EA580C)',
+              background: 'linear-gradient(90deg, #6366F1, #3B82F6)',
               border: 'none', borderRadius: '14px',
               color: '#FFF', fontSize: '18px', fontWeight: '700',
-              cursor: 'pointer', boxShadow: '0 6px 24px rgba(234,88,12,0.4)',
+              cursor: 'pointer', boxShadow: '0 6px 24px rgba(99,102,241,0.4)',
               transition: 'all 0.2s', letterSpacing: '0.3px',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
+              marginBottom: '12px'
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
+          >
+            🧠 View My Dashboard
+          </button>
+          <Link to="/" style={{ textDecoration: 'none', display: 'block' }}>
+            <button style={{
+              width: '100%', padding: '14px',
+              background: 'transparent',
+              border: '1px solid rgba(255,255,255,0.1)', borderRadius: '14px',
+              color: '#94A3B8', fontSize: '16px', fontWeight: '600',
+              cursor: 'pointer', transition: 'all 0.2s',
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px'
             }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 10px 32px rgba(234,88,12,0.5)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 6px 24px rgba(234,88,12,0.4)'; }}
             >
-              <i className="fa-solid fa-house"></i> Back to Home Page
+              ← Back to Home
             </button>
           </Link>
 

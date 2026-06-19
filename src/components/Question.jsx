@@ -106,7 +106,7 @@ const Question = () => {
         }
       }
 
-      // Navigate to payment page to complete the flow
+      // Navigate to payment page
       navigate('/payment');
       window.scrollTo(0, 0);
 
