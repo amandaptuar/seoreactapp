@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Limitless — Unlock Your True Potential</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0a0e23;
+    --navy-deep:#060919;
+    --bg-light:#f3f5f9;
+    --bg-section:#eef1f7;
+    --purple:#7c3aed;
+    --blue:#2563eb;
+    --grad-btn: linear-gradient(90deg,#7c3aed 0%, #2563eb 100%);
+    --orange:#f97316;
+    --text-dark:#111530;
+    --text-muted:#6b7280;
+    --text-light-muted:#9aa3b8;
+    --card-radius:16px;
+    --green:#16a34a;
+    --red:#ef4444;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Inter', sans-serif;
+    background:var(--bg-light);
+    color:var(--text-dark);
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%; display:block;}
+  a{text-decoration:none; color:inherit;}
+  ul{list-style:none;}
+  .wrap{max-width:1280px; margin:0 auto; padding:0 40px;}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:14px 26px; border-radius:10px; font-weight:600; font-size:15px;
+    cursor:pointer; border:none; white-space:nowrap;
+  }
+  .btn-gradient{ background:var(--grad-btn); color:#fff; box-shadow:0 8px 20px rgba(99,60,226,0.35);}
+  .btn-outline{ background:transparent; color:#fff; border:1.5px solid rgba(255,255,255,0.4);}
+  .btn-outline-dark{ background:transparent; color:var(--navy); border:1.5px solid #d8dce6;}
+  .btn-orange{ background:#f97316; color:#fff; }
+  .section-eyebrow{ text-align:center; font-size:28px; font-weight:800; color:var(--text-dark); margin-bottom:36px;}
+
+  /* ===== HEADER ===== */
+  header{
+    background:var(--navy-deep);
+    padding:20px 0;
+  }
+  .header-inner{ display:flex; align-items:center; justify-content:space-between; }
+  .logo-area{ display:flex; align-items:center; gap:10px; }
+  .logo-mark{ width:34px; height:34px; }
+  .logo-text-group{ line-height:1.1; }
+  .logo-text{ color:#fff; font-weight:800; font-size:19px; letter-spacing:0.5px; }
+  .logo-sub{ color:var(--orange); font-size:8.5px; font-weight:700; letter-spacing:1px; }
+  nav{ display:flex; align-items:center; gap:32px; }
+  nav a{ color:#cbd2e6; font-size:14.5px; font-weight:500; padding-bottom:4px; }
+  nav a.active{ color:#fff; border-bottom:2px solid #3b82f6; }
+  .header-right{ display:flex; align-items:center; gap:24px; }
+  .phone-line{ display:flex; align-items:center; gap:8px; color:#fff; font-size:14.5px; font-weight:500;}
+
+  /* ===== HERO ===== */
+  .hero{
+    background:var(--navy-deep);
+    padding:70px 0 120px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-inner{ display:flex; align-items:center; gap:40px; }
+  .hero-left{ flex:0 0 46%; }
+  .hero-right{ flex:1; position:relative; }
+  .hero-left h1{
+    font-size:44px; font-weight:800; color:#fff; line-height:1.18; margin-bottom:6px;
+  }
+  .hero-left h1 .grad{
+    background:linear-gradient(90deg,#a855f7,#3b82f6);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero-left p{ color:#aab0c6; font-size:15.5px; line-height:1.6; margin:18px 0; max-width:480px; }
+  .hero-btn-row{ display:flex; gap:14px; margin:26px 0 22px; }
+  .hero-meta{ display:flex; gap:26px; }
+  .hero-meta span{ display:flex; align-items:center; gap:7px; color:#9aa3c0; font-size:13.5px; font-weight:500; }
+  .hero-meta svg{ width:15px; height:15px; }
+
+  .brain-wrap{ position:relative; display:flex; align-items:center; justify-content:center; min-height:480px; }
+  .brain-img{ width:100%; max-width:420px; filter:drop-shadow(0 0 60px rgba(80,120,255,0.45)); }
+  .orbit-badge{
+    position:absolute; display:flex; flex-direction:column; align-items:center; gap:6px;
+  }
+  .orbit-badge .circle{
+    width:54px; height:54px; border-radius:50%; background:rgba(30,41,80,0.85);
+    border:1px solid rgba(120,140,210,0.4);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .orbit-badge .circle svg{ width:24px; height:24px; }
+  .orbit-badge span.label{ color:#dfe3f0; font-size:10.5px; font-weight:700; letter-spacing:0.5px; }
+  .badge-memory{ top:0%; left:6%; }
+  .badge-focus{ top:32%; left:-6%; }
+  .badge-clarity{ top:65%; left:6%; }
+  .badge-stress{ top:0%; right:2%; }
+  .badge-energy{ top:32%; right:-6%; }
+  .badge-wellbeing{ top:65%; right:2%; }
+
+  /* ===== REVEALS CARD (overlaps hero) ===== */
+  .reveals-section{ margin-top:-60px; position:relative; z-index:5; }
+  .reveals-card{
+    background:#fff; border-radius:20px; padding:40px 30px 34px;
+    box-shadow:0 20px 50px rgba(20,30,60,0.08);
+    display:flex; justify-content:space-between; gap:10px;
+  }
+  .reveal-item{ flex:1; text-align:center; padding:0 10px; position:relative; }
+  .reveal-item:not(:last-child)::after{
+    content:''; position:absolute; right:0; top:10px; bottom:10px; width:1px; background:#ecedf2;
+  }
+  .reveal-icon{ width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 14px; }
+  .reveal-item h4{ font-size:14.5px; font-weight:700; margin-bottom:6px; }
+  .reveal-item p{ font-size:12px; color:var(--text-muted); line-height:1.5; }
+
+  /* ===== SECTION GENERIC ===== */
+  .section{ padding:70px 0; }
+  .section-light{ background:var(--bg-light); }
+
+  /* ===== AUDIENCE ===== */
+  .audience-grid{ display:flex; gap:18px; margin-bottom:50px; }
+  .audience-card{
+    flex:1; background:#fff; border-radius:14px; padding:26px 18px; text-align:center;
+    box-shadow:0 6px 18px rgba(20,30,60,0.05);
+  }
+  .audience-card .ic{ font-size:30px; margin-bottom:12px; }
+  .audience-card h4{ font-size:14.5px; font-weight:700; margin-bottom:6px; }
+  .audience-card p{ font-size:12px; color:var(--text-muted); line-height:1.5; }
+
+  /* ===== CHALLENGES ===== */
+  .challenge-wrap{ display:flex; border-radius:18px; overflow:hidden; box-shadow:0 10px 30px rgba(20,30,60,0.06); position:relative; }
+  .challenge-col{ flex:1.05; background:var(--navy-deep); padding:26px 30px; }
+  .after-col{ flex:1.05; background:#dcf5e6; padding:26px 30px; }
+  .challenge-col h4, .after-col h4{ font-size:16px; font-weight:700; margin-bottom:18px; color:#fff; }
+  .after-col h4{ color:var(--text-dark); }
+  .challenge-list li, .after-list li{ display:flex; align-items:center; gap:12px; font-size:13.5px; padding:9px 0; color:#cfd4e6; font-weight:500; }
+  .after-list li{ color:#1d2a3a; }
+  .ico-x{ width:18px; height:18px; border-radius:50%; background:#3a1320; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .ico-check{ width:18px; height:18px; border-radius:50%; background:#16a34a; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .arrow-divider{
+    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    width:46px; height:46px; border-radius:50%; background:#fff; box-shadow:0 6px 16px rgba(0,0,0,0.15);
+    display:flex; align-items:center; justify-content:center; z-index:3;
+  }
+  .challenge-photo{ flex:0.85; position:relative; }
+  .challenge-photo img{ width:100%; height:100%; object-fit:cover; }
+
+  /* ===== REPORT CARD SECTION ===== */
+  .report-grid{ display:flex; gap:18px; align-items:stretch; }
+  .report-dark-card{
+    flex:0 0 23%; background:var(--navy-deep); border-radius:18px; padding:22px;
+    display:flex; flex-direction:column; align-items:center; text-align:center; color:#fff;
+  }
+  .report-dark-card .mini-logo{ align-self:flex-start; display:flex; align-items:center; gap:6px; font-size:11px; font-weight:700; letter-spacing:0.5px; margin-bottom:18px; }
+  .report-dark-card h5{ font-size:14px; font-weight:600; }
+  .report-dark-card .sub{ font-size:11px; color:#9aa3c0; margin-bottom:14px; }
+  .score-ring{ width:120px; height:120px; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    background:conic-gradient(#3b82f6 0% 78%, #1c2440 78% 100%); margin-bottom:16px; position:relative; }
+  .score-ring::before{ content:''; position:absolute; width:96px; height:96px; border-radius:50%; background:var(--navy-deep); }
+  .score-ring .val{ position:relative; font-size:30px; font-weight:800; }
+  .score-ring .lbl{ position:relative; font-size:10.5px; color:#4ade80; font-weight:700; }
+  .report-dark-card p.desc{ font-size:11.5px; color:#aab0c6; margin-bottom:16px; line-height:1.5; }
+  .report-dark-card .btn{ width:100%; justify-content:center; padding:11px; font-size:13px; }
+
+  .report-mid-stack{ flex:0 0 17%; display:flex; flex-direction:column; gap:12px; }
+  .stat-card{ background:#fff; border-radius:14px; padding:16px 18px; box-shadow:0 4px 14px rgba(20,30,60,0.05); }
+  .stat-card h6{ font-size:11.5px; font-weight:600; color:var(--text-muted); margin-bottom:6px; }
+  .stat-card .num{ font-size:24px; font-weight:800; }
+  .stat-card .num small{ font-size:12px; font-weight:500; color:var(--text-light-muted); }
+  .stat-card .tag{ font-size:11px; font-weight:700; }
+  .tag-green{ color:#16a34a; } .tag-orange{ color:#f97316; }
+  .stat-bar{ height:4px; border-radius:2px; background:#eee; margin-top:8px; overflow:hidden; }
+  .stat-bar i{ display:block; height:100%; border-radius:2px; }
+
+  .radar-card{ flex:0 0 26%; background:#fff; border-radius:18px; padding:20px; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 14px rgba(20,30,60,0.05); }
+  .see-get{ flex:1; }
+  .see-get h3{ font-size:20px; font-weight:800; margin-bottom:12px; }
+  .see-get p{ font-size:13.5px; color:var(--text-muted); line-height:1.6; margin-bottom:16px; }
+  .see-get ul{ margin-bottom:20px; }
+  .see-get li{ display:flex; align-items:center; gap:10px; font-size:13.5px; padding:5px 0; font-weight:500; }
+  .check-sm{ color:#16a34a; }
+
+  /* ===== EXPERTS ===== */
+  .experts-row{ display:flex; gap:18px; }
+  .experts-card{ flex:1; background:#fff; border-radius:18px; padding:32px 30px; box-shadow:0 4px 14px rgba(20,30,60,0.05); }
+  .experts-card h3{ text-align:center; font-size:21px; font-weight:800; margin-bottom:28px; }
+  .experts-icons{ display:flex; justify-content:space-between; }
+  .expert-item{ flex:1; text-align:center; padding:0 8px; position:relative; }
+  .expert-item:not(:last-child)::after{ content:''; position:absolute; right:0; top:6px; bottom:6px; width:1px; background:#eee; }
+  .expert-icon{ width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; }
+  .expert-item h5{ font-size:13.5px; font-weight:700; margin-bottom:5px; }
+  .expert-item p{ font-size:11px; color:var(--text-muted); line-height:1.4; }
+  .privacy-card{ flex:0 0 26%; background:#e9edfb; border-radius:18px; padding:28px 24px; display:flex; flex-direction:column; gap:14px; }
+  .privacy-card .shield{ width:48px; height:48px; border-radius:12px; background:#dde3f9; display:flex; align-items:center; justify-content:center; }
+  .privacy-card h4{ font-size:16px; font-weight:800; line-height:1.3; }
+  .privacy-card p{ font-size:12.5px; color:var(--text-muted); line-height:1.5; }
+
+  /* ===== HOW IT WORKS ===== */
+  .steps-card{ background:#fff; border-radius:20px; padding:40px 30px; box-shadow:0 4px 14px rgba(20,30,60,0.05); }
+  .steps-row{ display:flex; align-items:flex-start; justify-content:space-between; }
+  .step-item{ flex:1; text-align:center; padding:0 6px; }
+  .step-icon-wrap{ position:relative; width:60px; height:60px; margin:0 auto 16px; }
+  .step-num{ position:absolute; top:-6px; left:-6px; width:24px; height:24px; border-radius:50%; color:#fff; font-size:11.5px; font-weight:800; display:flex; align-items:center; justify-content:center; z-index:2; }
+  .step-circle{ width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+  .step-item h5{ font-size:14px; font-weight:700; margin-bottom:8px; }
+  .step-item p{ font-size:12px; color:var(--text-muted); line-height:1.5; }
+  .step-arrow{ flex:0 0 30px; padding-top:24px; color:#94a3b8; font-size:18px; text-align:center; }
+
+  /* ===== BENEFITS ===== */
+  .benefits-card{ background:#fff; border-radius:20px; padding:40px 30px; box-shadow:0 4px 14px rgba(20,30,60,0.05); display:flex; justify-content:space-between; }
+  .benefit-item{ flex:1; text-align:center; padding:0 10px; position:relative; }
+  .benefit-item:not(:last-child)::after{ content:''; position:absolute; right:0; top:10px; bottom:10px; width:1px; background:#eee; }
+  .benefit-icon{ width:54px; height:54px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 14px; }
+  .benefit-item h5{ font-size:13.5px; font-weight:700; margin-bottom:7px; line-height:1.3; }
+  .benefit-item p{ font-size:11.5px; color:var(--text-muted); line-height:1.5; }
+
+  /* ===== TESTIMONIALS ===== */
+  .testi-card{ background:var(--navy-deep); border-radius:20px; padding:32px; display:flex; gap:20px; }
+  .testi-item{ flex:1; padding:6px; }
+  .testi-top{ display:flex; align-items:center; gap:14px; margin-bottom:14px; }
+  .testi-avatar{ width:54px; height:54px; border-radius:50%; object-fit:cover; }
+  .stars{ color:#fbbf24; font-size:13px; letter-spacing:2px; }
+  .testi-item p.quote{ color:#cfd4e6; font-size:13.5px; line-height:1.6; margin-bottom:14px; }
+  .testi-item .name{ color:#fff; font-weight:700; font-size:13.5px; }
+  .testi-item .loc{ color:#9aa3c0; font-size:12px; }
+
+  .stats-bar{ display:flex; justify-content:space-between; background:#fff; border-radius:16px; padding:24px 30px; margin-top:24px; box-shadow:0 6px 18px rgba(20,30,60,0.05); }
+  .stats-bar .stat{ display:flex; align-items:center; gap:12px; }
+  .stats-bar .stat .icon-circ{ width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .stats-bar .stat .big{ font-size:17px; font-weight:800; line-height:1.2; }
+  .stats-bar .stat .lbl{ font-size:11px; color:var(--text-muted); }
+
+  /* ===== SCIENCE TRUST ===== */
+  .trust-wrap{ display:flex; gap:20px; align-items:stretch; background:#fff; border-radius:18px; padding:30px; box-shadow:0 4px 14px rgba(20,30,60,0.05); }
+  .trust-blurb{ flex:0 0 26%; font-size:13px; color:var(--text-muted); line-height:1.6; display:flex; align-items:center; }
+  .trust-stats{ flex:1; display:flex; }
+  .trust-stat{ flex:1; display:flex; align-items:center; gap:12px; padding:0 14px; position:relative; }
+  .trust-stat:not(:last-child)::after{ content:''; position:absolute; right:0; top:6px; bottom:6px; width:1px; background:#eee; }
+  .trust-stat .icon-circ{ width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .trust-stat .big{ font-size:18px; font-weight:800; }
+  .trust-stat .lbl{ font-size:11px; color:var(--text-muted); line-height:1.3; }
+
+  /* ===== FAQ ===== */
+  .faq-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px 20px; }
+  .faq-item{ background:#fff; border-radius:12px; padding:16px 20px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 2px 8px rgba(20,30,60,0.04); }
+  .faq-item .left{ display:flex; align-items:center; gap:12px; font-size:13.5px; font-weight:600; }
+  .faq-ic{ width:30px; height:30px; border-radius:50%; background:#f0e9fe; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:14px; }
+  .faq-item .chev{ color:#9aa3c0; }
+
+  /* ===== CTA ===== */
+  .cta-section{ background:linear-gradient(120deg,#150b35,#0a0e23 60%); padding:60px 0; position:relative; overflow:hidden; }
+  .cta-inner{ display:flex; align-items:center; gap:30px; }
+  .cta-brain{ flex:0 0 18%; }
+  .cta-text{ flex:1; }
+  .cta-text h2{ color:#fff; font-size:30px; font-weight:800; margin-bottom:10px; }
+  .cta-text p{ color:#b6bcd4; font-size:14px; margin-bottom:22px; }
+  .cta-btn-row{ display:flex; gap:14px; }
+  .cta-photo-wrap{ flex:0 0 28%; position:relative; }
+  .cta-photo-wrap img{ border-radius:16px; width:100%; height:170px; object-fit:cover; }
+  .cta-badge{ position:absolute; right:-14px; bottom:-18px; background:#1c2148; border-radius:14px; padding:16px 18px; color:#fff; width:170px; box-shadow:0 10px 24px rgba(0,0,0,0.3); }
+  .cta-badge h6{ font-size:13px; font-weight:700; line-height:1.3; margin-bottom:6px; }
+  .cta-badge .count{ font-size:13px; color:#9aa3c0; margin-bottom:8px; }
+  .avatar-stack{ display:flex; }
+  .avatar-stack img{ width:24px; height:24px; border-radius:50%; border:2px solid #1c2148; margin-left:-8px; object-fit:cover; }
+  .avatar-stack img:first-child{ margin-left:0; }
+
+  /* ===== FOOTER ===== */
+  footer{ background:var(--navy-deep); padding:46px 0 24px; }
+  .footer-grid{ display:flex; justify-content:space-between; gap:30px; padding-bottom:30px; border-bottom:1px solid rgba(255,255,255,0.08); }
+  .footer-brand{ flex:0 0 28%; }
+  .footer-brand p{ color:#8b91ab; font-size:12.5px; line-height:1.6; margin:14px 0 18px; }
+  .social-row{ display:flex; gap:10px; }
+  .social-row a{ width:32px; height:32px; border-radius:8px; background:rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:center; color:#fff; font-size:13px; }
+  .footer-col h6{ color:#fff; font-size:14px; font-weight:700; margin-bottom:16px; }
+  .footer-col a{ display:block; color:#9aa3c0; font-size:13px; margin-bottom:10px; }
+  .footer-contact p{ display:flex; align-items:flex-start; gap:10px; color:#9aa3c0; font-size:13px; margin-bottom:12px; line-height:1.5; }
+  .footer-bottom{ text-align:center; color:#7b819c; font-size:12px; padding-top:20px; }
+  .footer-col{ flex:0 0 14%; }
+  .footer-contact{ flex:0 0 22%; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap header-inner">
+    <div class="logo-area">
+      <svg class="logo-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="20,2 38,20 20,38 2,20" fill="url(#g1)"/>
+        <polygon points="20,10 30,20 20,30 10,20" fill="#0a0e23"/>
+        <circle cx="20" cy="20" r="3" fill="#fff"/>
+        <defs>
+          <linearGradient id="g1" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#7c3aed"/>
+            <stop offset="1" stop-color="#2563eb"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="logo-text-group">
+        <div class="logo-text">LIMITLESS</div>
+        <div class="logo-sub">UNLOCK YOUR TRUE POTENTIAL</div>
+      </div>
+    </div>
+    <nav>
+      <a href="#" class="active">Home</a>
+      <a href="#">About</a>
+      <a href="#">Features</a>
+      <a href="#">Benefits</a>
+      <a href="#">How it Works</a>
+      <a href="#">Join Now</a>
+    </nav>
+    <div class="header-right">
+      <div class="phone-line">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        +1 (702) 555-0147
+      </div>
+      <button class="btn btn-orange">Start Assessment +</button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-inner">
+    <div class="hero-left">
+      <h1>Know Your Brain.<br><span class="grad">Unlock Your Best Life.</span></h1>
+      <p>Take our 5-minute AI-powered assessment to discover your cognitive strengths, stress levels, focus, memory, and more.</p>
+      <p>Get a personalized report and action plan to improve your brain health and daily performance.</p>
+      <div class="hero-btn-row">
+        <button class="btn btn-gradient">Start Free Assessment +</button>
+        <button class="btn btn-outline">View Sample Report</button>
+      </div>
+      <div class="hero-meta">
+        <span>⏱ 5 Minutes</span>
+        <span>🔒 100% Private</span>
+        <span>🧪 Science-Backed</span>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="brain-wrap">
+        <svg viewBox="0 0 420 480" width="100%" style="max-width:420px; overflow:visible;">
+          <defs>
+            <radialGradient id="coreGlow" cx="50%" cy="42%" r="40%">
+              <stop offset="0%" stop-color="#ffffff"/>
+              <stop offset="25%" stop-color="#f0abfc"/>
+              <stop offset="55%" stop-color="#a855f7"/>
+              <stop offset="100%" stop-color="#3b2a6e" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="baseGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#60a5fa" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#60a5fa" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="brainStroke" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#93c5fd"/>
+              <stop offset="100%" stop-color="#60a5fa"/>
+            </linearGradient>
+          </defs>
+          <!-- starfield -->
+          <g opacity="0.7">
+            <circle cx="30" cy="40" r="1.4" fill="#9db4ff"/>
+            <circle cx="80" cy="90" r="1" fill="#9db4ff"/>
+            <circle cx="370" cy="60" r="1.6" fill="#9db4ff"/>
+            <circle cx="390" cy="160" r="1" fill="#9db4ff"/>
+            <circle cx="20" cy="220" r="1.2" fill="#9db4ff"/>
+            <circle cx="400" cy="280" r="1.4" fill="#9db4ff"/>
+            <circle cx="60" cy="380" r="1" fill="#9db4ff"/>
+            <circle cx="350" cy="400" r="1.3" fill="#9db4ff"/>
+          </g>
+          <!-- base pedestal glow -->
+          <ellipse cx="210" cy="430" rx="150" ry="22" fill="url(#baseGlow)"/>
+          <ellipse cx="210" cy="430" rx="100" ry="10" fill="#bfe0ff" opacity="0.7"/>
+          <g stroke="#5b8def" stroke-width="1" opacity="0.55" fill="none">
+            <ellipse cx="210" cy="430" rx="150" ry="22"/>
+            <ellipse cx="210" cy="425" rx="120" ry="16"/>
+          </g>
+          <!-- brain stem -->
+          <path d="M195 330 Q190 380 200 420" stroke="url(#brainStroke)" stroke-width="3" fill="none" opacity="0.85"/>
+          <path d="M222 330 Q228 380 218 420" stroke="url(#brainStroke)" stroke-width="3" fill="none" opacity="0.85"/>
+
+          <!-- brain outline (stylized) -->
+          <path d="M210 40
+            C140 40 95 80 90 130
+            C55 140 45 185 65 215
+            C50 235 55 265 80 280
+            C75 305 95 330 125 335
+            C135 355 160 365 185 360
+            C195 365 225 365 235 360
+            C260 365 285 355 295 335
+            C325 330 345 305 340 280
+            C365 265 370 235 355 215
+            C375 185 365 140 330 130
+            C325 80 280 40 210 40 Z"
+            fill="none" stroke="url(#brainStroke)" stroke-width="2.2" opacity="0.95"/>
+
+          <!-- inner brain texture lines (gyri) -->
+          <g stroke="#7fb2ff" stroke-width="1.1" fill="none" opacity="0.55">
+            <path d="M120 110 Q150 90 190 100 Q175 120 150 125 Q130 130 120 110Z"/>
+            <path d="M250 100 Q280 95 300 120 Q280 130 260 122 Q248 115 250 100Z"/>
+            <path d="M90 160 Q115 150 130 170 Q110 185 95 178 Q85 170 90 160Z"/>
+            <path d="M310 160 Q330 155 335 180 Q315 190 305 175Z"/>
+            <path d="M100 210 Q125 200 140 220 Q120 232 105 225Z"/>
+            <path d="M300 210 Q320 205 330 225 Q310 235 298 222Z"/>
+            <path d="M130 260 Q160 250 180 265 Q160 278 140 272Z"/>
+            <path d="M260 260 Q285 252 300 268 Q280 280 262 272Z"/>
+            <path d="M160 300 Q190 292 215 300 Q195 312 175 308Z"/>
+            <path d="M150 150 Q175 165 170 190"/>
+            <path d="M250 150 Q230 165 235 190"/>
+            <path d="M180 200 Q210 215 240 200"/>
+            <path d="M170 240 Q210 255 250 240"/>
+            <path d="M195 100 L195 320"/>
+            <path d="M225 100 L225 320"/>
+          </g>
+
+          <!-- neural network overlay -->
+          <g stroke="#bcd4ff" stroke-width="0.6" opacity="0.5">
+            <line x1="60" y1="90" x2="150" y2="125"/>
+            <line x1="60" y1="90" x2="40" y2="160"/>
+            <line x1="360" y1="100" x2="280" y2="130"/>
+            <line x1="360" y1="100" x2="385" y2="170"/>
+            <line x1="40" y1="160" x2="70" y2="220"/>
+            <line x1="385" y1="170" x2="350" y2="225"/>
+            <line x1="70" y1="220" x2="100" y2="270"/>
+            <line x1="350" y1="225" x2="315" y2="275"/>
+          </g>
+          <g fill="#bcd4ff" opacity="0.8">
+            <circle cx="60" cy="90" r="2"/>
+            <circle cx="360" cy="100" r="2"/>
+            <circle cx="40" cy="160" r="2"/>
+            <circle cx="385" cy="170" r="2"/>
+            <circle cx="70" cy="220" r="2"/>
+            <circle cx="350" cy="225" r="2"/>
+            <circle cx="100" cy="270" r="2"/>
+            <circle cx="315" cy="275" r="2"/>
+          </g>
+
+          <!-- glowing core -->
+          <circle cx="210" cy="195" r="95" fill="url(#coreGlow)"/>
+          <circle cx="210" cy="195" r="14" fill="#fff"/>
+
+          <!-- sparkle accents -->
+          <g fill="#ffffff">
+            <circle cx="150" cy="150" r="1.6"/>
+            <circle cx="270" cy="160" r="1.6"/>
+            <circle cx="190" cy="240" r="1.6"/>
+            <circle cx="250" cy="220" r="1.3"/>
+            <circle cx="160" cy="200" r="1.3"/>
+          </g>
+        </svg>
+
+        <div class="orbit-badge badge-memory">
+          <div class="circle"><svg viewBox="0 0 24 24" fill="none"><path d="M9 2a4 4 0 00-4 4 3 3 0 00-2 5 3 3 0 002 5 4 4 0 004 4M9 2a4 4 0 014 4M9 2v18M13 6a4 4 0 014-4 3 3 0 012 5 3 3 0 01-2 5 4 4 0 01-4 4" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <span class="label">MEMORY</span>
+        </div>
+        <div class="orbit-badge badge-focus">
+          <div class="circle"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#60a5fa" stroke-width="1.5"/><circle cx="12" cy="12" r="5" stroke="#60a5fa" stroke-width="1.5"/><circle cx="12" cy="12" r="1.5" fill="#60a5fa"/></svg></div>
+          <span class="label">FOCUS</span>
+        </div>
+        <div class="orbit-badge badge-clarity">
+          <div class="circle"><svg viewBox="0 0 24 24" fill="none"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.4.3.5.8.5 1.3v.3h6v-.3c0-.5.1-1 .5-1.3A6 6 0 0012 3z" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <span class="label">CLARITY</span>
+        </div>
+        <div class="orbit-badge badge-stress">
+          <div class="circle"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="#34d399" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="12" r="4" stroke="#34d399" stroke-width="1.6"/></svg></div>
+          <span class="label">STRESS</span>
+        </div>
+        <div class="orbit-badge badge-energy">
+          <div class="circle"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" stroke="#fff" stroke-width="1.5" stroke-linejoin="round" fill="#fff"/></svg></div>
+          <span class="label">ENERGY</span>
+        </div>
+        <div class="orbit-badge badge-wellbeing">
+          <div class="circle"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.5-9.5-9C1 8.5 2.5 5 6 5c2 0 3.5 1.2 4 2.5C10.5 6.2 12 5 14 5c3.5 0 5 3.5 3.5 7-2.5 4.5-9.5 9-9.5 9z" stroke="#f87171" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+          <span class="label">WELL-BEING</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<section class="reveals-section">
+  <div class="wrap">
+    <div class="reveals-card">
+      <div style="text-align:center; width:100%;">
+        <h2 class="section-eyebrow" style="margin-bottom:30px;">Your Assessment Reveals</h2>
+        <div style="display:flex; justify-content:space-between; gap:10px;">
+          <div class="reveal-item">
+            <div class="reveal-icon" style="background:#f0e9fe;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M9 2a4 4 0 00-4 4 3 3 0 00-2 5 3 3 0 002 5 4 4 0 004 4M9 2a4 4 0 014 4M9 2v18M13 6a4 4 0 014-4 3 3 0 012 5 3 3 0 01-2 5 4 4 0 01-4 4" stroke="#7c3aed" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h4>Cognitive Score</h4>
+            <p>Overall brain performance based on 50+ factors</p>
+          </div>
+          <div class="reveal-item">
+            <div class="reveal-icon" style="background:#e3f7ea;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#16a34a" stroke-width="1.6"/><circle cx="12" cy="12" r="5" stroke="#16a34a" stroke-width="1.6"/><circle cx="12" cy="12" r="1.5" fill="#16a34a"/></svg>
+            </div>
+            <h4>Focus &amp; Attention</h4>
+            <p>Your ability to concentrate and stay on track</p>
+          </div>
+          <div class="reveal-item">
+            <div class="reveal-icon" style="background:#fdeee0;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" fill="#f97316"/></svg>
+            </div>
+            <h4>Stress Risk</h4>
+            <p>Understand your stress and burnout risk</p>
+          </div>
+          <div class="reveal-item">
+            <div class="reveal-icon" style="background:#e3edfd;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#2563eb" stroke-width="1.6"/><path d="M9 10h.01M15 10h.01M8 14s1.5 2 4 2 4-2 4-2" stroke="#2563eb" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </div>
+            <h4>Mental Wellness</h4>
+            <p>Emotional well-being and mood balance</p>
+          </div>
+          <div class="reveal-item">
+            <div class="reveal-icon" style="background:#f0e9fe;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="7" y="2" width="10" height="20" rx="2" stroke="#7c3aed" stroke-width="1.6"/><path d="M10 7h4" stroke="#7c3aed" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </div>
+            <h4>Energy &amp; Productivity</h4>
+            <p>Daily energy levels and productivity score</p>
+          </div>
+          <div class="reveal-item">
+            <div class="reveal-icon" style="background:#e3f7ea;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="18" rx="2" stroke="#16a34a" stroke-width="1.6"/><path d="M8 8h8M8 12h8M8 16h5" stroke="#16a34a" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </div>
+            <h4>Personalized Plan</h4>
+            <p>Science-backed action plan just for you</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-light">
+  <div class="wrap">
+    <h2 class="section-eyebrow">Designed For Everyone Who Wants a Sharper Mind</h2>
+    <div class="audience-grid">
+      <div class="audience-card">
+        <div class="ic">💼</div>
+        <h4>Professionals</h4>
+        <p>Improve focus, productivity &amp; decision-making</p>
+      </div>
+      <div class="audience-card">
+        <div class="ic">🎓</div>
+        <h4>Students</h4>
+        <p>Boost memory, learning &amp; exam performance</p>
+      </div>
+      <div class="audience-card">
+        <div class="ic">👨‍👩‍👧</div>
+        <h4>Parents</h4>
+        <p>Manage stress and stay mentally strong</p>
+      </div>
+      <div class="audience-card">
+        <div class="ic">🧑</div>
+        <h4>Seniors</h4>
+        <p>Support memory, clarity &amp; long-term brain health</p>
+      </div>
+      <div class="audience-card">
+        <div class="ic">❤️</div>
+        <h4>Wellness Enthusiasts</h4>
+        <p>Optimize mental wellness &amp; overall well-being</p>
+      </div>
+    </div>
+
+    <div class="challenge-wrap">
+      <div class="challenge-col">
+        <h4>The Challenges Americans Face Every Day</h4>
+        <ul class="challenge-list">
+          <li><span class="ico-x">✕</span> Constant stress and anxiety</li>
+          <li><span class="ico-x">✕</span> Poor focus and distractions</li>
+          <li><span class="ico-x">✕</span> Mental fatigue and burnout</li>
+          <li><span class="ico-x">✕</span> Trouble sleeping and low energy</li>
+          <li><span class="ico-x">✕</span> Decreased productivity and motivation</li>
+        </ul>
+      </div>
+      <div class="arrow-divider">→</div>
+      <div class="after-col">
+        <h4>After Using Limitless</h4>
+        <ul class="after-list">
+          <li><span class="ico-check">✓</span> Better focus and concentration</li>
+          <li><span class="ico-check">✓</span> Improved memory and clarity</li>
+          <li><span class="ico-check">✓</span> Reduced stress and better mood</li>
+          <li><span class="ico-check">✓</span> Better sleep and more energy</li>
+          <li><span class="ico-check">✓</span> Higher productivity and peak performance</li>
+        </ul>
+      </div>
+      <div class="challenge-photo">
+        <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=600&q=80" alt="Woman with eyes closed, peaceful" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-light">
+  <div class="wrap">
+    <div class="report-grid">
+      <div class="report-dark-card">
+        <div class="mini-logo">
+          <svg width="16" height="16" viewBox="0 0 40 40"><polygon points="20,2 38,20 20,38 2,20" fill="#7c3aed"/></svg>
+          LIMITLESS
+        </div>
+        <h5>Your Cognitive Report</h5>
+        <div class="sub">Overall Score</div>
+        <div class="score-ring"><span class="val">78</span><span class="lbl">Good</span></div>
+        <p class="desc">You're performing better than 78% of people in your age group.</p>
+        <button class="btn btn-gradient" style="background:#2563eb; box-shadow:none;">View Full Report</button>
+      </div>
+
+      <div class="report-mid-stack">
+        <div class="stat-card">
+          <h6>Mental Well-being</h6>
+          <div class="num">72<small>/100</small> <span class="tag tag-green">Good</span></div>
+          <div class="stat-bar"><i style="width:72%; background:#16a34a;"></i></div>
+        </div>
+        <div class="stat-card">
+          <h6>Focus &amp; Attention</h6>
+          <div class="num">81<small>/100</small> <span class="tag tag-green">Excellent</span></div>
+          <div class="stat-bar"><i style="width:81%; background:#16a34a;"></i></div>
+        </div>
+        <div class="stat-card">
+          <h6>Stress Level</h6>
+          <div class="num">35<small>/100</small> <span class="tag tag-orange">Low</span></div>
+          <div class="stat-bar"><i style="width:35%; background:#f97316;"></i></div>
+        </div>
+      </div>
+
+      <div class="radar-card">
+        <svg viewBox="0 0 240 220" width="100%">
+          <g stroke="#e5e9f3" stroke-width="1" fill="none">
+            <polygon points="120,20 200,75 172,165 68,165 40,75"/>
+            <polygon points="120,50 176,90 154,148 86,148 64,90"/>
+            <polygon points="120,80 152,105 136,131 104,131 88,105"/>
+          </g>
+          <polygon points="120,40 180,85 145,150 95,140 70,80" fill="url(#radarFill)" stroke="#7c3aed" stroke-width="1.5"/>
+          <defs>
+            <linearGradient id="radarFill" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.55"/>
+              <stop offset="100%" stop-color="#60a5fa" stop-opacity="0.55"/>
+            </linearGradient>
+          </defs>
+          <text x="120" y="12" text-anchor="middle" font-size="11" fill="#374151" font-weight="600">Memory</text>
+          <text x="205" y="78" text-anchor="start" font-size="11" fill="#374151" font-weight="600">Stress</text>
+          <text x="178" y="180" text-anchor="middle" font-size="11" fill="#374151" font-weight="600">Energy</text>
+          <text x="62" y="180" text-anchor="middle" font-size="11" fill="#374151" font-weight="600">Clarity</text>
+          <text x="35" y="78" text-anchor="end" font-size="11" fill="#374151" font-weight="600">Focus</text>
+        </svg>
+      </div>
+
+      <div class="see-get">
+        <h3>See What You'll Get</h3>
+        <p>Our AI-powered report gives you deep insights into your brain health and a clear action plan to improve what matters most.</p>
+        <ul>
+          <li><span class="check-sm">✓</span> Easy to understand</li>
+          <li><span class="check-sm">✓</span> Personalized for you</li>
+          <li><span class="check-sm">✓</span> Actionable recommendations</li>
+          <li><span class="check-sm">✓</span> Track progress over time</li>
+        </ul>
+        <button class="btn btn-gradient">View Sample Report +</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-light" style="padding-top:0;">
+  <div class="wrap">
+    <div class="experts-row">
+      <div class="experts-card">
+        <h3>Built by Experts. Backed by Science.</h3>
+        <div class="experts-icons">
+          <div class="expert-item">
+            <div class="expert-icon" style="background:#f0e9fe;">🧠</div>
+            <h5>Psychologists</h5>
+            <p>Experts in cognitive assessments</p>
+          </div>
+          <div class="expert-item">
+            <div class="expert-icon" style="background:#fdeee0;">🔬</div>
+            <h5>Neuroscientists</h5>
+            <p>Researching brain function &amp; behavior</p>
+          </div>
+          <div class="expert-item">
+            <div class="expert-icon" style="background:#e3f3fb;">🤖</div>
+            <h5>AI Researchers</h5>
+            <p>Building advanced cognitive models</p>
+          </div>
+          <div class="expert-item">
+            <div class="expert-icon" style="background:#f7f6e3;">👥</div>
+            <h5>Behavioral Scientists</h5>
+            <p>Specialists in human behavior &amp; habits</p>
+          </div>
+          <div class="expert-item">
+            <div class="expert-icon" style="background:#f0e9fe;">📊</div>
+            <h5>Data Scientists</h5>
+            <p>Ensuring accuracy &amp; data security</p>
+          </div>
+        </div>
+      </div>
+      <div class="privacy-card">
+        <div class="shield">🔒</div>
+        <h4>Your Privacy is 100% Protected</h4>
+        <p>Your data is encrypted, private and never shared.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-light" style="padding-top:0;">
+  <div class="wrap">
+    <h2 class="section-eyebrow">How It Works</h2>
+    <div class="steps-card">
+      <div class="steps-row">
+        <div class="step-item">
+          <div class="step-icon-wrap">
+            <span class="step-num" style="background:#7c3aed;">1</span>
+            <div class="step-circle" style="background:#f0e9fe;">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="#7c3aed" stroke-width="1.6"/><path d="M9 8h6M9 12h6M9 16h3" stroke="#7c3aed" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </div>
+          </div>
+          <h5>Take Assessment</h5>
+          <p>Answer simple questions about your lifestyle, mood &amp; habits.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-item">
+          <div class="step-icon-wrap">
+            <span class="step-num" style="background:#2563eb;">2</span>
+            <div class="step-circle" style="background:#e3edfd;">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M9 2a4 4 0 00-4 4 3 3 0 00-2 5 3 3 0 002 5 4 4 0 004 4M9 2a4 4 0 014 4M9 2v18M13 6a4 4 0 014-4 3 3 0 012 5 3 3 0 01-2 5 4 4 0 01-4 4" stroke="#2563eb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <h5>AI Analysis</h5>
+          <p>Our advanced AI analyzes your cognitive &amp; behavioral patterns.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-item">
+          <div class="step-icon-wrap">
+            <span class="step-num" style="background:#16a34a;">3</span>
+            <div class="step-circle" style="background:#e3f7ea;">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="#16a34a" stroke-width="1.6"/><path d="M9 12l2 2 4-4" stroke="#16a34a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <h5>Get Your Report</h5>
+          <p>Receive your personalized report with scores, insights &amp; recommendations.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-item">
+          <div class="step-icon-wrap">
+            <span class="step-num" style="background:#f97316;">4</span>
+            <div class="step-circle" style="background:#fdeee0;">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 21l4-1 11-11-3-3L5 17l-1 4z" stroke="#f97316" stroke-width="1.6" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <h5>Follow Action Plan</h5>
+          <p>Implement science-backed steps to improve your brain health and performance.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-item">
+          <div class="step-icon-wrap">
+            <span class="step-num" style="background:#9333ea;">5</span>
+            <div class="step-circle" style="background:#f3e8fd;">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M3 17l6-6 4 4 8-8M21 7v6h-6" stroke="#9333ea" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <h5>Track &amp; Improve</h5>
+          <p>Monitor your progress and see real improvements over time.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-light" style="padding-top:0;">
+  <div class="wrap">
+    <h2 class="section-eyebrow">The Limitless Benefits</h2>
+    <div class="benefits-card">
+      <div class="benefit-item">
+        <div class="benefit-icon" style="background:#e3f7ea;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="9" r="6" stroke="#16a34a" stroke-width="1.6"/><path d="M9 19h6M10 22h4" stroke="#16a34a" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </div>
+        <h5>Sharpen Focus &amp; Concentration</h5>
+        <p>Improve attention span and eliminate distractions.</p>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon" style="background:#f0e9fe;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 2a4 4 0 00-4 4 3 3 0 00-2 5 3 3 0 002 5 4 4 0 004 4M9 2a4 4 0 014 4M9 2v18M13 6a4 4 0 014-4 3 3 0 012 5 3 3 0 01-2 5 4 4 0 01-4 4" stroke="#7c3aed" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h5>Stronger Memory &amp; Learning</h5>
+        <p>Boost recall, retain information better and enhance learning.</p>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon" style="background:#e3edfd;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M21 12.5A8.5 8.5 0 1111.5 4a6.5 6.5 0 009.5 8.5z" stroke="#2563eb" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        </div>
+        <h5>Better Sleep Quality</h5>
+        <p>Regulate sleep patterns and wake up refreshed and energized.</p>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon" style="background:#fdeaea;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="7" r="3" stroke="#ef4444" stroke-width="1.6"/><path d="M5 21c0-4 3-6 7-6s7 2 7 6" stroke="#ef4444" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </div>
+        <h5>Reduce Stress &amp; Anxiety</h5>
+        <p>Understand stress triggers and build emotional balance.</p>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon" style="background:#e3f7ea;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="17" cy="5" r="2" stroke="#16a34a" stroke-width="1.6"/><path d="M5 21l4-7 3 3 4-6M14 11l3-4 3 2" stroke="#16a34a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h5>Increase Productivity</h5>
+        <p>Make smarter decisions, manage time better and achieve more.</p>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon" style="background:#fdeaea;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.5-9.5-9C1 8.5 2.5 5 6 5c2 0 3.5 1.2 4 2.5C10.5 6.2 12 5 14 5c3.5 0 5 3.5 3.5 7-2.5 4.5-9.5 9-9.5 9z" stroke="#ef4444" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        </div>
+        <h5>Improve Overall Well-being</h5>
+        <p>Enhance mood, energy and emotional balance for a healthier life.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-light" style="padding-top:0;">
+  <div class="wrap">
+    <div class="testi-card">
+      <div class="testi-item">
+        <div class="testi-top">
+          <img class="testi-avatar" src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=200&q=80" alt="James T."/>
+          <div class="stars">★★★★★</div>
+        </div>
+        <p class="quote">"Limitless helped me understand my stress triggers and improve my focus at work. Within two weeks, I felt a huge difference."</p>
+        <div class="name">James T.</div>
+        <div class="loc">Austin, TX</div>
+      </div>
+      <div class="testi-item">
+        <div class="testi-top">
+          <img class="testi-avatar" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&q=80" alt="Sarah M."/>
+          <div class="stars">★★★★★</div>
+        </div>
+        <p class="quote">"The report was eye-opening! I improved my sleep and memory using the action plan. Highly recommended!"</p>
+        <div class="name">Sarah M.</div>
+        <div class="loc">Miami, FL</div>
+      </div>
+      <div class="testi-item">
+        <div class="testi-top">
+          <img class="testi-avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80" alt="Michael R."/>
+          <div class="stars">★★★★★</div>
+        </div>
+        <p class="quote">"As a student, this helped me improve my concentration and study smarter, not harder."</p>
+        <div class="name">Michael R.</div>
+        <div class="loc">Denver, CO</div>
+      </div>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat">
+        <div class="icon-circ" style="background:#e3edfd;">👥</div>
+        <div><div class="big">2,300+</div><div class="lbl">Assessments Completed</div></div>
+      </div>
+      <div class="stat">
+        <div class="icon-circ" style="background:#fdeee0;">⭐</div>
+        <div><div class="big">4.8 / 5</div><div class="lbl">Average Rating</div></div>
+      </div>
+      <div class="stat">
+        <div class="icon-circ" style="background:#e3f7ea;">🛡️</div>
+        <div><div class="big">100%</div><div class="lbl">Private &amp; Secure</div></div>
+      </div>
+      <div class="stat">
+        <div class="icon-circ" style="background:#fdeaea;">🇺🇸</div>
+        <div><div class="big">50</div><div class="lbl">States &amp; Counting</div></div>
+      </div>
+      <div class="stat">
+        <div class="icon-circ" style="background:#f0e9fe;">🧪</div>
+        <div><div class="big">Science-Backed</div><div class="lbl">Built on Research</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-light" style="padding-top:0;">
+  <div class="wrap">
+    <h2 class="section-eyebrow">Science You Can Trust</h2>
+    <div class="trust-wrap">
+      <div class="trust-blurb">Limitless is built on validated research in neuroscience, psychology, and behavioral science to deliver accurate insights that make a real impact.</div>
+      <div class="trust-stats">
+        <div class="trust-stat">
+          <div class="icon-circ" style="background:#e3edfd;">🎓</div>
+          <div><div class="big">50+</div><div class="lbl">Cognitive &amp; Behavioral Factors Analyzed</div></div>
+        </div>
+        <div class="trust-stat">
+          <div class="icon-circ" style="background:#e3f7ea;">🏛️</div>
+          <div><div class="big">1000+</div><div class="lbl">Research Studies Integrated</div></div>
+        </div>
+        <div class="trust-stat">
+          <div class="icon-circ" style="background:#e3f7ea;">📈</div>
+          <div><div class="big">99.9%</div><div class="lbl">Data Accuracy &amp; Reliability</div></div>
+        </div>
+        <div class="trust-stat">
+          <div class="icon-circ" style="background:#e3f3fb;">🔄</div>
+          <div><div class="big">Continuous</div><div class="lbl">AI Model Updates &amp; Improvements</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-light" style="padding-top:0;">
+  <div class="wrap">
+    <h2 class="section-eyebrow">Frequently Asked Questions</h2>
+    <div class="faq-grid">
+      <div class="faq-item"><div class="left"><span class="faq-ic">⏱️</span> How long does the assessment take?</div><span class="chev">⌄</span></div>
+      <div class="faq-item"><div class="left"><span class="faq-ic">📋</span> Will I receive personalized recommendations?</div><span class="chev">⌄</span></div>
+      <div class="faq-item"><div class="left"><span class="faq-ic">🔒</span> Is my data safe and private?</div><span class="chev">⌄</span></div>
+      <div class="faq-item"><div class="left"><span class="faq-ic">📈</span> Can I track my progress over time?</div><span class="chev">⌄</span></div>
+      <div class="faq-item"><div class="left"><span class="faq-ic">📄</span> Is this a medical diagnosis?</div><span class="chev">⌄</span></div>
+      <div class="faq-item"><div class="left"><span class="faq-ic">🧑‍🤝‍🧑</span> Who should take this assessment?</div><span class="chev">⌄</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="wrap cta-inner">
+    <div class="cta-brain">
+      <svg viewBox="0 0 200 220" width="100%">
+        <defs>
+          <radialGradient id="ctaGlow" cx="50%" cy="40%" r="45%">
+            <stop offset="0%" stop-color="#f0abfc"/>
+            <stop offset="60%" stop-color="#a855f7" stop-opacity="0.6"/>
+            <stop offset="100%" stop-color="#a855f7" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <path d="M100 15 C60 15 35 40 32 65 C15 70 10 95 22 112 C13 125 17 142 32 150 C28 165 40 180 58 182 C65 195 82 200 96 196 C103 200 120 200 126 196 C142 200 157 195 163 182 C180 180 190 165 184 150 C198 142 200 125 190 112 C200 95 195 70 178 65 C173 40 140 15 100 15Z" fill="none" stroke="#7c9bff" stroke-width="1.6" opacity="0.85"/>
+        <circle cx="100" cy="95" r="55" fill="url(#ctaGlow)"/>
+        <path d="M92 175 Q88 195 95 210" stroke="#7c9bff" stroke-width="2" fill="none" opacity="0.7"/>
+        <path d="M108 175 Q112 195 105 210" stroke="#7c9bff" stroke-width="2" fill="none" opacity="0.7"/>
+      </svg>
+    </div>
+    <div class="cta-text">
+      <h2>Your Best Self is Waiting.</h2>
+      <p>Take the first step today towards a healthier mind and a limitless future.</p>
+      <div class="cta-btn-row">
+        <button class="btn btn-gradient">Start Free Assessment +</button>
+        <button class="btn btn-outline">Join Now</button>
+      </div>
+    </div>
+    <div class="cta-photo-wrap">
+      <img src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=500&q=80" alt="Happy professionals"/>
+      <div class="cta-badge">
+        <h6>Join Thousands Across the USA</h6>
+        <div class="count">2,300+ Happy Users</div>
+        <div class="avatar-stack">
+          <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=100&q=80" alt=""/>
+          <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&q=80" alt=""/>
+          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80" alt=""/>
+          <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80" alt=""/>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo-area">
+          <svg class="logo-mark" viewBox="0 0 40 40" fill="none">
+            <polygon points="20,2 38,20 20,38 2,20" fill="url(#g2)"/>
+            <polygon points="20,10 30,20 20,30 10,20" fill="#0a0e23"/>
+            <circle cx="20" cy="20" r="3" fill="#fff"/>
+            <defs><linearGradient id="g2" x1="0" y1="0" x2="40" y2="40"><stop stop-color="#7c3aed"/><stop offset="1" stop-color="#2563eb"/></linearGradient></defs>
+          </svg>
+          <div class="logo-text-group">
+            <div class="logo-text">LIMITLESS</div>
+            <div class="logo-sub">UNLOCK YOUR TRUE POTENTIAL</div>
+          </div>
+        </div>
+        <p>Science-backed cognitive performance platform dedicated to helping you unlock your true potential.</p>
+        <div class="social-row">
+          <a href="#">f</a><a href="#">◎</a><a href="#">in</a><a href="#">▶</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h6>Quick Links</h6>
+        <a href="#">Home</a><a href="#">About</a><a href="#">Features</a><a href="#">Benefits</a>
+      </div>
+      <div class="footer-col">
+        <h6>&nbsp;</h6>
+        <a href="#">How it Works</a><a href="#">Join Now</a><a href="#">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h6>Resources</h6>
+        <a href="#">Blog</a><a href="#">FAQs</a><a href="#">Privacy Policy</a><a href="#">Terms of Service</a>
+      </div>
+      <div class="footer-col footer-contact">
+        <h6>Contact Us</h6>
+        <p>📞 +1 (702) 555-0147</p>
+        <p>✉️ hello@limitlessworld.net</p>
+        <p>📍 123 Mindful Way, Suite 100<br>Las Vegas, NV 89101, USA</p>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2025 Limitless. All rights reserved.</div>
+  </div>
+</footer>
+
+</body>
+</html>
+
+
