@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import bcrypt from 'bcryptjs';
 import LoginModal from '../components/LoginModal';
+import Header from '../components/Header';
 import './Home.css';
 
 const Home = () => {
@@ -228,95 +229,7 @@ const Home = () => {
         }}
       />
 
-      {/* HEADER */}
-      <header>
-        <div className="wrap header-inner">
-          <div className="logo-area">
-            <img src="/img/limitless-logo.webp" alt="Limitless Logo" className="logo-mark" style={{ width: '120px', height: '120px', objectFit: 'contain' }} />
-            <div className="logo-text-group">
-              <div className="logo-text">LIMITLESS</div>
-              <div className="logo-sub">UNLOCK YOUR TRUE POTENTIAL</div>
-            </div>
-          </div>
-          {/* Desktop & Mobile Menu */}
-          <div className={`header-right ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
-            {isLoggedIn ? (
-              <>
-                <button
-                  className="btn"
-                  onClick={() => { navigate('/dashboard'); setIsMobileMenuOpen(false); }}
-                  style={{
-                    background: 'transparent',
-                    color: '#fff',
-                    border: '2px solid rgba(255,255,255,0.5)',
-                    borderRadius: '14px',
-                    padding: '10px 24px',
-                    fontWeight: '600',
-                    fontSize: '15px',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                    whiteSpace: 'nowrap',
-                    height: '44px'
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.borderColor = '#fff'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.5)'; }}
-                >
-                  Dashboard
-                </button>
-                <button
-                  onClick={handleLogout}
-                  className="btn btn-orange"
-                  style={{ height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                >
-                  Logout
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  className="btn"
-                  onClick={() => setShowLoginModal(true)}
-                  style={{
-                    background: 'transparent',
-                    color: '#fff',
-                    border: '2px solid rgba(255,255,255,0.5)',
-                    borderRadius: '14px',
-                    padding: '10px 24px',
-                    fontWeight: '600',
-                    fontSize: '15px',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                    whiteSpace: 'nowrap',
-                    height: '44px'
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.borderColor = '#fff'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.5)'; }}
-                >
-                  Sign In
-                </button>
-                <button
-                  onClick={handleStartAssessment}
-                  className="btn btn-orange"
-                  style={{ height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                >
-                  Start Assessment +
-                </button>
-              </>
-            )}
-          </div>
-
-          {/* Hamburger Icon */}
-          <button 
-            className={`hamburger ${isMobileMenuOpen ? 'open' : ''}`} 
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
-        </div>
-      </header>
+      <Header />
 
       {/* HERO */}
       <section className="hero">

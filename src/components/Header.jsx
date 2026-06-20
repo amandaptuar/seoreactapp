@@ -1,31 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import limitlessLogo from '../assets/limitless-logo.webp';
 import LoginModal from './LoginModal';
 import EnquiryModal from './EnquiryModal';
-import { useNavigate, Link } from 'react-router-dom';
 
 const Header = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem('isLoggedIn') === 'true');
-  const [username, setUsername] = useState(() => localStorage.getItem('username') || '');
-  const [userEmail, setUserEmail] = useState(() => localStorage.getItem('userEmail') || '');
-  const [paymentStatus, setPaymentStatus] = useState(() => localStorage.getItem('paymentStatus') || 'no');
-  const [showUserDetails, setShowUserDetails] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Keep this just in case other tabs change localStorage
     const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    if (loggedIn) {
-      setIsLoggedIn(true);
-      setUsername(localStorage.getItem('username') || '');
-      setUserEmail(localStorage.getItem('userEmail') || '');
-      setPaymentStatus(localStorage.getItem('paymentStatus') || 'no');
-    } else {
-      setIsLoggedIn(false);
-    }
+    setIsLoggedIn(loggedIn);
   }, []);
 
   const handleLogout = () => {
@@ -33,221 +21,231 @@ const Header = () => {
     localStorage.removeItem('userEmail');
     localStorage.removeItem('username');
     setIsLoggedIn(false);
+    navigate('/');
     window.location.reload();
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', width: '100%', position: 'fixed', top: '20px', zIndex: 10001, padding: '0 20px' }}>
-      <header id="stickyHeader" style={{ 
-        background: '#040B16', 
-        borderRadius: '20px', 
-        padding: '16px 32px', 
-        width: '100%', 
-        maxWidth: '1440px', 
-        boxShadow: '0 10px 40px rgba(0,0,0,0.2)',
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'space-between'
-      }}>
-        
-        {/* Left Side: Logo */}
-        <div className="logo" style={{ display: 'flex', alignItems: 'center' }}>
-          <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-            <img
-              alt="logo"
-              src={limitlessLogo}
-              style={{
-                maxWidth: '240px',
-                maxHeight: '65px',
-                objectFit: 'contain',
-              }}
-            />
-            <div className="logo-text" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginLeft: '12px' }}>
-              <span className="logo-title" style={{ color: '#FFF', fontSize: '30px', fontWeight: '800', lineHeight: '1', letterSpacing: '1px', margin: 0 }}>LIMITLESS</span>
-              <span className="logo-subtitle" style={{ color: '#F97316', fontSize: '14px', fontWeight: '800', letterSpacing: '1px', marginTop: '4px', textTransform: 'uppercase' }}>UNLOCK YOUR TRUE POTENTIAL</span>
+    <>
+      <style>{`
+        .global-header {
+          background: #060919;
+          padding: 20px 0;
+          width: 100%;
+          position: relative;
+          z-index: 1000;
+        }
+        .global-header .wrap {
+          max-width: 100%;
+          margin: 0 auto;
+          padding: 0 40px;
+        }
+        .global-header .header-inner {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          position: relative;
+        }
+        .global-header .logo-area {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+        }
+        .global-header .logo-mark {
+          width: 120px;
+          height: 120px;
+          object-fit: contain;
+        }
+        .global-header .logo-text-group {
+          line-height: 1.1;
+        }
+        .global-header .logo-text {
+          color: #fff;
+          font-weight: 800;
+          font-size: 19px;
+          letter-spacing: 0.5px;
+        }
+        .global-header .logo-sub {
+          color: #f97316;
+          font-size: 8.5px;
+          font-weight: 700;
+          letter-spacing: 1px;
+        }
+        .global-header .nav-links {
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+        .global-header .header-actions {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+        }
+        .global-header .nav-link {
+          color: #fff;
+          text-decoration: none;
+          font-weight: 600;
+          font-size: 16px;
+          padding: 8px 12px;
+          display: flex;
+          align-items: center;
+          transition: color 0.2s ease;
+        }
+        .global-header .nav-link:hover {
+          color: #F97316;
+        }
+        .global-header .btn-outline {
+          background: transparent;
+          color: #fff;
+          border: 2px solid rgba(255,255,255,0.5);
+          border-radius: 14px;
+          padding: 10px 24px;
+          font-weight: 600;
+          font-size: 15px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          white-space: nowrap;
+          height: 44px;
+        }
+        .global-header .btn-outline:hover {
+          background: rgba(255,255,255,0.1);
+          border-color: #fff;
+        }
+        .global-header .btn-orange {
+          background: #f97316;
+          color: #fff;
+          border: none;
+          border-radius: 14px;
+          padding: 0 24px;
+          font-weight: 600;
+          font-size: 15px;
+          cursor: pointer;
+          height: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          white-space: nowrap;
+        }
+        .global-header .hamburger {
+          display: none;
+          flex-direction: column;
+          gap: 6px;
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 0;
+          z-index: 101;
+        }
+        .global-header .hamburger span {
+          display: block;
+          width: 30px;
+          height: 3px;
+          background: #fff;
+          border-radius: 2px;
+          transition: all 0.3s ease;
+        }
+        .global-header .hamburger.open span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+        .global-header .hamburger.open span:nth-child(2) { opacity: 0; }
+        .global-header .hamburger.open span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+
+        @media (max-width: 992px) {
+          .global-header .header-inner {
+            display: flex;
+            justify-content: space-between;
+          }
+          .global-header .nav-links {
+            position: relative;
+            left: 0;
+            transform: none;
+            width: 100%;
+          }
+          .global-header .hamburger { display: flex; }
+          .global-header .mobile-menu-wrapper {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: #060919;
+            flex-direction: column;
+            padding: 20px;
+            gap: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: none;
+            border-top: 1px solid rgba(255,255,255,0.1);
+          }
+          .global-header .mobile-menu-wrapper.mobile-open { display: flex; }
+          .global-header .nav-links { flex-direction: column; align-items: stretch; gap: 4px; }
+          .global-header .header-actions { flex-direction: column; width: 100%; align-items: stretch; gap: 12px; }
+          .global-header .nav-link { padding: 12px; font-size: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+          .global-header .btn-outline, .global-header .btn-orange { width: 100%; justify-content: center; }
+        }
+        @media (max-width: 480px) {
+          .global-header .logo-mark { width: 80px; height: 80px; }
+          .global-header .logo-text { font-size: 16px; }
+          .global-header .logo-sub { font-size: 7px; }
+          .global-header .wrap { padding: 0 20px; }
+        }
+      `}</style>
+
+      <header className="global-header">
+        <div className="wrap header-inner">
+          <Link to="/" className="logo-area" style={{ textDecoration: 'none' }}>
+            <img src={limitlessLogo} alt="Limitless Logo" className="logo-mark" />
+            <div className="logo-text-group">
+              <div className="logo-text">LIMITLESS</div>
+              <div className="logo-sub">UNLOCK YOUR TRUE POTENTIAL</div>
             </div>
           </Link>
-        </div>
 
-        {/* Right Side: Contact & Actions */}
-        <div className="header-buttons" style={{ display: 'flex', flexWrap: 'nowrap', alignItems: 'center', gap: '24px' }}>
-          
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }} className="header-phone">
-            <i className="fa-solid fa-phone" style={{ color: '#60A5FA', fontSize: '22px' }}></i>
-            <a href="tel:+17025550147" style={{ color: '#FFFFFF', fontWeight: '600', fontSize: '21px', textDecoration: 'none' }}>+1 (702) 555-0147</a>
+          <div className={`mobile-menu-wrapper ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
+            <nav className="nav-links">
+              <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="nav-link">Home</Link>
+              <Link to="/features" onClick={() => setIsMobileMenuOpen(false)} className="nav-link">Features</Link>
+              <Link to="/benefits" onClick={() => setIsMobileMenuOpen(false)} className="nav-link">Benefits</Link>
+              <Link to="/how-it-works" onClick={() => setIsMobileMenuOpen(false)} className="nav-link">How It Works</Link>
+            </nav>
+            
+            <div className="header-actions">
+              {isLoggedIn ? (
+                <>
+                  <button className="btn-outline" onClick={() => { navigate('/dashboard'); setIsMobileMenuOpen(false); }}>
+                    Dashboard
+                  </button>
+                  <button onClick={() => { setIsMobileMenuOpen(false); handleLogout(); }} className="btn-orange">
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button className="btn-outline" onClick={() => { setIsMobileMenuOpen(false); setIsLoginOpen(true); }}>
+                    Sign In
+                  </button>
+                  <button onClick={() => { setIsMobileMenuOpen(false); setIsEnquiryOpen(true); }} className="btn-orange">
+                    Start Assessment +
+                  </button>
+                </>
+              )}
+            </div>
           </div>
 
-          <div className="desktop-menu" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            {isLoggedIn ? (
-              <>
-                {paymentStatus === 'yes' ? (
-                  <button
-                    onClick={() => navigate('/dashboard')}
-                    style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '12px', padding: '12px 24px', color: '#FFF', fontSize: '20px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', transition: 'all 0.2s' }}
-                  >
-                    <i className="fa-solid fa-chart-line"></i> Dashboard
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => navigate('/payment')}
-                    style={{ background: 'linear-gradient(90deg, #F97316 0%, #EA580C 100%)', border: 'none', borderRadius: '12px', padding: '12px 24px', color: '#FFF', fontSize: '20px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 14px rgba(234,88,12,0.4)' }}
-                  >
-                    <i className="fa-solid fa-credit-card"></i> Pay Now
-                  </button>
-                )}
-                
-                <div style={{ position: 'relative' }}>
-                  <div 
-                    onClick={() => setShowUserDetails(!showUserDetails)}
-                    style={{ width: '46px', height: '46px', borderRadius: '12px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.2s' }}
-                    title="User Profile"
-                  >
-                    {username ? username.charAt(0).toUpperCase() : '👤'}
-                  </div>
-                  {showUserDetails && (
-                    <div style={{ position: 'absolute', top: '60px', right: '0', background: '#FFFFFF', borderRadius: '16px', boxShadow: '0 10px 40px rgba(0,0,0,0.2)', padding: '20px', minWidth: '220px', zIndex: 10002 }}>
-                      <p style={{ margin: '0 0 4px', fontWeight: '800', color: '#0F172A', fontSize: '22px' }}>{username}</p>
-                      <p style={{ margin: '0 0 16px', color: '#64748B', fontSize: '18px', wordBreak: 'break-all' }}>{userEmail}</p>
-                      <button onClick={handleLogout} style={{ width: '100%', padding: '10px', background: '#FEE2E2', color: '#EF4444', border: 'none', borderRadius: '8px', fontWeight: '700', cursor: 'pointer' }}>
-                        Logout
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </>
-            ) : (
-              <>
-                <button
-                  onClick={() => setIsLoginOpen(true)}
-                  style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '12px', padding: '12px 24px', color: '#FFF', fontSize: '20px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', transition: 'all 0.2s' }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
-                >
-                  <i className="fa-regular fa-user"></i> SIGN-IN
-                </button>
-                <button
-                  onClick={() => setIsEnquiryOpen(true)}
-                  style={{ background: 'linear-gradient(90deg, #F97316 0%, #EA580C 100%)', border: 'none', borderRadius: '12px', padding: '12px 24px', color: '#FFF', fontSize: '20px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 14px rgba(234,88,12,0.4)', transition: 'transform 0.2s' }}
-                  onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(234,88,12,0.6)'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(234,88,12,0.4)'; }}
-                >
-                  <i className="fa-solid fa-rocket"></i> Start Assessment
-                </button>
-              </>
-            )}
-          </div>
-
-          {/* Hamburger Icon */}
           <button 
-            className="hamburger-btn"
+            className={`hamburger ${isMobileMenuOpen ? 'open' : ''}`} 
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            style={{ background: 'transparent', border: 'none', color: '#FFF', fontSize: '30px', cursor: 'pointer', display: 'none', padding: '0 8px' }}
+            aria-label="Toggle menu"
           >
-            <i className={`fa-solid ${isMobileMenuOpen ? 'fa-xmark' : 'fa-bars'}`}></i>
+            <span></span>
+            <span></span>
+            <span></span>
           </button>
         </div>
       </header>
 
-      {/* Mobile Menu Dropdown */}
-      {isMobileMenuOpen && (
-        <div className="mobile-dropdown" style={{
-          position: 'absolute',
-          top: '90px',
-          left: '20px',
-          right: '20px',
-          background: '#040B16',
-          borderRadius: '20px',
-          padding: '24px',
-          boxShadow: '0 10px 40px rgba(0,0,0,0.5)',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '16px',
-          zIndex: 10000,
-          border: '1px solid rgba(255,255,255,0.1)'
-        }}>
-          {isLoggedIn ? (
-            <>
-              <div style={{ padding: '12px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', marginBottom: '8px' }}>
-                <p style={{ margin: '0 0 4px', fontWeight: '800', color: '#FFF', fontSize: '20px' }}>{username || 'User'}</p>
-                <p style={{ margin: '0', color: '#94A3B8', fontSize: '16px', wordBreak: 'break-all' }}>{userEmail}</p>
-              </div>
-              
-              {paymentStatus === 'yes' ? (
-                <button
-                  onClick={() => { setIsMobileMenuOpen(false); navigate('/dashboard'); }}
-                  style={{ width: '100%', background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '12px', padding: '16px', color: '#FFF', fontSize: '18px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
-                >
-                  <i className="fa-solid fa-chart-line"></i> Dashboard
-                </button>
-              ) : (
-                <button
-                  onClick={() => { setIsMobileMenuOpen(false); navigate('/payment'); }}
-                  style={{ width: '100%', background: 'linear-gradient(90deg, #F97316 0%, #EA580C 100%)', border: 'none', borderRadius: '12px', padding: '16px', color: '#FFF', fontSize: '18px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
-                >
-                  <i className="fa-solid fa-credit-card"></i> Pay Now
-                </button>
-              )}
-              <button 
-                onClick={() => { setIsMobileMenuOpen(false); handleLogout(); }} 
-                style={{ width: '100%', padding: '16px', background: 'rgba(239,68,68,0.1)', color: '#EF4444', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '12px', fontWeight: '700', cursor: 'pointer', fontSize: '18px' }}
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <>
-              <button
-                onClick={() => { setIsMobileMenuOpen(false); setIsLoginOpen(true); }}
-                style={{ width: '100%', background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '12px', padding: '16px', color: '#FFF', fontSize: '18px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
-              >
-                <i className="fa-regular fa-user"></i> SIGN-IN
-              </button>
-              <button
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  setIsEnquiryOpen(true);
-                }}
-                style={{ width: '100%', background: 'linear-gradient(90deg, #F97316 0%, #EA580C 100%)', border: 'none', borderRadius: '12px', padding: '16px', color: '#FFF', fontSize: '18px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
-              >
-                <i className="fa-solid fa-rocket"></i> Start Assessment
-              </button>
-            </>
-          )}
-        </div>
-      )}
-
-      {/* Global CSS for Header Responsiveness */}
-      <style>{`
-        @media (max-width: 992px) {
-          .header-phone { display: none !important; }
-        }
-        @media (max-width: 768px) {
-          .logo-title { font-size: 20px !important; }
-          .logo-subtitle { font-size: 10px !important; letter-spacing: 0.5px !important; }
-          .logo img { max-width: 140px !important; }
-          
-          /* Show burger and hide desktop menu on tablets and phones */
-          .desktop-menu { display: none !important; }
-          .hamburger-btn { display: block !important; }
-        }
-        @media (max-width: 640px) {
-          #stickyHeader { padding: 12px 16px !important; }
-          .logo img { max-width: 80px !important; }
-          .logo-title { font-size: 18px !important; }
-          .logo-subtitle { font-size: 9px !important; letter-spacing: 0px !important; margin-top: 2px !important; }
-        }
-        @media (max-width: 480px) {
-          /* On very small screens */
-          .logo img { max-width: 50px !important; }
-          .logo-title { font-size: 16px !important; }
-          .logo-subtitle { font-size: 7.5px !important; }
-          .hamburger-btn { font-size: 24px !important; }
-        }
-      `}</style>
-
       <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
       <EnquiryModal isOpen={isEnquiryOpen} onClose={() => setIsEnquiryOpen(false)} />
-    </div>
+    </>
   );
 };
 

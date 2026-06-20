@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Limitless - How It Works</title>
+<style>
+  :root{
+    --navy:#0b1330;
+    --purple:#7c3aed;
+    --purple-2:#6d28d9;
+    --purple-light:#f1e8ff;
+    --blue:#2563eb;
+    --orange:#f97316;
+    --green:#16a34a;
+    --text-dark:#101223;
+    --text-gray:#6b7280;
+    --text-light-gray:#9ca3af;
+    --bg-light:#f7f7fb;
+    --card-border:#eceef3;
+    --white:#ffffff;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Segoe UI', Arial, Helvetica, sans-serif;
+    color:var(--text-dark);
+    background:var(--white);
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%; display:block;}
+  a{text-decoration:none; color:inherit;}
+  ul{list-style:none;}
+  .container{ max-width:1240px; margin:0 auto; padding:0 40px; }
+
+  .placeholder-asset{
+    position:relative;
+    outline:2px dashed rgba(249,115,22,0.6);
+    outline-offset:-2px;
+  }
+  .placeholder-asset::after{
+    content:"PLACEHOLDER — replace with real asset";
+    position:absolute; bottom:4px; left:4px;
+    background:rgba(249,115,22,0.95); color:#fff;
+    font-size:9px; font-family:Arial, sans-serif;
+    padding:2px 6px; border-radius:3px; letter-spacing:.3px;
+    z-index:5; pointer-events:none;
+  }
+
+  /* ===================== HEADER ===================== */
+  .topbar{ background:var(--navy); color:#fff; }
+  .topbar-inner{ display:flex; align-items:center; justify-content:space-between; height:76px; }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand-logo{ width:32px; height:32px; border-radius:8px; background:linear-gradient(135deg,#8b5cf6,#3b82f6); }
+  .brand-text-group{ display:flex; flex-direction:column; line-height:1.1; }
+  .brand-name{ font-size:17px; font-weight:800; letter-spacing:.5px; }
+  .brand-tag{ font-size:7.5px; color:var(--orange); letter-spacing:1px; font-weight:600; }
+  .nav{ display:flex; align-items:center; gap:26px; }
+  .nav a{ font-size:13.5px; color:#cbd2e6; font-weight:500; }
+  .nav a.active{ color:#fff; border-bottom:2px solid var(--blue); padding-bottom:24px; }
+  .topbar-right{ display:flex; align-items:center; gap:20px; }
+  .phone{ display:flex; align-items:center; gap:7px; font-size:13.5px; font-weight:600; color:#fff; }
+  .btn{
+    display:inline-flex; align-items:center; gap:7px;
+    font-size:13px; font-weight:700;
+    padding:10px 18px; border-radius:7px; border:none; cursor:pointer;
+    white-space:nowrap;
+  }
+  .btn-orange{ background:var(--orange); color:#fff; }
+  .btn-purple{ background:var(--purple); color:#fff; }
+  .btn-block{ width:100%; justify-content:center; padding:13px; }
+
+  /* ===================== HERO ===================== */
+  .hero{
+    background:linear-gradient(120deg, var(--navy) 0%, #161235 50%, #1f1750 100%);
+    color:#fff; position:relative; overflow:hidden;
+    padding:56px 0 64px;
+  }
+  .hero-grid{ display:grid; grid-template-columns:1.05fr 1fr; gap:30px; align-items:center; }
+  .badge-pill{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:11px; font-weight:700; letter-spacing:.5px;
+    color:#a78bfa; background:rgba(124,58,237,0.18);
+    padding:6px 14px; border-radius:20px; margin-bottom:18px;
+  }
+  .hero h1{ font-size:36px; font-weight:800; line-height:1.18; margin-bottom:14px; }
+  .hero h1 .grad-blue{ color:#5b9dff; }
+  .hero p{ font-size:14px; color:#b9c0d6; line-height:1.7; max-width:440px; margin-bottom:26px; }
+  .hero-trust-row{ display:flex; gap:30px; }
+  .hero-trust-item{ text-align:center; }
+  .hero-trust-item .ic{
+    width:46px; height:46px; border-radius:50%;
+    background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.14);
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px; margin:0 auto 8px;
+  }
+  .hero-trust-item span{ font-size:11px; color:#cdd2ef; }
+
+  .hero-visual{ height:300px; display:flex; align-items:center; justify-content:flex-end; }
+  .head-profile-img{
+    width:100%; max-width:420px; height:280px; border-radius:16px;
+  }
+
+  /* ===================== THE PROCESS (5 steps) ===================== */
+  .section{ padding:60px 0; }
+  .section-bg-light{ background:var(--bg-light); }
+  .section-head{ text-align:center; margin-bottom:38px; }
+  .section-eyebrow{ font-size:12px; font-weight:700; letter-spacing:1px; color:var(--purple); margin-bottom:10px; }
+  .section-title{ font-size:27px; font-weight:800; color:var(--text-dark); }
+  .section-sub{ font-size:13.5px; color:var(--text-gray); margin-top:8px; }
+
+  .steps5-grid{ display:grid; grid-template-columns:1fr auto 1fr auto 1fr auto 1fr auto 1fr; align-items:center; gap:8px; }
+  .step5-card{
+    background:#fff; border:1px solid var(--card-border); border-radius:14px;
+    padding:26px 14px 22px; text-align:center; position:relative;
+  }
+  .step5-num{
+    position:absolute; top:-13px; left:50%; transform:translateX(-50%);
+    width:26px; height:26px; border-radius:50%; background:var(--purple);
+    color:#fff; font-size:12px; font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .step5-ic{
+    width:42px; height:42px; border-radius:10px; background:var(--purple-light);
+    color:var(--purple);
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px; margin:0 auto 14px;
+  }
+  .step5-card h3{ font-size:13px; font-weight:700; margin-bottom:8px; }
+  .step5-card p{ font-size:11px; color:var(--text-gray); line-height:1.5; }
+  .step5-arrow{ font-size:18px; color:#cbd2e0; }
+
+  /* ===================== STEP 1 & 2 PANEL ===================== */
+  .step-title-block{ text-align:center; margin-bottom:36px; }
+  .step-title-block h2{ font-size:24px; font-weight:800; margin-bottom:8px; }
+  .step-title-block p{ font-size:13.5px; color:var(--text-gray); }
+
+  .panel-grid-3{ display:grid; grid-template-columns:1fr 1fr 0.85fr; gap:20px; align-items:start; }
+  .form-panel{
+    background:#fff; border:1px solid var(--card-border); border-radius:14px; padding:24px;
+  }
+  .form-panel h3{ font-size:15px; font-weight:700; margin-bottom:4px; }
+  .form-panel > p{ font-size:12px; color:var(--text-gray); margin-bottom:18px; }
+  .oauth-btn{
+    display:flex; align-items:center; gap:10px;
+    border:1px solid #dfe2ea; border-radius:8px;
+    padding:11px 14px; font-size:13px; font-weight:600;
+    margin-bottom:10px; color:var(--text-dark);
+  }
+  .or-divider{ text-align:center; font-size:11px; color:var(--text-light-gray); margin:14px 0; }
+  .field-label{ font-size:12px; font-weight:600; color:#374151; margin-bottom:6px; display:block; }
+  .field-input{
+    width:100%; border:1px solid #dfe2ea; border-radius:8px;
+    padding:11px 14px; font-size:13px; color:var(--text-dark);
+    margin-bottom:14px; background:#fff;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .field-input.placeholder-text{ color:var(--text-light-gray); }
+  .terms-row{ font-size:11.5px; color:var(--text-gray); display:flex; align-items:flex-start; gap:7px; margin-bottom:14px; }
+  .terms-row a{ color:var(--purple); font-weight:600; }
+  .login-link{ text-align:center; font-size:12px; color:var(--text-gray); margin-top:12px; }
+  .login-link a{ color:var(--purple); font-weight:700; }
+
+  .info-safe-panel{
+    background:#f1e8ff; border-radius:14px; padding:26px;
+    position:relative; overflow:hidden;
+  }
+  .info-safe-top{ display:flex; align-items:flex-start; gap:12px; margin-bottom:18px; }
+  .info-safe-icon{
+    width:42px; height:42px; border-radius:10px; background:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px; color:var(--purple); flex-shrink:0;
+  }
+  .info-safe-top h4{ font-size:14.5px; font-weight:700; margin-bottom:4px; }
+  .info-safe-top p{ font-size:12px; color:#5b5470; line-height:1.5; }
+  .safe-list li{ font-size:12.5px; color:#3f3a52; display:flex; align-items:center; gap:9px; margin-bottom:12px; font-weight:500; }
+  .safe-check{
+    width:18px; height:18px; border-radius:50%; background:var(--purple); color:#fff;
+    font-size:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .lock-deco{
+    position:absolute; bottom:-10px; right:-10px;
+    width:90px; height:90px; opacity:.5;
+  }
+
+  /* ===================== STEP 3 — ASSESSMENT EXPERIENCE ===================== */
+  .panel-grid-3b{ display:grid; grid-template-columns:0.85fr 1.3fr 0.85fr; gap:20px; align-items:start; }
+  .side-feature{ display:flex; gap:12px; margin-bottom:24px; }
+  .side-feature .ic{
+    width:42px; height:42px; border-radius:10px; background:var(--purple-light);
+    color:var(--purple); flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-size:17px;
+  }
+  .side-feature h4{ font-size:13.5px; font-weight:700; margin-bottom:4px; }
+  .side-feature p{ font-size:12px; color:var(--text-gray); line-height:1.5; }
+
+  .quiz-panel{
+    background:#fff; border:1px solid var(--card-border); border-radius:14px; padding:24px;
+  }
+  .quiz-progress-row{ display:flex; justify-content:space-between; font-size:11px; color:var(--text-gray); margin-bottom:8px; }
+  .quiz-progress-bar{ height:6px; background:#eceef3; border-radius:6px; overflow:hidden; margin-bottom:22px; }
+  .quiz-progress-fill{ height:100%; width:32%; background:var(--purple); border-radius:6px; }
+  .quiz-question{ font-size:15px; font-weight:700; line-height:1.4; margin-bottom:18px; }
+  .quiz-options{ display:flex; flex-direction:column; gap:10px; margin-bottom:24px; }
+  .quiz-option{
+    display:flex; align-items:center; gap:10px;
+    border:1px solid #e3e6ee; border-radius:9px;
+    padding:12px 14px; font-size:13px; color:#374151;
+  }
+  .quiz-option.selected{ border-color:var(--purple); background:#f8f5ff; color:var(--purple); font-weight:600; }
+  .radio{ width:16px; height:16px; border-radius:50%; border:2px solid #c9cce0; flex-shrink:0; }
+  .radio.on{ border-color:var(--purple); background:radial-gradient(circle, var(--purple) 0 40%, #fff 40%); }
+  .quiz-nav-row{ display:flex; justify-content:space-between; align-items:center; }
+  .quiz-nav-btn{ font-size:12.5px; font-weight:600; color:var(--text-gray); display:flex; align-items:center; gap:5px; }
+  .quiz-next-btn{
+    background:var(--purple); color:#fff; font-size:12.5px; font-weight:700;
+    padding:10px 18px; border-radius:8px; display:flex; align-items:center; gap:6px;
+  }
+
+  .assessed-panel{
+    background:#fff; border:1px solid var(--card-border); border-radius:14px; padding:22px;
+  }
+  .assessed-panel h4{ font-size:14px; font-weight:700; margin-bottom:16px; }
+  .assessed-list li{
+    font-size:12.5px; color:#374151; display:flex; align-items:center; gap:10px; margin-bottom:14px; font-weight:500;
+  }
+  .assessed-dot{ width:24px; height:24px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:11px; flex-shrink:0; }
+
+  /* ===================== STEP 4 & 5 ===================== */
+  .panel-grid-3c{ display:grid; grid-template-columns:0.9fr 1fr 1.2fr; gap:0; align-items:stretch; }
+  .s45-card{
+    background:#fff; border:1px solid var(--card-border);
+    padding:26px; display:flex; flex-direction:column;
+  }
+  .s45-card:first-child{ border-radius:14px 0 0 14px; }
+  .s45-card:nth-child(3){ border-left:none; }
+  .s45-icon-box{
+    width:60px; height:60px; border-radius:12px; background:var(--purple-light);
+    color:var(--purple); font-size:24px;
+    display:flex; align-items:center; justify-content:center; margin-bottom:16px;
+  }
+  .s45-card h3{ font-size:15px; font-weight:700; margin-bottom:8px; }
+  .s45-card > p{ font-size:12.5px; color:var(--text-gray); line-height:1.55; margin-bottom:16px; }
+  .s45-list li{ font-size:12.5px; color:#374151; display:flex; align-items:center; gap:8px; margin-bottom:9px; font-weight:500; }
+  .s45-check{ width:16px; height:16px; border-radius:50%; background:var(--purple-light); color:var(--purple); font-size:9px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .s45-arrow{
+    display:flex; align-items:center; justify-content:center;
+    border:1px solid var(--card-border); border-left:none; border-right:none;
+    background:#fff; font-size:18px; color:#cbd2e0; padding:0 6px;
+  }
+
+  /* mini report preview reused style */
+  .mini-report{
+    background:#fff; border-radius:0 14px 14px 0; overflow:hidden;
+    display:flex; flex-direction:column;
+  }
+  .mini-report-top{ background:var(--navy); padding:10px 16px; display:flex; align-items:center; gap:8px; }
+  .mini-report-top .brand-logo{ width:18px; height:18px; }
+  .mini-report-top .brand-name{ font-size:10px; }
+  .mini-report-body{ display:grid; grid-template-columns:90px 1fr; flex:1; }
+  .mini-sidebar{ background:#f7f7fb; border-right:1px solid var(--card-border); padding:14px 10px; }
+  .mini-sidebar li{ font-size:9.5px; color:#6b7280; padding:7px 6px; border-radius:5px; margin-bottom:2px; }
+  .mini-sidebar li.active{ background:#fff; color:var(--purple); font-weight:700; }
+  .mini-main{ padding:16px 18px; }
+  .mini-main h4{ font-size:14px; font-weight:800; line-height:1.25; }
+  .mini-main h4 .blue{ color:var(--blue); }
+  .mini-score-row{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:12px 0; }
+  .mini-score-box{ border:1px solid var(--card-border); border-radius:8px; padding:8px; }
+  .mini-score-box .label{ font-size:8px; color:var(--text-gray); }
+  .mini-score-box .value{ font-size:14px; font-weight:800; }
+  .mini-insights-row{ display:grid; grid-template-columns:1fr 1fr 0.7fr; gap:8px; }
+  .mini-insight-box{ border:1px solid var(--card-border); border-radius:8px; padding:8px; }
+  .mini-insight-box .label{ font-size:8px; font-weight:700; margin-bottom:5px; }
+  .mini-insight-box li{ font-size:7.5px; color:#5b6170; margin-bottom:3px; }
+  .mini-ring{
+    width:34px; height:34px; border-radius:50%; border:3px solid var(--green);
+    color:var(--green); font-size:9px; font-weight:800;
+    display:flex; align-items:center; justify-content:center; margin:0 auto 4px;
+  }
+
+  /* ===================== TRUST BAR (4 col) ===================== */
+  .trust4-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+  .trust4-item{
+    display:flex; gap:12px; align-items:flex-start;
+    background:#fff; border:1px solid var(--card-border); border-radius:12px; padding:18px;
+  }
+  .trust4-item .ic{
+    width:38px; height:38px; border-radius:9px; background:var(--purple-light);
+    color:var(--purple); font-size:16px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .trust4-item h4{ font-size:13px; font-weight:700; margin-bottom:3px; }
+  .trust4-item p{ font-size:11.5px; color:var(--text-gray); line-height:1.45; }
+
+  /* ===================== FINAL CTA ===================== */
+  .final-cta{
+    background:linear-gradient(120deg,#1b1340 0%, #261b5e 45%, #2e2270 100%);
+    color:#fff; padding:46px 0; position:relative; overflow:hidden;
+  }
+  .final-cta-inner{ display:flex; align-items:center; justify-content:space-between; gap:30px; position:relative; z-index:2; }
+  .final-cta h2{ font-size:23px; font-weight:800; margin-bottom:8px; }
+  .final-cta p{ font-size:13px; color:#cdd2ef; max-width:420px; line-height:1.6; }
+  .final-cta-mid{ display:flex; align-items:center; gap:18px; }
+  .final-cta .phone{ color:#dfe3fb; font-weight:600; }
+  .final-brain-deco{ width:140px; height:140px; opacity:.4; }
+
+  @media (max-width:1000px){
+    .nav{ display:none; }
+    .hero-grid{ grid-template-columns:1fr; }
+    .hero-visual{ justify-content:center; }
+    .steps5-grid{ grid-template-columns:1fr; }
+    .step5-arrow{ display:none; }
+    .panel-grid-3, .panel-grid-3b{ grid-template-columns:1fr; }
+    .panel-grid-3c{ grid-template-columns:1fr; }
+    .s45-card:first-child, .s45-card:nth-child(3), .mini-report{ border-radius:14px; border-left:1px solid var(--card-border); }
+    .s45-arrow{ border:1px solid var(--card-border); transform:rotate(90deg); padding:10px; width:fit-content; margin:0 auto; }
+    .trust4-grid{ grid-template-columns:repeat(2,1fr); }
+    .final-cta-inner{ flex-direction:column; text-align:center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== HEADER ===================== -->
+<header class="topbar">
+  <div class="container topbar-inner">
+    <div class="brand">
+      <div class="brand-logo placeholder-asset"></div>
+      <div class="brand-text-group">
+        <span class="brand-name">LIMITLESS</span>
+        <span class="brand-tag">UNLOCK YOUR TRUE POTENTIAL</span>
+      </div>
+    </div>
+    <nav class="nav">
+      <a href="#">Home</a>
+      <a href="#">Features</a>
+      <a href="#">Benefits</a>
+      <a href="#" class="active">How It Works</a>
+      <a href="#">About Us</a>
+      <a href="#">Blog</a>
+      <a href="#">Contact</a>
+    </nav>
+    <div class="topbar-right">
+      <div class="phone">📞 +1 (702) 555-0147</div>
+      <button class="btn btn-orange">🚀 Start Assessment</button>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <div class="badge-pill">◐ HOW IT WORKS</div>
+      <h1>
+        A Simple Process.<br>
+        <span class="grad-blue">Powerful Results.</span>
+      </h1>
+      <p>Limitless makes cognitive health assessment easy, secure, and personalized. Complete a few simple steps and get AI-powered insights you can trust.</p>
+      <div class="hero-trust-row">
+        <div class="hero-trust-item">
+          <div class="ic">🕐</div>
+          <span>Under 5 Minutes</span>
+        </div>
+        <div class="hero-trust-item">
+          <div class="ic">🛡️</div>
+          <span>100% Secure</span>
+        </div>
+        <div class="hero-trust-item">
+          <div class="ic">🧠</div>
+          <span>AI-Powered</span>
+        </div>
+        <div class="hero-trust-item">
+          <div class="ic">📈</div>
+          <span>Personalized<br>Results</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="head-profile-img placeholder-asset" style="background:radial-gradient(circle at 60% 40%, #6d5bd0 0%, #2c2470 55%, transparent 80%);"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== THE PROCESS — 5 STEPS ===================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-eyebrow">THE PROCESS</div>
+      <h2 class="section-title">How Limitless Works – 5 Easy Steps</h2>
+      <p class="section-sub">From signup to insights in just a few simple steps.</p>
+    </div>
+    <div class="steps5-grid">
+      <div class="step5-card">
+        <div class="step5-num">1</div>
+        <div class="step5-ic">👤+</div>
+        <h3>Create Your Account</h3>
+        <p>Sign up in seconds with your email or phone number.</p>
+      </div>
+      <div class="step5-arrow">→</div>
+      <div class="step5-card">
+        <div class="step5-num">2</div>
+        <div class="step5-ic">📋</div>
+        <h3>Provide Basic Details</h3>
+        <p>Share some basic information to personalize your assessment.</p>
+      </div>
+      <div class="step5-arrow">→</div>
+      <div class="step5-card">
+        <div class="step5-num">3</div>
+        <div class="step5-ic">🧠</div>
+        <h3>Complete Assessment</h3>
+        <p>Answer science-backed questions about your cognitive health.</p>
+      </div>
+      <div class="step5-arrow">→</div>
+      <div class="step5-card">
+        <div class="step5-num">4</div>
+        <div class="step5-ic">🤖</div>
+        <h3>AI Analysis</h3>
+        <p>Our advanced AI analyzes your responses across multiple domains.</p>
+      </div>
+      <div class="step5-arrow">→</div>
+      <div class="step5-card">
+        <div class="step5-num">5</div>
+        <div class="step5-ic">📄</div>
+        <h3>Get Your Report</h3>
+        <p>Receive your personalized AI report with insights and action plan.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== STEP 1 & 2 ===================== -->
+<section class="section section-bg-light">
+  <div class="container">
+    <div class="step-title-block">
+      <h2>Step 1 &amp; 2 – Login &amp; Provide Your Details</h2>
+      <p>A quick and secure start to personalize your assessment experience.</p>
+    </div>
+
+    <div class="panel-grid-3">
+      <div class="form-panel">
+        <h3>1. Create Your Account</h3>
+        <p>Choose a convenient way to sign up.</p>
+        <div class="oauth-btn">🔵 Continue with Google</div>
+        <div class="oauth-btn"> Continue with Apple</div>
+        <div class="or-divider">or</div>
+        <label class="field-label">Full Name</label>
+        <div class="field-input placeholder-text">John Doe</div>
+        <label class="field-label">Email Address</label>
+        <div class="field-input placeholder-text">john.doe@example.com</div>
+        <label class="field-label">Password</label>
+        <div class="field-input"><span class="placeholder-text">••••••••</span><span>👁</span></div>
+        <div class="terms-row">
+          <span>☐</span>
+          <span>I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></span>
+        </div>
+        <button class="btn btn-purple btn-block">Create Account</button>
+        <div class="login-link">Already have an account? <a href="#">Login</a></div>
+      </div>
+
+      <div class="form-panel">
+        <h3>2. Basic Information</h3>
+        <p>Help us personalize your assessment.</p>
+        <label class="field-label">Date of Birth</label>
+        <div class="field-input placeholder-text">MM / DD / YYYY <span>📅</span></div>
+        <label class="field-label">Gender</label>
+        <div class="field-input placeholder-text">Select Gender <span>⌄</span></div>
+        <label class="field-label">Phone Number (Optional)</label>
+        <div class="field-input placeholder-text">+1 (___) ___-____</div>
+        <label class="field-label">Location</label>
+        <div class="field-input placeholder-text">United States <span>⌄</span></div>
+        <button class="btn btn-purple btn-block" style="margin-top:8px;">Continue to Assessment</button>
+      </div>
+
+      <div class="info-safe-panel">
+        <div class="info-safe-top">
+          <div class="info-safe-icon">🛡️</div>
+          <div>
+            <h4>Your Information is Safe</h4>
+            <p>We use bank-level encryption to keep your data private and secure.</p>
+          </div>
+        </div>
+        <ul class="safe-list">
+          <li><span class="safe-check">✓</span>Encrypted &amp; Secure Data</li>
+          <li><span class="safe-check">✓</span>Your data is never shared</li>
+          <li><span class="safe-check">✓</span>You can delete your data anytime</li>
+          <li><span class="safe-check">✓</span>HIPAA-aligned best practices</li>
+        </ul>
+        <div class="lock-deco placeholder-asset" style="background:radial-gradient(circle, #a78bfa55 0%, transparent 70%);"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== STEP 3 — ASSESSMENT EXPERIENCE ===================== -->
+<section class="section">
+  <div class="container">
+    <div class="step-title-block">
+      <h2>Step 3 – Assessment Experience</h2>
+      <p>Answer a series of questions designed by cognitive scientists.</p>
+    </div>
+
+    <div class="panel-grid-3b">
+      <div>
+        <div class="side-feature">
+          <div class="ic">▦</div>
+          <div>
+            <h4>Multiple Domains</h4>
+            <p>Questions cover memory, attention, stress, mental well-being, and more.</p>
+          </div>
+        </div>
+        <div class="side-feature">
+          <div class="ic">🛡️</div>
+          <div>
+            <h4>Adaptive Questioning</h4>
+            <p>The assessment adapts to your responses for more accurate insights.</p>
+          </div>
+        </div>
+        <div class="side-feature">
+          <div class="ic">⬇️</div>
+          <div>
+            <h4>Takes Less Than 5 Minutes</h4>
+            <p>Quick, engaging, and easy to complete on any device.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="quiz-panel">
+        <div class="quiz-progress-row">
+          <span>Overall Progress</span>
+          <span>Question 8 of 25</span>
+        </div>
+        <div class="quiz-progress-bar"><div class="quiz-progress-fill"></div></div>
+        <div class="quiz-question">In the past two weeks, how often have you had trouble focusing on tasks for more than a few minutes?</div>
+        <div class="quiz-options">
+          <div class="quiz-option"><span class="radio"></span>Never</div>
+          <div class="quiz-option"><span class="radio"></span>Rarely</div>
+          <div class="quiz-option selected"><span class="radio on"></span>Sometimes</div>
+          <div class="quiz-option"><span class="radio"></span>Often</div>
+          <div class="quiz-option"><span class="radio"></span>Always</div>
+        </div>
+        <div class="quiz-nav-row">
+          <div class="quiz-nav-btn">← Previous</div>
+          <div class="quiz-next-btn">Next →</div>
+        </div>
+      </div>
+
+      <div class="assessed-panel">
+        <h4>What You'll Be Assessed On</h4>
+        <ul class="assessed-list">
+          <li><span class="assessed-dot" style="background:#f1e8ff; color:var(--purple);">🎯</span>Focus &amp; Attention</li>
+          <li><span class="assessed-dot" style="background:#e7eefe; color:var(--blue);">🧠</span>Memory &amp; Learning</li>
+          <li><span class="assessed-dot" style="background:#fff0e0; color:var(--orange);">⚡</span>Processing Speed</li>
+          <li><span class="assessed-dot" style="background:#e3faf0; color:var(--green);">🛡️</span>Stress &amp; Resilience</li>
+          <li><span class="assessed-dot" style="background:#e7eefe; color:var(--blue);">💙</span>Mental Well-being</li>
+          <li><span class="assessed-dot" style="background:#fff0e0; color:var(--orange);">⚖️</span>Decision Making</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== STEP 4 & 5 ===================== -->
+<section class="section section-bg-light">
+  <div class="container">
+    <div class="step-title-block">
+      <h2>Step 4 &amp; 5 – AI Analysis &amp; Your Personalized Report</h2>
+      <p>Advanced AI turns your responses into actionable insights.</p>
+    </div>
+
+    <div class="panel-grid-3c">
+      <div class="s45-card">
+        <div class="s45-icon-box">🧠</div>
+        <h3>4. AI Analysis</h3>
+        <p>Our AI evaluates your responses using validated cognitive and behavioral models.</p>
+        <ul class="s45-list">
+          <li><span class="s45-check">✓</span>50+ Cognitive &amp; Behavioral Factors</li>
+          <li><span class="s45-check">✓</span>Neuroscience-Based Algorithms</li>
+          <li><span class="s45-check">✓</span>Benchmarked Against Age Group</li>
+          <li><span class="s45-check">✓</span>Instant, Accurate &amp; Reliable</li>
+        </ul>
+      </div>
+      <div class="s45-arrow">→</div>
+      <div class="s45-card" style="border-left:1px solid var(--card-border);">
+        <h3>5. Get Your Personalized Report</h3>
+        <p>Receive a detailed report with scores, insights, and recommendations.</p>
+        <ul class="s45-list">
+          <li><span class="s45-check">✓</span>Overall Cognitive Score</li>
+          <li><span class="s45-check">✓</span>Strengths &amp; Areas to Improve</li>
+          <li><span class="s45-check">✓</span>Personalized Action Plan</li>
+          <li><span class="s45-check">✓</span>Track Progress Over Time</li>
+        </ul>
+      </div>
+
+      <div class="mini-report">
+        <div class="mini-report-top">
+          <div class="brand-logo placeholder-asset"></div>
+          <span class="brand-name">LIMITLESS</span>
+        </div>
+        <div class="mini-report-body">
+          <ul class="mini-sidebar">
+            <li class="active">Overview</li>
+            <li>Cognitive Scores</li>
+            <li>Insights</li>
+            <li>Action Plan</li>
+            <li>Progress</li>
+            <li>Recommendations</li>
+          </ul>
+          <div class="mini-main">
+            <h4>Your AI Report Deep Insights.<br><span class="blue">Better Decisions.</span></h4>
+            <div class="mini-score-row">
+              <div class="mini-score-box"><div class="label">Overall Cognitive</div><div class="value">78</div></div>
+              <div class="mini-score-box"><div class="label">Mental Well-being</div><div class="value">72</div></div>
+              <div class="mini-score-box"><div class="label">Focus &amp; Attention</div><div class="value">81</div></div>
+              <div class="mini-score-box"><div class="label">Stress Level</div><div class="value">36</div></div>
+            </div>
+            <div class="mini-insights-row">
+              <div class="mini-insight-box">
+                <div class="label">Key Insights</div>
+                <ul>
+                  <li>• Focus on consistent sleep</li>
+                  <li>• Stress is slightly elevated</li>
+                </ul>
+              </div>
+              <div class="mini-insight-box">
+                <div class="label">Personalized Action</div>
+                <ul>
+                  <li>• Practice 10 mins mindfulness</li>
+                  <li>• Improve sleep quality (7–8 hrs)</li>
+                  <li>• Engage in brain training 3x/wk</li>
+                  <li>• Stay hydrated &amp; balanced diet</li>
+                </ul>
+                <div style="font-size:8px; color:var(--purple); font-weight:700; margin-top:4px;">View Full Action Plan →</div>
+              </div>
+              <div class="mini-insight-box" style="text-align:center;">
+                <div class="label" style="text-align:left;">Report Summary</div>
+                <div class="mini-ring">78</div>
+                <div style="font-size:7px; color:var(--text-gray);">Excellent (90-100)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BUILT ON TRUST & SECURITY ===================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-head" style="margin-bottom:30px;">
+      <h2 class="section-title">Built on Trust &amp; Security</h2>
+    </div>
+    <div class="trust4-grid">
+      <div class="trust4-item">
+        <div class="ic">🔒</div>
+        <div>
+          <h4>100% Private</h4>
+          <p>Your data is encrypted and never shared.</p>
+        </div>
+      </div>
+      <div class="trust4-item">
+        <div class="ic">🛡️</div>
+        <div>
+          <h4>Secure Infrastructure</h4>
+          <p>Enterprise-grade security with regular audits.</p>
+        </div>
+      </div>
+      <div class="trust4-item">
+        <div class="ic">👤</div>
+        <div>
+          <h4>User Control</h4>
+          <p>You can access, download, or delete your data anytime.</p>
+        </div>
+      </div>
+      <div class="trust4-item">
+        <div class="ic">🇺🇸</div>
+        <div>
+          <h4>Made in the USA</h4>
+          <p>Proudly developed and hosted in the United States.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FINAL CTA ===================== -->
+<section class="final-cta">
+  <div class="container final-cta-inner">
+    <div>
+      <h2>Ready to Unlock Your True Potential?</h2>
+      <p>Take control of your cognitive health today. It only takes 5 minutes to get started.</p>
+    </div>
+    <div class="final-cta-mid">
+      <button class="btn btn-orange">🚀 Start Free Assessment</button>
+      <div class="phone">📞 +1 (702) 555-0147</div>
+    </div>
+    <div class="final-brain-deco placeholder-asset" style="background:radial-gradient(circle, #6d5bd0 0%, #2c2470 60%, transparent 80%); border-radius:50%;"></div>
+  </div>
+</section>
+
+</body>
+</html>

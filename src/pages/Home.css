@@ -1458,10 +1458,7 @@
   .limitless-home p { font-size: 15px; }
 }
 
-/* Fix Hero overlap with Navbar */
-.limitless-home .hero {
-  padding-top: 140px !important;
-}
+/* Removed unnecessary hero padding */
 
 /* Specific Component Fixes */
 .limitless-home .big-new, .limitless-home .big {
@@ -1875,9 +1872,4 @@
   }
 }
 
-/* Reduce top padding on Hero in mobile */
-@media (max-width: 768px) {
-  .limitless-home .hero {
-    padding-top: 40px !important;
-  }
-}
+

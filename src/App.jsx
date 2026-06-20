@@ -15,6 +15,9 @@ import FloatingWhatsApp from './components/FloatingWhatsApp';
 import Dashboard from './components/Dashboard';
 import RegistrationSuccess from './components/RegistrationSuccess';
 import SampleDashboard from './pages/SampleDashboard';
+import Features from './pages/Features';
+import Benefits from './pages/Benefits';
+import HowItWorksPage from './pages/HowItWorksPage';
 
 
 const ProtectedRoute = ({ children }) => {
@@ -42,6 +45,9 @@ function App() {
       <FloatingWhatsApp />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/features" element={<Features />} />
+        <Route path="/benefits" element={<Benefits />} />
+        <Route path="/how-it-works" element={<HowItWorksPage />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-conditions" element={<TermsConditions />} />
         
