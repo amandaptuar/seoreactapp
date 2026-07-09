@@ -48,17 +48,11 @@ export async function fetchWithRetry(url, options = {}, retries = 3, delayMs = 2
 }
 
 // ─── Backend URL Routing ─────────────────────────────────────────────────────
-const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+// All requests go straight to the Node.js backend (CORS is enabled there).
+// Base URL comes from VITE_BACKEND_URL / environment — see lib/backendApi.js.
+import { BACKEND_URL } from './backendApi';
 
-export const getApiUrl = (endpoint) => {
-  if (isLocalhost) {
-    // Locally, Vite is configured to proxy /api requests to the Render backend
-    return endpoint;
-  } else {
-    // In production (FTP), route through the PHP proxy to avoid CORS
-    return `/api-proxy.php?endpoint=${endpoint}`;
-  }
-};
+export const getApiUrl = (endpoint) => `${BACKEND_URL}${endpoint}`;
 
 /**
  * Calls the generate-questions API with retry support.

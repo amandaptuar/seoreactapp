@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
 import { fetchWithRetry, getApiUrl } from '../lib/apiUtils';
-import { sendCredentialsEmail } from '../lib/emailService';
 import './Question.css';
 
 const Question = () => {
@@ -78,6 +76,10 @@ const Question = () => {
       let gender = sessionStorage.getItem('userGender') || 'prefer-not-to-say';
       if (gender === 'prefer_not_to_say') gender = 'prefer-not-to-say';
 
+      // Passing userId makes the backend save the report as an assessment
+      // record automatically — no separate DB call needed.
+      const userId = sessionStorage.getItem('userId');
+
       const analyzeResponse = await fetchWithRetry(getApiUrl('/api/v1/analyze'), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -85,25 +87,13 @@ const Question = () => {
           assessmentId: assessmentId || "fallback-id",
           age: age,
           gender: gender,
-          responses: apiResponses
+          responses: apiResponses,
+          userId: userId || undefined
         })
       });
 
       const analysisResult = await analyzeResponse.json();
       sessionStorage.setItem('analysisReport', JSON.stringify(analysisResult));
-
-      // Save assessment report JSON to assessments table immediately so it's not lost
-      const userId = sessionStorage.getItem('userId');
-      if (userId) {
-        try {
-          // Save a record of this assessment to the assessments table for unlimited history
-          await supabase
-            .from('assessments')
-            .insert([{ user_id: userId, report_json: analysisResult }]);
-        } catch (dbErr) {
-          console.error("Error saving assessment to DB:", dbErr);
-        }
-      }
 
       // Always navigate directly to dashboard after assessment
       navigate('/dashboard');

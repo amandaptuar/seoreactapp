@@ -13,10 +13,10 @@ export default defineConfig({
   },
   server: {
     proxy: {
+      // Local Node.js backend (MongoDB) — see ../backend
       '/api': {
-        target: 'https://limitless-b3he.onrender.com',
+        target: 'http://localhost:4000',
         changeOrigin: true,
-        secure: false,
       }
     }
   }

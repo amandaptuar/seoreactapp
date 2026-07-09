@@ -1,28 +1,22 @@
 import { generateAssessmentQuestions } from './apiUtils';
-import { supabase } from './supabase';
+import { fetchUserWithAssessments } from './backendApi';
 
 export const startLoggedInAssessment = async (navigate, setIsSubmitting) => {
     try {
         if (setIsSubmitting) setIsSubmitting(true);
-        let age = 30;
-        let gender = 'male';
+        let age = sessionStorage.getItem('userAge') || 30;
+        let gender = sessionStorage.getItem('userGender') || 'male';
 
-        const userEmail = sessionStorage.getItem('userEmail');
-        if (userEmail) {
-            const { data, error } = await supabase
-                .from('users')
-                .select('age, gender')
-                .eq('email', userEmail)
-                .single();
-            if (data && !error) {
-                if (data.age) age = data.age;
-                if (data.gender) gender = data.gender;
-                sessionStorage.setItem('userAge', data.age);
-                sessionStorage.setItem('userGender', data.gender);
+        // If the profile isn't cached in this session, fetch it from the backend
+        const userId = sessionStorage.getItem('userId');
+        if ((!sessionStorage.getItem('userAge') || !sessionStorage.getItem('userGender')) && userId) {
+            try {
+                const user = await fetchUserWithAssessments(userId);
+                if (user.age) { age = user.age; sessionStorage.setItem('userAge', String(user.age)); }
+                if (user.gender) { gender = user.gender; sessionStorage.setItem('userGender', user.gender); }
+            } catch (err) {
+                console.warn('Could not fetch profile — using defaults:', err.message);
             }
-        } else {
-            age = sessionStorage.getItem('userAge') || 30;
-            gender = sessionStorage.getItem('userGender') || 'male';
         }
 
         const questionsData = await generateAssessmentQuestions(age, gender);

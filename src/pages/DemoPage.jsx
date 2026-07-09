@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { supabase } from '../lib/supabase';
-import bcrypt from 'bcryptjs';
 import { generateAssessmentQuestions } from '../lib/apiUtils';
-import { sendCredentialsEmail } from '../lib/emailService';
+import { registerUser } from '../lib/backendApi';
 import './JoinUsPage.css';
 
 const DemoPage = () => {
@@ -26,68 +24,26 @@ const DemoPage = () => {
     setFormError('');
 
     try {
-      // 1. Check if email already exists FIRST
-      const { data: existingUser } = await supabase
-        .from('users')
-        .select('id')
-        .eq('email', formData.email)
-        .maybeSingle();
+      // 1. Register a demo account through the backend (sends the welcome
+      //    email too). Throws with status 409 if already registered.
+      await registerUser({
+        name: formData.name,
+        email: formData.email,
+        age: formData.age,
+        gender: formData.gender,
+        paymentStatus: 'demo',
+        passwordResetRequired: false,
+      });
 
-      if (existingUser) {
-        setFormError('This email is already registered. Please log in instead.');
-        setIsSubmitting(false);
-        return;
-      }
-
-      // 2. Generate Questions from Limitless API
+      // 2. Generate the personalized questions
       const questionsData = await generateAssessmentQuestions(formData.age, formData.gender);
-      
-      // 3. Generate temp password & insert user
-      const generatedPassword = Math.random().toString(36).slice(-8).toUpperCase();
-      const passwordHash = await bcrypt.hash(generatedPassword, 10);
-      
-      const { data: newUser, error: insertErr } = await supabase
-        .from('users')
-        .insert([{
-          name: formData.name,
-          email: formData.email,
-          temp_password: generatedPassword,
-          password_hash: passwordHash,
-          password_reset_required: false,
-          payment_status: 'demo',
-        }])
-        .select('id')
-        .single();
-
-      if (insertErr) {
-        throw new Error(`DB Error: ${insertErr.message || insertErr.details || JSON.stringify(insertErr)}`);
-      }
-      
-      const dbUserId = newUser.id;
-
-      try {
-        await sendCredentialsEmail({
-          name: formData.name,
-          email: formData.email,
-          tempPassword: generatedPassword,
-        });
-      } catch (emailErr) {
-        console.warn('Credentials email failed (non-fatal):', emailErr);
-      }
       setFormError('');
 
       sessionStorage.setItem('assessmentId', questionsData.assessmentId);
       sessionStorage.setItem('assessmentSections', JSON.stringify(questionsData.sections));
-      sessionStorage.setItem('userEmail', formData.email);
-      sessionStorage.setItem('username', formData.email);
-      sessionStorage.setItem('name', formData.name);
       sessionStorage.setItem('userAge', formData.age);
       sessionStorage.setItem('userGender', formData.gender);
-      sessionStorage.setItem('generatedPassword', generatedPassword);
-      sessionStorage.setItem('isLoggedIn', 'true');
-      sessionStorage.setItem('passwordResetRequired', 'false');
       sessionStorage.setItem('demoMode', 'true');
-      if (dbUserId) sessionStorage.setItem('userId', dbUserId);
 
       navigate('/question');
       window.scrollTo(0, 0);

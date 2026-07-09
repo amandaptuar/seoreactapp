@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
+import { adminGetUser } from '../lib/backendApi';
 import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Cell
@@ -42,23 +42,22 @@ export default function AdminUserDetail() {
   useEffect(() => {
     (async () => {
       try {
-        const { data, error: err } = await supabase.from('users').select('*, assessments(*)').eq('id', id).single();
-        if (err) throw err;
-        
-        const sortedAssessments = data.assessments?.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) || [];
-        const latest = sortedAssessments[0];
-
-        setUser({ 
-          ...data, 
-          ai_insights: latest?.report_json || null,
-          pdf_url: latest?.pdf_url || null,
-          assessments: sortedAssessments
-        });
-        if (latest) setActiveAssessmentId(latest.id);
-      } catch (e) { setError(e.message); }
+        // Backend returns the user with assessments[] (newest first) and the
+        // latest report_json / pdf_url already mirrored onto the user object.
+        const data = await adminGetUser(id);
+        setUser({ ...data, ai_insights: data.report_json || null });
+        if (data.assessments?.[0]) setActiveAssessmentId(data.assessments[0].id);
+      } catch (e) {
+        if (e.status === 401 || e.status === 403) {
+          sessionStorage.removeItem('adminLoggedIn');
+          navigate('/admin-login');
+          return;
+        }
+        setError(e.message);
+      }
       finally { setLoading(false); }
     })();
-  }, [id]);
+  }, [id, navigate]);
 
   if (loading) return (
     <div style={{ minHeight: '100vh', background: '#020617', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Inter',sans-serif" }}>

@@ -5,9 +5,8 @@ import {
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid,
   Cell, AreaChart, Area, PieChart, Pie
 } from 'recharts';
-import { supabase } from '../lib/supabase';
-import { sendPdfEmail } from '../lib/emailService';
 import { getApiUrl } from '../lib/apiUtils';
+import { fetchUserWithAssessments, storeReportPdf } from '../lib/backendApi';
 import { startLoggedInAssessment } from '../lib/assessmentFlow';
 import FeedbackModal from './FeedbackModal';
 
@@ -76,25 +75,14 @@ const Dashboard = () => {
       // We reset it here so a stale cache never bypasses the paywall.
       setIsPaid(false);
 
-      // 2. Always fetch latest from Supabase to check if PDF was already generated
+      // 2. Always fetch latest from the backend (user + assessment history)
       const userId = sessionStorage.getItem('userId');
       if (userId) {
         try {
-          // Fetch user metadata
-          const { data: userRecord } = await supabase
-            .from('users')
-            .select('payment_status, age, gender')
-            .eq('id', userId)
-            .maybeSingle();
+          const userRecord = await fetchUserWithAssessments(userId);
+          const history = userRecord.assessments || [];
 
-          // Fetch all assessments history
-          const { data: history } = await supabase
-            .from('assessments')
-            .select('*')
-            .eq('user_id', userId)
-            .order('created_at', { ascending: false });
-
-          if (history && history.length > 0) {
+          if (history.length > 0) {
             setAssessmentsHistory(history);
             const latestAssessment = history[0];
             setCurrentAssessmentId(latestAssessment.id);
@@ -108,19 +96,17 @@ const Dashboard = () => {
             }
           }
 
-          if (userRecord) {
-            setUserAge(userRecord.age || '');
-              setUserGender(userRecord.gender || '');
-              sessionStorage.setItem('userAge', userRecord.age || '');
-              sessionStorage.setItem('userGender', userRecord.gender || '');
-              if (userRecord.payment_status === 'paid') {
-              setIsPaid(true);
-              sessionStorage.setItem('paymentStatus', 'yes');
-            } else {
-              // Clear any stale local cache
-              setIsPaid(false);
-              sessionStorage.removeItem('paymentStatus');
-            }
+          setUserAge(userRecord.age || '');
+          setUserGender(userRecord.gender || '');
+          sessionStorage.setItem('userAge', userRecord.age || '');
+          sessionStorage.setItem('userGender', userRecord.gender || '');
+          if (userRecord.payment_status === 'paid') {
+            setIsPaid(true);
+            sessionStorage.setItem('paymentStatus', 'yes');
+          } else {
+            // Clear any stale local cache
+            setIsPaid(false);
+            sessionStorage.removeItem('paymentStatus');
           }
         } catch (err) {
           console.error('Error fetching assessment from DB:', err);
@@ -154,20 +140,36 @@ const Dashboard = () => {
 
     setIsGeneratingPdf(true);
     try {
-      const endpoint = isPaid ? '/api/v1/generate-pdf' : '/api/v1/generate-teaser-pdf';
-      const response = await fetch(getApiUrl(endpoint), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ analysis: report, brand: { primaryColor: '#3B82F6', accentColor: '#6366F1' } })
-      });
-      if (!response.ok) throw new Error('PDF generation failed');
-      const blob = await response.blob();
-      
+      const userId = sessionStorage.getItem('userId');
       const dateStr = new Date().toISOString().split('T')[0];
-      const uniqueSuffix = currentAssessmentId ? `_${currentAssessmentId}` : `_${Date.now()}`;
-      const fileName = isPaid 
-        ? `Limitless_Cognitive_Report_${dateStr}${uniqueSuffix}.pdf`
-        : `Limitless_Cognitive_Teaser_${dateStr}${uniqueSuffix}.pdf`;
+      let blob;
+      let fileName;
+
+      if (isPaid && userId) {
+        // Paid: the backend generates the PDF, stores it (public URL saved on
+        // the latest assessment) and emails the download link to the user.
+        const stored = await storeReportPdf(userId, report, { sendEmail: true });
+        setPdfUrl(stored.pdfUrl);
+        if (currentAssessmentId) {
+          setAssessmentsHistory(prev => prev.map(a =>
+            a.id === currentAssessmentId ? { ...a, pdf_url: stored.pdfUrl } : a
+          ));
+        }
+        const response = await fetch(stored.pdfUrl);
+        if (!response.ok) throw new Error('PDF download failed');
+        blob = await response.blob();
+        fileName = `Limitless_Cognitive_Report_${dateStr}.pdf`;
+      } else {
+        // Free preview: generate the teaser PDF directly (not stored)
+        const response = await fetch(getApiUrl('/api/v1/generate-teaser-pdf'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ analysis: report, brand: { primaryColor: '#3B82F6', accentColor: '#6366F1' } })
+        });
+        if (!response.ok) throw new Error('PDF generation failed');
+        blob = await response.blob();
+        fileName = `Limitless_Cognitive_Teaser_${dateStr}.pdf`;
+      }
 
       const fallbackDownload = () => {
         const downloadUrl = window.URL.createObjectURL(blob);
@@ -181,38 +183,8 @@ const Dashboard = () => {
       };
 
       const file = new File([blob], fileName, { type: 'application/pdf' });
-      // 2. Upload PDF to Supabase Storage (run in background so share block doesn't delay it)
-      const userId = sessionStorage.getItem('userId');
-      if (userId && isPaid) {
-        supabase.storage
-          .from('pdf-reports')
-          .upload(`${userId}/${fileName}`, blob, { contentType: 'application/pdf', upsert: true })
-          .then(async ({ error: uploadErr }) => {
-            if (!uploadErr) {
-              const { data: { publicUrl } } = supabase.storage
-                .from('pdf-reports')
-                .getPublicUrl(`${userId}/${fileName}`);
 
-              if (currentAssessmentId) {
-                await supabase.from('assessments').update({ pdf_url: publicUrl }).eq('id', currentAssessmentId);
-                
-                setAssessmentsHistory(prev => prev.map(a => 
-                  a.id === currentAssessmentId ? { ...a, pdf_url: publicUrl } : a
-                ));
-              }
-              setPdfUrl(publicUrl);
-              
-              await sendPdfEmail({
-                name: sessionStorage.getItem('name') || 'User',
-                email: sessionStorage.getItem('userEmail'),
-                pdfUrl: publicUrl,
-              }).catch(console.warn);
-            }
-          })
-          .catch(console.warn);
-      }
-
-      // 3. Share or Download locally
+      // Share or Download locally
       if (action === 'share' && navigator.canShare && navigator.canShare({ files: [file] })) {
         try {
           await navigator.share({

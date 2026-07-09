@@ -4,6 +4,7 @@ import { Lock, User as UserIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
+import { adminLogin } from "../../lib/backendApi"
 
 export default function Login() {
   const navigate = useNavigate()
@@ -17,15 +18,17 @@ export default function Login() {
     }
   }, [navigate])
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
 
-    if (username === "admin" && password === "limitlessadmin") {
-      sessionStorage.setItem("isAuthenticated", "true")
+    try {
+      // Credentials are verified by the backend and an admin JWT is stored
+      // for all subsequent admin API calls.
+      await adminLogin(username, password)
       navigate("/admin-panel/admin")
-    } else {
-      setError("Invalid username or password.")
+    } catch (err: any) {
+      setError(err?.status === 401 ? "Invalid username or password." : (err?.message || "Login failed."))
     }
   }
 

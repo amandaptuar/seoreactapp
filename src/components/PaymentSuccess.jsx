@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
-import { sendCredentialsEmail } from '../lib/emailService';
+import { markUserPaid } from '../lib/backendApi';
 
 const PaymentSuccess = () => {
   const [status, setStatus] = useState('processing');
@@ -16,25 +15,13 @@ const PaymentSuccess = () => {
 
       try {
         const userId = sessionStorage.getItem('userId');
-        const reportJson = sessionStorage.getItem('analysisReport');
 
-        // 1. Update payment_status in users table
+        // Mark the user as paid via the backend.
+        // (When the Stripe webhook is configured, the backend also confirms
+        // real payments server-side — this is the instant UI path.)
         if (userId) {
-          const updates = { payment_status: 'paid' };
-          await supabase
-            .from('users')
-            .update(updates)
-            .eq('id', userId);
-        }
-        // 3. Send Credentials Email
-        try {
-          await sendCredentialsEmail({
-            name: sessionStorage.getItem('name') || 'User',
-            email: sessionStorage.getItem('userEmail'),
-            tempPassword: sessionStorage.getItem('generatedPassword'),
-          });
-        } catch (emailErr) {
-          console.warn('Credentials email failed (non-fatal):', emailErr);
+          await markUserPaid(userId);
+          sessionStorage.setItem('paymentStatus', 'yes');
         }
 
         setStatus('success');

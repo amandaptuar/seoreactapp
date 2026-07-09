@@ -5,8 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
-// We use the same supabase client from the main app
-import { supabase } from "../../lib/supabase"
+import { getEnquiries } from "../services/api"
 
 export default function Enquiries() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -20,13 +19,8 @@ export default function Enquiries() {
   const fetchData = async () => {
     setLoading(true)
     try {
-      const { data, error } = await supabase
-        .from('enquiries')
-        .select('*')
-        .order('created_at', { ascending: false })
-      
-      if (error) throw error;
-      setEnquiries(data || [])
+      // Backend returns enquiries newest-first
+      setEnquiries(await getEnquiries() || [])
     } catch (error) {
       console.error("Failed to fetch enquiries", error)
     } finally {
