@@ -2,30 +2,94 @@ import React, { useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import bcrypt from 'bcryptjs';
+import { generateAssessmentQuestions } from '../lib/apiUtils';
+import { startLoggedInAssessment } from '../lib/assessmentFlow';
+import { sendCredentialsEmail } from '../lib/emailService';
 import LoginModal from '../components/LoginModal';
+import AssessmentModal from '../components/AssessmentModal';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import './Home.css';
 
 const Home = () => {
   const navigate = useNavigate();
   const [openFaq, setOpenFaq] = React.useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-  const [isLoggedIn, setIsLoggedIn] = React.useState(localStorage.getItem('isLoggedIn') === 'true');
+  const [isLoggedIn, setIsLoggedIn] = React.useState(sessionStorage.getItem('isLoggedIn') === 'true');
   const [showLoginModal, setShowLoginModal] = React.useState(false);
 
   const handleLogout = () => {
-    localStorage.clear();
+    sessionStorage.clear();
     setIsLoggedIn(false);
     setIsMobileMenuOpen(false);
   };
 
   const faqData = [
-    { icon: "⏱️", question: "How long does the assessment take?", answer: "The assessment typically takes about 15-20 minutes to complete." },
-    { icon: "📋", question: "Will I receive personalized recommendations?", answer: "Yes, after completing the assessment, you will receive a detailed, personalized report with actionable recommendations based on your results." },
-    { icon: "🔒", question: "Is my data safe and private?", answer: "Absolutely. We use industry-standard encryption and strict privacy protocols to ensure your data is always 100% secure and never shared." },
-    { icon: "📈", question: "Can I track my progress over time?", answer: "Yes! You can retake the assessment periodically to see how your cognitive scores and behavioral metrics improve over time." },
-    { icon: "📄", question: "Is this a medical diagnosis?", answer: "No. Limitless is designed for self-improvement and cognitive tracking. It is not a clinical diagnostic tool and should not replace professional medical advice." },
-    { icon: "🧑‍🤝‍🧑", question: "Who should take this assessment?", answer: "Anyone looking to better understand their mental performance, manage stress, improve focus, and unlock their full cognitive potential." }
+    { 
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </svg>
+      ), 
+      question: "How long does the assessment take?", 
+      answer: "The assessment typically takes about 15-20 minutes to complete." 
+    },
+    { 
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+          <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+        </svg>
+      ), 
+      question: "Will I receive personalized recommendations?", 
+      answer: "Yes, after completing the assessment, you will receive a detailed, personalized report with actionable recommendations based on your results." 
+    },
+    { 
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+        </svg>
+      ), 
+      question: "Is my data safe and private?", 
+      answer: "Absolutely. We use industry-standard encryption and strict privacy protocols to ensure your data is always 100% secure and never shared." 
+    },
+    { 
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 3v18h18" />
+          <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3" />
+        </svg>
+      ), 
+      question: "Can I track my progress over time?", 
+      answer: "Yes! You can retake the assessment periodically to see how your cognitive scores and behavioral metrics improve over time." 
+    },
+    { 
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+          <polyline points="10 9 9 9 8 9" />
+        </svg>
+      ), 
+      question: "Is this a medical diagnosis?", 
+      answer: "No. Limitless is designed for self-improvement and cognitive tracking. It is not a clinical diagnostic tool and should not replace professional medical advice." 
+    },
+    { 
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </svg>
+      ), 
+      question: "Who should take this assessment?", 
+      answer: "Anyone looking to better understand their mental performance, manage stress, improve focus, and unlock their full cognitive potential." 
+    }
   ];
 
   const toggleFaq = (index) => {
@@ -33,83 +97,17 @@ const Home = () => {
   };
 
 
+
   const [showModal, setShowModal] = React.useState(false);
-  const [formData, setFormData] = React.useState({ name: '', email: '', age: '', gender: '' });
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [formError, setFormError] = React.useState('');
+
 
   const handleStartAssessment = () => {
-    setShowModal(true);
-    setFormError('');
-    setFormData({ name: '', email: '', age: '', gender: '' });
-  };
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setFormError('');
-    try {
-      const generatedPassword = Math.random().toString(36).slice(-8).toUpperCase();
-      const passwordHash = await bcrypt.hash(generatedPassword, 10);
-
-      const { data: newUser, error: insertErr } = await supabase
-        .from('users')
-        .insert([{
-          name: formData.name,
-          email: formData.email,
-          temp_password: generatedPassword,
-          password_hash: passwordHash,
-          password_reset_required: true,
-          payment_status: 'pending',
-        }])
-        .select('id')
-        .single();
-
-      if (insertErr) {
-        const errString = JSON.stringify(insertErr).toLowerCase();
-        const isDuplicate = insertErr.code === '23505' || errString.includes('duplicate') || errString.includes('unique') || errString.includes('already exists');
-        if (isDuplicate) {
-          setFormError('This email is already registered. Please log in instead.');
-          setIsSubmitting(false);
-          return;
-        }
-        throw new Error(`DB Error: ${insertErr.message || JSON.stringify(insertErr)}`);
-      }
-
-      const apiResponse = await fetch('/api/v1/generate-questions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ age: parseInt(formData.age, 10), gender: formData.gender, locale: 'en' })
-      });
-
-      if (!apiResponse.ok) throw new Error('Failed to generate assessment questions');
-      const questionsData = await apiResponse.json();
-
-      localStorage.setItem('assessmentId', questionsData.assessmentId);
-      localStorage.setItem('assessmentSections', JSON.stringify(questionsData.sections));
-      localStorage.setItem('userEmail', formData.email);
-      localStorage.setItem('username', formData.email);
-      localStorage.setItem('name', formData.name);
-      localStorage.setItem('userAge', formData.age);
-      localStorage.setItem('userGender', formData.gender);
-      localStorage.setItem('generatedPassword', generatedPassword);
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('passwordResetRequired', 'true');
-      if (newUser?.id) localStorage.setItem('userId', newUser.id);
-
-      setShowModal(false);
-      navigate('/question');
-      window.scrollTo(0, 0);
-    } catch (error) {
-      console.error('Error:', error);
-      setFormError(error.message || 'An error occurred. Please try again.');
-    } finally {
-      setIsSubmitting(false);
+    if (isLoggedIn) {
+      startLoggedInAssessment(navigate, setIsSubmitting);
+      return;
     }
+    setShowModal(true);
   };
 
   useEffect(() => {
@@ -123,99 +121,8 @@ const Home = () => {
   return (
     <div className="limitless-home">
 
-      {/* ===== REGISTRATION MODAL ===== */}
-      {showModal && (
-        <div
-          onClick={(e) => { if (e.target === e.currentTarget) setShowModal(false); }}
-          style={{
-            position: 'fixed', inset: 0, zIndex: 9999,
-            background: 'rgba(15,23,42,0.7)', backdropFilter: 'blur(6px)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            padding: '20px'
-          }}
-        >
-          <div style={{
-            background: '#fff', borderRadius: '24px', padding: '40px',
-            width: '100%', maxWidth: '520px', position: 'relative',
-            boxShadow: '0 32px 64px rgba(0,0,0,0.2)'
-          }}>
-            {/* Close Button */}
-            <button onClick={() => setShowModal(false)} style={{
-              position: 'absolute', top: '16px', right: '20px',
-              background: 'none', border: 'none', fontSize: '24px',
-              cursor: 'pointer', color: '#94a3b8', lineHeight: 1
-            }}>✕</button>
-
-            {/* Modal Header */}
-            <div style={{ marginBottom: '28px' }}>
-              <img src="/img/limitless-logo.webp" alt="Limitless" style={{ width: '48px', height: '48px', objectFit: 'contain', marginBottom: '12px' }} />
-              <h3 style={{ fontSize: '26px', fontWeight: '800', color: '#0F172A', margin: '0 0 6px 0' }}>Start Your Journey</h3>
-              <p style={{ fontSize: '16px', color: '#64748B', margin: 0 }}>Enter your details to begin your free cognitive assessment.</p>
-            </div>
-
-            {/* Form */}
-            <form onSubmit={handleFormSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              {/* Name + Email */}
-              <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
-                <div style={{ flex: '1 1 180px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '13px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.8px' }}>Full Name</label>
-                  <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="John Doe" required
-                    style={{ padding: '13px 16px', borderRadius: '10px', border: '1.5px solid #E2E8F0', fontSize: '16px', background: '#F8FAFC', outline: 'none', width: '100%', boxSizing: 'border-box' }} />
-                </div>
-                <div style={{ flex: '1 1 180px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '13px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.8px' }}>Email Address</label>
-                  <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="john@example.com" required
-                    style={{ padding: '13px 16px', borderRadius: '10px', border: '1.5px solid #E2E8F0', fontSize: '16px', background: '#F8FAFC', outline: 'none', width: '100%', boxSizing: 'border-box' }} />
-                </div>
-              </div>
-
-              {/* Age + Gender */}
-              <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
-                <div style={{ flex: '1 1 100px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '13px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.8px' }}>Age</label>
-                  <input type="number" name="age" value={formData.age} onChange={handleChange} min="18" max="25" placeholder="22" required
-                    style={{ padding: '13px 16px', borderRadius: '10px', border: '1.5px solid #E2E8F0', fontSize: '16px', background: '#F8FAFC', outline: 'none', width: '100%', boxSizing: 'border-box' }} />
-                </div>
-                <div style={{ flex: '1 1 160px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '13px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.8px' }}>Gender</label>
-                  <select name="gender" value={formData.gender} onChange={handleChange} required
-                    style={{ padding: '13px 16px', borderRadius: '10px', border: '1.5px solid #E2E8F0', fontSize: '16px', background: '#F8FAFC', color: '#0F172A', outline: 'none', width: '100%', boxSizing: 'border-box' }}>
-                    <option value="">Select Gender</option>
-                    <option value="female">Female</option>
-                    <option value="male">Male</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Error */}
-              {formError && (
-                <div style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)', borderRadius: '10px', padding: '12px 16px', color: '#ef4444', fontSize: '15px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  ⚠️ {formError}
-                </div>
-              )}
-
-              {/* Submit */}
-              <button type="submit" disabled={isSubmitting}
-                style={{
-                  width: '100%', padding: '15px',
-                  background: 'linear-gradient(135deg, #3B82F6, #2563EB)',
-                  color: '#fff', border: 'none', borderRadius: '12px',
-                  fontSize: '17px', fontWeight: '700', cursor: isSubmitting ? 'not-allowed' : 'pointer',
-                  display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px',
-                  boxShadow: '0 8px 24px rgba(59,130,246,0.35)', marginTop: '4px',
-                  opacity: isSubmitting ? 0.7 : 1, transition: 'all 0.2s'
-                }}
-              >
-                {isSubmitting ? '⏳ Starting Assessment...' : 'Start Free Assessment →'}
-              </button>
-
-              <p style={{ textAlign: 'center', fontSize: '13px', color: '#94a3b8', margin: 0 }}>
-                🔒 100% Private & Secure. Your data is never shared.
-              </p>
-            </form>
-          </div>
-        </div>
-      )}
+            {/* ===== REGISTRATION MODAL ===== */}
+      <AssessmentModal isOpen={showModal} onClose={() => setShowModal(false)} />
 
       {/* ===== LOGIN MODAL ===== */}
       <LoginModal
@@ -223,10 +130,11 @@ const Home = () => {
         onClose={() => {
           setShowLoginModal(false);
           // Refresh login state after modal closes
-          if (localStorage.getItem('isLoggedIn') === 'true') {
+          if (sessionStorage.getItem('isLoggedIn') === 'true') {
             setIsLoggedIn(true);
           }
         }}
+        onOpenAssessment={() => setShowModal(true)}
       />
 
       <Header />
@@ -239,13 +147,17 @@ const Home = () => {
             <p style={{ color: '#fff' }}>Take our 5-minute AI-powered assessment to discover your cognitive strengths, stress levels, focus, memory, and more.</p>
             <p style={{ color: '#fff' }}>Get a personalized report and action plan to improve your brain health and daily performance.</p>
             <div className="hero-btn-row">
-              <button onClick={handleStartAssessment} className="btn btn-gradient">Start Free Assessment +</button>
-              <button onClick={() => navigate('/sample-report')} className="btn btn-outline">View Sample Report</button>
+              <button onClick={handleStartAssessment}  className="btn btn-gradient" style={{  cursor: 'pointer', }}>
+                {isSubmitting ? 'Generating Questionnaire...' : isLoggedIn ? 'Take Assessment Again' : 'Start Free Assessment ➔'}
+              </button>
+              <button onClick={() => navigate('/sample-report')}  className="btn btn-outline" style={{  cursor: 'pointer', }}>
+                'View Sample Report'
+              </button>
             </div>
             <div className="hero-meta">
-              <span>⏱ 5 Minutes</span>
-              <span>🔒 100% Private</span>
-              <span>🧪 Science-Backed</span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> 5 Minutes</span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg> 100% Private</span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(45 12 12)"></ellipse><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(135 12 12)"></ellipse></svg> Science-Backed</span>
             </div>
           </div>
           <div className="hero-right">
@@ -256,7 +168,7 @@ const Home = () => {
                 <span className="label">MEMORY</span>
               </div>
               <div className="orbit-badge badge-focus">
-                <div className="circle"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#60a5fa" strokeWidth="1.5"/><circle cx="12" cy="12" r="5" stroke="#60a5fa" strokeWidth="1.5"/><circle cx="12" cy="12" r="1.5" fill="#60a5fa"/></svg></div>
+                <div className="circle"><svg viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/><path d="M22 2l-7.9 7.9"/></svg></div>
                 <span className="label">FOCUS</span>
               </div>
               <div className="orbit-badge badge-clarity">
@@ -264,7 +176,7 @@ const Home = () => {
                 <span className="label">CLARITY</span>
               </div>
               <div className="orbit-badge badge-stress">
-                <div className="circle"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="#34d399" strokeWidth="1.6" strokeLinecap="round"/><circle cx="12" cy="12" r="4" stroke="#34d399" strokeWidth="1.6"/></svg></div>
+                <div className="circle"><svg viewBox="0 0 24 24" fill="none" stroke="#34d399" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-8 0v2"/><circle cx="12" cy="7" r="4"/><path d="M12 1v2M8.5 2.5l1.5 1.5M15.5 2.5l-1.5 1.5"/></svg></div>
                 <span className="label">STRESS</span>
               </div>
               <div className="orbit-badge badge-energy">
@@ -283,9 +195,9 @@ const Home = () => {
       {/* REVEALS CARD */}
       <section className="reveals-section">
         <div className="wrap">
-          <div className="reveals-card">
-            <div style={{textAlign: 'center', width: '100%'}}>
-              <h2 className="section-eyebrow" style={{marginBottom: '30px'}}>Your Assessment Reveals</h2>
+          <div style={{textAlign: 'center', width: '100%'}}>
+            <h2 className="section-eyebrow" style={{marginBottom: '30px'}}>Your Assessment Reveals</h2>
+            <div className="reveals-card">
               <div className="reveal-container">
                 <div className="reveal-item">
                   <div className="reveal-icon" style={{background: '#f0e9fe'}}>
@@ -324,7 +236,7 @@ const Home = () => {
                 </div>
                 <div className="reveal-item">
                   <div className="reveal-icon" style={{background: '#e3f7ea'}}>
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="18" rx="2" stroke="#16a34a" strokeWidth="1.6"/><path d="M8 8h8M8 12h8M8 16h5" stroke="#16a34a" strokeWidth="1.6" strokeLinecap="round"/></svg>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 14l2 2 4-4"></path></svg>
                   </div>
                   <h4>Personalized Plan</h4>
                   <p>Science-backed action plan just for you</p>
@@ -400,8 +312,8 @@ const Home = () => {
               </div>
             </div>
 
-            <div className="challenge-photo" style={{background: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '300px'}}>
-              <span style={{color: '#94a3b8', }}>Image Placeholder</span>
+            <div className="challenge-photo" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '300px', borderRadius: '24px', overflow: 'hidden' }}>
+              <img src="/featurespageimage/image copy 7.png" alt="Limitless Potential" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
           </div>
         </div>
@@ -502,7 +414,9 @@ const Home = () => {
                 <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="flex-shrink-0"><circle cx="12" cy="12" r="9" stroke="#10b981" strokeWidth="2"/><path d="M8 12.5l3 3 5-6" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg> Actionable recommendations</li>
                 <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="flex-shrink-0"><circle cx="12" cy="12" r="9" stroke="#10b981" strokeWidth="2"/><path d="M8 12.5l3 3 5-6" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg> Track progress over time</li>
               </ul>
-              <button className="btn-purple-rounded">View Sample Report &rarr;</button>
+              <button onClick={() => navigate('/sample-report')}  className="btn-purple-rounded" style={{  cursor: 'pointer', }}>
+                'View Sample Report ➔'
+              </button>
             </div>
           </div>
         </div>
@@ -796,19 +710,27 @@ const Home = () => {
             <div className="trust-blurb">Limitless is built on validated research in neuroscience, psychology, and behavioral science to deliver accurate insights that make a real impact.</div>
             <div className="trust-stats">
               <div className="trust-stat">
-                <div className="icon-circ" style={{background: '#e3edfd'}}>🎓</div>
+                <div className="icon-circ" style={{background: '#e3edfd'}}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
+                </div>
                 <div><div className="big">50+</div><div className="lbl">Cognitive &amp; Behavioral Factors Analyzed</div></div>
               </div>
               <div className="trust-stat">
-                <div className="icon-circ" style={{background: '#e3f7ea'}}>🏛️</div>
+                <div className="icon-circ" style={{background: '#e3f7ea'}}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                </div>
                 <div><div className="big">1000+</div><div className="lbl">Research Studies Integrated</div></div>
               </div>
               <div className="trust-stat">
-                <div className="icon-circ" style={{background: '#e3f7ea'}}>📈</div>
+                <div className="icon-circ" style={{background: '#e3f7ea'}}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                </div>
                 <div><div className="big">99.9%</div><div className="lbl">Data Accuracy &amp; Reliability</div></div>
               </div>
               <div className="trust-stat">
-                <div className="icon-circ" style={{background: '#e3f3fb'}}>🔄</div>
+                <div className="icon-circ" style={{background: '#e3f3fb'}}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                </div>
                 <div><div className="big">Continuous</div><div className="lbl">AI Model Updates &amp; Improvements</div></div>
               </div>
             </div>
@@ -829,7 +751,7 @@ const Home = () => {
                 style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
-                  <div className="left"><span className="faq-ic">{faq.icon}</span> {faq.question}</div>
+                  <div className="left" style={{ display: 'flex', alignItems: 'center' }}><span className="faq-ic" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginRight: '12px' }}>{faq.icon}</span> {faq.question}</div>
                   <span className="chev" style={{ transform: openFaq === index ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s ease' }}>⌄</span>
                 </div>
                 {openFaq === index && (
@@ -863,8 +785,10 @@ const Home = () => {
             <h2 style={{ color: '#fff', marginBottom: '12px' }}>Your Best Self is Waiting.</h2>
             <p style={{ color: '#cbd5e1', marginBottom: '24px', }}>Take the first step today towards a healthier mind and a limitless future.</p>
             <div className="cta-btn-row-new" style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-              <button onClick={handleStartAssessment} className="btn" style={{ background: 'linear-gradient(to right, #6366f1, #3b82f6)', color: '#fff', border: 'none', padding: '12px 24px', borderRadius: '8px', whiteSpace: 'nowrap' }}>Start Free Assessment ➔</button>
-              <button className="btn" style={{ background: 'transparent', color: '#fff', border: '1px solid rgba(255,255,255,0.3)', padding: '12px 24px', borderRadius: '8px', whiteSpace: 'nowrap' }}>Join Now</button>
+              <button onClick={handleStartAssessment}  className="btn" style={{ background: 'linear-gradient(to right, #6366f1, #3b82f6)', color: '#fff', border: 'none', padding: '12px 24px', borderRadius: '8px', whiteSpace: 'nowrap',  cursor: 'pointer', }}>
+                {isSubmitting ? 'Generating Questionnaire...' : isLoggedIn ? 'Take Assessment Again' : 'Start Free Assessment \u2794'}
+              </button>
+              <button onClick={() => navigate('/join-us')} className="btn" style={{ background: 'transparent', color: '#fff', border: '1px solid rgba(255,255,255,0.3)', padding: '12px 24px', borderRadius: '8px', whiteSpace: 'nowrap' }}>Join Now</button>
             </div>
           </div>
           
@@ -884,30 +808,7 @@ const Home = () => {
       </section>
 
       {/* FOOTER */}
-      <footer>
-        <div className="wrap">
-          <div className="footer-grid" style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '40px' }}>
-            <div className="footer-brand" style={{ maxWidth: '400px' }}>
-              <div className="logo-area" style={{ marginBottom: '20px' }}>
-                <img src="/img/limitless-logo.webp" alt="Limitless Logo" className="logo-mark" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
-                <div className="logo-text-group">
-                  <div className="logo-text">LIMITLESS</div>
-                  <div className="logo-sub">UNLOCK YOUR TRUE POTENTIAL</div>
-                </div>
-              </div>
-              <p style={{ lineHeight: '1.6', color: '#cbd5e1' }}>Science-backed cognitive performance platform dedicated to helping you unlock your true potential.</p>
-            </div>
-
-            <div className="footer-col footer-contact">
-              <h6 style={{ color: '#fff', fontSize: '18px', marginBottom: '20px', fontWeight: '700' }}>Contact Us</h6>
-              <p style={{ color: '#cbd5e1', marginBottom: '10px' }}>📞 +1 (702) 555-0147</p>
-              <p style={{ color: '#cbd5e1', marginBottom: '10px' }}>✉️ hello@limitlessworld.net</p>
-              <p style={{ color: '#cbd5e1', lineHeight: '1.6' }}>📍 123 Mindful Way, Suite 100<br/>Las Vegas, NV 89101, USA</p>
-            </div>
-          </div>
-          <div className="footer-bottom">© 2025 Limitless. All rights reserved.</div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

@@ -12,17 +12,22 @@ import Admin from './components/Admin';
 import AdminUserDetail from './components/AdminUserDetail';
 import FloatingCTA from './components/FloatingCTA';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
+import FeedbackCTA from './components/FeedbackCTA';
 import Dashboard from './components/Dashboard';
 import RegistrationSuccess from './components/RegistrationSuccess';
 import SampleDashboard from './pages/SampleDashboard';
 import Features from './pages/Features';
 import Benefits from './pages/Benefits';
 import HowItWorksPage from './pages/HowItWorksPage';
+import ContactPage from './pages/ContactPage';
+import AboutPage from './pages/AboutPage';
+import JoinUsPage from './pages/JoinUsPage';
+import DashboardApp from './dashbaord-app/App';
 
 
 const ProtectedRoute = ({ children }) => {
 // ... existing code ...
-  const userEmail = localStorage.getItem('userEmail');
+  const userEmail = sessionStorage.getItem('userEmail');
   if (!userEmail) {
     return <Navigate to="/" replace />;
   }
@@ -30,19 +35,34 @@ const ProtectedRoute = ({ children }) => {
 };
 
 const AdminProtectedRoute = ({ children }) => {
-  const adminLoggedIn = localStorage.getItem('adminLoggedIn');
+  const adminLoggedIn = sessionStorage.getItem('adminLoggedIn');
   if (adminLoggedIn !== 'true') {
     return <Navigate to="/admin-login" replace />;
   }
   return children;
 };
 
+const GlobalComponents = () => {
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith('/admin');
+  const isDashboard = location.pathname.startsWith('/dashboard');
+  
+  if (isAdmin) return null;
+
+  return (
+    <>
+      <FloatingCTA />
+      <FloatingWhatsApp />
+      {!isDashboard && <FeedbackCTA />}
+    </>
+  );
+};
+
 function App() {
   return (
     <Router>
       <ScrollToTop />
-      <FloatingCTA />
-      <FloatingWhatsApp />
+      <GlobalComponents />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/features" element={<Features />} />
@@ -50,6 +70,10 @@ function App() {
         <Route path="/how-it-works" element={<HowItWorksPage />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-conditions" element={<TermsConditions />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/join-us" element={<JoinUsPage />} />
+
         
         {/* Protected User Routes */}
         <Route path="/question" element={
@@ -83,6 +107,9 @@ function App() {
             <AdminUserDetail />
           </AdminProtectedRoute>
         } />
+
+        {/* Dashboard App Integration */}
+        <Route path="/admin-panel/*" element={<DashboardApp />} />
       </Routes>
     </Router>
   );

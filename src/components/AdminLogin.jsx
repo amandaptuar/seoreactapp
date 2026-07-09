@@ -11,10 +11,10 @@ const AdminLogin = () => {
     e.preventDefault();
     // Use the desired admin credentials
     if (username === 'admin' && password === 'limitlessadmin') {
-      localStorage.setItem('adminLoggedIn', 'true');
+      sessionStorage.setItem('adminLoggedIn', 'true');
       navigate('/admin');
     } else if (username === 'admin@limitlessworld.net' && password === 'limitlessadmin') {
-      localStorage.setItem('adminLoggedIn', 'true');
+      sessionStorage.setItem('adminLoggedIn', 'true');
       navigate('/admin');
     } else {
       setErrorMsg('Wrong credentials');

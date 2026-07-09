@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+
 /* Global Premium Theme - Navy & Amber */
 *, *::before, *::after {
     box-sizing: border-box;
@@ -42,7 +44,21 @@ html, body {
     --main-color: #F59E0B !important;
     --theme-colour: #0F172A !important;
 
-    --font-primary: 'Inter', sans-serif;
+    --font-primary: 'Outfit', 'Inter', sans-serif;
+    
+    /* Responsive typography sizing variables */
+    --h1-size: 38px;
+    --h2-size: 29px;
+    --h3-size: 23px;
+    --h4-size: 18px;
+    --h5-size: 15.5px;
+    --p-size: 15px;
+
+
+
+
+
+
     --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
     --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
     --shadow-lg: 0 10px 30px rgba(15, 23, 42, 0.15);
@@ -761,3 +777,21 @@ a:hover {
     width: 100%;
   }
 }
+
+/* Global scale up for laptop viewports */
+@media (min-width: 1024px) {
+  :root {
+    --h1-size: 43px;
+    --h2-size: 32px;
+    --h3-size: 25px;
+    --h4-size: 20px;
+    --h5-size: 17px;
+    --p-size: 16px;
+  }
+}
+
+
+
+
+
+

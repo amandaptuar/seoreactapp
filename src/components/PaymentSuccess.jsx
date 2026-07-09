@@ -11,23 +11,16 @@ const PaymentSuccess = () => {
 
   useEffect(() => {
     const completePayment = async () => {
-      const email = localStorage.getItem('userEmail');
+      const email = sessionStorage.getItem('userEmail');
       if (!email) { setStatus('error'); return; }
 
       try {
-        const userId = localStorage.getItem('userId');
-        const reportJson = localStorage.getItem('analysisReport');
+        const userId = sessionStorage.getItem('userId');
+        const reportJson = sessionStorage.getItem('analysisReport');
 
-        // 1. Update payment_status and report_json in users table
+        // 1. Update payment_status in users table
         if (userId) {
           const updates = { payment_status: 'paid' };
-          if (reportJson) {
-            try {
-              updates.report_json = JSON.parse(reportJson);
-            } catch (e) {
-              console.warn("Could not parse reportJson in PaymentSuccess");
-            }
-          }
           await supabase
             .from('users')
             .update(updates)
@@ -36,9 +29,9 @@ const PaymentSuccess = () => {
         // 3. Send Credentials Email
         try {
           await sendCredentialsEmail({
-            name: localStorage.getItem('name') || 'User',
-            email: localStorage.getItem('userEmail'),
-            tempPassword: localStorage.getItem('generatedPassword'),
+            name: sessionStorage.getItem('name') || 'User',
+            email: sessionStorage.getItem('userEmail'),
+            tempPassword: sessionStorage.getItem('generatedPassword'),
           });
         } catch (emailErr) {
           console.warn('Credentials email failed (non-fatal):', emailErr);
@@ -76,29 +69,15 @@ const PaymentSuccess = () => {
                 <span style={{ color: '#16A34A', fontWeight: '700', fontSize: '14px', letterSpacing: '1px', textTransform: 'uppercase' }}>Payment Successful</span>
               </div>
               <h2 style={{ color: '#0F172A', fontSize: '38px', marginBottom: '10px', fontWeight: '800' }}>Analysis Complete!</h2>
-              <p style={{ color: '#64748B', fontSize: '18px', marginBottom: '24px' }}>Your cognitive wellness report has been saved. Use the credentials below to log in anytime.</p>
-
-              <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', padding: '20px', borderRadius: '16px', margin: '0 0 24px', textAlign: 'left' }}>
-                <p style={{ color: '#64748B', fontSize: '13px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', margin: '0 0 12px' }}>🔐 Your Login Credentials</p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 14px', background: '#fff', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
-                    <span style={{ color: '#64748B', fontWeight: '600', fontSize: '16px' }}>Username</span>
-                    <strong style={{ color: '#0F172A', fontSize: '16px' }}>{localStorage.getItem('userEmail')}</strong>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 14px', background: '#fff', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
-                    <span style={{ color: '#64748B', fontWeight: '600', fontSize: '16px' }}>Temp Password</span>
-                    <strong style={{ color: '#6366F1', fontSize: '18px', letterSpacing: '2px', fontFamily: 'monospace' }}>{localStorage.getItem('generatedPassword')}</strong>
-                  </div>
-                </div>
-                <p style={{ color: '#EF4444', fontSize: '14px', margin: '12px 0 0', fontStyle: 'italic' }}>⚠️ Save these before continuing — you'll be asked to reset your password on first login.</p>
-              </div>
+              <p style={{ color: '#64748B', fontSize: '18px', marginBottom: '32px' }}>Your cognitive wellness report has been saved. Please check your email for your secure login credentials to access your dashboard anytime.</p>
 
               <button
                 disabled={isNavigating}
                 onClick={() => {
                   setIsNavigating(true);
-                  localStorage.setItem('isLoggedIn', 'true');
-                  localStorage.setItem('paymentStatus', 'yes');
+                  sessionStorage.setItem('isLoggedIn', 'true');
+                  sessionStorage.setItem('paymentStatus', 'yes');
+                  sessionStorage.removeItem('demoMode');
                   setTimeout(() => navigate('/dashboard'), 800);
                 }}
                 style={{ width: '100%', padding: '16px', background: 'linear-gradient(135deg, #F59E0B, #FB923C)', color: '#fff', border: 'none', borderRadius: '12px', fontWeight: '700', fontSize: '20px', cursor: isNavigating ? 'not-allowed' : 'pointer', boxShadow: '0 4px 14px rgba(245,158,11,0.35)', opacity: isNavigating ? 0.7 : 1 }}

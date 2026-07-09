@@ -2,24 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import limitlessLogo from '../assets/limitless-logo.webp';
 import LoginModal from './LoginModal';
-import EnquiryModal from './EnquiryModal';
+import AssessmentModal from './AssessmentModal';
 
 const Header = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem('isLoggedIn') === 'true');
+  const [isAssessmentOpen, setIsAssessmentOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(() => sessionStorage.getItem('isLoggedIn') === 'true');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    const loggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
     setIsLoggedIn(loggedIn);
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('username');
+    sessionStorage.removeItem('isLoggedIn');
+    sessionStorage.removeItem('userEmail');
+    sessionStorage.removeItem('username');
     setIsLoggedIn(false);
     navigate('/');
     window.location.reload();
@@ -49,7 +49,7 @@ const Header = () => {
         .global-header .logo-area {
           display: flex;
           align-items: center;
-          gap: 14px;
+          gap: 8px;
         }
         .global-header .logo-mark {
           width: 120px;
@@ -58,16 +58,17 @@ const Header = () => {
         }
         .global-header .logo-text-group {
           line-height: 1.1;
+          margin-left: 0px;
         }
         .global-header .logo-text {
           color: #fff;
           font-weight: 800;
-          font-size: 19px;
+          font-size: 26px;
           letter-spacing: 0.5px;
         }
         .global-header .logo-sub {
           color: #f97316;
-          font-size: 8.5px;
+          font-size: 11px;
           font-weight: 700;
           letter-spacing: 1px;
         }
@@ -203,9 +204,11 @@ const Header = () => {
           <div className={`mobile-menu-wrapper ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
             <nav className="nav-links">
               <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="nav-link">Home</Link>
+              <Link to="/about" onClick={() => setIsMobileMenuOpen(false)} className="nav-link">About</Link>
               <Link to="/features" onClick={() => setIsMobileMenuOpen(false)} className="nav-link">Features</Link>
               <Link to="/benefits" onClick={() => setIsMobileMenuOpen(false)} className="nav-link">Benefits</Link>
               <Link to="/how-it-works" onClick={() => setIsMobileMenuOpen(false)} className="nav-link">How It Works</Link>
+              <Link to="/join-us" onClick={() => setIsMobileMenuOpen(false)} className="nav-link">Join Now</Link>
             </nav>
             
             <div className="header-actions">
@@ -221,10 +224,10 @@ const Header = () => {
               ) : (
                 <>
                   <button className="btn-outline" onClick={() => { setIsMobileMenuOpen(false); setIsLoginOpen(true); }}>
-                    Sign In
+                    Login
                   </button>
-                  <button onClick={() => { setIsMobileMenuOpen(false); setIsEnquiryOpen(true); }} className="btn-orange">
-                    Start Assessment +
+                  <button onClick={() => { setIsMobileMenuOpen(false); setIsAssessmentOpen(true); }} className="btn-orange">
+                    Start Assessment ➔
                   </button>
                 </>
               )}
@@ -243,8 +246,8 @@ const Header = () => {
         </div>
       </header>
 
-      <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
-      <EnquiryModal isOpen={isEnquiryOpen} onClose={() => setIsEnquiryOpen(false)} />
+      <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} onOpenAssessment={() => setIsAssessmentOpen(true)} />
+      <AssessmentModal isOpen={isAssessmentOpen} onClose={() => setIsAssessmentOpen(false)} />
     </>
   );
 };

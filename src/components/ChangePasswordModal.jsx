@@ -44,6 +44,7 @@ const ChangePasswordModal = ({ isOpen, userId, onSuccess }) => {
       const { error: updateErr } = await supabase
         .from('users')
         .update({
+          temp_password: newPwd,
           password_hash: newHash,
           password_reset_required: false,
         })
@@ -51,8 +52,8 @@ const ChangePasswordModal = ({ isOpen, userId, onSuccess }) => {
 
       if (updateErr) throw new Error('Failed to update password. Please try again.');
 
-      // 4. Update localStorage
-      localStorage.setItem('passwordResetRequired', 'false');
+      // 4. Update sessionStorage
+      sessionStorage.setItem('passwordResetRequired', 'false');
       setSuccess(true);
       setTimeout(() => { onSuccess(); }, 2000);
     } catch (err) {

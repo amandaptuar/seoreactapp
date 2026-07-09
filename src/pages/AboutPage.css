@@ -1,0 +1,230 @@
+.limitless-about {
+  --purple: #7C3AED;
+  --purple-light: #A855F7;
+  --blue: #3B82F6;
+  --blue-light: #60A5FA;
+  --orange: #F97316;
+  --yellow: #F59E0B;
+  --green: #10B981;
+  --red: #EF4444;
+  --dark-bg: #0A0A1A;
+  --white: #FFFFFF;
+  --gray-text: #CBD5E1;
+  --light-gray: #6B7280;
+  --mid-gray: #374151;
+  --border: #E5E7EB;
+  --section-bg: #F9FAFB;
+  --text-dark: #0F172A;
+  --grad-btn: linear-gradient(135deg, #7C3AED 0%, #A855F7 50%, #3B82F6 100%);
+  background: #fff;
+  color: var(--text-dark);
+  line-height: 1.6;
+  overflow-x: hidden;
+  font-family: var(--font-primary);
+}
+
+.limitless-about *,
+.limitless-about *::before,
+.limitless-about *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── HERO ── */
+.limitless-about .hero {
+  background: var(--dark-bg) url('/aboutuspage/herobg.png') no-repeat center center;
+  background-size: cover;
+  position: relative; overflow: hidden;
+  padding: 55px 60px 45px; display: flex; align-items: center; justify-content: space-between;
+  gap: 30px; min-height: 272px;
+}
+.limitless-about .hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 70% 50%, rgba(124,58,237,0.4) 0%, transparent 60%),
+              radial-gradient(ellipse at 15% 70%, rgba(59,130,246,0.2) 0%, transparent 55%);
+  pointer-events: none;
+}
+.limitless-about .hero-content { position: relative; z-index: 2; max-width: 500px; }
+.limitless-about .hero-badge {
+  display: inline-block; background: var(--purple); color: #fff;
+  font-size: 10.5px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 5px 14px; border-radius: 20px; margin-bottom: 20px;
+}
+.limitless-about .hero h1 { font-size: clamp(32px, 5vw, var(--h1-size)); font-weight: 800; color: #fff; line-height: 1.18; margin-bottom: 14px; }
+.limitless-about .hero h1 span { background: linear-gradient(135deg, #A855F7, #60A5FA); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.limitless-about .hero-sub { color: var(--gray-text); font-size: var(--p-size); line-height: 1.7; margin-bottom: 30px; max-width: 600px; }
+.limitless-about .hero-trust { display: flex; gap: 24px; flex-wrap: wrap; }
+.limitless-about .hero-trust-item { display: flex; align-items: center; gap: 8px; }
+.limitless-about .hero-trust-icon { width: 32px; height: 32px; border-radius: 8px; border: 1px solid rgba(124,58,237,0.5); background: rgba(124,58,237,0.12); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.limitless-about .hero-trust-icon svg { color: #A855F7; }
+.limitless-about .hero-trust-text strong { display: block; color: #fff; font-size: 12.5px; font-weight: 700; }
+.limitless-about .hero-trust-text span { color: var(--gray-text); font-size: 11px; }
+
+/* Hero Brain */
+.limitless-about .hero-visual { position: relative; z-index: 2; flex-shrink: 0; width: clamp(200px, 32vw, 360px); }
+.limitless-about .hero-visual svg { width: 100%; height: auto; }
+
+/* ── OUR STORY ── */
+.limitless-about .our-story { padding: 70px 40px; max-width: 100%; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.1fr; gap: 10px; align-items: center; }
+.limitless-about .story-label { font-size: 14px; font-weight: 800; color: var(--purple); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+.limitless-about .story-content h2 { font-size: clamp(28px, 4vw, var(--h2-size)); font-weight: 800; color: var(--text-dark); margin-bottom: 20px; }
+.limitless-about .story-content p { color: var(--light-gray); font-size: var(--p-size); line-height: 1.75; margin-bottom: 14px; }
+.limitless-about .btn-outline {
+  display: inline-block; padding: 11px 22px; border: 2px solid var(--purple);
+  border-radius: 8px; color: var(--purple); font-size: 13.5px; font-weight: 600;
+  text-decoration: none; transition: background .2s, color .2s; margin-top: 10px;
+}
+.limitless-about .btn-outline:hover { background: var(--purple); color: #fff; }
+
+/* Story image card */
+.limitless-about .story-visual { border-radius: 16px; overflow: hidden; position: relative; aspect-ratio: 4/3; }
+.limitless-about .story-visual img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.limitless-about .story-visual-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(10,10,26,0.6) 0%, transparent 60%);
+}
+/* Fallback: generated scene */
+.limitless-about .story-scene {
+  width: 100%; height: 100%; min-height: 320px;
+  background: linear-gradient(160deg, #0A0A1A 0%, #1a0a3a 30%, #0d1a3a 60%, #1a2a4a 100%);
+  display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;
+}
+.limitless-about .scene-logo-card {
+  display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 2; position: relative;
+}
+.limitless-about .scene-logo-card span { font-size: 22px; font-weight: 900; color: #fff; letter-spacing: 3px; text-transform: uppercase; }
+.limitless-about .scene-logo-card small { font-size: 8px; font-weight: 600; color: var(--orange); letter-spacing: 2px; text-transform: uppercase; }
+/* Silhouette figure */
+.limitless-about .scene-silhouette {
+  position: absolute; bottom: 0; right: 60px;
+  width: 120px; height: 220px;
+  background: rgba(0,0,0,0.7);
+  clip-path: polygon(40% 0%, 60% 0%, 68% 12%, 65% 30%, 75% 32%, 85% 55%, 75% 58%, 72% 70%, 80% 100%, 20% 100%, 28% 70%, 25% 58%, 15% 55%, 25% 32%, 35% 30%, 32% 12%);
+}
+.limitless-about .scene-glow { position: absolute; bottom: -30px; left: 50%; transform: translateX(-50%); width: 300px; height: 120px; background: radial-gradient(ellipse, rgba(124,58,237,0.5) 0%, transparent 70%); }
+.limitless-about .scene-stars { position: absolute; inset: 0; }
+
+/* ── STATS BAR ── */
+.limitless-about .stats-bar { background: #fff; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 40px 40px; }
+.limitless-about .stats-inner { max-width: 100%; margin: 0 auto; display: flex; justify-content: space-around; flex-wrap: wrap; gap: 30px; }
+.limitless-about .stat-item { text-align: center; }
+.limitless-about .stat-icon { width: 48px; height: 48px; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; }
+.limitless-about .stat-number { font-size: clamp(28px, 3.5vw, 42px); font-weight: 800; color: var(--text-dark); line-height: 1; }
+.limitless-about .stat-label { font-size: 16px; font-weight: 600; color: var(--light-gray); margin-top: 4px; }
+
+/* ── MISSION & VISION ── */
+.limitless-about .mission-section { background: var(--section-bg); padding: 10px 40px 70px; }
+.limitless-about .mission-inner { max-width: 100%; margin: 0 auto; }
+.limitless-about .section-title { text-align: center; font-size: clamp(28px, 4vw, var(--h2-size)); font-weight: 800; color: var(--text-dark); margin-bottom: 40px; }
+.limitless-about .mv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.limitless-about .mv-card { background: #fff; border-radius: 16px; padding: 32px; border: 1px solid var(--border); }
+.limitless-about .mv-card-header { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.limitless-about .mv-icon { width: 52px; height: 52px; border-radius: 14px; background: rgba(124,58,237,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.limitless-about .mv-card h3 { font-size: var(--h3-size); font-weight: 800; color: var(--text-dark); }
+.limitless-about .mv-card > p { color: var(--light-gray); font-size: var(--p-size); line-height: 1.7; margin-bottom: 20px; }
+.limitless-about .mv-checklist { list-style: none; display: flex; flex-direction: column; gap: 10px; padding: 0;}
+.limitless-about .mv-checklist li { display: flex; align-items: center; gap: 10px; font-size: calc(var(--p-size) - 1px); color: var(--mid-gray); }
+.limitless-about .mv-check { width: 20px; height: 20px; border-radius: 50%; background: rgba(124,58,237,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.limitless-about .mv-check svg { color: var(--purple); }
+
+/* ── WHY CHOOSE ── */
+.limitless-about .why-section { padding: 10px 40px 70px; }
+.limitless-about .why-inner { max-width: 100%; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.8fr; gap: 10px; align-items: start; }
+.limitless-about .why-left h2 { font-size: clamp(28px, 4vw, var(--h2-size)); font-weight: 800; color: var(--text-dark); margin-bottom: 12px; }
+.limitless-about .why-left p { color: var(--light-gray); font-size: var(--p-size); line-height: 1.7; }
+.limitless-about .why-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.limitless-about .why-card { background: var(--section-bg); border: 1px solid var(--border); border-radius: 14px; padding: 24px; }
+.limitless-about .why-card-icon { width: 44px; height: 44px; border-radius: 12px; margin-bottom: 14px; display: flex; align-items: center; justify-content: center; }
+.limitless-about .why-card h4 { font-size: var(--h4-size); font-weight: 800; color: var(--text-dark); margin-bottom: 6px; }
+.limitless-about .why-card p { font-size: calc(var(--p-size) - 1px); color: var(--light-gray); line-height: 1.6; }
+
+/* ── VALUES ── */
+.limitless-about .values-section { background: var(--section-bg); padding: 10px 40px 70px; }
+.limitless-about .values-inner { max-width: 100%; margin: 0 auto; }
+.limitless-about .values-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; margin-top: 40px; }
+.limitless-about .value-card { background: #fff; border-radius: 14px; padding: 28px 20px; text-align: center; border: 1px solid var(--border); }
+.limitless-about .value-icon { width: 52px; height: 52px; border-radius: 14px; margin: 0 auto 14px; display: flex; align-items: center; justify-content: center; }
+.limitless-about .value-card h4 { font-size: var(--h4-size); font-weight: 800; color: var(--text-dark); margin-bottom: 8px; }
+.limitless-about .value-card p { font-size: calc(var(--p-size) - 1px); color: var(--light-gray); line-height: 1.6; }
+
+/* ── TEAM ── */
+.limitless-about .team-section { background: #fff; padding: 10px 40px 70px; }
+.limitless-about .team-inner { max-width: 100%; margin: 0 auto; }
+.limitless-about .team-header { text-align: center; margin-bottom: 14px; }
+.limitless-about .team-header h2 { font-size: clamp(28px, 4vw, var(--h2-size)); font-weight: 800; color: var(--text-dark); margin-bottom: 8px; }
+.limitless-about .team-header p { color: var(--light-gray); font-size: var(--p-size); }
+.limitless-about .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 40px; }
+.limitless-about .team-card { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 28px 20px; text-align: center; transition: box-shadow .2s; }
+.limitless-about .team-card:hover { box-shadow: 0 8px 32px rgba(124,58,237,0.12); }
+.limitless-about .team-avatar { width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 14px; overflow: hidden; border: 3px solid rgba(124,58,237,0.2); background: linear-gradient(135deg, #e8d5ff, #d1e8ff); display: flex; align-items: center; justify-content: center; }
+.limitless-about .team-avatar svg { color: #7C3AED; }
+.limitless-about .team-card h4 { font-size: var(--h4-size); font-weight: 800; color: var(--text-dark); margin-bottom: 4px; }
+.limitless-about .team-role { font-size: 15px; font-weight: 700; color: var(--purple); margin-bottom: 8px; }
+.limitless-about .team-card p { font-size: calc(var(--p-size) - 1.5px); color: var(--light-gray); line-height: 1.6; margin-bottom: 14px; }
+.limitless-about .linkedin-btn { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 8px; background: rgba(59,130,246,0.1); transition: background .2s; }
+.limitless-about .linkedin-btn:hover { background: rgba(59,130,246,0.25); }
+.limitless-about .linkedin-btn svg { color: var(--blue); }
+
+/* ── CTA BANNER ── */
+.limitless-about .cta-banner { background: var(--dark-bg) url('/aboutuspage/herobg.png') no-repeat center center; background-size: cover; padding: 60px 40px; display: flex; align-items: center; justify-content: space-between; gap: 30px; position: relative; overflow: hidden; }
+.limitless-about .cta-brain { flex-shrink: 0; width: clamp(100px, 15vw, 160px); position: relative; z-index: 2; }
+.limitless-about .cta-brain svg { width: 100%; height: auto; }
+.limitless-about .cta-text { position: relative; z-index: 2; flex: 1; }
+.limitless-about .cta-text h2 { font-size: clamp(28px, 4vw, var(--h2-size)); font-weight: 800; color: #fff; margin-bottom: 8px; }
+.limitless-about .cta-text p { color: var(--gray-text); font-size: var(--p-size); }
+.limitless-about .cta-buttons { display: flex; gap: 14px; flex-shrink: 0; position: relative; z-index: 2; flex-wrap: wrap; }
+.limitless-about .btn-secondary { padding: 13px 26px; border: 2px solid rgba(255,255,255,0.3); border-radius: 8px; color: #fff; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; transition: border-color .2s, background .2s; white-space: nowrap; }
+.limitless-about .btn-secondary:hover { border-color: #fff; background: rgba(255,255,255,0.08); }
+.limitless-about .btn-cta-primary { padding: 13px 26px; background: var(--grad-btn); border: none; border-radius: 8px; color: #fff; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; white-space: nowrap; transition: opacity .2s; }
+.limitless-about .btn-cta-primary:hover { opacity: .88; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+  .limitless-about .our-story { grid-template-columns: 1fr; padding: 50px 30px; }
+  .limitless-about .story-visual { order: -1; aspect-ratio: 16/7; }
+  .limitless-about .mv-grid { grid-template-columns: 1fr; }
+  .limitless-about .why-inner { grid-template-columns: 1fr; gap: 30px; }
+  .limitless-about .values-grid { grid-template-columns: repeat(3, 1fr); }
+  .limitless-about .team-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .limitless-about .hero { flex-direction: column; padding: 45px 24px 40px; text-align: center; min-height: unset; }
+  .limitless-about .hero-trust { justify-content: center; }
+  .limitless-about .hero-visual { width: 200px; }
+  .limitless-about .our-story { padding: 40px 20px; gap: 30px; }
+  .limitless-about .stats-bar { padding: 30px 20px; }
+  .limitless-about .stats-inner { justify-content: center; gap: 24px; }
+  .limitless-about .mission-section, .limitless-about .why-section, .limitless-about .values-section, .limitless-about .team-section { padding: 50px 20px; }
+  .limitless-about .why-cards { grid-template-columns: 1fr; }
+  .limitless-about .values-grid { grid-template-columns: repeat(2, 1fr); }
+  .limitless-about .team-grid { grid-template-columns: 1fr 1fr; }
+  .limitless-about .cta-banner { flex-direction: column; text-align: center; padding: 45px 24px; }
+  .limitless-about .cta-brain { width: 100px; }
+  .limitless-about .cta-buttons { justify-content: center; width: 100%; }
+}
+@media (max-width: 480px) {
+  .limitless-about .hero h1 { font-size: 24px; }
+  .limitless-about .hero-trust { flex-direction: column; align-items: center; gap: 14px; }
+  .limitless-about .team-grid { grid-template-columns: 1fr; }
+  .limitless-about .values-grid { grid-template-columns: 1fr 1fr; }
+  .limitless-about .cta-buttons { flex-direction: column; align-items: center; }
+  .limitless-about .btn-cta-primary, .limitless-about .btn-secondary { width: 100%; text-align: center; }
+}
+
+/* Typography size scaling overrides */
+.limitless-about .hero-badge { font-size: calc(var(--p-size) - 4px); }
+.limitless-about .hero-trust-text strong { font-size: calc(var(--p-size) - 3.5px); }
+.limitless-about .hero-trust-text span { font-size: calc(var(--p-size) - 5px); }
+.limitless-about .story-label { font-size: calc(var(--p-size) - 2px); }
+.limitless-about .story-badge { font-size: calc(var(--p-size) - 2.5px); }
+.limitless-about .stat-number { font-size: clamp(28px, 3.5vw, var(--h1-size)); }
+.limitless-about .stat-label { font-size: var(--p-size); }
+.limitless-about .mv-checklist li { font-size: var(--p-size); }
+.limitless-about .why-card p { font-size: var(--p-size); }
+.limitless-about .value-card p { font-size: var(--p-size); }
+.limitless-about .team-role { font-size: calc(var(--p-size) - 1.5px); }
+.limitless-about .team-card p { font-size: calc(var(--p-size) - 1.5px); }
+.limitless-about .btn-secondary { font-size: calc(var(--p-size) - 2.5px); }
+.limitless-about .btn-cta-primary { font-size: calc(var(--p-size) - 2.5px); }
+

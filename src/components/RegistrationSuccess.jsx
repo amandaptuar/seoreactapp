@@ -7,9 +7,9 @@ const RegistrationSuccess = () => {
 
   useEffect(() => {
     setCredentials({
-      name: localStorage.getItem('name') || 'Friend',
-      username: localStorage.getItem('userEmail') || '',
-      password: localStorage.getItem('generatedPassword') || '',
+      name: sessionStorage.getItem('name') || 'Friend',
+      username: sessionStorage.getItem('userEmail') || '',
+      password: sessionStorage.getItem('generatedPassword') || '',
     });
     window.scrollTo(0, 0);
   }, []);

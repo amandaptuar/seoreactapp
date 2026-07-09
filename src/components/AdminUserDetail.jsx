@@ -37,13 +37,24 @@ export default function AdminUserDetail() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeAssessmentId, setActiveAssessmentId] = useState(null);
 
   useEffect(() => {
     (async () => {
       try {
-        const { data, error: err } = await supabase.from('users').select('*').eq('id', id).single();
+        const { data, error: err } = await supabase.from('users').select('*, assessments(*)').eq('id', id).single();
         if (err) throw err;
-        setUser({ ...data, ai_insights: data.report_json || null });
+        
+        const sortedAssessments = data.assessments?.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) || [];
+        const latest = sortedAssessments[0];
+
+        setUser({ 
+          ...data, 
+          ai_insights: latest?.report_json || null,
+          pdf_url: latest?.pdf_url || null,
+          assessments: sortedAssessments
+        });
+        if (latest) setActiveAssessmentId(latest.id);
       } catch (e) { setError(e.message); }
       finally { setLoading(false); }
     })();
@@ -69,7 +80,10 @@ export default function AdminUserDetail() {
     </div>
   );
 
-  const r = user.ai_insights;
+  const activeAssessment = user.assessments?.find(a => a.id === activeAssessmentId);
+  const r = activeAssessment?.report_json || user.ai_insights;
+  const currentPdfUrl = activeAssessment?.pdf_url || user.pdf_url;
+  
   const score = r?.overall?.score ?? 0;
   const rating = r?.overall?.rating ?? '—';
   const scoreColor = rating.includes('Excellent') || rating.includes('Good') ? '#10B981' : rating.includes('Risk') || rating.includes('Critical') ? '#EF4444' : '#6366F1';
@@ -141,8 +155,8 @@ export default function AdminUserDetail() {
                 {user.created_at && <span style={{ color: '#94A3B8', fontSize: 17 }}>🗓 {new Date(user.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>}
               </div>
             </div>
-            {user.pdf_url && (
-              <a className="pdf-link" href={user.pdf_url} target="_blank" rel="noreferrer" style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 10, padding: '14px 26px', background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.25)', borderRadius: 12, color: '#60A5FA', fontWeight: 700, fontSize: 17, textDecoration: 'none', transition: 'all 0.2s' }}>
+            {currentPdfUrl && (
+              <a className="pdf-link" href={currentPdfUrl} target="_blank" rel="noreferrer" style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 10, padding: '14px 26px', background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.25)', borderRadius: 12, color: '#60A5FA', fontWeight: 700, fontSize: 17, textDecoration: 'none', transition: 'all 0.2s' }}>
                 📄 View PDF Report
               </a>
             )}
@@ -313,6 +327,49 @@ export default function AdminUserDetail() {
                   <span style={{ color: '#94A3B8', fontSize: 18, lineHeight: 1.7 }}>{rec}</span>
                 </div>
               ))}
+            </div>
+          </SectionCard>
+        )}
+
+        {/* ── ASSESSMENT HISTORY ── */}
+        {(user.assessments && user.assessments.length > 0) && (
+          <SectionCard icon="🕒" title={`Assessment History (${user.assessments.length})`} style={{ marginBottom: 24 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {user.assessments.map((assessment, i) => {
+                const date = new Date(assessment.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                const scr = assessment.report_json?.overall?.score || 'N/A';
+                const rat = assessment.report_json?.overall?.rating || 'N/A';
+                return (
+                  <div key={assessment.id || i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12 }}>
+                    <div>
+                      <h4 style={{ margin: '0 0 6px', color: '#F8FAFC', fontSize: 17, fontWeight: 700 }}>Assessment {user.assessments.length - i}</h4>
+                      <p style={{ margin: 0, color: '#94A3B8', fontSize: 14 }}>{date}</p>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+                      <div style={{ textAlign: 'right' }}>
+                        <div style={{ color: '#F8FAFC', fontWeight: 800, fontSize: 18 }}>Score: {scr}</div>
+                        <div style={{ color: '#F59E0B', fontSize: 14, fontWeight: 600 }}>{rat}</div>
+                      </div>
+                      {assessment.pdf_url ? (
+                        <a href={assessment.pdf_url} target="_blank" rel="noreferrer" style={{ padding: '8px 16px', background: 'rgba(59,130,246,0.1)', color: '#60A5FA', border: '1px solid rgba(59,130,246,0.25)', borderRadius: 8, textDecoration: 'none', fontWeight: 600, fontSize: 14 }}>
+                          View PDF
+                        </a>
+                      ) : (
+                        <span style={{ padding: '8px 16px', background: 'rgba(255,255,255,0.05)', color: '#64748B', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, fontWeight: 600, fontSize: 14 }}>
+                          No PDF
+                        </span>
+                      )}
+                      <button 
+                        disabled={activeAssessmentId === assessment.id}
+                        onClick={() => { setActiveAssessmentId(assessment.id); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                        style={{ padding: '8px 16px', background: activeAssessmentId === assessment.id ? 'rgba(255,255,255,0.05)' : 'rgba(16,185,129,0.15)', color: activeAssessmentId === assessment.id ? '#64748B' : '#10B981', border: activeAssessmentId === assessment.id ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(16,185,129,0.3)', borderRadius: 8, fontWeight: 600, fontSize: 14, cursor: activeAssessmentId === assessment.id ? 'default' : 'pointer' }}
+                      >
+                        {activeAssessmentId === assessment.id ? 'Viewing' : 'View Data'}
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </SectionCard>
         )}

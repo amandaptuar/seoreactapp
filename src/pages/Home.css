@@ -16,7 +16,7 @@
 }
 
 .limitless-home {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-primary);
   background: var(--bg-light);
   color: var(--text-dark);
   -webkit-font-smoothing: antialiased;
@@ -230,7 +230,7 @@
   align-items: center;
   gap: 7px;
   color: #9aa3c0;
-  font-size: 13.5px;
+  font-size: 16px;
   font-weight: 500;
 }
 .limitless-home .hero-meta svg {
@@ -317,15 +317,7 @@
   padding: 0 10px;
   position: relative;
 }
-.limitless-home .reveal-item:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  right: 0;
-  top: 10px;
-  bottom: 10px;
-  width: 1px;
-  background: #ecedf2;
-}
+/* Removed vertical dividers between reveal items to match design image */
 .limitless-home .reveal-icon {
   width: 46px;
   height: 46px;
@@ -341,7 +333,7 @@
   margin-bottom: 6px;
 }
 .limitless-home .reveal-item p {
-  font-size: 12px;
+  font-size: 15px;
   color: var(--text-muted);
   line-height: 1.5;
 }
@@ -385,7 +377,7 @@
   margin-bottom: 6px;
 }
 .limitless-home .audience-card p {
-  font-size: 12px;
+  font-size: 15px;
   color: var(--text-muted);
   line-height: 1.5;
 }
@@ -445,7 +437,7 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  font-size: 13.5px;
+  font-size: 16px;
   padding: 10px 0;
   font-weight: 600;
   color: #1e293b;
@@ -513,7 +505,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 11.5px;
+  font-size: 14px;
   font-weight: 800;
   letter-spacing: 0.5px;
   margin-bottom: 24px;
@@ -526,7 +518,7 @@
   color: #fff !important;
 }
 .limitless-home .report-dark-card-new .sub-text {
-  font-size: 11px;
+  font-size: 14px;
   color: #9aa3c0 !important;
   margin-bottom: 16px;
 }
@@ -555,13 +547,13 @@
   color: #fff !important;
 }
 .limitless-home .score-inner .eval-text {
-  font-size: 11px;
+  font-size: 14px;
   color: #10b981;
   font-weight: 700;
   margin-top: 6px;
 }
 .limitless-home .report-dark-card-new .desc-text {
-  font-size: 11px;
+  font-size: 14px;
   color: #aab0c6;
   line-height: 1.5;
   margin-bottom: 20px;
@@ -573,7 +565,7 @@
   border: none;
   border-radius: 8px;
   padding: 10px;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
 }
@@ -602,7 +594,7 @@
   box-shadow: 0 2px 8px rgba(0,0,0,0.02);
 }
 .limitless-home .stat-item-new h6 {
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 600;
   color: #0f172a;
   margin-bottom: 8px;
@@ -617,19 +609,19 @@
   color: #0f172a;
 }
 .limitless-home .stat-val-row .small-num {
-  font-size: 14px;
+  font-size: 16px;
   color: #94a3b8;
   font-weight: 500;
   margin-left: 4px;
   margin-right: 14px;
 }
 .limitless-home .status-good-new {
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 700;
   color: #10b981;
 }
 .limitless-home .status-low-new {
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 700;
   color: #f97316;
 }
@@ -653,7 +645,7 @@
   margin-bottom: 12px;
 }
 .limitless-home .see-get-new p {
-  font-size: 14px;
+  font-size: 16px;
   color: #64748b;
   line-height: 1.6;
   margin-bottom: 20px;
@@ -667,7 +659,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: #1e293b;
   padding: 8px 0;
@@ -678,7 +670,7 @@
   border: none;
   border-radius: 8px;
   padding: 12px 24px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
@@ -737,20 +729,20 @@
   margin-bottom: 16px;
 }
 .limitless-home .expert-item-new h5 {
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 800;
   color: #1e293b;
   margin-bottom: 6px;
 }
 .limitless-home .expert-item-new p {
-  font-size: 11px;
+  font-size: 14px;
   color: #64748b;
   line-height: 1.4;
 }
 
 .limitless-home .privacy-card-new {
   flex: 1.2;
-  background: #f8fafc;
+  background: #eff6ff; /* Changed to light blue to match design image */
   border-radius: 16px;
   padding: 32px;
   display: flex;
@@ -761,14 +753,14 @@
   flex-shrink: 0;
 }
 .limitless-home .privacy-text h4 {
-  font-size: 16px;
+  font-size: 18px; /* Increased font-size to match design image */
   font-weight: 800;
   color: #0f172a;
   line-height: 1.3;
   margin-bottom: 12px;
 }
 .limitless-home .privacy-text p {
-  font-size: 13px;
+  font-size: 16px;
   color: #64748b;
   line-height: 1.5;
 }
@@ -804,7 +796,7 @@
   height: 24px;
   border-radius: 50%;
   color: #fff;
-  font-size: 11.5px;
+  font-size: 14px;
   font-weight: 800;
   display: flex;
   align-items: center;
@@ -820,12 +812,12 @@
   justify-content: center;
 }
 .limitless-home .step-item h5 {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   margin-bottom: 8px;
 }
 .limitless-home .step-item p {
-  font-size: 12px;
+  font-size: 15px;
   color: var(--text-muted);
   line-height: 1.5;
 }
@@ -871,13 +863,13 @@
   margin: 0 auto 14px;
 }
 .limitless-home .benefit-item h5 {
-  font-size: 13.5px;
+  font-size: 16px;
   font-weight: 700;
   margin-bottom: 7px;
   line-height: 1.3;
 }
 .limitless-home .benefit-item p {
-  font-size: 11.5px;
+  font-size: 14px;
   color: var(--text-muted);
   line-height: 1.5;
 }
@@ -919,20 +911,20 @@
   margin-bottom: 12px;
 }
 .limitless-home .testi-quote-new {
-  font-size: 13px;
+  font-size: 16px;
   color: #cbd5e1;
   line-height: 1.5;
   margin-bottom: 16px;
   font-weight: 500;
 }
 .limitless-home .testi-name-new {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   color: #fff;
   margin-bottom: 2px;
 }
 .limitless-home .testi-loc-new {
-  font-size: 11px;
+  font-size: 14px;
   color: #94a3b8;
 }
 
@@ -982,7 +974,7 @@
   margin-bottom: 2px;
 }
 .limitless-home .lbl-new {
-  font-size: 11px;
+  font-size: 14px;
   color: #64748b;
   font-weight: 500;
 }
@@ -999,7 +991,7 @@
 }
 .limitless-home .trust-blurb {
   flex: 0 0 26%;
-  font-size: 13px;
+  font-size: 16px;
   color: var(--text-muted);
   line-height: 1.6;
   display: flex;
@@ -1040,7 +1032,7 @@
   font-weight: 800;
 }
 .limitless-home .trust-stat .lbl {
-  font-size: 11px;
+  font-size: 14px;
   color: var(--text-muted);
   line-height: 1.3;
 }
@@ -1064,7 +1056,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 13.5px;
+  font-size: 16px;
   font-weight: 600;
 }
 .limitless-home .faq-ic {
@@ -1076,7 +1068,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  font-size: 14px;
+  font-size: 16px;
 }
 .limitless-home .faq-item .chev {
   color: #9aa3c0;
@@ -1107,7 +1099,7 @@
 }
 .limitless-home .cta-text p {
   color: #b6bcd4;
-  font-size: 14px;
+  font-size: 16px;
   margin-bottom: 22px;
 }
 .limitless-home .cta-btn-row {
@@ -1137,13 +1129,13 @@
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
 }
 .limitless-home .cta-badge h6 {
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 700;
   line-height: 1.3;
   margin-bottom: 6px;
 }
 .limitless-home .cta-badge .count {
-  font-size: 13px;
+  font-size: 16px;
   color: #9aa3c0;
   margin-bottom: 8px;
 }
@@ -1180,7 +1172,7 @@
 }
 .limitless-home .footer-brand p {
   color: #8b91ab;
-  font-size: 12.5px;
+  font-size: 15px;
   line-height: 1.6;
   margin: 14px 0 18px;
 }
@@ -1197,18 +1189,18 @@
   align-items: center;
   justify-content: center;
   color: #fff;
-  font-size: 13px;
+  font-size: 16px;
 }
 .limitless-home .footer-col h6 {
   color: #fff;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   margin-bottom: 16px;
 }
 .limitless-home .footer-col a {
   display: block;
   color: #9aa3c0;
-  font-size: 13px;
+  font-size: 16px;
   margin-bottom: 10px;
 }
 .limitless-home .footer-contact p {
@@ -1216,14 +1208,14 @@
   align-items: flex-start;
   gap: 10px;
   color: #9aa3c0;
-  font-size: 13px;
+  font-size: 16px;
   margin-bottom: 12px;
   line-height: 1.5;
 }
 .limitless-home .footer-bottom {
   text-align: center;
   color: #7b819c;
-  font-size: 12px;
+  font-size: 15px;
   padding-top: 20px;
 }
 .limitless-home .footer-col {
@@ -1307,6 +1299,11 @@
   
   .limitless-home .challenge-wrap {
     flex-direction: column;
+  }
+  .limitless-home .report-white-box-new {
+    flex-direction: column;
+    padding: 16px;
+    gap: 16px;
   }
   .limitless-home .arrow-divider {
     transform: translate(-50%, -50%) rotate(90deg);
@@ -1437,7 +1434,7 @@
 }
 
 .limitless-home .small-text, .limitless-home .sub-text, .limitless-home .lbl-new, .limitless-home .testi-quote-new, .limitless-home .privacy-text p {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
   line-height: 1.5;
   color: #64748b;
@@ -1477,13 +1474,7 @@
   font-weight: 600;
   color: #1e293b;
 }
-.limitless-home .section-eyebrow {
-  font-size: 16px;
-  font-weight: 700;
-  color: #3b82f6;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
+/* Removed override to allow .section-eyebrow to fall back to the default large bold centered header style */
 .limitless-home .section-subtitle {
   font-size: 18px;
   font-weight: 400;
@@ -1871,5 +1862,72 @@
     height: 52px !important;
   }
 }
+
+/* Typography size scaling overrides */
+.limitless-home .hero-left h1 { font-size: clamp(32px, 5vw, var(--h1-size)); }
+.limitless-home .hero-left p { font-size: var(--p-size); }
+.limitless-home .section-eyebrow { font-size: var(--h2-size); }
+.limitless-home p { font-size: var(--p-size); }
+.limitless-home h2 { font-size: var(--h2-size); }
+.limitless-home h3 { font-size: var(--h3-size); }
+.limitless-home h4 { font-size: var(--h4-size); }
+.limitless-home h5 { font-size: var(--h5-size); }
+.limitless-home .reveal-item p { font-size: var(--p-size); }
+.limitless-home .expert-desc-new { font-size: var(--p-size); }
+.limitless-home .faq-question { font-size: var(--p-size); }
+.limitless-home .faq-answer { font-size: calc(var(--p-size) - 1.5px); }
+.limitless-home .benefit-card p { font-size: var(--p-size); }
+.limitless-home .science-card p { font-size: var(--p-size); }
+
+/* Additional sub-element scaling */
+.limitless-home .btn { font-size: calc(var(--p-size) - 2px); }
+.limitless-home .btn-hero { font-size: calc(var(--p-size) - 1.5px); }
+.limitless-home .hero-badges span { font-size: calc(var(--p-size) - 2.5px); }
+.limitless-home .hero-trust-text strong { font-size: calc(var(--p-size) - 1.5px); }
+.limitless-home .hero-trust-text span { font-size: calc(var(--p-size) - 3.5px); }
+.limitless-home .col-header h4 { font-size: var(--h5-size); }
+.limitless-home .challenge-list li, 
+.limitless-home .after-list li { font-size: var(--p-size); }
+.limitless-home .report-dark-card-new h5 { font-size: var(--h5-size); }
+.limitless-home .report-dark-card-new .sub-text { font-size: calc(var(--p-size) - 2.5px); }
+.limitless-home .report-dark-card-new .desc-text { font-size: calc(var(--p-size) - 2.5px); }
+.limitless-home .score-inner .eval-text { font-size: calc(var(--p-size) - 2.5px); }
+.limitless-home .designed-section p { font-size: var(--p-size); }
+.limitless-home .reveal-item p { font-size: var(--p-size); }
+.limitless-home .step-card p { font-size: var(--p-size); }
+.limitless-home .step-card h3 { font-size: var(--h4-size); }
+.limitless-home .benefit-card p { font-size: var(--p-size); }
+.limitless-home .benefit-card h3 { font-size: var(--h4-size); }
+.limitless-home .trust-item h4 { font-size: var(--h5-size); }
+.limitless-home .trust-item p { font-size: calc(var(--p-size) - 2px); }
+.limitless-home .privacy-card-new p { font-size: var(--p-size); }
+.limitless-home .privacy-card-new h4 { font-size: var(--h4-size); }
+.limitless-home .science-card .label { font-size: calc(var(--p-size) - 2.5px); }
+.limitless-home .science-card .source { font-size: calc(var(--p-size) - 3px); }
+.limitless-home .expert-badge-new { font-size: calc(var(--p-size) - 3px); }
+.limitless-home .expert-badge-new span { font-size: calc(var(--p-size) - 3px); }
+
+/* Newly targeted home elements */
+.limitless-home .experts-card-new h3 { font-size: var(--h2-size); }
+.limitless-home .expert-item-new h5 { font-size: var(--h4-size); }
+.limitless-home .expert-item-new p { font-size: var(--p-size); }
+.limitless-home .step-item h5 { font-size: var(--h4-size); }
+.limitless-home .step-item p { font-size: var(--p-size); }
+.limitless-home .benefit-item h5 { font-size: var(--h4-size); }
+.limitless-home .benefit-item p { font-size: var(--p-size); }
+.limitless-home .testi-quote-new { font-size: var(--p-size); }
+.limitless-home .testi-name-new { font-size: var(--h5-size); font-weight: 700; }
+.limitless-home .testi-loc-new { font-size: calc(var(--p-size) - 2px); }
+.limitless-home .stat-new .big-new { font-size: var(--h2-size); }
+.limitless-home .stat-new .lbl-new { font-size: var(--p-size); }
+.limitless-home .trust-blurb { font-size: var(--p-size); }
+.limitless-home .trust-stat .big { font-size: var(--h2-size); }
+.limitless-home .trust-stat .lbl { font-size: var(--p-size); }
+.limitless-home .faq-question { font-size: var(--p-size); }
+.limitless-home .faq-answer { font-size: calc(var(--p-size) - 1px); }
+
+
+
+
 
 

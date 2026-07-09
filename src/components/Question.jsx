@@ -1,32 +1,37 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
+import { fetchWithRetry, getApiUrl } from '../lib/apiUtils';
+import { sendCredentialsEmail } from '../lib/emailService';
+import './Question.css';
 
 const Question = () => {
   const [formData, setFormData] = useState({});
   const [status, setStatus] = useState('idle');
   const navigate = useNavigate();
-  const userEmail = localStorage.getItem('userEmail');
+  const userEmail = sessionStorage.getItem('userEmail');
 
   const [questionsData, setQuestionsData] = useState([]);
 
   React.useEffect(() => {
-    const stored = localStorage.getItem('assessmentSections');
+    const stored = sessionStorage.getItem('assessmentSections');
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
-        const mapped = parsed.map(s => ({
-          section: s.title,
-          questions: s.items
-        }));
-        setQuestionsData(mapped);
+        const flat = [];
+        parsed.forEach(s => {
+          (s.items || []).forEach(item => {
+            flat.push({ ...item, domain: s.title });
+          });
+        });
+        setQuestionsData(flat);
       } catch (e) {
         console.error("Error parsing sections", e);
       }
     }
   }, []);
 
-  const totalQuestions = questionsData.reduce((acc, sec) => acc + sec.questions.length, 0);
+  const totalQuestions = questionsData.length;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -68,12 +73,12 @@ const Question = () => {
         value: value
       }));
 
-      const assessmentId = localStorage.getItem('assessmentId');
-      const age = parseInt(localStorage.getItem('userAge'), 10) || 22;
-      let gender = localStorage.getItem('userGender') || 'prefer-not-to-say';
+      const assessmentId = sessionStorage.getItem('assessmentId');
+      const age = parseInt(sessionStorage.getItem('userAge'), 10) || 22;
+      let gender = sessionStorage.getItem('userGender') || 'prefer-not-to-say';
       if (gender === 'prefer_not_to_say') gender = 'prefer-not-to-say';
 
-      const analyzeResponse = await fetch("/api/v1/analyze", {
+      const analyzeResponse = await fetchWithRetry(getApiUrl('/api/v1/analyze'), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -84,30 +89,24 @@ const Question = () => {
         })
       });
 
-      if (!analyzeResponse.ok) {
-        const errData = await analyzeResponse.json();
-        console.error("Analyze Error:", errData);
-        throw new Error('Failed to analyze assessment');
-      }
-
       const analysisResult = await analyzeResponse.json();
-      localStorage.setItem('analysisReport', JSON.stringify(analysisResult));
+      sessionStorage.setItem('analysisReport', JSON.stringify(analysisResult));
 
-      // Save assessment report JSON to users table immediately so it's not lost
-      const userId = localStorage.getItem('userId');
+      // Save assessment report JSON to assessments table immediately so it's not lost
+      const userId = sessionStorage.getItem('userId');
       if (userId) {
         try {
+          // Save a record of this assessment to the assessments table for unlimited history
           await supabase
-            .from('users')
-            .update({ report_json: analysisResult })
-            .eq('id', userId);
+            .from('assessments')
+            .insert([{ user_id: userId, report_json: analysisResult }]);
         } catch (dbErr) {
           console.error("Error saving assessment to DB:", dbErr);
         }
       }
 
-      // Navigate to payment page
-      navigate('/payment');
+      // Always navigate directly to dashboard after assessment
+      navigate('/dashboard');
       window.scrollTo(0, 0);
 
     } catch (err) {
@@ -118,213 +117,69 @@ const Question = () => {
   };
 
   return (
-    <section style={styles.section} className="question-section">
-      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '6px', background: '#1e293b', zIndex: 9999 }}>
-        <div style={{ width: `${calculateProgress()}%`, height: '100%', background: 'linear-gradient(90deg, #F59E0B, #10B981)', transition: 'width 0.4s ease' }}></div>
-      </div>
-      {/* Decorative background blobs */}
-      <div style={{ position: 'absolute', top: '10%', left: '-100px', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(245,158,11,0.12) 0%, transparent 70%)', borderRadius: '50%', pointerEvents: 'none' }} />
-      <div style={{ position: 'absolute', bottom: '10%', right: '-100px', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(59,130,246,0.10) 0%, transparent 70%)', borderRadius: '50%', pointerEvents: 'none' }} />
-      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '800px', height: '800px', background: 'radial-gradient(circle, rgba(15,23,42,0.0) 0%, rgba(245,158,11,0.04) 100%)', borderRadius: '50%', pointerEvents: 'none' }} />
-      
-      <div className="container" style={styles.container}>
-        <div className="question-form-panel" style={styles.formPanel}>
-          <h2 style={styles.headerTitle} className="slide-up">Cognitive Health Assessment</h2>
-          <p style={styles.headerSubtitle} className="slide-up delay-100">
-            Please answer each question based on how you’ve felt over the past 2 weeks.
-          </p>
+    <div className="assessment-page">
+      <div className="assessment__bg"></div>
+      <div className="container assessment__inner">
+          <div className="assessment-quiz fade-in" style={{ maxWidth: '800px', width: '100%' }}>
+            <div className="quiz-header" style={{ marginBottom: '32px', textAlign: 'center' }}>
+              <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#111', margin: 0 }}>Cognitive Assessment</h2>
+              <p style={{ color: '#666', marginTop: '12px', fontSize: '16px' }}>Answer all questions to get your personalized report.</p>
+            </div>
 
-          <div style={styles.legendBlock} className="slide-up delay-100">
-            <h4 style={{ color: '#fff', marginBottom: '10px' }}>Scale:</h4>
-            <ul style={styles.legendList}>
-              <li><strong>0</strong> = Not at all</li>
-              <li><strong>1</strong> = Rarely (1–2 days)</li>
-              <li><strong>2</strong> = Sometimes (3–5 days)</li>
-              <li><strong>3</strong> = Often (6–10 days)</li>
-              <li><strong>4</strong> = Almost Always (11–14 days)</li>
-            </ul>
-          </div>
-
-          <form onSubmit={handleSubmit} style={styles.form} className="slide-up delay-200">
-            {questionsData.map((section, idx) => (
-              <div key={idx} style={styles.sectionBlock}>
-                <h3 style={styles.sectionHeader}>🔹 Section {idx + 1}: {section.section}</h3>
-                
-                <div style={styles.questionsContainer}>
-                  {section.questions.map((q) => (
-                    <div key={q.id} style={styles.questionItem}>
-                      <p style={styles.questionText}>{q.text}</p>
-                      <div style={styles.radioGroup}>
-                        {[0, 1, 2, 3, 4].map((val) => {
-                          const isSelected = formData[q.id] === val;
-                          return (
-                            <label 
-                              key={val} 
-                              style={{
-                                ...styles.radioLabel,
-                                ...(isSelected ? styles.radioLabelSelected : {})
-                              }}
-                            >
-                              <input 
-                                type="radio" 
-                                name={q.id} 
-                                value={val} 
-                                required 
-                                onChange={handleChange}
-                                style={{ display: 'none' }}
-                              />
-                              <span>{val}</span>
-                            </label>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  ))}
+            <div className="quiz-list">
+              {questionsData.map((q, idx) => (
+                <div key={q.id} className="quiz-list-item" style={{ marginBottom: '40px', paddingBottom: '32px', borderBottom: '1px solid #eaeaea' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                    <span style={{ fontWeight: 700, color: '#888', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px' }}>Question {idx + 1}</span>
+                    <span className="quiz-domain">{q.domain ? q.domain.replace(/_/g, ' ') : ''}</span>
+                  </div>
+                  <h3 style={{ fontSize: '20px', fontWeight: 600, color: '#111', marginBottom: '24px', lineHeight: 1.4 }}>{q.text}</h3>
+                  <div className="quiz-radio-group" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: '12px' }}>
+                    {[0, 1, 2, 3, 4].map((val) => (
+                      <label key={val} style={{
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px',
+                        cursor: 'pointer', padding: '16px 8px', borderRadius: '12px',
+                        border: formData[q.id] === val ? '2px solid var(--primary)' : '2px solid #f0f0f0',
+                        background: formData[q.id] === val ? 'rgba(212,20,58,0.05)' : '#fafafa',
+                        transition: 'all 0.2s ease',
+                        boxShadow: formData[q.id] === val ? '0 4px 12px rgba(212,20,58,0.1)' : 'none'
+                      }}>
+                        <input
+                          type="radio"
+                          name={q.id}
+                          value={val}
+                          checked={formData[q.id] === val}
+                          onChange={handleChange}
+                          style={{ margin: 0, width: '20px', height: '20px', accentColor: 'var(--primary)', cursor: 'pointer' }}
+                        />
+                        <span style={{ fontSize: '14px', textAlign: 'center', fontWeight: formData[q.id] === val ? 700 : 500, color: formData[q.id] === val ? 'var(--primary)' : '#666' }}>
+                          {['Never', 'Rarely', 'Sometimes', 'Often', 'Always'][val]}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
 
-            <button 
-              type="submit" 
-              className="btn btn-primary support-submit"
-              disabled={status === 'submitting'}
-              style={{ padding: '16px', fontSize: '26px', marginTop: '20px', opacity: status === 'submitting' ? 0.7 : 1 }}
+            <button
+              className="btn-primary w-100"
+              onClick={handleSubmit}
+              disabled={Object.keys(formData).length < totalQuestions || status === 'submitting'}
+              style={{
+                padding: '20px', fontSize: '18px', marginTop: '24px',
+                opacity: Object.keys(formData).length < totalQuestions ? 0.5 : 1,
+                cursor: Object.keys(formData).length < totalQuestions ? 'not-allowed' : 'pointer'
+              }}
             >
-              {status === 'submitting' ? 'Submitting Assessment...' : 'Submit Assessment & Continue'}
+              {status === 'submitting' ? 'Submitting Assessment...' : Object.keys(formData).length < totalQuestions
+                ? `Answer all questions (${Object.keys(formData).length} of ${totalQuestions} done)`
+                : 'Submit & Get My Report'}
             </button>
-          </form>
-        </div>
+          </div>
       </div>
-    </section>
+    </div>
   );
-};
-
-const styles = {
-  section: {
-    paddingTop: '140px',
-    paddingBottom: '80px',
-    minHeight: '100vh',
-    display: 'flex',
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    position: 'relative',
-    overflow: 'hidden',
-    background: 'linear-gradient(135deg, #020617 0%, #0F172A 40%, #1e1b4b 70%, #0F172A 100%)'
-  },
-  container: {
-    maxWidth: '900px',
-    width: '100%',
-    padding: '0 15px',
-    position: 'relative',
-    zIndex: 1
-  },
-  formPanel: {
-    background: 'rgba(255,255,255,0.04)',
-    backdropFilter: 'blur(20px)',
-    WebkitBackdropFilter: 'blur(20px)',
-    border: '1px solid rgba(255,255,255,0.08)',
-    borderRadius: '24px',
-    padding: '48px 40px',
-    boxShadow: '0 25px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)'
-  },
-  headerTitle: {
-    fontSize: 'clamp(24px, 5vw, 36px)',
-    color: '#fff',
-    marginBottom: '10px',
-    textAlign: 'center',
-    fontWeight: '800',
-    background: 'linear-gradient(135deg, #fff 0%, #F59E0B 100%)',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    backgroundClip: 'text'
-  },
-  headerSubtitle: {
-    fontSize: 'clamp(15px, 3vw, 18px)',
-    color: '#94A3B8',
-    textAlign: 'center',
-    marginBottom: '30px'
-  },
-  legendBlock: {
-    background: 'rgba(255, 255, 255, 0.05)',
-    padding: '20px',
-    borderRadius: '12px',
-    marginBottom: '40px',
-    border: '1px solid rgba(255,255,255,0.1)'
-  },
-  legendList: {
-    listStyle: 'none',
-    padding: 0,
-    margin: 0,
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: '15px',
-    color: '#CBD5E1',
-    fontSize: '21px'
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '30px'
-  },
-  sectionBlock: {
-    padding: '28px',
-    background: 'rgba(255, 255, 255, 0.03)',
-    borderRadius: '16px',
-    border: '1px solid rgba(255,255,255,0.07)',
-    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)'
-  },
-  sectionHeader: {
-    color: '#F59E0B',
-    fontSize: '26px',
-    fontWeight: '700',
-    marginBottom: '20px',
-    borderBottom: '1px solid rgba(245, 158, 11, 0.2)',
-    paddingBottom: '12px',
-    letterSpacing: '0.3px'
-  },
-  questionsContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '20px'
-  },
-  questionItem: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '10px'
-  },
-  questionText: {
-    color: '#fff',
-    fontSize: '23px',
-    margin: 0
-  },
-  radioGroup: {
-    display: 'flex',
-    gap: '12px',
-    flexWrap: 'wrap',
-    marginTop: '5px'
-  },
-  radioLabel: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '45px',
-    height: '45px',
-    borderRadius: '12px',
-    background: 'rgba(255, 255, 255, 0.05)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    cursor: 'pointer',
-    color: '#94A3B8',
-    transition: 'all 0.2s ease',
-    fontSize: '23px',
-    fontWeight: '700'
-  },
-  radioLabelSelected: {
-    background: 'linear-gradient(135deg, #F59E0B, #FB923C)',
-    color: '#fff',
-    borderColor: '#F59E0B',
-    boxShadow: '0 4px 15px rgba(245, 158, 11, 0.4)',
-    transform: 'scale(1.05)'
-  }
 };
 
 export default Question;

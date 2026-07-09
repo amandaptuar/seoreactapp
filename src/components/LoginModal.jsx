@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabase';
 import bcrypt from 'bcryptjs';
 import ChangePasswordModal from './ChangePasswordModal';
 
-const LoginModal = ({ isOpen, onClose }) => {
+const LoginModal = ({ isOpen, onClose, onOpenAssessment }) => {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -43,15 +43,17 @@ const LoginModal = ({ isOpen, onClose }) => {
         throw new Error('Incorrect password. Please try again.');
       }
 
-      // 3. Restore all session data to localStorage
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('userEmail', user.email);
-      localStorage.setItem('username', user.email);
-      localStorage.setItem('name', user.name || '');
-      localStorage.setItem('userId', user.id);
-      localStorage.setItem('paymentStatus', user.payment_status === 'paid' ? 'yes' : 'no');
-      localStorage.setItem('passwordResetRequired', user.password_reset_required ? 'true' : 'false');
-      if (user.temp_password) localStorage.setItem('generatedPassword', user.temp_password);
+      // 3. Restore all session data to sessionStorage
+      sessionStorage.setItem('isLoggedIn', 'true');
+      sessionStorage.setItem('userEmail', user.email);
+      sessionStorage.setItem('username', user.email);
+      sessionStorage.setItem('name', user.name || '');
+      sessionStorage.setItem('userId', user.id);
+      sessionStorage.setItem('paymentStatus', user.payment_status === 'paid' ? 'yes' : 'no');
+      sessionStorage.setItem('passwordResetRequired', user.password_reset_required ? 'true' : 'false');
+      if (user.age) sessionStorage.setItem('userAge', user.age);
+      if (user.gender) sessionStorage.setItem('userGender', user.gender);
+      if (user.temp_password) sessionStorage.setItem('generatedPassword', user.temp_password);
 
       // 4. Restore latest assessment from Supabase if available
       const { data: assessment } = await supabase
@@ -63,7 +65,7 @@ const LoginModal = ({ isOpen, onClose }) => {
         .single();
 
       if (assessment?.report_json) {
-        localStorage.setItem('analysisReport', JSON.stringify(assessment.report_json));
+        sessionStorage.setItem('analysisReport', JSON.stringify(assessment.report_json));
       }
 
       setIsSuccess(true);
@@ -74,7 +76,7 @@ const LoginModal = ({ isOpen, onClose }) => {
         if (user.password_reset_required) {
           setShowChangePassword(true);
         } else {
-          window.location.reload();
+          navigate('/dashboard');
         }
       }, 1000);
 
@@ -94,7 +96,7 @@ const LoginModal = ({ isOpen, onClose }) => {
           userId={loggedInUserId}
           onSuccess={() => {
             setShowChangePassword(false);
-            window.location.reload();
+            navigate('/dashboard');
           }}
         />
       )}
@@ -169,9 +171,13 @@ const LoginModal = ({ isOpen, onClose }) => {
                     onClick={(e) => {
                       e.preventDefault();
                       onClose();
-                      const el = document.getElementById('hero-form-section');
-                      if (el) el.scrollIntoView({ behavior: 'smooth' });
-                      else navigate('/');
+                      if (onOpenAssessment) {
+                        onOpenAssessment();
+                      } else {
+                        const el = document.getElementById('hero-form-section');
+                        if (el) el.scrollIntoView({ behavior: 'smooth' });
+                        else navigate('/');
+                      }
                     }}
                     style={{ color: '#0F172A', fontWeight: '700', textDecoration: 'none' }}
                   >

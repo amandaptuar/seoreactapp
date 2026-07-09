@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Limitless – Join Us</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:      #0d1b3e;
+    --navy-dark: #080f24;
+    --indigo:    #3b4fd4;
+    --purple:    #7c3aed;
+    --violet:    #a855f7;
+    --blue-glow: #4f9cf9;
+    --cyan:      #06b6d4;
+    --orange:    #f97316;
+    --pink:      #ec4899;
+    --green:     #22c55e;
+    --gold:      #eab308;
+    --white:     #ffffff;
+    --gray-50:   #f9fafb;
+    --gray-100:  #f3f4f6;
+    --gray-200:  #e5e7eb;
+    --gray-400:  #9ca3af;
+    --gray-500:  #6b7280;
+    --gray-600:  #4b5563;
+    --gray-700:  #374151;
+    --gray-900:  #111827;
+    --text:      #1f2937;
+    --radius:    10px;
+    --shadow:    0 4px 24px rgba(0,0,0,.08);
+  }
+
+  body { font-family: 'Inter', sans-serif; color: var(--text); background: #fff; }
+  img  { max-width: 100%; display: block; }
+  a    { text-decoration: none; color: inherit; }
+
+  /* ─── NAV ─── */
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px; height: 68px;
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-200);
+    position: sticky; top: 0; z-index: 999;
+  }
+  .nav-brand { display: flex; align-items: center; gap: 10px; }
+  .nav-brand svg { width: 38px; height: 38px; }
+  .nav-brand-text { display: flex; flex-direction: column; line-height: 1; }
+  .nav-brand-text .brand-name { font-size: 18px; font-weight: 800; letter-spacing: .08em; color: var(--navy); }
+  .nav-brand-text .brand-sub  { font-size: 9px;  font-weight: 600; letter-spacing: .1em; color: var(--orange); text-transform: uppercase; }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-links a { font-size: 14px; font-weight: 500; color: var(--gray-700); transition: color .2s; }
+  .nav-links a:hover { color: var(--indigo); }
+  .nav-right { display: flex; align-items: center; gap: 20px; }
+  .nav-phone { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500; color: var(--navy); }
+  .nav-phone svg { color: var(--indigo); }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--indigo), var(--purple));
+    color: #fff; border: none; border-radius: 6px;
+    padding: 10px 20px; font-size: 14px; font-weight: 600; cursor: pointer;
+    white-space: nowrap; transition: opacity .2s;
+  }
+  .btn-primary:hover { opacity: .9; }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: linear-gradient(135deg, #0a1628 0%, #0f1e45 40%, #131f50 70%, #0d1640 100%);
+    padding: 60px 40px 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 40px; overflow: hidden; position: relative;
+    border-radius: 0; min-height: 340px;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 80% at 70% 50%, rgba(79,156,249,.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-left { max-width: 500px; z-index: 1; }
+  .badge-join {
+    display: inline-flex; align-items: center;
+    background: var(--indigo); color: #fff;
+    font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    padding: 5px 14px; border-radius: 20px; margin-bottom: 22px;
+  }
+  .hero h1 { font-size: clamp(28px, 4vw, 46px); font-weight: 800; color: #fff; line-height: 1.15; margin-bottom: 10px; }
+  .hero h1 span { color: transparent; background: linear-gradient(90deg, #5b8ef8, #a259f7); -webkit-background-clip: text; background-clip: text; }
+  .hero p  { font-size: 15px; color: rgba(255,255,255,.72); line-height: 1.7; margin-bottom: 28px; max-width: 400px; }
+  .hero-badges { display: flex; flex-wrap: wrap; gap: 10px; }
+  .hero-badge {
+    display: flex; align-items: center; gap: 7px;
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14);
+    color: rgba(255,255,255,.88); font-size: 13px; font-weight: 500;
+    padding: 8px 16px; border-radius: 6px; backdrop-filter: blur(4px);
+  }
+  .hero-badge svg { flex-shrink: 0; }
+
+  /* hero right – glowing brain portal */
+  .hero-right { z-index: 1; flex-shrink: 0; width: clamp(220px, 35vw, 380px); }
+  .brain-portal {
+    position: relative; width: 100%; aspect-ratio: 1 / 1.1;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .brain-portal svg { width: 100%; height: 100%; }
+
+  /* ─── AUTH + WHY SECTION ─── */
+  .auth-section {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 0; background: #fff;
+    border: 1px solid var(--gray-200); border-radius: 12px;
+    margin: 40px 40px; box-shadow: var(--shadow); overflow: hidden;
+  }
+  .auth-left { padding: 40px; border-right: 1px solid var(--gray-200); }
+  .auth-right { padding: 40px; }
+
+  .auth-left h2, .auth-right h2 { text-align: center; font-size: 22px; font-weight: 700; color: var(--gray-900); margin-bottom: 6px; }
+  .auth-left p,  .auth-right > p { text-align: center; font-size: 14px; color: var(--gray-500); margin-bottom: 28px; }
+
+  /* Tabs */
+  .tabs { display: flex; border-bottom: 2px solid var(--gray-200); margin-bottom: 24px; }
+  .tab { flex: 1; text-align: center; padding: 10px; font-size: 15px; font-weight: 600; color: var(--gray-500); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all .2s; }
+  .tab.active { color: var(--indigo); border-bottom-color: var(--indigo); }
+
+  /* Form */
+  .form-group { position: relative; margin-bottom: 14px; }
+  .form-group svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--gray-400); }
+  .form-group input {
+    width: 100%; padding: 12px 14px 12px 40px;
+    border: 1px solid var(--gray-200); border-radius: 8px;
+    font-size: 14px; color: var(--gray-700); background: #fff;
+    outline: none; transition: border-color .2s;
+  }
+  .form-group input:focus { border-color: var(--indigo); }
+  .form-group .eye-icon { position: absolute; right: 14px; left: auto; cursor: pointer; }
+
+  .form-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+  .remember { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--gray-600); }
+  .remember input[type=checkbox] { accent-color: var(--indigo); width: 15px; height: 15px; }
+  .forgot { font-size: 13px; color: var(--indigo); font-weight: 500; cursor: pointer; }
+
+  .btn-signin {
+    width: 100%; padding: 13px;
+    background: linear-gradient(135deg, var(--indigo), var(--purple));
+    color: #fff; border: none; border-radius: 8px;
+    font-size: 15px; font-weight: 600; cursor: pointer; transition: opacity .2s;
+  }
+  .btn-signin:hover { opacity: .9; }
+
+  .divider { text-align: center; font-size: 13px; color: var(--gray-400); margin: 16px 0; position: relative; }
+  .divider::before, .divider::after {
+    content: ''; position: absolute; top: 50%; width: 40%; height: 1px; background: var(--gray-200);
+  }
+  .divider::before { left: 0; } .divider::after { right: 0; }
+
+  .social-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .btn-social {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 11px; border: 1px solid var(--gray-200); border-radius: 8px;
+    font-size: 14px; font-weight: 500; cursor: pointer; transition: background .2s;
+    background: #fff; color: var(--gray-700);
+  }
+  .btn-social:hover { background: var(--gray-50); }
+
+  .signup-prompt { text-align: center; font-size: 13px; color: var(--gray-500); }
+  .signup-prompt a { color: var(--indigo); font-weight: 600; }
+
+  /* Why Join list */
+  .why-list { display: flex; flex-direction: column; gap: 20px; }
+  .why-item { display: flex; align-items: flex-start; gap: 14px; }
+  .why-icon {
+    width: 42px; height: 42px; border-radius: 10px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .why-icon.purple { background: #7c3aed22; }
+  .why-icon.green  { background: #22c55e22; }
+  .why-icon.blue   { background: #3b82f622; }
+  .why-icon.orange { background: #f9731622; }
+  .why-icon.pink   { background: #ec489922; }
+  .why-item-text h4 { font-size: 14px; font-weight: 700; color: var(--gray-900); margin-bottom: 3px; }
+  .why-item-text p  { font-size: 13px; color: var(--gray-500); line-height: 1.5; }
+
+  /* ─── CAREERS SECTION ─── */
+  .careers {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 30px;
+    background: #fff; padding: 50px 40px;
+    border-top: 1px solid var(--gray-100);
+  }
+  .careers-left { flex: 1; min-width: 220px; }
+  .careers-left h2 { font-size: 26px; font-weight: 800; color: var(--gray-900); line-height: 1.25; margin-bottom: 12px; }
+  .careers-left p  { font-size: 14px; color: var(--gray-500); line-height: 1.7; margin-bottom: 24px; max-width: 280px; }
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 6px;
+    border: 2px solid var(--indigo); color: var(--indigo);
+    background: transparent; padding: 10px 22px; border-radius: 6px;
+    font-size: 14px; font-weight: 600; cursor: pointer; transition: all .2s;
+  }
+  .btn-outline:hover { background: var(--indigo); color: #fff; }
+
+  .careers-stats { display: flex; gap: 20px; flex-wrap: wrap; }
+  .stat-card {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 8px; padding: 24px 30px; text-align: center;
+    background: var(--gray-50); border-radius: 12px; min-width: 130px;
+  }
+  .stat-card svg { width: 32px; height: 32px; }
+  .stat-num  { font-size: 24px; font-weight: 800; color: var(--gray-900); }
+  .stat-label{ font-size: 13px; color: var(--gray-500); font-weight: 500; }
+
+  /* ─── TESTIMONIALS ─── */
+  .testimonials { padding: 50px 40px; border-top: 1px solid var(--gray-100); }
+  .testi-header { margin-bottom: 30px; }
+  .testi-header h2 { font-size: 22px; font-weight: 800; color: var(--gray-900); margin-bottom: 8px; }
+  .happy-users { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+  .avatar-stack { display: flex; }
+  .avatar-stack img, .avatar-item {
+    width: 32px; height: 32px; border-radius: 50%;
+    border: 2px solid #fff; margin-left: -8px; object-fit: cover;
+    background: linear-gradient(135deg, var(--indigo), var(--violet));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0;
+  }
+  .avatar-stack .avatar-item:first-child { margin-left: 0; }
+  .happy-meta { font-size: 13px; font-weight: 600; color: var(--gray-700); }
+  .stars { color: var(--gold); font-size: 16px; letter-spacing: 1px; }
+
+  .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .testi-card {
+    background: var(--gray-50); border-radius: 12px; padding: 24px;
+    position: relative;
+  }
+  .quote-mark { font-size: 48px; color: var(--indigo); font-family: Georgia, serif; line-height: 1; margin-bottom: 10px; opacity: .7; }
+  .testi-card p { font-size: 14px; color: var(--gray-600); line-height: 1.65; margin-bottom: 16px; }
+  .testi-author { display: flex; align-items: center; gap: 10px; }
+  .testi-avatar {
+    width: 40px; height: 40px; border-radius: 50%; object-fit: cover;
+    background: linear-gradient(135deg, var(--indigo), var(--violet));
+    display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #fff;
+  }
+  .testi-name { font-size: 13px; font-weight: 700; color: var(--gray-900); }
+  .testi-loc  { font-size: 12px; color: var(--gray-400); }
+
+  /* ─── CTA BANNER ─── */
+  .cta-banner {
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 30px;
+    padding: 50px 40px;
+    background: linear-gradient(135deg, #f0f4ff 0%, #faf0ff 100%);
+    border-top: 1px solid var(--gray-100);
+  }
+  .cta-left { display: flex; align-items: center; gap: 24px; }
+  .cta-brain svg { width: 100px; height: 100px; }
+  .cta-text h2 { font-size: 24px; font-weight: 800; color: var(--gray-900); margin-bottom: 8px; }
+  .cta-text p  { font-size: 14px; color: var(--gray-500); line-height: 1.6; max-width: 380px; }
+  .cta-buttons { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .btn-cta-solid {
+    background: linear-gradient(135deg, var(--indigo), var(--purple));
+    color: #fff; border: none; border-radius: 8px;
+    padding: 13px 28px; font-size: 15px; font-weight: 600; cursor: pointer; transition: opacity .2s; white-space: nowrap;
+  }
+  .btn-cta-solid:hover { opacity: .9; }
+  .btn-cta-outline {
+    border: 2px solid var(--indigo); color: var(--indigo);
+    background: transparent; border-radius: 8px;
+    padding: 11px 28px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all .2s; white-space: nowrap;
+  }
+  .btn-cta-outline:hover { background: var(--indigo); color: #fff; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #fff; border-top: 1px solid var(--gray-200);
+    padding: 50px 40px 24px;
+  }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.3fr; gap: 40px; margin-bottom: 40px; }
+  .footer-brand-desc { font-size: 13px; color: var(--gray-500); line-height: 1.7; margin: 12px 0 18px; max-width: 220px; }
+  .social-icons { display: flex; gap: 12px; }
+  .social-icon {
+    width: 32px; height: 32px; border-radius: 6px;
+    background: var(--gray-100); display: flex; align-items: center; justify-content: center;
+    color: var(--gray-600); transition: all .2s; cursor: pointer;
+  }
+  .social-icon:hover { background: var(--indigo); color: #fff; }
+  footer h4 { font-size: 14px; font-weight: 700; color: var(--gray-900); margin-bottom: 14px; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .footer-links a { font-size: 13px; color: var(--gray-500); transition: color .2s; }
+  .footer-links a:hover { color: var(--indigo); }
+  .footer-links-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; }
+  .contact-item { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 10px; font-size: 13px; color: var(--gray-500); }
+  .contact-item svg { flex-shrink: 0; margin-top: 1px; }
+  .footer-bottom { border-top: 1px solid var(--gray-100); padding-top: 20px; text-align: center; font-size: 13px; color: var(--gray-400); }
+
+  /* ─── HAMBURGER MENU ─── */
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+  .hamburger span { display: block; width: 24px; height: 2px; background: var(--gray-700); border-radius: 2px; }
+  .mobile-menu {
+    display: none; position: fixed; top: 68px; left: 0; right: 0; bottom: 0;
+    background: #fff; z-index: 998; flex-direction: column; padding: 24px;
+    gap: 16px; overflow-y: auto;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a { font-size: 16px; font-weight: 500; color: var(--gray-700); padding: 8px 0; border-bottom: 1px solid var(--gray-100); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 1024px) {
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .testi-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .nav-links, .nav-right { display: none; }
+    .hamburger { display: flex; }
+    .hero { flex-direction: column; padding: 40px 20px; text-align: center; min-height: auto; }
+    .hero-left { max-width: 100%; }
+    .hero p { margin: 0 auto 28px; }
+    .hero-badges { justify-content: center; }
+    .hero-right { width: 200px; margin: 0 auto; }
+    .auth-section { grid-template-columns: 1fr; margin: 24px 20px; }
+    .auth-left { border-right: none; border-bottom: 1px solid var(--gray-200); }
+    .careers { padding: 40px 20px; flex-direction: column; }
+    .careers-stats { justify-content: center; }
+    .testimonials { padding: 40px 20px; }
+    .testi-grid { grid-template-columns: 1fr; }
+    .cta-banner { padding: 40px 20px; flex-direction: column; text-align: center; }
+    .cta-left { flex-direction: column; align-items: center; text-align: center; }
+    .cta-buttons { justify-content: center; }
+    footer { padding: 40px 20px 20px; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+  }
+  @media (max-width: 480px) {
+    .footer-grid { grid-template-columns: 1fr; }
+    .testi-grid { grid-template-columns: 1fr; }
+    .careers-stats { flex-direction: column; align-items: stretch; }
+    .stat-card { flex-direction: row; justify-content: flex-start; text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav>
+  <div class="nav-brand">
+    <!-- Limitless gem/star logo -->
+    <svg viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="19" cy="19" r="19" fill="#0d1b3e"/>
+      <polygon points="19,5 23,15 34,15 25,22 28,33 19,27 10,33 13,22 4,15 15,15" fill="none" stroke="#4f9cf9" stroke-width="1.5"/>
+      <polygon points="19,9 22,16 30,16 24,21 26,29 19,25 12,29 14,21 8,16 16,16" fill="#4f9cf9" opacity=".35"/>
+      <circle cx="19" cy="19" r="4" fill="#7c3aed" opacity=".8"/>
+      <circle cx="19" cy="19" r="2" fill="#a855f7"/>
+    </svg>
+    <div class="nav-brand-text">
+      <span class="brand-name">LIMITLESS</span>
+      <span class="brand-sub">Unlock Your True Potential</span>
+    </div>
+  </div>
+  <div class="nav-links">
+    <a href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">Features</a>
+    <a href="#">Benefits</a>
+    <a href="#">How It Works</a>
+    <a href="#" style="color:var(--indigo);font-weight:700;">Join Now</a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-phone">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8 19.79 19.79 0 011 2.18 2 2 0 012.96 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg>
+      +1 (702) 555-0147
+    </div>
+    <button class="btn-primary">Start Assessment +</button>
+  </div>
+  <!-- hamburger -->
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#">Home</a>
+  <a href="#">About</a>
+  <a href="#">Features</a>
+  <a href="#">Benefits</a>
+  <a href="#">How It Works</a>
+  <a href="#" style="color:var(--indigo);font-weight:700;">Join Now</a>
+  <a href="tel:+17025550147">+1 (702) 555-0147</a>
+  <button class="btn-primary" style="width:100%;margin-top:8px;">Start Assessment +</button>
+</div>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="badge-join">JOIN US</div>
+    <h1>Be Part of a<br><span>Smarter, Healthier Future.</span></h1>
+    <p>Join thousands of professionals, students, parents, and wellness enthusiasts who trust Limitless to unlock their cognitive potential and live their best life.</p>
+    <div class="hero-badges">
+      <div class="hero-badge">
+        <!-- atom / science icon -->
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4f9cf9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M12 2a10 10 0 0 1 0 20M12 2a10 10 0 0 0 0 20M2 12h20M12 12l7-7M12 12l-7 7"/></svg>
+        Science-Backed
+      </div>
+      <div class="hero-badge">
+        <!-- AI / cpu icon -->
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="8" y="8" width="8" height="8"/><line x1="4" y1="10" x2="2" y2="10"/><line x1="4" y1="14" x2="2" y2="14"/><line x1="20" y1="10" x2="22" y2="10"/><line x1="20" y1="14" x2="22" y2="14"/><line x1="10" y1="4" x2="10" y2="2"/><line x1="14" y1="4" x2="14" y2="2"/><line x1="10" y1="20" x2="10" y2="22"/><line x1="14" y1="20" x2="14" y2="22"/></svg>
+        AI-Powered
+      </div>
+      <div class="hero-badge">
+        <!-- shield / trusted icon -->
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Trusted by 2,300+ Users
+      </div>
+    </div>
+  </div>
+
+  <!-- Brain Portal SVG Illustration -->
+  <div class="hero-right">
+    <div class="brain-portal">
+      <svg viewBox="0 0 380 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="portalGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#4f9cf9" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="#4f9cf9" stop-opacity="0"/>
+          </radialGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+            <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <linearGradient id="stairGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#1a3a7a"/>
+            <stop offset="100%" stop-color="#0d1b3e"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Background glow -->
+        <ellipse cx="190" cy="210" rx="160" ry="180" fill="url(#portalGlow)"/>
+
+        <!-- Portal frame outer glow -->
+        <rect x="90" y="40" width="200" height="260" rx="8" stroke="#4f9cf9" stroke-width="1" stroke-opacity="0.3" fill="none"/>
+
+        <!-- Portal frame glowing lines -->
+        <rect x="100" y="50" width="180" height="240" rx="6" stroke="#4f9cf9" stroke-width="2.5" fill="rgba(10,20,60,0.6)" filter="url(#glow)"/>
+
+        <!-- Corner accents -->
+        <line x1="100" y1="50" x2="116" y2="50" stroke="#4f9cf9" stroke-width="3" stroke-linecap="round" filter="url(#glow)"/>
+        <line x1="100" y1="50" x2="100" y2="66" stroke="#4f9cf9" stroke-width="3" stroke-linecap="round" filter="url(#glow)"/>
+        <line x1="280" y1="50" x2="264" y2="50" stroke="#4f9cf9" stroke-width="3" stroke-linecap="round" filter="url(#glow)"/>
+        <line x1="280" y1="50" x2="280" y2="66" stroke="#4f9cf9" stroke-width="3" stroke-linecap="round" filter="url(#glow)"/>
+        <line x1="100" y1="290" x2="116" y2="290" stroke="#4f9cf9" stroke-width="3" stroke-linecap="round" filter="url(#glow)"/>
+        <line x1="100" y1="290" x2="100" y2="274" stroke="#4f9cf9" stroke-width="3" stroke-linecap="round" filter="url(#glow)"/>
+        <line x1="280" y1="290" x2="264" y2="290" stroke="#4f9cf9" stroke-width="3" stroke-linecap="round" filter="url(#glow)"/>
+        <line x1="280" y1="290" x2="280" y2="274" stroke="#4f9cf9" stroke-width="3" stroke-linecap="round" filter="url(#glow)"/>
+
+        <!-- Stars in portal background -->
+        <circle cx="130" cy="80" r="1" fill="white" opacity="0.6"/>
+        <circle cx="165" cy="65" r="1.2" fill="white" opacity="0.5"/>
+        <circle cx="200" cy="72" r="0.8" fill="white" opacity="0.7"/>
+        <circle cx="240" cy="60" r="1" fill="white" opacity="0.5"/>
+        <circle cx="260" cy="85" r="1.2" fill="white" opacity="0.6"/>
+        <circle cx="145" cy="260" r="1" fill="white" opacity="0.4"/>
+        <circle cx="250" cy="255" r="1.2" fill="white" opacity="0.5"/>
+        <circle cx="120" cy="200" r="0.8" fill="white" opacity="0.6"/>
+        <circle cx="270" cy="180" r="1" fill="white" opacity="0.5"/>
+
+        <!-- BRAIN SVG (top center inside portal) -->
+        <g transform="translate(130, 60) scale(1.1)" filter="url(#glow)">
+          <!-- Brain outline -->
+          <path d="M60 90 C50 90 35 82 33 68 C31 56 40 47 48 45 C44 38 46 28 54 25 C58 23 63 24 66 27 C68 20 76 14 84 16 C90 18 93 24 92 30 C98 26 107 27 110 34 C114 42 110 52 104 55 C110 59 113 68 109 75 C106 82 98 86 92 84 C90 90 84 94 78 93 C72 95 65 95 60 90Z" 
+                fill="none" stroke="#4f9cf9" stroke-width="1.8" opacity="0.9"/>
+          <!-- Brain neural lines left -->
+          <path d="M48 45 C52 50 54 56 52 62" stroke="#4f9cf9" stroke-width="1" fill="none" opacity="0.6"/>
+          <path d="M52 62 C50 68 54 74 58 76" stroke="#4f9cf9" stroke-width="1" fill="none" opacity="0.6"/>
+          <path d="M60 50 C62 56 60 62 58 68" stroke="#6ba8f7" stroke-width="1" fill="none" opacity="0.6"/>
+          <!-- Brain neural lines right -->
+          <path d="M92 30 C88 36 88 44 90 50" stroke="#a78bfa" stroke-width="1" fill="none" opacity="0.6"/>
+          <path d="M104 55 C100 60 98 66 100 72" stroke="#a78bfa" stroke-width="1" fill="none" opacity="0.6"/>
+          <path d="M80 35 C78 42 80 50 78 56" stroke="#6ba8f7" stroke-width="1" fill="none" opacity="0.6"/>
+          <!-- Center divider -->
+          <line x1="71" y1="25" x2="71" y2="90" stroke="#4f9cf9" stroke-width="0.8" opacity="0.35"/>
+          <!-- Glow dots -->
+          <circle cx="48" cy="45" r="2.5" fill="#4f9cf9" opacity="0.8"/>
+          <circle cx="104" cy="55" r="2.5" fill="#a78bfa" opacity="0.8"/>
+          <circle cx="71" cy="55" r="3" fill="#7c3aed" opacity="0.6"/>
+          <circle cx="58" cy="75" r="2" fill="#4f9cf9" opacity="0.7"/>
+          <circle cx="92" cy="50" r="2" fill="#a78bfa" opacity="0.7"/>
+          <circle cx="80" cy="35" r="1.5" fill="#4f9cf9" opacity="0.6"/>
+        </g>
+
+        <!-- LIMITLESS AWAITS YOU text in portal -->
+        <text x="190" y="196" text-anchor="middle" fill="white" font-family="Inter,sans-serif" font-size="13" font-weight="800" letter-spacing="2">LIMITLESS</text>
+        <text x="190" y="213" text-anchor="middle" fill="white" font-family="Inter,sans-serif" font-size="11" font-weight="600" letter-spacing="1.5" opacity="0.85">AWAITS YOU</text>
+
+        <!-- Staircase/steps inside portal bottom -->
+        <rect x="140" y="240" width="100" height="10" fill="#1e3a7a" opacity="0.7"/>
+        <rect x="148" y="250" width="84" height="10" fill="#162e6a" opacity="0.7"/>
+        <rect x="156" y="260" width="68" height="10" fill="#102458" opacity="0.7"/>
+
+        <!-- Human silhouette -->
+        <!-- head -->
+        <ellipse cx="190" cy="246" rx="7" ry="8" fill="#0d1b3e"/>
+        <!-- body -->
+        <path d="M183 254 L185 285 L190 282 L195 285 L197 254Z" fill="#0d1b3e"/>
+        <!-- legs -->
+        <line x1="186" y1="283" x2="184" y2="295" stroke="#0d1b3e" stroke-width="3" stroke-linecap="round"/>
+        <line x1="194" y1="283" x2="196" y2="295" stroke="#0d1b3e" stroke-width="3" stroke-linecap="round"/>
+        <!-- arms -->
+        <line x1="184" y1="260" x2="178" y2="272" stroke="#0d1b3e" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="196" y1="260" x2="202" y2="272" stroke="#0d1b3e" stroke-width="2.5" stroke-linecap="round"/>
+
+        <!-- Portal floor glow -->
+        <ellipse cx="190" cy="298" rx="65" ry="10" fill="#4f9cf9" opacity="0.12"/>
+
+        <!-- Bottom stairs extending below portal -->
+        <rect x="120" y="296" width="140" height="8" fill="#1a3a7a" opacity="0.5" rx="2"/>
+        <rect x="110" y="304" width="160" height="8" fill="#132f68" opacity="0.45" rx="2"/>
+        <rect x="98" y="312" width="184" height="8" fill="#0e2558" opacity="0.4" rx="2"/>
+
+        <!-- Floating particles -->
+        <circle cx="88" cy="140" r="2.5" fill="#4f9cf9" opacity="0.6">
+          <animate attributeName="opacity" values="0.6;0.2;0.6" dur="3s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="292" cy="160" r="2" fill="#a855f7" opacity="0.5">
+          <animate attributeName="opacity" values="0.5;0.1;0.5" dur="2.5s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="78" cy="220" r="1.5" fill="#06b6d4" opacity="0.5">
+          <animate attributeName="opacity" values="0.5;0.15;0.5" dur="4s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="302" cy="240" r="2" fill="#4f9cf9" opacity="0.4">
+          <animate attributeName="opacity" values="0.4;0.1;0.4" dur="3.5s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ AUTH + WHY JOIN ═══════════ -->
+<section class="auth-section">
+  <!-- Sign In / Sign Up form -->
+  <div class="auth-left">
+    <h2>Welcome Back!</h2>
+    <p>Sign in to continue your journey with Limitless.</p>
+    <div class="tabs">
+      <div class="tab active" onclick="setTab(this,'signin')">Sign In</div>
+      <div class="tab" onclick="setTab(this,'signup')">Sign Up</div>
+    </div>
+
+    <!-- Sign In Form -->
+    <div id="signin">
+      <div class="form-group">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <input type="email" placeholder="Email Address" />
+      </div>
+      <div class="form-group">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <input type="password" placeholder="Password" id="pwdInput" />
+        <svg class="eye-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" onclick="togglePwd()"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </div>
+      <div class="form-row">
+        <label class="remember"><input type="checkbox" checked /> Remember me</label>
+        <a href="#" class="forgot">Forgot Password?</a>
+      </div>
+      <button class="btn-signin">Sign In</button>
+      <div class="divider">or continue with</div>
+      <div class="social-btns">
+        <button class="btn-social">
+          <!-- Google G -->
+          <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+          Google
+        </button>
+        <button class="btn-social">
+          <!-- Apple -->
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98l-.09.06c-.22.15-2.18 1.27-2.16 3.8.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.37 2.78M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          Apple
+        </button>
+      </div>
+      <div class="signup-prompt">Don't have an account? <a href="#">Sign Up</a></div>
+    </div>
+  </div>
+
+  <!-- Why Join Limitless -->
+  <div class="auth-right">
+    <h2>Why Join Limitless?</h2>
+    <p>Your journey to a better brain and better life starts here.</p>
+    <div class="why-list">
+      <div class="why-item">
+        <div class="why-icon purple">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <div class="why-item-text">
+          <h4>Personalized Assessments</h4>
+          <p>AI-powered reports tailored to your cognitive strengths and areas of improvement.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-icon green">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="why-item-text">
+          <h4>Actionable Insights</h4>
+          <p>Get science-backed recommendations to enhance your memory, focus, and well-being.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-icon blue">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="why-item-text">
+          <h4>Track &amp; Improve</h4>
+          <p>Monitor your progress over time and see real improvements in your performance.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-icon orange">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+        </div>
+        <div class="why-item-text">
+          <h4>Trusted &amp; Secure</h4>
+          <p>Your data is 100% private, encrypted, and never shared.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-icon pink">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <div class="why-item-text">
+          <h4>For Everyone</h4>
+          <p>Professionals, students, parents, seniors, and wellness enthusiasts – Limitless is for you.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CAREERS ═══════════ -->
+<section class="careers">
+  <div class="careers-left">
+    <h2>We're Building the Future<br>of Brain Health.</h2>
+    <p>Join our mission to empower millions of people to unlock their true potential through science, AI, and innovation.</p>
+    <button class="btn-outline">View Open Positions</button>
+  </div>
+  <div class="careers-stats">
+    <div class="stat-card">
+      <!-- people icon -->
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="10" r="4" fill="#4f9cf9" opacity=".25"/>
+        <circle cx="12" cy="10" r="4" stroke="#4f9cf9" stroke-width="1.5" fill="none"/>
+        <circle cx="21" cy="10" r="4" fill="#4f9cf9" opacity=".25"/>
+        <circle cx="21" cy="10" r="4" stroke="#4f9cf9" stroke-width="1.5" fill="none"/>
+        <path d="M4 26c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="#4f9cf9" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M20 18.5c2.2.5 4 2.6 4 5.5" stroke="#4f9cf9" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div><div class="stat-num">20+</div><div class="stat-label">Open Positions</div></div>
+    </div>
+    <div class="stat-card">
+      <!-- briefcase icon -->
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="6" y="12" width="20" height="14" rx="2" stroke="#22c55e" stroke-width="1.5" fill="#22c55e" fill-opacity=".15"/>
+        <path d="M11 12V9a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v3" stroke="#22c55e" stroke-width="1.5" fill="none"/>
+        <line x1="6" y1="19" x2="26" y2="19" stroke="#22c55e" stroke-width="1.5"/>
+        <line x1="14" y1="19" x2="18" y2="19" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <div><div class="stat-num">5+</div><div class="stat-label">Departments</div></div>
+    </div>
+    <div class="stat-card">
+      <!-- globe icon -->
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="16" cy="16" r="11" stroke="#7c3aed" stroke-width="1.5" fill="#7c3aed" fill-opacity=".1"/>
+        <ellipse cx="16" cy="16" rx="5" ry="11" stroke="#7c3aed" stroke-width="1.5" fill="none"/>
+        <line x1="5" y1="16" x2="27" y2="16" stroke="#7c3aed" stroke-width="1.5"/>
+        <line x1="7" y1="10" x2="25" y2="10" stroke="#7c3aed" stroke-width="1" opacity=".5"/>
+        <line x1="7" y1="22" x2="25" y2="22" stroke="#7c3aed" stroke-width="1" opacity=".5"/>
+      </svg>
+      <div><div class="stat-num">Global</div><div class="stat-label">Remote First</div></div>
+    </div>
+    <div class="stat-card">
+      <!-- bar chart growth icon -->
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="6" y="18" width="5" height="8" rx="1" fill="#f97316" opacity=".3"/>
+        <rect x="6" y="18" width="5" height="8" rx="1" stroke="#f97316" stroke-width="1.5" fill="none"/>
+        <rect x="13.5" y="12" width="5" height="14" rx="1" fill="#f97316" opacity=".3"/>
+        <rect x="13.5" y="12" width="5" height="14" rx="1" stroke="#f97316" stroke-width="1.5" fill="none"/>
+        <rect x="21" y="6" width="5" height="20" rx="1" fill="#f97316" opacity=".3"/>
+        <rect x="21" y="6" width="5" height="20" rx="1" stroke="#f97316" stroke-width="1.5" fill="none"/>
+        <polyline points="8,16 16,10 24,4" stroke="#f97316" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <polyline points="20,4 24,4 24,8" stroke="#f97316" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+      <div><div class="stat-num">Growth</div><div class="stat-label">Career Development</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ TESTIMONIALS ═══════════ -->
+<section class="testimonials">
+  <div class="testi-header">
+    <h2>Trusted by Thousands<br>Around the World</h2>
+    <div class="happy-users">
+      <div class="avatar-stack">
+        <div class="avatar-item" style="background:linear-gradient(135deg,#f97316,#eab308);">S</div>
+        <div class="avatar-item" style="background:linear-gradient(135deg,#22c55e,#06b6d4);">J</div>
+        <div class="avatar-item" style="background:linear-gradient(135deg,#3b4fd4,#7c3aed);">M</div>
+        <div class="avatar-item" style="background:linear-gradient(135deg,#ec4899,#a855f7);">A</div>
+        <div class="avatar-item" style="background:linear-gradient(135deg,#0d1b3e,#3b4fd4);">R</div>
+      </div>
+      <div>
+        <div class="happy-meta">2,300+ Happy Users</div>
+        <div class="stars">★★★★★</div>
+      </div>
+    </div>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="quote-mark">"</div>
+      <p>Limitless has completely changed the way I understand my brain and performance.</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:linear-gradient(135deg,#f97316,#eab308);">S</div>
+        <div>
+          <div class="testi-name">Sarah M.</div>
+          <div class="testi-loc">Miami, FL</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="quote-mark">"</div>
+      <p>The personalized insights helped me improve focus and reduce stress.</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:linear-gradient(135deg,#22c55e,#06b6d4);">J</div>
+        <div>
+          <div class="testi-name">James T.</div>
+          <div class="testi-loc">Austin, TX</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="quote-mark">"</div>
+      <p>As a student, this platform has helped me stay focused and perform better.</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:linear-gradient(135deg,#3b4fd4,#7c3aed);">M</div>
+        <div>
+          <div class="testi-name">Michael R.</div>
+          <div class="testi-loc">Denver, CO</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CTA BANNER ═══════════ -->
+<section class="cta-banner">
+  <div class="cta-left">
+    <div class="cta-brain">
+      <!-- Neural brain illustration -->
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="brainGlow2" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.3"/>
+            <stop offset="100%" stop-color="#7c3aed" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <circle cx="50" cy="50" r="48" fill="url(#brainGlow2)"/>
+        <!-- Brain shape -->
+        <path d="M50 82 C38 82 25 73 23 60 C21 48 30 39 38 37 C34 30 36 20 44 17 C48 15 53 16 56 19 C58 12 66 6 74 8 C80 10 83 16 82 22 C88 18 97 19 100 26 C104 34 100 44 94 47 C100 51 103 60 99 67 C96 74 88 78 82 76 C80 82 74 86 68 85 C62 87 55 87 50 82Z"
+              fill="none" stroke="#7c3aed" stroke-width="2" transform="scale(0.72) translate(14,10)"/>
+        <!-- Neural network lines -->
+        <line x1="30" y1="35" x2="45" y2="50" stroke="#7c3aed" stroke-width="0.8" opacity="0.6"/>
+        <line x1="45" y1="50" x2="55" y2="40" stroke="#a855f7" stroke-width="0.8" opacity="0.6"/>
+        <line x1="55" y1="40" x2="70" y2="48" stroke="#7c3aed" stroke-width="0.8" opacity="0.6"/>
+        <line x1="70" y1="48" x2="60" y2="62" stroke="#a855f7" stroke-width="0.8" opacity="0.6"/>
+        <line x1="60" y1="62" x2="45" y2="65" stroke="#7c3aed" stroke-width="0.8" opacity="0.6"/>
+        <line x1="45" y1="65" x2="35" y2="55" stroke="#a855f7" stroke-width="0.8" opacity="0.6"/>
+        <line x1="50" y1="30" x2="50" y2="70" stroke="#7c3aed" stroke-width="0.6" opacity="0.3"/>
+        <!-- Glowing nodes -->
+        <circle cx="30" cy="35" r="3" fill="#7c3aed" opacity="0.7"/>
+        <circle cx="45" cy="50" r="3.5" fill="#a855f7" opacity="0.8"/>
+        <circle cx="55" cy="40" r="3" fill="#7c3aed" opacity="0.7"/>
+        <circle cx="70" cy="48" r="3" fill="#a855f7" opacity="0.7"/>
+        <circle cx="60" cy="62" r="3" fill="#7c3aed" opacity="0.7"/>
+        <circle cx="45" cy="65" r="3" fill="#a855f7" opacity="0.7"/>
+        <circle cx="35" cy="55" r="2.5" fill="#7c3aed" opacity="0.6"/>
+        <!-- Center glow -->
+        <circle cx="50" cy="50" r="5" fill="#7c3aed" opacity="0.5"/>
+        <circle cx="50" cy="50" r="2.5" fill="#a855f7"/>
+      </svg>
+    </div>
+    <div class="cta-text">
+      <h2>Ready to Unlock Your Potential?</h2>
+      <p>Create your account or sign in to get your personalized AI assessment and start your transformation today.</p>
+    </div>
+  </div>
+  <div class="cta-buttons">
+    <button class="btn-cta-solid">Create Account</button>
+    <button class="btn-cta-outline">Sign In Now</button>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer>
+  <div class="footer-grid">
+    <!-- Brand column -->
+    <div>
+      <div class="nav-brand">
+        <svg viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" width="36" height="36">
+          <circle cx="19" cy="19" r="19" fill="#0d1b3e"/>
+          <polygon points="19,5 23,15 34,15 25,22 28,33 19,27 10,33 13,22 4,15 15,15" fill="none" stroke="#4f9cf9" stroke-width="1.5"/>
+          <polygon points="19,9 22,16 30,16 24,21 26,29 19,25 12,29 14,21 8,16 16,16" fill="#4f9cf9" opacity=".35"/>
+          <circle cx="19" cy="19" r="4" fill="#7c3aed" opacity=".8"/>
+          <circle cx="19" cy="19" r="2" fill="#a855f7"/>
+        </svg>
+        <div class="nav-brand-text">
+          <span class="brand-name">LIMITLESS</span>
+          <span class="brand-sub">Unlock Your True Potential</span>
+        </div>
+      </div>
+      <p class="footer-brand-desc">Science-backed cognitive performance platform designed to help you unlock your true potential.</p>
+      <div class="social-icons">
+        <div class="social-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </div>
+        <div class="social-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </div>
+        <div class="social-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </div>
+        <div class="social-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.97C18.88 4 12 4 12 4s-6.88 0-8.59.45A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.4a2.78 2.78 0 0 0 1.95-1.97A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#0d1b3e"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div>
+      <h4>Quick Links</h4>
+      <ul class="footer-links footer-links-two-col">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">How It Works</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Join Now</a></li>
+        <li><a href="#">Features</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Benefits</a></li>
+      </ul>
+    </div>
+
+    <!-- Resources -->
+    <div>
+      <h4>Resources</h4>
+      <ul class="footer-links">
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">FAQs</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+      </ul>
+    </div>
+
+    <!-- Contact Us -->
+    <div>
+      <h4>Contact Us</h4>
+      <div class="contact-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3b4fd4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8 19.79 19.79 0 011 2.18 2 2 0 012.96 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg>
+        +1 (702) 555-0147
+      </div>
+      <div class="contact-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3b4fd4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        hello@limitlessworld.net
+      </div>
+      <div class="contact-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3b4fd4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span>123 Mindful Way, Suite 100<br>Las Vegas, NV 89101, USA</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2025 Limitless. All rights reserved.</div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+  function togglePwd() {
+    const i = document.getElementById('pwdInput');
+    i.type = i.type === 'password' ? 'text' : 'password';
+  }
+  function setTab(el, tab) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+</script>
+</body>
+</html>

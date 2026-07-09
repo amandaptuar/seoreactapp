@@ -1,18 +1,24 @@
 import React, { useState } from 'react';
-import EnquiryModal from './EnquiryModal';
+import AssessmentModal from './AssessmentModal';
+import { useLocation } from 'react-router-dom';
 
 const FloatingCTA = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const location = useLocation();
+
+  if (location.pathname.includes('/dashboard') || location.pathname.includes('/admin') || location.pathname.includes('/sample-report')) {
+    return null;
+  }
 
   return (
     <>
       <div 
         className="floating-cta" 
         onClick={() => setIsModalOpen(true)}
-        title="Start Assessment"
+        title="Start Free Assessment"
       >
         ⚡
-        <span className="cta-tooltip">Start Assessment</span>
+        <span className="cta-tooltip">Start Free Assessment</span>
       
       <style>{`
         .floating-cta {
@@ -73,7 +79,7 @@ const FloatingCTA = () => {
         }
       `}</style>
       </div>
-      <EnquiryModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <AssessmentModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </>
   );
 };

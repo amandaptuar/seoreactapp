@@ -4,29 +4,46 @@ import { supabase } from '../lib/supabase';
 
 const Admin = () => {
   const [users, setUsers] = useState([]);
+  const [enquiries, setEnquiries] = useState([]);
+  const [activeTab, setActiveTab] = useState('users');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchUsers();
+    fetchData();
   }, []);
 
-  const fetchUsers = async () => {
+  const fetchData = async () => {
     try {
       setLoading(true);
       const { data: usersData, error: usersError } = await supabase
         .from('users')
-        .select('*')
+        .select('*, assessments(*)')
         .order('created_at', { ascending: false });
 
       if (usersError) throw usersError;
 
-      const mappedUsers = usersData.map(user => ({
-        ...user,
-        ai_insights: user.report_json || null,
-        pdf_url: user.pdf_url || null,
-      }));
+      const { data: enquiriesData, error: enquiriesError } = await supabase
+        .from('enquiries')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (!enquiriesError && enquiriesData) {
+        setEnquiries(enquiriesData);
+      } else {
+        console.warn("Could not fetch enquiries. Ensure the 'enquiries' table exists.");
+      }
+
+      const mappedUsers = usersData.map(user => {
+        const sortedAssessments = user.assessments?.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) || [];
+        const latest = sortedAssessments[0];
+        return {
+          ...user,
+          ai_insights: latest?.report_json || null,
+          pdf_url: latest?.pdf_url || null,
+        };
+      });
 
       setUsers(mappedUsers);
       setLoading(false);
@@ -41,7 +58,7 @@ const Admin = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('adminLoggedIn');
+    sessionStorage.removeItem('adminLoggedIn');
     navigate('/admin-login');
   };
 
@@ -71,7 +88,7 @@ const Admin = () => {
         <div style={styles.headerRow}>
           <h2 style={styles.title}>Limitless Internal Dashboard</h2>
           <div style={{ display: 'flex', gap: '15px' }}>
-            <button style={styles.refreshBtn} onClick={fetchUsers}>
+            <button style={styles.refreshBtn} onClick={fetchData}>
               ↻ Refresh Data
             </button>
             <button style={styles.logoutBtn} onClick={handleLogout}>
@@ -80,11 +97,28 @@ const Admin = () => {
           </div>
         </div>
 
+        {/* Tabs for switching views */}
+        <div style={{ display: 'flex', gap: '15px', marginBottom: '30px' }}>
+          <button 
+            style={{ ...styles.tabBtn, background: activeTab === 'users' ? 'var(--primary)' : 'transparent', color: activeTab === 'users' ? '#000' : 'var(--primary)' }}
+            onClick={() => setActiveTab('users')}
+          >
+            Registered Users ({users.length})
+          </button>
+          <button 
+            style={{ ...styles.tabBtn, background: activeTab === 'enquiries' ? 'var(--primary)' : 'transparent', color: activeTab === 'enquiries' ? '#000' : 'var(--primary)' }}
+            onClick={() => setActiveTab('enquiries')}
+          >
+            Feedback & Enquiries ({enquiries.length})
+          </button>
+        </div>
+
         {loading ? (
           <div style={{ textAlign: 'center', color: '#ccc', padding: '40px' }}>Loading records...</div>
         ) : error ? (
           <div style={styles.errorBox}>Error fetching data: {error}</div>
-        ) : users.length === 0 ? (
+        ) : activeTab === 'users' ? (
+          users.length === 0 ? (
           <div style={{ textAlign: 'center', color: '#ccc', padding: '40px' }}>No users registered yet.</div>
         ) : (
           <div style={styles.grid}>
@@ -116,7 +150,7 @@ const Admin = () => {
                   </div>
                   {user.ai_insights && (
                     <div style={{ ...styles.pill, background: 'rgba(139, 92, 246, 0.15)', color: '#8b5cf6' }}>
-                      AI Generated
+                      {user.assessments?.length > 1 ? `${user.assessments.length} Assessments` : 'AI Generated'}
                     </div>
                   )}
                   {user.pdf_url && (
@@ -142,6 +176,38 @@ const Admin = () => {
                   </button>
                 </div>
 
+              </div>
+            ))}
+          </div>
+          )
+        ) : (
+          <div style={styles.grid}>
+            {enquiries.length === 0 ? (
+              <div style={{ textAlign: 'center', color: '#ccc', padding: '40px', gridColumn: '1 / -1' }}>No feedback or enquiries found.</div>
+            ) : enquiries.map(enquiry => (
+              <div key={enquiry.id} style={{ ...styles.card, transition: 'transform 0.2s ease', cursor: 'default' }}>
+                <div style={styles.cardHeader}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <h3 style={styles.name} title={enquiry.name}>{enquiry.name || 'Anonymous'}</h3>
+                    <div style={styles.email} title={enquiry.email}>{enquiry.email}</div>
+                  </div>
+                </div>
+                <div style={{ 
+                  color: '#e2e8f0', 
+                  fontSize: '17px', 
+                  lineHeight: '1.6', 
+                  marginTop: '15px', 
+                  background: 'rgba(255,255,255,0.03)', 
+                  padding: '20px', 
+                  borderRadius: '12px', 
+                  border: '1px solid rgba(255,255,255,0.08)',
+                  whiteSpace: 'pre-wrap'
+                }}>
+                  {enquiry.message}
+                </div>
+                <div style={{ marginTop: '15px', fontSize: '15px', color: '#64748b', fontWeight: '500' }}>
+                  Received: {new Date(enquiry.created_at).toLocaleString()}
+                </div>
               </div>
             ))}
           </div>
@@ -304,8 +370,16 @@ const styles = {
     background: 'rgba(255,107,107,0.1)',
     border: '1px solid rgba(255,107,107,0.2)',
     padding: '20px',
-    borderRadius: '8px',
     textAlign: 'center'
+  },
+  tabBtn: {
+    padding: '12px 24px',
+    border: '1px solid var(--primary)',
+    borderRadius: '8px',
+    fontSize: '16px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
   }
 };
 

@@ -1,0 +1,562 @@
+.limitless-contact {
+    --purple: #7C3AED;
+    --purple-light: #A855F7;
+    --purple-glow: #6D28D9;
+    --blue-accent: #3B82F6;
+    --orange: #F97316;
+    --dark-bg: #0A0A1A;
+    --dark-card: #0F0F2A;
+    --white: #FFFFFF;
+    --gray-text: #CBD5E1;
+    --light-gray: #94A3B8;
+    --section-bg: #F8FAFC;
+    --border: #E2E8F0;
+    --input-border: #D1D5DB;
+    --text-dark: #0F172A;
+    --text-mid: #374151;
+    --gradient-btn: linear-gradient(135deg, #7C3AED 0%, #A855F7 50%, #3B82F6 100%);
+  }
+
+.limitless-contact *,
+.limitless-contact *::before,
+.limitless-contact *::after { box-sizing: border-box; margin: 0; padding: 0; }.limitless-contact {
+    font-family: var(--font-primary);
+    background: #fff;
+    color: var(--text-dark);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }.limitless-contact nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+  }.limitless-contact .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }.limitless-contact .logo-icon {
+    width: 42px;
+    height: 42px;
+  }.limitless-contact .logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }.limitless-contact .logo-name {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-dark);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }.limitless-contact .logo-tagline {
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--orange);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }.limitless-contact .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    list-style: none;
+  }.limitless-contact .nav-links a {
+    text-decoration: none;
+    color: var(--text-mid);
+    font-size: 14px;
+    font-weight: 500;
+    transition: color .2s;
+  }.limitless-contact .nav-links a:hover { color: var(--purple); }.limitless-contact .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }.limitless-contact .nav-phone {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-mid);
+    text-decoration: none;
+  }.limitless-contact .nav-phone svg { color: var(--purple); }.limitless-contact .btn-primary {
+    background: var(--gradient-btn);
+    color: #fff;
+    padding: 10px 22px;
+    border-radius: 25px;
+    font-size: 13.5px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: opacity .2s, transform .2s;
+    white-space: nowrap;
+  }.limitless-contact .btn-primary:hover { opacity: .9; transform: translateY(-1px); }.limitless-contact .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 4px;
+  }.limitless-contact .hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--text-dark);
+    border-radius: 2px;
+    transition: all .3s;
+  }.limitless-contact .hero {
+    background: url('/contactpage/image.png') center center no-repeat;
+    background-size: cover;
+    position: relative;
+    overflow: hidden;
+    padding: 70px 60px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    min-height: 340px;
+  }.limitless-contact .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(124,58,237,0.35) 0%, transparent 65%),
+                radial-gradient(ellipse at 20% 80%, rgba(59,130,246,0.2) 0%, transparent 55%);
+    pointer-events: none;
+  }.limitless-contact .hero-icons {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }.limitless-contact .hero-icon {
+    position: absolute;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: rgba(124,58,237,0.25);
+    border: 1px solid rgba(124,58,237,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }.limitless-contact .hero-icon svg { color: rgba(168,85,247,0.9); }.limitless-contact .hi-1 { top: 20%; left: 47%; }.limitless-contact .hi-2 { top: 55%; left: 52%; }.limitless-contact .hi-3 { top: 15%; right: 18%; }.limitless-contact .hi-4 { bottom: 20%; right: 8%; }.limitless-contact .hero-content { position: relative; z-index: 2; max-width: 520px; }.limitless-contact .hero-badge {
+    display: inline-block;
+    background: var(--purple);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 22px;
+  }.limitless-contact .hero h1 {
+    font-size: clamp(28px, 4vw, 46px);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 6px;
+  }.limitless-contact .hero h1 span {
+    background: linear-gradient(135deg, #A855F7, #60A5FA);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }.limitless-contact .hero-sub {
+    color: #ffffff;
+    font-size: 15px;
+    line-height: 1.65;
+    margin-top: 14px;
+    margin-bottom: 32px;
+    max-width: 420px;
+  }.limitless-contact .hero-divider {
+    width: 50px;
+    height: 3px;
+    background: var(--gradient-btn);
+    border-radius: 2px;
+    margin-bottom: 28px;
+  }.limitless-contact .hero-badges {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+  }.limitless-contact .hero-badge-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }.limitless-contact .hero-badge-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(124,58,237,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: rgba(124,58,237,0.12);
+  }.limitless-contact .hero-badge-icon svg { color: #A855F7; }.limitless-contact .hero-badge-text strong {
+    display: block;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 1px;
+  }.limitless-contact .hero-badge-text span {
+    color: #ffffff;
+    font-size: 11.5px;
+  }.limitless-contact .hero-brain {
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
+    width: clamp(220px, 35vw, 380px);
+  }.limitless-contact .hero-brain svg { width: 100%; height: auto; }.limitless-contact .main-content {
+    max-width: 100%; padding-left: 40px; padding-right: 40px;
+    margin: 0 auto;
+    padding: 56px 30px;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 80px;
+    align-items: stretch;
+  }.limitless-contact .form-section h2 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+  }.limitless-contact .form-section p {
+    color: var(--light-gray);
+    font-size: 14px;
+    margin-bottom: 30px;
+  }.limitless-contact .form-group {
+    margin-bottom: 16px;
+  }.limitless-contact .form-field {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    transition: border-color .2s, box-shadow .2s;
+    background: #fff;
+  }.limitless-contact .form-field:focus-within {
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
+  }.limitless-contact .form-field svg { color: #9CA3AF; flex-shrink: 0; }.limitless-contact .form-field input,
+.limitless-contact .form-field textarea {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: var(--p-size);
+    color: var(--text-dark);
+    font-family: var(--font-primary);
+    background: transparent;
+    resize: none;
+  }.limitless-contact .form-field input::placeholder,
+.limitless-contact .form-field textarea::placeholder { color: #9CA3AF; }.limitless-contact .form-field textarea { min-height: 90px; }.limitless-contact .btn-send {
+    width: 100%;
+    padding: 16px;
+    background: var(--gradient-btn);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 8px;
+    transition: opacity .2s, transform .2s;
+  }.limitless-contact .btn-send:hover { opacity: .9; transform: translateY(-1px); }.limitless-contact .form-privacy {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    color: var(--light-gray);
+    font-size: 12.5px;
+  }.limitless-contact .form-privacy svg { color: #9CA3AF; }.limitless-contact .contact-info h2 {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+  }.limitless-contact .contact-info > p {
+    color: var(--light-gray);
+    font-size: 14px;
+    margin-bottom: 30px;
+  }.limitless-contact .contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 26px;
+  }.limitless-contact .contact-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: rgba(124,58,237,0.08);
+    border: 1px solid rgba(124,58,237,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }.limitless-contact .contact-icon svg { color: var(--purple); }.limitless-contact .contact-item-text strong {
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 3px;
+  }.limitless-contact .contact-item-text span {
+    display: block;
+    font-size: 13.5px;
+    color: var(--text-mid);
+    line-height: 1.5;
+  }.limitless-contact .social-icons {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
+  }.limitless-contact .social-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: rgba(124,58,237,0.1);
+    border: 1px solid rgba(124,58,237,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background .2s;
+    text-decoration: none;
+  }.limitless-contact .social-btn:hover { background: rgba(124,58,237,0.25); }.limitless-contact .social-btn svg { color: var(--purple); }.limitless-contact .live-chat-banner {
+    max-width: 100%; padding-left: 40px; padding-right: 40px;
+    margin: 0 auto 0;
+    padding: 0 30px 20px;
+  }.limitless-contact .live-chat-inner {
+    background: #F0EBFF;
+    border-radius: 16px;
+    padding: 30px 40px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }.limitless-contact .chat-avatar {
+    position: relative;
+    flex-shrink: 0;
+  }.limitless-contact .chat-avatar-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7C3AED, #A855F7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }.limitless-contact .chat-bubble {
+    position: absolute;
+    top: -4px;
+    right: -8px;
+    background: #fff;
+    border-radius: 8px;
+    padding: 4px 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    display: flex;
+    gap: 3px;
+  }.limitless-contact .chat-bubble-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--purple);
+    animation: bounce 1.2s infinite;
+  }.limitless-contact .chat-bubble-dot:nth-child(2) { animation-delay: .2s; }.limitless-contact .chat-bubble-dot:nth-child(3) { animation-delay: .4s; }.limitless-contact .chat-badge-247 {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--purple);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 8px;
+  }.limitless-contact .chat-text { flex: 1; }.limitless-contact .chat-text h3 {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+  }.limitless-contact .chat-text p { color: var(--text-mid); font-size: 14px; }.limitless-contact .btn-live-chat {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 24px;
+    border: 2px solid var(--purple);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--purple);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background .2s, color .2s;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }.limitless-contact .btn-live-chat:hover { background: var(--purple); color: #fff; }.limitless-contact .faq-section {
+    background: var(--section-bg);
+    padding: 30px 30px;
+  }.limitless-contact .faq-inner {
+    max-width: 100%; padding-left: 40px; padding-right: 40px;
+    margin: 0 auto;
+  }.limitless-contact .section-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }.limitless-contact .section-header h2 {
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+  }.limitless-contact .section-header p { color: var(--light-gray); font-size: 15px; }.limitless-contact .faq-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 40px;
+  }.limitless-contact .faq-item {
+    border-bottom: 1px solid var(--border);
+    padding: 18px 0;
+    cursor: pointer;
+  }.limitless-contact .faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: var(--p-size);
+    font-weight: 600;
+    color: var(--text-dark);
+    user-select: none;
+  }.limitless-contact .faq-chevron {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid var(--input-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform .3s, border-color .2s;
+  }.limitless-contact .faq-item.open .faq-chevron {
+    transform: rotate(180deg);
+    border-color: var(--purple);
+  }.limitless-contact .faq-item.open .faq-chevron svg { color: var(--purple); }.limitless-contact .faq-answer {
+    font-size: calc(var(--p-size) - 1.5px);
+    color: var(--light-gray);
+    line-height: 1.65;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .35s ease, padding .3s;
+  }.limitless-contact .faq-item.open .faq-answer {
+    max-height: 200px;
+    padding-top: 12px;
+  }.limitless-contact .global-section {
+    padding: 30px 30px;
+  }.limitless-contact .global-inner {
+    max-width: 100%; padding-left: 40px; padding-right: 40px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }.limitless-contact .world-map-wrap {
+    position: relative;
+  }.limitless-contact .world-map-wrap svg { width: 100%; height: auto; }.limitless-contact .map-pin {
+    position: absolute;
+    transform: translate(-50%, -50%);
+  }.limitless-contact .map-pin-inner {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--purple);
+    border: 3px solid rgba(124,58,237,0.3);
+    box-shadow: 0 0 0 6px rgba(124,58,237,0.15);
+    animation: pulse-pin 2s infinite;
+  }.limitless-contact .map-pin.p1 { top: 38%; left: 24%; }.limitless-contact .map-pin.p2 { top: 30%; left: 47%; }.limitless-contact .map-pin.p3 { top: 48%; left: 57%; }.limitless-contact .global-right h2 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+  }.limitless-contact .global-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }.limitless-contact .global-badge-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(124,58,237,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }.limitless-contact .global-right p { color: var(--text-mid); font-size: 14.5px; line-height: 1.7; margin-bottom: 30px; }.limitless-contact .stats-row {
+    display: flex;
+    gap: 30px;
+  }.limitless-contact .stat-item {}.limitless-contact .stat-number {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--purple);
+    line-height: 1;
+  }.limitless-contact .stat-label { font-size: 13px; color: var(--light-gray); margin-top: 3px; }
+
+  
+  @media (max-width: 1024px) {.limitless-contact .main-content { grid-template-columns: 1fr; gap: 20px; }.limitless-contact .global-inner { grid-template-columns: 1fr; }.limitless-contact .faq-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 768px) {.limitless-contact nav { padding: 0 20px; }.limitless-contact .nav-links,
+.limitless-contact .nav-phone { display: none; }.limitless-contact .hamburger { display: flex; }.limitless-contact .nav-links.open {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 68px;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 20px;
+      gap: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }.limitless-contact .hero { padding: 50px 24px 40px; flex-direction: column; text-align: center; min-height: unset; }.limitless-contact .hero-badges { justify-content: center; }.limitless-contact .hero-brain { width: 200px; }.limitless-contact .hero h1 { font-size: 28px; }.limitless-contact .hi-1,
+.limitless-contact .hi-2,
+.limitless-contact .hi-3,
+.limitless-contact .hi-4 { display: none; }.limitless-contact .main-content { padding: 40px 20px; }.limitless-contact .live-chat-banner { padding: 0 20px 20px; }.limitless-contact .live-chat-inner { flex-direction: column; text-align: center; padding: 24px 20px; }.limitless-contact .btn-live-chat { width: 100%; justify-content: center; }.limitless-contact .faq-section { padding: 30px 20px; }.limitless-contact .global-section { padding: 30px 20px; }.limitless-contact .stats-row { gap: 20px; }
+  }
+
+  @media (max-width: 480px) {.limitless-contact .hero-badges { flex-direction: column; align-items: center; gap: 16px; }.limitless-contact .hero-badge-item { flex-direction: column; align-items: center; text-align: center; }.limitless-contact .stats-row { flex-wrap: wrap; gap: 20px; }
+  }
+
+
+@keyframes bounce {
+    0%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-4px); }
+  }
+
+@keyframes pulse-pin {
+    0%, 100% { box-shadow: 0 0 0 6px rgba(124,58,237,0.15); }
+    50% { box-shadow: 0 0 0 12px rgba(124,58,237,0.05); }
+  }
+
+/* Typography size scaling overrides */
+.limitless-contact .hero h1 { font-size: clamp(28px, 4vw, var(--h1-size)); }
+.limitless-contact .hero-sub { font-size: var(--p-size); }
+.limitless-contact .form-section h2 { font-size: var(--h2-size); }
+.limitless-contact .form-section p { font-size: var(--p-size); }
+.limitless-contact .form-field input, .limitless-contact .form-field textarea { font-size: var(--p-size); }
+.limitless-contact .contact-info h2 { font-size: var(--h3-size); }
+.limitless-contact .contact-info > p { font-size: var(--p-size); }
+.limitless-contact .contact-item-text strong { font-size: var(--h5-size); }
+.limitless-contact .contact-item-text span { font-size: calc(var(--p-size) - 1.5px); }
+.limitless-contact .chat-text h3 { font-size: var(--h4-size); }
+.limitless-contact .chat-text p { font-size: var(--p-size); }
+.limitless-contact .section-header h2 { font-size: clamp(22px, 3vw, var(--h2-size)); }
+.limitless-contact .section-header p { font-size: var(--p-size); }
+.limitless-contact .faq-question { font-size: var(--p-size); }
+.limitless-contact .faq-answer { font-size: calc(var(--p-size) - 1.5px); }
+.limitless-contact .global-right h2 { font-size: var(--h2-size); }
+.limitless-contact .global-right p { font-size: var(--p-size); }
+.limitless-contact .stat-number { font-size: var(--h1-size); }
+.limitless-contact .stat-label { font-size: calc(var(--p-size) - 2px); }

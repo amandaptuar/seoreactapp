@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cognitive Dashboard</title>
+<style>
+  :root{
+    --bg:#eef0f7;
+    --card:#ffffff;
+    --border:#e7e9f2;
+    --text-dark:#1f2430;
+    --text-grey:#8a8fa3;
+    --purple:#6c5ce7;
+    --purple-light:#f1eefd;
+    --purple-badge:#efe9fd;
+    --green:#1ea672;
+    --green-light:#eafaf3;
+    --green-badge:#e4f8ee;
+    --blue:#2f6fed;
+    --blue-light:#eef4ff;
+    --red:#e0455f;
+    --orange:#f0a63a;
+    --teal:#2bb3a3;
+    --radius-lg:16px;
+    --radius-md:12px;
+    --radius-sm:8px;
+    --shadow:0 2px 10px rgba(30,30,60,0.05);
+  }
+  *{box-sizing:border-box;}
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0;
+    font-family:"Inter","Segoe UI",Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text-dark);
+    padding:28px 32px;
+    overflow-x:hidden;
+  }
+
+  /* ===== HEADER ===== */
+  .topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    margin-bottom:22px;
+    flex-wrap:wrap;
+    gap:16px;
+  }
+  .topbar-title-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .hamburger{
+    display:none;
+    width:40px;height:40px;
+    flex-shrink:0;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:#fff;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    box-shadow:var(--shadow);
+  }
+  .hamburger span,
+  .hamburger span::before,
+  .hamburger span::after{
+    content:"";
+    display:block;
+    width:18px;height:2px;
+    background:var(--text-dark);
+    border-radius:2px;
+    position:relative;
+    transition:all .2s ease;
+  }
+  .hamburger span::before{ position:absolute; top:-6px; }
+  .hamburger span::after{ position:absolute; top:6px; }
+
+  .topbar h1{
+    font-size:28px;
+    margin:0 0 4px 0;
+    font-weight:700;
+  }
+  .topbar p{
+    margin:0;
+    color:var(--text-grey);
+    font-size:14px;
+  }
+  .topbar-actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .btn{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 18px;
+    border-radius:10px;
+    font-size:14px;
+    font-weight:600;
+    border:none;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .btn-green{ background:#1fa96a; color:#fff; }
+  .btn-blue{ background:#2f6fed; color:#fff; }
+  .btn-purple{ background:#6c5ce7; color:#fff; }
+  .btn-outline-red{ background:#fff; color:var(--red); border:1.5px solid var(--red); }
+
+  /* ===== LAYOUT ===== */
+  .layout{
+    display:grid;
+    grid-template-columns:270px 1fr;
+    gap:24px;
+    align-items:start;
+  }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow);
+    padding:20px;
+  }
+
+  /* overlay used only on mobile when the sidebar drawer is open */
+  .sidebar-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(20,20,35,0.45);
+    z-index:40;
+  }
+  .sidebar-overlay.active{ display:block; }
+
+  .sidebar-close{
+    display:none;
+    width:32px;height:32px;
+    border-radius:8px;
+    border:1px solid var(--border);
+    background:#fff;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    font-size:16px;
+    color:var(--text-grey);
+  }
+
+  /* ===== SIDEBAR ===== */
+  .sidebar-header{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:16px;
+  }
+  .icon-circle{
+    width:34px;height:34px;
+    border-radius:50%;
+    background:var(--purple-light);
+    color:var(--purple);
+    display:flex;align-items:center;justify-content:center;
+    font-size:16px;
+    flex-shrink:0;
+  }
+  .sidebar-header h3{ margin:0; font-size:16px; font-weight:700; }
+
+  .assessment-item{
+    background:var(--purple-light);
+    border:1px solid #e3daf9;
+    border-radius:var(--radius-md);
+    padding:14px 14px;
+    margin-bottom:16px;
+  }
+  .assessment-item-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:6px;
+  }
+  .assessment-item-top span.title{
+    font-weight:700;
+    color:var(--purple);
+    font-size:14px;
+  }
+  .score-pill{
+    display:flex;align-items:center;gap:5px;
+    font-weight:700;color:var(--green);font-size:13px;
+  }
+  .score-pill::before{
+    content:"";
+    width:7px;height:7px;border-radius:50%;
+    background:var(--green);display:inline-block;
+  }
+  .assessment-item .date{
+    color:var(--text-grey);font-size:12.5px;
+  }
+
+  .btn-view-all{
+    width:100%;
+    padding:11px;
+    border-radius:10px;
+    border:1.5px solid #d9d4f5;
+    background:#fff;
+    color:var(--purple);
+    font-weight:600;
+    font-size:14px;
+    cursor:pointer;
+    margin-top:170px;
+  }
+
+  /* ===== MAIN COLUMN ===== */
+  .main{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+  }
+
+  /* profile row */
+  .profile-card{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:20px;
+  }
+  .profile-left{
+    display:flex;
+    align-items:center;
+    gap:16px;
+  }
+  .avatar{
+    width:56px;height:56px;border-radius:50%;
+    background:var(--purple-light);
+    color:var(--purple);
+    display:flex;align-items:center;justify-content:center;
+    font-size:22px;font-weight:700;
+    flex-shrink:0;
+  }
+  .profile-name-row{
+    display:flex;align-items:center;gap:10px;margin-bottom:4px;
+  }
+  .profile-name-row h2{ margin:0;font-size:18px; }
+  .badge-paid{
+    background:var(--green-badge);
+    color:var(--green);
+    font-size:12px;font-weight:700;
+    padding:3px 10px;border-radius:20px;
+    display:flex;align-items:center;gap:5px;
+  }
+  .badge-paid::before{
+    content:"";width:6px;height:6px;border-radius:50%;background:var(--green);
+  }
+  .profile-email{ color:var(--text-grey);font-size:13.5px;margin-bottom:8px; }
+  .profile-meta{ display:flex;gap:22px;font-size:13px;color:var(--text-dark); }
+  .profile-meta span{ display:flex;align-items:center;gap:6px;color:var(--text-grey); }
+
+  .profile-stats{
+    display:flex;
+    gap:0;
+  }
+  .stat-block{
+    padding:0 26px;
+    border-left:1px solid var(--border);
+    text-align:left;
+  }
+  .stat-block:first-child{ border-left:none; }
+  .stat-label{ font-size:12.5px;color:var(--text-grey);margin-bottom:6px; }
+  .stat-value{ font-size:20px;font-weight:700; }
+  .stat-value.green{ color:var(--green); }
+  .stat-value.copy{
+    display:flex;align-items:center;gap:6px;font-size:17px;color:var(--text-dark);
+  }
+  .stat-value.check{
+    display:flex;align-items:center;gap:6px;
+  }
+
+  /* row: score + age */
+  .row-scores{
+    display:flex;
+    gap:20px;
+    align-items:stretch;
+    flex-wrap:wrap;
+  }
+  .score-panel{
+    display:flex;
+    flex:2;
+    min-width:340px;
+  }
+  .score-sub{
+    flex:1;
+    padding:4px 20px;
+    border-right:1px solid var(--border);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    justify-content:flex-start;
+  }
+  .score-sub:last-child{ border-right:none; }
+  .score-sub h4{
+    display:flex;align-items:center;gap:6px;
+    font-size:14px;margin:0 0 16px 0;align-self:flex-start;
+  }
+  .score-sub.first h4{ align-self:center; }
+
+  .gauge-wrap{ position:relative;width:150px;height:150px; }
+  .gauge-wrap svg{ width:100%;height:100%; transform:rotate(-90deg); }
+  .gauge-center{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+  }
+  .gauge-center .num{ font-size:26px;font-weight:700; }
+  .gauge-center .den{ font-size:12px;color:var(--text-grey); }
+  .gauge-good-badge{
+    margin-top:14px;
+    background:var(--green-badge);color:var(--green);
+    font-size:12px;font-weight:700;
+    padding:4px 14px;border-radius:20px;
+    display:flex;align-items:center;gap:5px;
+  }
+  .gauge-good-badge::before{ content:"";width:6px;height:6px;border-radius:50%;background:var(--green); }
+
+  .risk-check{
+    width:56px;height:56px;border-radius:50%;
+    border:2px solid var(--green);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--green);font-size:24px;margin:20px 0 14px 0;
+  }
+  .risk-text{ font-size:13.5px;color:var(--text-dark); }
+
+  .strength-star{ color:var(--purple);font-size:22px;margin:22px 0 12px 0; }
+  .strength-text{
+    display:flex;align-items:center;gap:6px;font-size:13.5px;color:var(--purple);font-weight:600;
+  }
+
+  .age-card{
+    flex:1;
+    min-width:260px;
+  }
+  .age-card h4{ display:flex;align-items:center;gap:8px;margin:0 0 18px 0;font-size:15px; }
+  .age-values{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:16px;
+  }
+  .age-values div{ text-align:left; }
+  .age-label{ font-size:12.5px;color:var(--text-grey);margin-bottom:6px; }
+  .age-num{ font-size:26px;font-weight:700; }
+  .age-num.grey{ color:var(--text-dark); }
+  .age-num.purple{ color:var(--purple); }
+  .age-unit{ font-size:12px;color:var(--text-grey); }
+  .age-note{
+    font-size:11.5px;color:var(--text-grey);
+    display:flex;gap:6px;align-items:flex-start;
+    border-top:1px solid var(--border);
+    padding-top:12px;
+  }
+
+  /* Domain scores + lifestyle row */
+  .row-domain{
+    display:flex;gap:20px;flex-wrap:wrap;
+  }
+  .domain-card{ flex:2;min-width:420px; }
+  .card-title{
+    display:flex;align-items:center;gap:8px;
+    font-size:15px;font-weight:700;margin:0 0 16px 0;
+  }
+  .domain-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+  }
+  .domain-box{
+    border-radius:12px;
+    padding:14px 16px;
+  }
+  .domain-box .label{ font-size:12.5px;margin-bottom:8px;font-weight:600; }
+  .domain-box .value{ font-size:22px;font-weight:700;color:var(--text-dark); }
+
+  .bg-orange{ background:#fdf1ec; } .fg-orange{ color:#e08c3e; }
+  .bg-blue{ background:#eef2fb; } .fg-blue{ color:#5b7bd6; }
+  .bg-green{ background:#eaf8f1; } .fg-green{ color:#22a06b; }
+  .bg-purple{ background:#f2effc; } .fg-purple{ color:#7a5fe0; }
+  .bg-peach{ background:#fdf3e7; } .fg-peach{ color:#e0a23e; }
+  .bg-grey{ background:#eef0f5; } .fg-grey{ color:#6c7a94; }
+  .bg-teal{ background:#e9f8f6; } .fg-teal{ color:#28a99a; }
+  .bg-green2{ background:#eafaf0; } .fg-green2{ color:#1fa572; }
+
+  .lifestyle-card{ flex:1;min-width:320px; }
+  .lifestyle-item{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:12px 0;
+    border-bottom:1px solid var(--border);
+    font-size:13.5px;
+  }
+  .lifestyle-item:last-child{ border-bottom:none; }
+  .lifestyle-item .left{ display:flex;align-items:center;gap:10px;color:var(--text-dark);font-weight:500; }
+  .lifestyle-icon{ font-size:16px; }
+  .low-badge{
+    background:var(--green-badge);color:var(--green);
+    font-size:12px;font-weight:700;
+    padding:3px 12px;border-radius:20px;
+  }
+
+  /* radar + recommendations row */
+  .row-radar{
+    display:flex;gap:20px;flex-wrap:wrap;
+  }
+  .radar-card{ flex:1;min-width:320px; }
+  .radar-card svg{ width:100%;height:auto; }
+
+  .reco-card{ flex:1;min-width:320px; }
+  .reco-item{
+    display:flex;gap:12px;
+    padding:12px 0;
+    align-items:flex-start;
+  }
+  .reco-num{
+    width:24px;height:24px;border-radius:50%;
+    color:#fff;font-size:12px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;margin-top:2px;
+  }
+  .reco-num.n1{ background:#6c5ce7; }
+  .reco-num.n2{ background:#1fa96a; }
+  .reco-num.n3{ background:#f0a63a; }
+  .reco-text{ font-size:13.5px;color:var(--text-dark);line-height:1.5; }
+
+  /* ================= RESPONSIVE ================= */
+
+  /* Tablet: sidebar becomes an off-canvas drawer, main content full width */
+  @media (max-width: 900px){
+    .hamburger{ display:flex; }
+    .layout{ grid-template-columns:1fr; }
+
+    .sidebar{
+      position:fixed;
+      top:0;
+      left:0;
+      height:100vh;
+      width:280px;
+      max-width:80vw;
+      z-index:50;
+      border-radius:0;
+      transform:translateX(-100%);
+      transition:transform .25s ease;
+      overflow-y:auto;
+    }
+    .sidebar.open{ transform:translateX(0); }
+    .sidebar-close{ display:flex; margin-left:auto; }
+    .btn-view-all{ margin-top:24px; }
+
+    .row-scores, .row-domain, .row-radar{ flex-direction:column; }
+    .score-panel{ flex-direction:column; }
+    .score-sub{
+      border-right:none;
+      border-bottom:1px solid var(--border);
+      padding:16px 0;
+    }
+    .score-sub:last-child{ border-bottom:none; }
+    .score-sub h4{ align-self:center !important; }
+  }
+
+  /* Phone */
+  @media (max-width: 600px){
+    body{ padding:16px; }
+
+    .topbar h1{ font-size:22px; }
+    .topbar-actions{ width:100%; }
+    .topbar-actions .btn{
+      flex:1 1 calc(50% - 5px);
+      justify-content:center;
+      padding:10px 8px;
+      font-size:13px;
+    }
+
+    .layout{ gap:16px; }
+    .card{ padding:16px; border-radius:14px; }
+
+    .profile-card{ flex-direction:column;align-items:flex-start; }
+    .profile-stats{
+      width:100%;
+      flex-wrap:wrap;
+    }
+    .stat-block{
+      flex:1 1 45%;
+      border-left:none;
+      border-top:1px solid var(--border);
+      padding:12px 0 0 0;
+      margin-top:10px;
+    }
+    .stat-block:nth-child(odd){ padding-right:12px; }
+    .stat-block:nth-child(even){ padding-left:12px;border-left:1px solid var(--border); }
+
+    .domain-grid{ grid-template-columns:repeat(2,1fr); }
+
+    .gauge-wrap{ width:130px;height:130px; }
+
+    .age-values{ gap:10px; }
+
+    .reco-item .reco-text{ font-size:13px; }
+  }
+
+  @media (max-width: 380px){
+    .domain-grid{ grid-template-columns:1fr 1fr; }
+    .topbar-actions .btn{ flex:1 1 100%; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ===== TOP HEADER ===== -->
+  <div class="topbar">
+    <div class="topbar-title-row">
+      <button class="hamburger" id="hamburgerBtn" aria-label="Open menu"><span></span></button>
+      <div>
+        <h1>Dashboard</h1>
+        <p>Welcome back, <strong>Test user</strong>! Here's your cognitive overview.</p>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn btn-green">⟳ Retake Assessment</button>
+      <button class="btn btn-blue">📄 View PDF</button>
+      <button class="btn btn-purple">↗ Share PDF</button>
+      <button class="btn btn-outline-red">⏻ Logout</button>
+    </div>
+  </div>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <div class="layout">
+
+    <!-- ===== SIDEBAR ===== -->
+    <div class="card sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="icon-circle">🕐</div>
+        <h3>Assessment History</h3>
+        <button class="sidebar-close" id="sidebarCloseBtn" aria-label="Close menu">✕</button>
+      </div>
+
+      <div class="assessment-item">
+        <div class="assessment-item-top">
+          <span class="title">Assessment 1</span>
+          <span class="score-pill">72.53</span>
+        </div>
+        <div class="date">6 Jul 2026, 02:19 pm</div>
+      </div>
+
+      <button class="btn-view-all">View All History</button>
+    </div>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="main">
+
+      <!-- Profile / stats row -->
+      <div class="card profile-card">
+        <div class="profile-left">
+          <div class="avatar">U</div>
+          <div>
+            <div class="profile-name-row">
+              <h2>Test user</h2>
+              <span class="badge-paid">Paid</span>
+            </div>
+            <div class="profile-email">test13@gmail.com</div>
+            <div class="profile-meta">
+              <span>🎂 Age 55</span>
+              <span>📅 6 Jul 2026</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-stats">
+          <div class="stat-block">
+            <div class="stat-label">Overall Score</div>
+            <div class="stat-value green">72.53 / 100</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">Rating</div>
+            <div class="stat-value green">Good</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">Temp Password</div>
+            <div class="stat-value copy">ZUNV7PVH 📋</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">Assessment</div>
+            <div class="stat-value green check">Completed ✅</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cognitive score / risk / strengths / age row -->
+      <div class="row-scores">
+        <div class="card score-panel">
+          <div class="score-sub first">
+            <h4>📊 Cognitive Score</h4>
+            <div class="gauge-wrap">
+              <svg viewBox="0 0 150 150">
+                <circle cx="75" cy="75" r="62" fill="none" stroke="#e9ebf2" stroke-width="12"/>
+                <circle cx="75" cy="75" r="62" fill="none" stroke="#1fa96a" stroke-width="12"
+                  stroke-linecap="round"
+                  stroke-dasharray="389.5"
+                  stroke-dashoffset="108"/>
+              </svg>
+              <div class="gauge-center">
+                <div class="num">72.53</div>
+                <div class="den">/ 100</div>
+              </div>
+            </div>
+            <div class="gauge-good-badge">Good</div>
+          </div>
+
+          <div class="score-sub">
+            <h4>⚠️ Risk Indicators</h4>
+            <div class="risk-check">✓</div>
+            <div class="risk-text">No significant risks</div>
+          </div>
+
+          <div class="score-sub">
+            <h4>⭐ Key Strengths</h4>
+            <div class="strength-star">★</div>
+            <div class="strength-text">★ Mental clarity</div>
+          </div>
+        </div>
+
+        <div class="card age-card">
+          <h4>🧠 Cognitive Age Estimate</h4>
+          <div class="age-values">
+            <div>
+              <div class="age-label">Actual Age</div>
+              <div class="age-num grey">55</div>
+              <div class="age-unit">years old</div>
+            </div>
+            <div>
+              <div class="age-label">Cognitive Age</div>
+              <div class="age-num purple">52</div>
+              <div class="age-unit">estimated</div>
+            </div>
+          </div>
+          <div class="age-note">ⓘ Motivational wellness metric only — not a clinical measurement.</div>
+        </div>
+      </div>
+
+      <!-- Domain scores + lifestyle assessment -->
+      <div class="row-domain">
+        <div class="card domain-card">
+          <div class="card-title">📶 Domain Scores</div>
+          <div class="domain-grid">
+            <div class="domain-box bg-orange"><div class="label fg-orange">Memory</div><div class="value">63</div></div>
+            <div class="domain-box bg-blue"><div class="label fg-blue">Reaction Time</div><div class="value">70</div></div>
+            <div class="domain-box bg-green"><div class="label fg-green">Mental Clarity</div><div class="value">81</div></div>
+            <div class="domain-box bg-purple"><div class="label fg-purple">Attention Focus</div><div class="value">75</div></div>
+            <div class="domain-box bg-peach"><div class="label fg-peach">Language Skills</div><div class="value">66</div></div>
+            <div class="domain-box bg-grey"><div class="label fg-grey">Problem Solving</div><div class="value">76</div></div>
+            <div class="domain-box bg-teal"><div class="label fg-teal">Processing Speed</div><div class="value">73</div></div>
+            <div class="domain-box bg-green2"><div class="label fg-green2">Executive Function</div><div class="value">78</div></div>
+          </div>
+        </div>
+
+        <div class="card lifestyle-card">
+          <div class="card-title">🍃 Lifestyle Assessment</div>
+          <div class="lifestyle-item">
+            <div class="left"><span class="lifestyle-icon">😊</span> Anxiety Load Impact</div>
+            <span class="low-badge">Low</span>
+          </div>
+          <div class="lifestyle-item">
+            <div class="left"><span class="lifestyle-icon">🔥</span> Burnout Risk Impact</div>
+            <span class="low-badge">Low</span>
+          </div>
+          <div class="lifestyle-item">
+            <div class="left"><span class="lifestyle-icon">❤️</span> Stress Level Impact</div>
+            <span class="low-badge">Low</span>
+          </div>
+          <div class="lifestyle-item">
+            <div class="left"><span class="lifestyle-icon">🌙</span> Sleep Quality Impact</div>
+            <span class="low-badge">Low</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Radar charts + recommendations -->
+      <div class="row-radar">
+        <div class="card radar-card">
+          <div class="card-title">📊 Cognitive Functions Profile</div>
+          <svg viewBox="0 0 300 300">
+            <!-- grid rings -->
+            <polygon points="150,40 233,90 233,210 150,260 67,210 67,90" fill="none" stroke="#e9ebf2"/>
+            <polygon points="150,68 205,102 205,198 150,232 95,198 95,102" fill="none" stroke="#e9ebf2"/>
+            <polygon points="150,96 178,113 178,187 150,204 122,187 122,113" fill="none" stroke="#e9ebf2"/>
+            <polygon points="150,124 150,124 150,124 150,124 150,124 150,124" fill="none" stroke="#e9ebf2"/>
+            <!-- axis lines -->
+            <line x1="150" y1="150" x2="150" y2="40" stroke="#e9ebf2"/>
+            <line x1="150" y1="150" x2="233" y2="90" stroke="#e9ebf2"/>
+            <line x1="150" y1="150" x2="233" y2="210" stroke="#e9ebf2"/>
+            <line x1="150" y1="150" x2="150" y2="260" stroke="#e9ebf2"/>
+            <line x1="150" y1="150" x2="67" y2="210" stroke="#e9ebf2"/>
+            <line x1="150" y1="150" x2="67" y2="90" stroke="#e9ebf2"/>
+            <!-- data polygon (approx scores) -->
+            <polygon points="150,90 195,108 200,178 150,220 100,190 105,112"
+              fill="#6c5ce7" fill-opacity="0.25" stroke="#6c5ce7" stroke-width="2"/>
+            <!-- labels -->
+            <text x="150" y="28" text-anchor="middle" font-size="11" fill="#555">Memory</text>
+            <text x="245" y="88" text-anchor="start" font-size="11" fill="#555">Attention &amp; Focus</text>
+            <text x="245" y="214" text-anchor="start" font-size="11" fill="#555">Processing Speed</text>
+            <text x="150" y="278" text-anchor="middle" font-size="11" fill="#555">Executive Function</text>
+            <text x="150" y="292" text-anchor="middle" font-size="11" fill="#555">Mental Clarity</text>
+            <text x="55" y="214" text-anchor="end" font-size="11" fill="#555">Language Skills</text>
+            <text x="55" y="88" text-anchor="end" font-size="11" fill="#555">Problem Solving</text>
+            <text x="90" y="70" text-anchor="end" font-size="11" fill="#555">Reaction Time</text>
+          </svg>
+        </div>
+
+        <div class="card radar-card">
+          <div class="card-title">🎗 Lifestyle Impact Scores</div>
+          <svg viewBox="0 0 300 300">
+            <polygon points="150,50 235,120 200,225 100,225 65,120" fill="none" stroke="#e9ebf2"/>
+            <polygon points="150,80 210,128 185,205 115,205 90,128" fill="none" stroke="#e9ebf2"/>
+            <polygon points="150,110 185,136 170,185 130,185 115,136" fill="none" stroke="#e9ebf2"/>
+            <line x1="150" y1="150" x2="150" y2="50" stroke="#e9ebf2"/>
+            <line x1="150" y1="150" x2="235" y2="120" stroke="#e9ebf2"/>
+            <line x1="150" y1="150" x2="200" y2="225" stroke="#e9ebf2"/>
+            <line x1="150" y1="150" x2="100" y2="225" stroke="#e9ebf2"/>
+            <line x1="150" y1="150" x2="65" y2="120" stroke="#e9ebf2"/>
+            <polygon points="150,95 205,133 180,200 120,200 100,133"
+              fill="#e0455f" fill-opacity="0.2" stroke="#e0455f" stroke-width="2"/>
+            <text x="150" y="35" text-anchor="middle" font-size="11" fill="#555">Sleep Quality</text>
+            <text x="250" y="118" text-anchor="start" font-size="11" fill="#555">Stress Level</text>
+            <text x="205" y="245" text-anchor="middle" font-size="11" fill="#555">Anxiety Load</text>
+            <text x="95" y="245" text-anchor="middle" font-size="11" fill="#555">Burnout Risk</text>
+            <text x="50" y="118" text-anchor="end" font-size="11" fill="#555">Burnout Risk</text>
+          </svg>
+        </div>
+
+        <div class="card reco-card">
+          <div class="card-title">💡 Personalized Recommendations</div>
+          <div class="reco-item">
+            <div class="reco-num n1">1</div>
+            <div class="reco-text">Build cognitive reserve through regular reading, a course, or social activities — these are some of the strongest protective factors for long-term brain health.</div>
+          </div>
+          <div class="reco-item">
+            <div class="reco-num n2">2</div>
+            <div class="reco-text">Your cognitive wellness is in great shape — maintain your current routines and reassess in 4-6 weeks to track progress.</div>
+          </div>
+          <div class="reco-item">
+            <div class="reco-num n3">3</div>
+            <div class="reco-text">This plan is a wellness guide, not medical advice. Consult a licensed clinician for persistent symptoms.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const openBtn = document.getElementById('hamburgerBtn');
+    const closeBtn = document.getElementById('sidebarCloseBtn');
+
+    function openSidebar(){
+      sidebar.classList.add('open');
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeSidebar(){
+      sidebar.classList.remove('open');
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    openBtn.addEventListener('click', openSidebar);
+    closeBtn.addEventListener('click', closeSidebar);
+    overlay.addEventListener('click', closeSidebar);
+
+    // close drawer automatically if the viewport is resized back to desktop
+    window.addEventListener('resize', () => {
+      if(window.innerWidth > 900){ closeSidebar(); }
+    });
+  </script>
+</body>
+</html>

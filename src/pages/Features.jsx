@@ -1,15 +1,19 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
+import AssessmentModal from '../components/AssessmentModal';
 import './Features.css';
 
 const Features = () => {
-  const handleStartAssessment = () => {
-    window.dispatchEvent(new Event('open-booking-modal'));
-  };
+  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const handleStartAssessment = () => setModalOpen(true);
+  const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
 
   return (
-    <div className="features-page">
+    <>
+      <div className="features-page">
       {/* ===================== HEADER ===================== */}
       <Header />
 
@@ -27,13 +31,13 @@ const Features = () => {
             </h1>
             <p style={{color: '#4b5563'}}>Limitless combines AI, neuroscience, and behavioral science to provide deep insights into your cognitive health, helping you perform better at work, school, and life.</p>
             <div className="hero-btn-row">
-              <button onClick={handleStartAssessment} className="btn btn-orange" style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
+              <button onClick={handleStartAssessment}  className="btn btn-orange" style={{display: 'flex', alignItems: 'center', gap: '8px',  cursor: 'pointer',}}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
-                Start Free Assessment
+                {isSubmitting ? 'Generating Questionnaire...' : isLoggedIn ? 'Take Assessment Again' : 'Start Free Assessment'}
               </button>
-              <button className="btn btn-outline" style={{display: 'flex', alignItems: 'center', gap: '8px', color: '#1f2937', borderColor: '#d1d5db'}}>
+              <button onClick={() => navigate('/sample-report')}  className="btn btn-outline" style={{display: 'flex', alignItems: 'center', gap: '8px', color: '#1f2937', borderColor: '#d1d5db',  cursor: 'pointer',}}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
-                View Sample Report
+                'View Sample Report'
               </button>
             </div>
           </div>
@@ -286,7 +290,7 @@ const Features = () => {
                 </div>
                 <div style={{display: 'flex', alignItems: 'center', gap: '14px'}}>
                   <span style={{fontSize: '11px'}}>📞 +1 (702) 555-0147</span>
-                  <button onClick={handleStartAssessment} className="btn btn-orange" style={{padding: '7px 14px', fontSize: '11px'}}>🚀 Start Assessment</button>
+                  <button onClick={handleStartAssessment} className="btn btn-orange" style={{padding: '7px 14px', fontSize: '11px'}}>🚀 Start Free Assessment</button>
                 </div>
               </div>
               <div className="report-mock-body">
@@ -499,9 +503,9 @@ const Features = () => {
             <p>Take the Limitless Cognitive Assessment today and gain the insights needed to improve focus, reduce stress, and maximize performance.</p>
           </div>
           <div className="final-cta-right">
-            <button onClick={handleStartAssessment} className="btn btn-orange" style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
+            <button onClick={handleStartAssessment}  className="btn btn-orange" style={{display: 'flex', alignItems: 'center', gap: '8px',  cursor: 'pointer',}}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
-              Start Free Assessment
+              {isSubmitting ? 'Generating Questionnaire...' : isLoggedIn ? 'Take Assessment Again' : 'Start Free Assessment'}
             </button>
             <div className="phone" style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -511,6 +515,8 @@ const Features = () => {
         </div>
       </section>
     </div>
+    <AssessmentModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+    </>
   );
 };
 

@@ -3,13 +3,15 @@ import './EnquiryModal.css';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import bcrypt from 'bcryptjs';
+import { generateAssessmentQuestions } from '../lib/apiUtils';
+import { sendCredentialsEmail } from '../lib/emailService';
 
 const EnquiryModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({ name: '', email: '', age: '', gender: '' });
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
-  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -23,13 +25,26 @@ const EnquiryModal = ({ isOpen, onClose }) => {
     setErrorMsg('');
 
     try {
-      // 1. Generate temp password and hash
+      // 1. Check if email already exists FIRST
+      const { data: existingUser } = await supabase
+        .from('users')
+        .select('id')
+        .eq('email', formData.email)
+        .maybeSingle();
+
+      if (existingUser) {
+        setErrorMsg('This email is already registered. Please log in instead.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      // 2. Generate Questions from Limitless API (with retry for cold starts)
+      const questionsData = await generateAssessmentQuestions(formData.age, formData.gender);
+      
+      // 3. Generate temp password & insert user
       const generatedPassword = Math.random().toString(36).slice(-8).toUpperCase();
       const passwordHash = await bcrypt.hash(generatedPassword, 10);
-
-      // 2. Insert User into Supabase FIRST (To catch duplicate emails immediately)
-      let dbUserId = null;
-
+      
       const { data: newUser, error: insertErr } = await supabase
         .from('users')
         .insert([{
@@ -44,39 +59,22 @@ const EnquiryModal = ({ isOpen, onClose }) => {
         .single();
 
       if (insertErr) {
-        // Postgres error code 23505 means Unique Constraint Violation
-        const errString = JSON.stringify(insertErr).toLowerCase();
-        const isDuplicate = insertErr.code === '23505' ||
-          errString.includes('duplicate') ||
-          errString.includes('unique') ||
-          errString.includes('already exists');
-
-        if (isDuplicate) {
-          setErrorMsg('This email is already registered. Please log in instead.');
-          setIsSubmitting(false);
-          return; // Halts the flow completely before generating AI questions
-        }
-
-        console.warn('Supabase insert error details:', insertErr);
-        throw new Error(`DB Error: ${insertErr.message || insertErr.details || 'Unknown error'}`);
+        throw new Error(`DB Error: ${insertErr.message || insertErr.details || JSON.stringify(insertErr)}`);
       }
+      
+      const dbUserId = newUser.id;
 
-      dbUserId = newUser.id;
-
-      // 3. Generate questions from Limitless API
-      let genderForApi = formData.gender;
-
-      const apiResponse = await fetch('/api/v1/generate-questions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ age: parseInt(formData.age, 10), gender: genderForApi })
-      });
-
-      if (!apiResponse.ok) throw new Error('Failed to generate assessment questions.');
-
-      const questionsData = await apiResponse.json();
-
-      // 4. FormSubmit notification (fire and forget)
+      try {
+        await sendCredentialsEmail({
+          name: formData.name,
+          email: formData.email,
+          tempPassword: generatedPassword,
+        });
+      } catch (emailErr) {
+        console.warn('Credentials email failed (non-fatal):', emailErr);
+      }
+      setErrorMsg('');
+// 4. FormSubmit notification (fire and forget)
       fetch('https://formsubmit.co/ajax/info@limitlessworld.net', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
@@ -87,18 +85,18 @@ const EnquiryModal = ({ isOpen, onClose }) => {
         }),
       }).catch(() => { });
 
-      // 5. Save to localStorage
-      localStorage.setItem('assessmentId', questionsData.assessmentId);
-      localStorage.setItem('assessmentSections', JSON.stringify(questionsData.sections));
-      localStorage.setItem('userEmail', formData.email);
-      localStorage.setItem('username', formData.email);
-      localStorage.setItem('name', formData.name);
-      localStorage.setItem('userAge', formData.age);
-      localStorage.setItem('userGender', formData.gender);
-      localStorage.setItem('generatedPassword', generatedPassword);
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('passwordResetRequired', 'true');
-      if (dbUserId) localStorage.setItem('userId', dbUserId);
+      // 5. Save to sessionStorage
+      sessionStorage.setItem('assessmentId', questionsData.assessmentId);
+      sessionStorage.setItem('assessmentSections', JSON.stringify(questionsData.sections));
+      sessionStorage.setItem('userEmail', formData.email);
+      sessionStorage.setItem('username', formData.email);
+      sessionStorage.setItem('name', formData.name);
+      sessionStorage.setItem('userAge', formData.age);
+      sessionStorage.setItem('userGender', formData.gender);
+      sessionStorage.setItem('generatedPassword', generatedPassword);
+      sessionStorage.setItem('isLoggedIn', 'true');
+      sessionStorage.setItem('passwordResetRequired', 'true');
+      if (dbUserId) sessionStorage.setItem('userId', dbUserId);
 
       // 6. Navigate to questions
       onClose();
@@ -152,7 +150,7 @@ const EnquiryModal = ({ isOpen, onClose }) => {
               <div style={{ display: 'flex', gap: '12px' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', flex: 1 }}>
                   <label style={{ fontSize: '15px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '1px' }}>Age</label>
-                  <input type="number" name="age" value={formData.age} onChange={handleChange} min="10" max="80" placeholder="e.g. 22" required
+                  <input type="number" name="age" value={formData.age} onChange={handleChange} min="18" max="66" placeholder="e.g. 22" required
                     style={{ padding: '12px 16px', borderRadius: '10px', border: '1px solid #e2e8f0', fontSize: '18px', outline: 'none', transition: 'border-color 0.2s', fontFamily: 'inherit', width: '100%' }}
                     onFocus={(e) => e.target.style.borderColor = '#6366F1'}
                     onBlur={(e) => e.target.style.borderColor = '#e2e8f0'} />
@@ -191,7 +189,7 @@ const EnquiryModal = ({ isOpen, onClose }) => {
                   opacity: (isSubmitting || isLoggedIn) ? 0.7 : 1
                 }}
               >
-                {isLoggedIn ? 'You are already logged in' : isSubmitting ? 'Starting...' : 'Start Assessment →'}
+                {isSubmitting ? 'Generating Questionnaire...' : isLoggedIn ? 'Take Assessment Again' : 'Start Free Assessment →'}
               </button>
 
               <p style={{ textAlign: 'center', fontSize: '18px', color: '#94a3b8', margin: 0 }}>

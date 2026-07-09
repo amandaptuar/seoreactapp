@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import EnquiryModal from './EnquiryModal';
+import AssessmentModal from './AssessmentModal';
 
 const Pricing = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -80,7 +80,7 @@ const Pricing = () => {
                   </div>
                   <div className="price-display">
                     <span className="price-old">$149</span>
-                    <span className="price-new">$79</span>
+                    <span className="price-new">$19</span>
                     <span className="price-term">one-time</span>
                   </div>
                   <p className="price-description">Full Cognitive Performance Assessment</p>
@@ -114,7 +114,7 @@ const Pricing = () => {
                 
                 <div className="pricing-cta-container">
                   <button className="pricing-cta-button" onClick={() => setIsModalOpen(true)}>
-                    Start Assessment Now
+                    Start Free Assessment Now
                   </button>
                 </div>
 
@@ -200,7 +200,7 @@ const Pricing = () => {
           </div>
         </div>
       </section>
-      <EnquiryModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <AssessmentModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </>
   );
 };

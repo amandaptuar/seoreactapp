@@ -7,7 +7,7 @@ const stripeLink = "https://buy.stripe.com/9B68wI7Ux7bGaXugBt7ss00";
 const Payment = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const navigate = useNavigate();
-  const userEmail = localStorage.getItem('userEmail');
+  const userEmail = sessionStorage.getItem('userEmail');
 
   const handlePayment = () => {
     setIsProcessing(true);
@@ -25,34 +25,23 @@ const Payment = () => {
           <div className="slide-up">
             <h2 style={{ color: '#0F172A', fontSize: '42px', marginBottom: '16px', fontWeight: '800' }}>Complete Your Payment</h2>
             <p style={{ color: '#64748b', fontSize: '24px', marginBottom: '32px' }}>
-              Final step: Pay the one-time fee of <strong>$79</strong> to unlock your full cognitive report and personalized action plan.
+              Final step: Pay the one-time fee of <strong>$19</strong> to unlock your full cognitive report and personalized action plan.
             </p>
 
             <div style={{ background: '#F8FAFC', padding: '24px', borderRadius: '16px', border: '1px solid #E2E8F0', marginBottom: '32px', textAlign: 'left' }}>
                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
                  <span style={{ color: '#64748b' }}>Assessment Fee</span>
-                 <span style={{ fontWeight: '700', color: '#0F172A' }}>$79.00</span>
+                 <span style={{ fontWeight: '700', color: '#0F172A' }}>$19.00</span>
                </div>
                <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid #E2E8F0', paddingTop: '10px' }}>
                  <span style={{ fontWeight: '700', color: '#0F172A' }}>Total</span>
-                 <span style={{ fontWeight: '800', color: '#0F172A', fontSize: '28px' }}>$79.00</span>
+                 <span style={{ fontWeight: '800', color: '#0F172A', fontSize: '28px' }}>$19.00</span>
                </div>
             </div>
 
             <div style={{ background: 'rgba(59, 130, 246, 0.05)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(59, 130, 246, 0.2)', marginBottom: '32px', textAlign: 'left' }}>
-              <h4 style={{ color: '#0F172A', margin: '0 0 12px 0', fontSize: '22px' }}>Important: Save your login credentials</h4>
-              <p style={{ color: '#64748B', fontSize: '20px', margin: '0 0 16px 0' }}>Your assessment answers have been securely saved. You can complete payment now, or save these details to log in and pay later.</p>
-              
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: '#fff', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
-                  <span style={{ color: '#64748B', fontWeight: '500', fontSize: '21px' }}>Username:</span>
-                  <strong style={{ color: '#0F172A', fontSize: '21px' }}>{localStorage.getItem('userEmail')}</strong>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: '#fff', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
-                  <span style={{ color: '#64748B', fontWeight: '500', fontSize: '21px' }}>Password:</span>
-                  <strong style={{ color: '#0F172A', fontSize: '21px' }}>{localStorage.getItem('generatedPassword')}</strong>
-                </div>
-              </div>
+              <h4 style={{ color: '#0F172A', margin: '0 0 12px 0', fontSize: '22px' }}>Important: Check your email</h4>
+              <p style={{ color: '#64748B', fontSize: '20px', margin: 0 }}>Your assessment answers have been securely saved and your login credentials have been sent to your email. You can complete payment now to view your full report.</p>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -72,7 +61,7 @@ const Payment = () => {
                   boxShadow: '0 4px 14px rgba(245, 158, 11, 0.35)'
                 }}
               >
-                {isProcessing ? 'Processing...' : 'Pay $79 & Get Instant Access'}
+                {isProcessing ? 'Processing...' : 'Pay $19 & Get Instant Access'}
               </button>
 
               <button 
@@ -95,7 +84,7 @@ const Payment = () => {
               
               <button 
                 onClick={() => {
-                  localStorage.removeItem('isLoggedIn');
+                  sessionStorage.removeItem('isLoggedIn');
                   navigate('/');
                   window.scrollTo(0, 0);
                 }} 
