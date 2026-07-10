@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Limitless — Pricing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0b14;
+    --bg-soft:#0d0f1c;
+    --card-bg:#11131f;
+    --border:#23263a;
+    --text:#f5f6fa;
+    --text-dim:#a6a9c1;
+    --text-faint:#72758f;
+    --green:#22c55e;
+    --green-dark:#16a34a;
+    --purple:#7c3aed;
+    --blue:#3b82f6;
+    --purple-blue-grad: linear-gradient(90deg,#8b5cf6 0%, #3b82f6 100%);
+    --purple-text-grad: linear-gradient(90deg,#a855f7 0%, #6366f1 100%);
+    --radius-lg:20px;
+    --radius-md:14px;
+    --radius-sm:10px;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  body{
+    background: radial-gradient(ellipse 80% 50% at 15% 0%, rgba(59,130,246,0.10), transparent 60%),
+                radial-gradient(ellipse 80% 50% at 85% 10%, rgba(139,92,246,0.12), transparent 60%),
+                var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  .page{
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 72px 24px 56px;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    text-align:center;
+    margin-bottom: 56px;
+  }
+
+  .hero h1{
+    font-size: clamp(2.1rem, 5vw, 3.4rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: var(--text);
+  }
+
+  .hero h1 .grad{
+    background: var(--purple-text-grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .hero p{
+    margin-top: 18px;
+    color: var(--text-dim);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    max-width: 620px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ---------- Pricing Cards ---------- */
+  .plans{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 32px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .card{
+    position: relative;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 40px 36px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .card.premium{
+    border: 1px solid rgba(139,92,246,0.55);
+    box-shadow: 0 0 0 1px rgba(139,92,246,0.15), 0 20px 60px -20px rgba(99,102,241,0.35);
+  }
+
+  .badge{
+    position: absolute;
+    top: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--purple-blue-grad);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 7px 18px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    box-shadow: 0 8px 20px -6px rgba(99,102,241,0.6);
+  }
+
+  .plan-icon{
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom: 18px;
+  }
+
+  .plan-icon.free{
+    background: radial-gradient(circle at 30% 30%, #34d399, #16a34a);
+  }
+  .plan-icon.premium{
+    background: radial-gradient(circle at 30% 30%, #818cf8, #4f46e5);
+  }
+
+  .plan-icon svg{ width: 30px; height: 30px; }
+
+  .plan-name{
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+  .plan-name.free{ color: var(--green); }
+  .plan-name.premium{ color: #818cf8; }
+
+  .plan-sub{
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    margin-top: 6px;
+  }
+
+  .price-row{
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    gap: 4px;
+    margin-top: 24px;
+  }
+
+  .price-row .dollar{
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-top: 8px;
+    color: var(--text);
+  }
+  .price-row .amount{
+    font-size: 3.6rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  .price-caption{
+    margin-top: 4px;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .price-caption.free{ color: var(--green); }
+  .price-caption.premium{ color: #818cf8; }
+
+  .divider{
+    width: 100%;
+    height: 1px;
+    background: var(--border);
+    margin: 28px 0 24px;
+  }
+
+  .features{
+    list-style: none;
+    width: 100%;
+    display:flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: left;
+    margin-bottom: 8px;
+  }
+
+  .features li{
+    display:flex;
+    align-items:center;
+    gap: 12px;
+    color: var(--text);
+    font-size: 0.98rem;
+  }
+
+  .check{
+    flex: 0 0 auto;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .check.green{ background: var(--green); }
+  .check.purple{ background: #7c5cf0; }
+  .check svg{ width: 11px; height: 11px; }
+
+  .spacer{ flex: 1; }
+
+  .btn{
+    margin-top: 28px;
+    width: 100%;
+    border: none;
+    border-radius: 999px;
+    padding: 16px 20px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap: 10px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .btn:hover{ transform: translateY(-2px); }
+
+  .btn.free{
+    background: linear-gradient(90deg,#22c55e, #16a34a);
+    box-shadow: 0 10px 30px -10px rgba(34,197,94,0.5);
+  }
+  .btn.premium{
+    background: var(--purple-blue-grad);
+    box-shadow: 0 10px 30px -10px rgba(99,102,241,0.6);
+  }
+
+  .btn svg{ width: 18px; height: 18px; }
+
+  .fine-print{
+    margin-top: 14px;
+    font-size: 0.85rem;
+    color: var(--text-faint);
+    display:flex;
+    align-items:center;
+    gap: 6px;
+  }
+  .fine-print svg{ width: 14px; height:14px; }
+
+  /* ---------- Trust bar ---------- */
+  .trust-bar{
+    max-width: 1080px;
+    margin: 64px auto 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--card-bg);
+    padding: 28px 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+
+  .trust-item{
+    display:flex;
+    align-items:center;
+    gap: 14px;
+    justify-content:center;
+  }
+
+  .trust-icon{
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(99,102,241,0.12);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex: 0 0 auto;
+  }
+  .trust-icon svg{ width: 20px; height: 20px; color: #818cf8; }
+
+  .trust-text{ text-align: left; }
+  .trust-text .title{ font-weight: 700; font-size: 0.92rem; color: var(--text); }
+  .trust-text .sub{ font-size: 0.8rem; color: var(--text-faint); margin-top: 2px; }
+
+  /* ---------- Guarantee ---------- */
+  .guarantee{
+    text-align:center;
+    margin-top: 48px;
+  }
+  .guarantee .g-icon{
+    width: 44px;
+    height: 44px;
+    margin: 0 auto 12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .guarantee .g-icon svg{ width: 30px; height: 30px; color: var(--green); }
+
+  .guarantee h3{
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
+  .guarantee p{
+    margin-top: 6px;
+    color: var(--text-dim);
+    font-size: 0.95rem;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 860px){
+    .plans{ grid-template-columns: 1fr; max-width: 480px; }
+    .trust-bar{ grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 520px){
+    .page{ padding: 56px 16px 40px; }
+    .card{ padding: 34px 22px 28px; }
+    .price-row .amount{ font-size: 3rem; }
+    .trust-bar{ grid-template-columns: 1fr; padding: 22px 16px; }
+    .trust-item{ justify-content:flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <section class="hero">
+    <h1>Simple <span class="grad">Pricing.</span> Powerful Results.</h1>
+    <p>Choose the plan that fits your goals. Start free and upgrade anytime to unlock deeper insights and track your progress.</p>
+  </section>
+
+  <section class="plans">
+
+    <!-- Free Plan -->
+    <div class="card">
+      <div class="plan-icon free">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 12v9H4v-9M2 7h20v5H2V7zM12 22V7M12 7C10 2 4.5 2 4.5 5.5 4.5 7 6 7 12 7zM12 7c2-5 7.5-5 7.5-1.5C19.5 7 18 7 12 7z" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="plan-name free">Free Plan</div>
+      <div class="plan-sub">Perfect for first-time users</div>
+
+      <div class="price-row">
+        <span class="dollar">$</span>
+        <span class="amount">0</span>
+      </div>
+      <div class="price-caption free">Forever Free</div>
+
+      <div class="divider"></div>
+
+      <ul class="features">
+        <li><span class="check green"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>One-Time AI Cognitive Assessment</li>
+        <li><span class="check green"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Personalized AI Analysis Report</li>
+        <li><span class="check green"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Online Dashboard Access</li>
+        <li><span class="check green"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Online Support</li>
+        <li><span class="check green"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Secure &amp; Private Data Protection</li>
+      </ul>
+
+      <div class="spacer"></div>
+
+      <button class="btn free">
+        Start Free Assessment
+        <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="fine-print">No Credit Card Required</div>
+    </div>
+
+    <!-- Premium Plan -->
+    <div class="card premium">
+      <div class="badge">
+        <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2l2.4 7.2H22l-6.2 4.4 2.4 7.2L12 16.4 5.8 20.8l2.4-7.2L2 9.2h7.6z"/></svg>
+        MOST POPULAR
+      </div>
+
+      <div class="plan-icon premium">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 3h12l4 6-10 12L2 9z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/>
+          <path d="M2 9h20M9 3l3 6 3-6M8 9l4 12 4-12" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="plan-name premium">Premium Plan</div>
+      <div class="plan-sub">Unlock full potential of your mind</div>
+
+      <div class="price-row">
+        <span class="dollar">$</span>
+        <span class="amount">19</span>
+      </div>
+      <div class="price-caption premium">Per Month</div>
+
+      <div class="divider"></div>
+
+      <ul class="features">
+        <li><span class="check purple"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Unlimited AI Cognitive Assessments</li>
+        <li><span class="check purple"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Unlimited AI Analysis Reports</li>
+        <li><span class="check purple"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Personalized Online Dashboard</li>
+        <li><span class="check purple"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Progress Tracking &amp; History</li>
+        <li><span class="check purple"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>AI-Powered Cognitive Insights</li>
+        <li><span class="check purple"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Memory, Focus &amp; Stress Trend Analysis</li>
+        <li><span class="check purple"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Personalized Recommendations</li>
+        <li><span class="check purple"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Priority Online Support</li>
+      </ul>
+
+      <div class="spacer"></div>
+
+      <button class="btn premium">
+        Upgrade to Premium
+        <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="fine-print">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z" stroke="#818cf8" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        Cancel Anytime. 100% Secure.
+      </div>
+    </div>
+
+  </section>
+
+  <section class="trust-bar">
+    <div class="trust-item">
+      <div class="trust-icon">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="trust-text">
+        <div class="title">100% Secure</div>
+        <div class="sub">Your data is safe</div>
+      </div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 11V7a4 4 0 018 0v4" stroke="currentColor" stroke-width="1.6"/></svg>
+      </div>
+      <div class="trust-text">
+        <div class="title">Privacy First</div>
+        <div class="sub">We respect your privacy</div>
+      </div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.6"/><path d="M8 12h8M12 8v8" stroke="currentColor" stroke-width="1.6"/></svg>
+      </div>
+      <div class="trust-text">
+        <div class="title">AI-Powered</div>
+        <div class="sub">Advanced science-backed AI</div>
+      </div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.2" stroke="currentColor" stroke-width="1.6"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </div>
+      <div class="trust-text">
+        <div class="title">Always Here for You</div>
+        <div class="sub">Reliable online support</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="guarantee">
+    <div class="g-icon">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <h3>7-Day Happiness Guarantee</h3>
+    <p>Not satisfied? Get a full refund within 7 days of your purchase.</p>
+  </section>
+
+</div>
+
+</body>
+</html>
