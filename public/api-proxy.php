@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 // The real backend URL
-define('BACKEND_URL', 'https://limitless-b3he.onrender.com');
+define('BACKEND_URL', 'https://limitless-model.160-153-179-249.sslip.io');
 
 // Which endpoints are allowed to be proxied
 $allowed_endpoints = [

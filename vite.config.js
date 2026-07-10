@@ -14,7 +14,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://limitless-b3he.onrender.com',
+        target: 'https://limitless-model.160-153-179-249.sslip.io',
         changeOrigin: true,
         secure: false,
       }

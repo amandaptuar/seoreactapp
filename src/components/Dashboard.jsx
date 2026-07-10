@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid,
-  Cell, AreaChart, Area, PieChart, Pie
+  Cell, AreaChart, Area, PieChart, Pie, LineChart, Line, Legend
 } from 'recharts';
 import { supabase } from '../lib/supabase';
 import { sendPdfEmail } from '../lib/emailService';
-import { getApiUrl } from '../lib/apiUtils';
+import { getApiUrl, fetchLongitudinalAnalysis } from '../lib/apiUtils';
 import { startLoggedInAssessment } from '../lib/assessmentFlow';
 import FeedbackModal from './FeedbackModal';
 
@@ -56,6 +56,8 @@ const Dashboard = () => {
   const [userAge, setUserAge] = useState('');
   const [userGender, setUserGender] = useState('');
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  const [longitudinalData, setLongitudinalData] = useState(null);
+  const [showRawJson, setShowRawJson] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -133,6 +135,25 @@ const Dashboard = () => {
     };
     loadDashboardData();
   }, [navigate]);
+
+  useEffect(() => {
+    const fetchLongitudinal = async () => {
+      const userId = sessionStorage.getItem('userId');
+      if (assessmentsHistory && assessmentsHistory.length >= 2 && userId) {
+        try {
+          const historyPayload = assessmentsHistory.map(h => ({
+            sessionTimestamp: h.created_at,
+            analysis: h.report_json
+          }));
+          const data = await fetchLongitudinalAnalysis(userId, historyPayload);
+          setLongitudinalData(data);
+        } catch (err) {
+          console.error('Error fetching longitudinal analysis:', err);
+        }
+      }
+    };
+    fetchLongitudinal();
+  }, [assessmentsHistory]);
 
   const handleGeneratePdf = async (action = 'download') => {
     if (pdfUrl && isPaid) {
@@ -970,6 +991,172 @@ const Dashboard = () => {
             </div>
           </div>
           
+          {/* Progression Tracking Section */}
+          {longitudinalData && (
+            <div className="card" style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              <div className="card-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 0 }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#6366F1' }}><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg>
+                  Your Progress Journey
+                </span>
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                  <span style={{ fontSize: '13px', color: 'var(--text-grey)', fontWeight: '600' }}>
+                    Based on your last {longitudinalData.historical_data_points_analyzed} sessions
+                  </span>
+                </div>
+              </div>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+                {/* Trajectory Card */}
+                <div style={{ background: '#f8fafc', border: '1px solid var(--border)', padding: '20px', borderRadius: 'var(--radius-lg)' }}>
+                  <div style={{ fontSize: '13px', color: '#64748b', fontWeight: '700', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Progress Overview</div>
+                  
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '12px', color: '#94a3b8', fontWeight: '600', marginBottom: '4px' }}>FIRST SCORE</div>
+                      <div style={{ fontSize: '24px', fontWeight: '800', color: '#1e293b' }}>{Math.round(longitudinalData.longitudinal_telemetry?.overall_trajectory?.baseline_overall_score || 0)}</div>
+                    </div>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '12px', color: '#94a3b8', fontWeight: '600', marginBottom: '4px' }}>LATEST SCORE</div>
+                      <div style={{ fontSize: '24px', fontWeight: '800', color: '#6c5ce7' }}>{Math.round(longitudinalData.longitudinal_telemetry?.overall_trajectory?.latest_overall_score || 0)}</div>
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#fff', padding: '12px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                    <div style={{ 
+                      width: '40px', height: '40px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px',
+                      background: longitudinalData.longitudinal_telemetry?.overall_trajectory?.direction === 'Improving' ? 'var(--green-badge)' : 'var(--purple-badge)',
+                      color: longitudinalData.longitudinal_telemetry?.overall_trajectory?.direction === 'Improving' ? 'var(--green)' : 'var(--purple)'
+                    }}>
+                      {longitudinalData.longitudinal_telemetry?.overall_trajectory?.direction === 'Improving' ? '🚀' : longitudinalData.longitudinal_telemetry?.overall_trajectory?.direction === 'Declining' ? '⚠️' : '➡️'}
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '15px', fontWeight: '700', color: '#0f172a' }}>{longitudinalData.longitudinal_telemetry?.overall_trajectory?.direction || 'Stable'}</div>
+                      <div style={{ fontSize: '13px', color: '#64748b' }}>Changing by <span style={{ fontWeight: '700', color: longitudinalData.longitudinal_telemetry?.overall_trajectory?.velocity_score_per_day >= 0 ? 'var(--green)' : 'var(--red)' }}>{longitudinalData.longitudinal_telemetry?.overall_trajectory?.velocity_score_per_day?.toFixed(2)} points</span> per day</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* AI Insights Card */}
+                <div style={{ background: 'linear-gradient(135deg, #1e293b, #0f172a)', padding: '20px', borderRadius: 'var(--radius-lg)', color: '#fff', display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ fontSize: '13px', color: '#94a3b8', fontWeight: '700', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                    Your Personal Coach
+                  </div>
+                  <div style={{ marginBottom: '16px', background: 'rgba(255,255,255,0.05)', padding: '12px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                    <span style={{ fontSize: '12px', color: '#94a3b8', fontWeight: '600', display: 'block', marginBottom: '4px' }}>AREA TO FOCUS ON</span>
+                    <span style={{ fontSize: '15px', color: '#fff', fontWeight: '600' }}>{longitudinalData.contextual_ai_insights?.primary_bottleneck}</span>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
+                    <span style={{ fontSize: '12px', color: '#94a3b8', fontWeight: '600' }}>ACTION STEPS</span>
+                    {longitudinalData.contextual_ai_insights?.dynamic_recommendations?.map((rec, idx) => (
+                      <div key={idx} style={{ fontSize: '13.5px', color: '#cbd5e1', display: 'flex', alignItems: 'flex-start', gap: '8px', lineHeight: '1.4' }}>
+                        <span style={{ color: '#6366f1', marginTop: '2px' }}>✦</span> {rec}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+                {/* Projections Card */}
+                {longitudinalData.predictive_projections_calibrated && Object.keys(longitudinalData.predictive_projections_calibrated).length > 0 && (
+                  <div style={{ background: '#f8fafc', border: '1px solid var(--border)', padding: '20px', borderRadius: 'var(--radius-lg)' }}>
+                    <div style={{ fontSize: '13px', color: '#64748b', fontWeight: '700', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Where You're Heading</div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                      {[30, 60, 90].map(days => {
+                        const noAction = longitudinalData.predictive_projections_calibrated[`days_${days}_no_action`];
+                        const withAction = longitudinalData.predictive_projections_calibrated[`days_${days}_with_recommendations`];
+                        if (noAction === undefined || withAction === undefined) return null;
+                        
+                        return (
+                          <div key={days} style={{ background: '#fff', padding: '16px', borderRadius: '8px', border: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div style={{ fontSize: '15px', fontWeight: '800', color: '#1e293b' }}>In {days} Days</div>
+                            <div style={{ display: 'flex', gap: '20px' }}>
+                              <div style={{ textAlign: 'right' }}>
+                                <div style={{ fontSize: '11px', color: '#64748b', fontWeight: '600', textTransform: 'uppercase', marginBottom: '2px' }}>Without Action</div>
+                                <div style={{ fontSize: '18px', fontWeight: '800', color: '#94a3b8' }}>{Math.round(noAction)}</div>
+                              </div>
+                              <div style={{ textAlign: 'right', borderLeft: '1px solid #e2e8f0', paddingLeft: '20px' }}>
+                                <div style={{ fontSize: '11px', color: '#6366f1', fontWeight: '600', textTransform: 'uppercase', marginBottom: '2px' }}>With Action</div>
+                                <div style={{ fontSize: '18px', fontWeight: '800', color: '#6366f1' }}>{Math.round(withAction)}</div>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* Attribution Matrix */}
+                {longitudinalData.longitudinal_telemetry?.attribution_available && longitudinalData.longitudinal_telemetry?.lifestyle_attribution_matrix && Object.keys(longitudinalData.longitudinal_telemetry.lifestyle_attribution_matrix).length > 0 && (
+                  <div style={{ background: '#f8fafc', border: '1px solid var(--border)', padding: '20px', borderRadius: 'var(--radius-lg)' }}>
+                    <div style={{ fontSize: '13px', color: '#64748b', fontWeight: '700', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>How Your Lifestyle Affects Your Score</div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                      {Object.entries(longitudinalData.longitudinal_telemetry.lifestyle_attribution_matrix).map(([key, val]) => {
+                        const isPositive = val >= 0;
+                        return (
+                          <div key={key} style={{ background: '#fff', padding: '12px', borderRadius: '8px', border: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span style={{ fontSize: '13px', color: '#475569', fontWeight: '600', textTransform: 'capitalize' }}>{key.replace('Impact', '')}</span>
+                            <span style={{ fontSize: '14px', fontWeight: '800', color: isPositive ? 'var(--green)' : 'var(--red)' }}>
+                              {isPositive ? '+' : ''}{val.toFixed(1)}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Line Chart */}
+              <div style={{ background: '#f8fafc', border: '1px solid var(--border)', padding: '20px', borderRadius: 'var(--radius-lg)' }}>
+                <div style={{ fontSize: '13px', color: '#64748b', fontWeight: '700', marginBottom: '20px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Your Brain Areas Over Time</div>
+                <div style={{ width: '100%', height: '350px' }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart 
+                      data={longitudinalData.session_timestamps.map((ts, i) => {
+                        const pt = { name: new Date(ts).toLocaleDateString() };
+                        Object.entries(longitudinalData.longitudinal_telemetry?.domain_trends || {}).forEach(([domain, data]) => {
+                          pt[domain] = data.historical_values[i];
+                        });
+                        return pt;
+                      })}
+                      margin={{ top: 10, right: 30, left: -20, bottom: 5 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e9ebf2" vertical={false} />
+                      <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#8a8fa3' }} axisLine={false} tickLine={false} dy={10} />
+                      <YAxis tick={{ fontSize: 11, fill: '#8a8fa3' }} domain={['dataMin - 5', 'dataMax + 5']} axisLine={false} tickLine={false} dx={-10} />
+                      <Tooltip 
+                        contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', padding: '16px' }}
+                        itemStyle={{ fontSize: '13px', fontWeight: '600', padding: '4px 0' }}
+                      />
+                      <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '20px' }} iconType="circle" />
+                      {Object.keys(longitudinalData.longitudinal_telemetry?.domain_trends || {}).map((domain, index) => {
+                        const lineColors = ['#6c5ce7', '#1ea672', '#2f6fed', '#f0a63a', '#e0455f', '#2bb3a3', '#e08c3e', '#7a5fe0'];
+                        return (
+                          <Line 
+                            key={domain} 
+                            type="monotone" 
+                            dataKey={domain} 
+                            name={domain.replace(/([A-Z])/g, ' $1').trim().replace(/^./, str => str.toUpperCase())} 
+                            stroke={lineColors[index % lineColors.length]} 
+                            strokeWidth={3}
+                            dot={{ r: 4, strokeWidth: 2, fill: '#fff' }}
+                            activeDot={{ r: 7, strokeWidth: 0 }}
+                          />
+                        );
+                      })}
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+            </div>
+          )}
+
           {/* Audit / Privacy (Optional) */}
           {(audit || privacy || (report.disclaimers && report.disclaimers.length > 0)) && (
             <div className="card" style={{ marginTop: '20px' }}>

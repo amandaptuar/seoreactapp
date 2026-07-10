@@ -100,3 +100,20 @@ export async function generatePdf(analysisData, teaser = false) {
   );
   return response;
 }
+
+/**
+ * Calls the longitudinal-analysis API with retry support.
+ */
+export async function fetchLongitudinalAnalysis(userId, history) {
+  const response = await fetchWithRetry(
+    getApiUrl('/api/v1/longitudinal-analysis'),
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, history }),
+    },
+    2,
+    3000
+  );
+  return response.json();
+}
