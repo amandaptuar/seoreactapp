@@ -8,6 +8,7 @@ const Admin = () => {
   const [activeTab, setActiveTab] = useState('users');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedUsers, setSelectedUsers] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -65,20 +66,66 @@ const Admin = () => {
   const deleteUser = async (userId, userEmail) => {
     if (window.confirm(`Are you sure you want to delete user ${userEmail}?`)) {
       try {
-        // We append .select() so Supabase returns the deleted row.
-        // If it returns an empty array, it means RLS silently blocked the delete.
         const { data, error } = await supabase.from('users').delete().eq('id', userId).select();
-
         if (error) throw error;
-
         if (!data || data.length === 0) {
           alert('Could not delete user. This is usually because Row Level Security (RLS) is enabled on the "users" table but no DELETE policy exists. Please add a DELETE policy in your Supabase dashboard.');
         } else {
           setUsers(users.filter(u => u.id !== userId));
+          setSelectedUsers(selectedUsers.filter(id => id !== userId));
         }
       } catch (err) {
         alert('Error deleting user: ' + err.message);
       }
+    }
+  };
+
+  const toggleUserSelection = (userId) => {
+    if (selectedUsers.includes(userId)) {
+      setSelectedUsers(selectedUsers.filter(id => id !== userId));
+    } else {
+      setSelectedUsers([...selectedUsers, userId]);
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedUsers.length === 0) return;
+    if (!window.confirm(`Are you sure you want to delete ${selectedUsers.length} selected users?`)) return;
+    try {
+      const { error } = await supabase.from('users').delete().in('id', selectedUsers);
+      if (error) throw error;
+      setUsers(users.filter(u => !selectedUsers.includes(u.id)));
+      setSelectedUsers([]);
+    } catch (err) {
+      alert('Error deleting users: ' + err.message);
+    }
+  };
+
+  const handleBulkSuspend = async () => {
+    if (selectedUsers.length === 0) return;
+    if (!window.confirm(`Are you sure you want to suspend ${selectedUsers.length} selected users?`)) return;
+    try {
+      const { error } = await supabase.from('users').update({ payment_status: 'suspended' }).in('id', selectedUsers);
+      if (error) throw error;
+      setUsers(users.map(u => selectedUsers.includes(u.id) ? { ...u, payment_status: 'suspended' } : u));
+      setSelectedUsers([]);
+      alert('Users suspended successfully');
+    } catch (err) {
+      alert('Error suspending users: ' + err.message);
+    }
+  };
+
+  const handleBulkUnsuspend = async () => {
+    if (selectedUsers.length === 0) return;
+    if (!window.confirm(`Are you sure you want to unsuspend ${selectedUsers.length} selected users?`)) return;
+    try {
+      const { error } = await supabase.from('users').update({ payment_status: 'paid' }).in('id', selectedUsers);
+      if (error) throw error;
+      setUsers(users.map(u => selectedUsers.includes(u.id) ? { ...u, payment_status: 'paid' } : u));
+      setSelectedUsers([]);
+      alert('Users unsuspended successfully');
+    } catch (err) {
+      alert('Error unsuspending users: ' + err.message);
     }
   };
 
@@ -98,19 +145,34 @@ const Admin = () => {
         </div>
 
         {/* Tabs for switching views */}
-        <div style={{ display: 'flex', gap: '15px', marginBottom: '30px' }}>
-          <button 
-            style={{ ...styles.tabBtn, background: activeTab === 'users' ? 'var(--primary)' : 'transparent', color: activeTab === 'users' ? '#000' : 'var(--primary)' }}
-            onClick={() => setActiveTab('users')}
-          >
-            Registered Users ({users.length})
-          </button>
-          <button 
-            style={{ ...styles.tabBtn, background: activeTab === 'enquiries' ? 'var(--primary)' : 'transparent', color: activeTab === 'enquiries' ? '#000' : 'var(--primary)' }}
-            onClick={() => setActiveTab('enquiries')}
-          >
-            Feedback & Enquiries ({enquiries.length})
-          </button>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', flexWrap: 'wrap', gap: '15px' }}>
+          <div style={{ display: 'flex', gap: '15px' }}>
+            <button 
+              style={{ ...styles.tabBtn, background: activeTab === 'users' ? 'var(--primary)' : 'transparent', color: activeTab === 'users' ? '#000' : 'var(--primary)' }}
+              onClick={() => setActiveTab('users')}
+            >
+              Registered Users ({users.length})
+            </button>
+            <button 
+              style={{ ...styles.tabBtn, background: activeTab === 'enquiries' ? 'var(--primary)' : 'transparent', color: activeTab === 'enquiries' ? '#000' : 'var(--primary)' }}
+              onClick={() => setActiveTab('enquiries')}
+            >
+              Feedback & Enquiries ({enquiries.length})
+            </button>
+          </div>
+          {activeTab === 'users' && selectedUsers.length > 0 && (
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button style={styles.bulkSuspendBtn} onClick={handleBulkSuspend}>
+                Suspend Selected ({selectedUsers.length})
+              </button>
+              <button style={styles.bulkUnsuspendBtn} onClick={handleBulkUnsuspend}>
+                Unsuspend Selected ({selectedUsers.length})
+              </button>
+              <button style={styles.bulkDeleteBtn} onClick={handleBulkDelete}>
+                Delete Selected ({selectedUsers.length})
+              </button>
+            </div>
+          )}
         </div>
 
         {loading ? (
@@ -131,9 +193,18 @@ const Admin = () => {
                 onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.5)'; }}
               >
                 <div style={styles.cardHeader}>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <h3 style={styles.name} title={user.name}>{user.name || 'Unknown User'}</h3>
-                    <div style={styles.email} title={user.email}>{user.email}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '15px', flex: 1, minWidth: 0 }}>
+                    <input 
+                      type="checkbox" 
+                      style={{ width: '20px', height: '20px', cursor: 'pointer', flexShrink: 0 }}
+                      checked={selectedUsers.includes(user.id)}
+                      onChange={() => toggleUserSelection(user.id)}
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <h3 style={styles.name} title={user.name}>{user.name || 'Unknown User'}</h3>
+                      <div style={styles.email} title={user.email}>{user.email}</div>
+                    </div>
                   </div>
                 </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '15px' }}>
@@ -142,11 +213,11 @@ const Admin = () => {
                   </div>
                   <div style={{
                     ...styles.pill,
-                    background: user.payment_status === 'paid' ? 'rgba(46, 204, 113, 0.15)' : 'rgba(231, 76, 60, 0.15)',
-                    color: user.payment_status === 'paid' ? '#2ecc71' : '#e74c3c',
+                    background: user.payment_status === 'suspended' ? 'rgba(245, 158, 11, 0.15)' : user.payment_status === 'paid' ? 'rgba(46, 204, 113, 0.15)' : 'rgba(231, 76, 60, 0.15)',
+                    color: user.payment_status === 'suspended' ? '#f59e0b' : user.payment_status === 'paid' ? '#2ecc71' : '#e74c3c',
                     fontWeight: '600'
                   }}>
-                    Payment: {user.payment_status === 'paid' ? 'Done' : 'Not Done'}
+                    {user.payment_status === 'suspended' ? 'Status: Suspended' : `Payment: ${user.payment_status === 'paid' ? 'Done' : 'Not Done'}`}
                   </div>
                   {user.ai_insights && (
                     <div style={{ ...styles.pill, background: 'rgba(139, 92, 246, 0.15)', color: '#8b5cf6' }}>
@@ -262,6 +333,36 @@ const styles = {
     borderRadius: '8px',
     cursor: 'pointer',
     transition: 'all 0.3s ease',
+  },
+  bulkDeleteBtn: {
+    padding: '10px 20px',
+    background: 'rgba(239,68,68,0.1)',
+    border: '1px solid rgba(239,68,68,0.3)',
+    color: '#ef4444',
+    fontWeight: '600',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease'
+  },
+  bulkSuspendBtn: {
+    padding: '10px 20px',
+    background: 'rgba(245,158,11,0.1)',
+    border: '1px solid rgba(245,158,11,0.3)',
+    color: '#f59e0b',
+    fontWeight: '600',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease'
+  },
+  bulkUnsuspendBtn: {
+    padding: '10px 20px',
+    background: 'rgba(16,185,129,0.1)',
+    border: '1px solid rgba(16,185,129,0.3)',
+    color: '#10b981',
+    fontWeight: '600',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease'
   },
   grid: {
     display: 'grid',

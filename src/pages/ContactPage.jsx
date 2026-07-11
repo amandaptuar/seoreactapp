@@ -255,7 +255,7 @@ const ContactPage = () => {
       </div>
       <div className="contact-item-text">
         <strong>Email</strong>
-        <span>hello@limitlessworld.net</span>
+        <span>support@limitless.com</span>
         <span>We'll reply within 24 hours</span>
       </div>
     </div>

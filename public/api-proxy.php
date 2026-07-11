@@ -26,6 +26,7 @@ $allowed_endpoints = [
     '/api/v1/analyze',
     '/api/v1/generate-pdf',
     '/api/v1/generate-teaser-pdf',
+    '/api/v1/longitudinal-analysis',
 ];
 
 // Get the endpoint from query string: ?endpoint=/api/v1/generate-questions

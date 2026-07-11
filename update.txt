@@ -1,0 +1,10 @@
+Update Summary:
+
+1. Ensured the user profile data is only deeply exposed in the Admin panel via `AdminUserDetail.jsx` and kept the regular User dashboard unmodified as per instructions.
+2. Added bulk selection checkboxes to the Admin user list (`src/components/Admin.jsx`).
+3. Implemented a "Suspend Selected" action that updates the users' payment_status to "suspended" and highlights it in orange.
+4. Implemented a "Delete Selected" action to allow deleting multiple users at once.
+5. Preserved the individual user delete functionality and all existing admin features.
+6. Replaced all occurrences of the old email address (hello@...) with the new address (support@limitless.com) across all frontend components and static HTML pages.
+7. Applied the same bulk selection, "Suspend", and "Delete" functionalities to the newer admin-panel dashboard (`src/dashbaord-app/pages/Users.tsx`) and updated the UI StatusPill component to handle the "suspended" state.
+8. Added an "Unsuspend Selected" option alongside the bulk actions in both admin dashboards to easily restore suspended users back to "paid" status.

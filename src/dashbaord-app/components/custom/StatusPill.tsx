@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils"
 
-export type Status = "active" | "trial" | "demo" | "expired" | "inactive" | "at_risk" | "moderate" | "good" | "excellent"
+export type Status = "active" | "trial" | "demo" | "expired" | "inactive" | "at_risk" | "moderate" | "good" | "excellent" | "suspended"
 
 interface StatusPillProps {
   status: Status
@@ -17,6 +17,7 @@ export function StatusPill({ status, className }: StatusPillProps) {
         status === "active" && "bg-success/10 text-success border-success/20",
         status === "trial" && "bg-warning/10 text-warning border-warning/20",
         status === "demo" && "bg-warning/10 text-warning border-warning/20",
+        status === "suspended" && "bg-warning/10 text-warning border-warning/20",
         status === "expired" && "bg-destructive/10 text-destructive border-destructive/20",
         status === "inactive" && "bg-muted text-muted-foreground border-border",
         status === "excellent" && "bg-success/10 text-success border-success/20",
