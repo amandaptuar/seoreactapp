@@ -14,7 +14,9 @@ const isLocalhost =
 
 export const BACKEND_URL = (
   import.meta.env.VITE_BACKEND_URL ||
-  (isLocalhost ? 'http://localhost:4000' : 'https://api.limitlessworld.net')
+  (isLocalhost
+    ? 'http://localhost:4000'
+    : 'https://limitless-api.160-153-179-249.sslip.io')
 ).replace(/\/+$/, '');
 
 // ── Tokens ───────────────────────────────────────────────────────────────────

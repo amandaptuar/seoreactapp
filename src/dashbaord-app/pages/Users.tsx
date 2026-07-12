@@ -60,12 +60,12 @@ export default function Users() {
     if (selectedUsers.length === 0) return
     if (!confirm(`Are you sure you want to delete ${selectedUsers.length} selected users?`)) return
     try {
-      const { error } = await supabase.from('users').delete().in('id', selectedUsers)
-      if (error) throw error
+      await Promise.all(selectedUsers.map(id => deleteUser(id)))
       setUsers(users.filter(u => !selectedUsers.includes(u.id)))
       setSelectedUsers([])
     } catch (error) {
       console.error("Failed to delete users", error)
+      fetchData()
     }
   }
 
@@ -73,12 +73,12 @@ export default function Users() {
     if (selectedUsers.length === 0) return
     if (!confirm(`Are you sure you want to suspend ${selectedUsers.length} selected users?`)) return
     try {
-      const { error } = await supabase.from('users').update({ payment_status: 'suspended' }).in('id', selectedUsers)
-      if (error) throw error
+      await Promise.all(selectedUsers.map(id => updateUserStatus(id, 'suspended')))
       setUsers(users.map(u => selectedUsers.includes(u.id) ? { ...u, payment_status: 'suspended' } : u))
       setSelectedUsers([])
     } catch (error) {
       console.error("Failed to suspend users", error)
+      fetchData()
     }
   }
 
@@ -86,12 +86,12 @@ export default function Users() {
     if (selectedUsers.length === 0) return
     if (!confirm(`Are you sure you want to unsuspend ${selectedUsers.length} selected users?`)) return
     try {
-      const { error } = await supabase.from('users').update({ payment_status: 'paid' }).in('id', selectedUsers)
-      if (error) throw error
+      await Promise.all(selectedUsers.map(id => updateUserStatus(id, 'paid')))
       setUsers(users.map(u => selectedUsers.includes(u.id) ? { ...u, payment_status: 'paid' } : u))
       setSelectedUsers([])
     } catch (error) {
       console.error("Failed to unsuspend users", error)
+      fetchData()
     }
   }
 

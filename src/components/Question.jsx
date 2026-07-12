@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchWithRetry, getApiUrl } from '../lib/apiUtils';
+import { saveAssessment } from '../lib/backendApi';
 import './Question.css';
 
 const Question = () => {
@@ -76,10 +77,6 @@ const Question = () => {
       let gender = sessionStorage.getItem('userGender') || 'prefer-not-to-say';
       if (gender === 'prefer_not_to_say') gender = 'prefer-not-to-say';
 
-      // Passing userId makes the backend save the report as an assessment
-      // record automatically — no separate DB call needed.
-      const userId = sessionStorage.getItem('userId');
-
       const analyzeResponse = await fetchWithRetry(getApiUrl('/api/v1/analyze'), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -87,13 +84,23 @@ const Question = () => {
           assessmentId: assessmentId || "fallback-id",
           age: age,
           gender: gender,
-          responses: apiResponses,
-          userId: userId || undefined
+          responses: apiResponses
         })
       });
 
       const analysisResult = await analyzeResponse.json();
       sessionStorage.setItem('analysisReport', JSON.stringify(analysisResult));
+
+      // Save the report to the account backend so it's never lost
+      // (the AI model service doesn't write to the database).
+      const userId = sessionStorage.getItem('userId');
+      if (userId) {
+        try {
+          await saveAssessment(userId, analysisResult);
+        } catch (dbErr) {
+          console.error('Error saving assessment to DB:', dbErr);
+        }
+      }
 
       // Always navigate directly to dashboard after assessment
       navigate('/dashboard');
