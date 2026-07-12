@@ -15,7 +15,11 @@ export default defineConfig({
     proxy: {
       // Local Node.js backend (MongoDB) — see ../backend
       '/api': {
+<<<<<<< HEAD
         target: 'http://localhost:4000',
+=======
+        target: 'https://limitless-model.160-153-179-249.sslip.io',
+>>>>>>> origin/main
         changeOrigin: true,
       }
     }

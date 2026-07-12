@@ -22,6 +22,7 @@ import HowItWorksPage from './pages/HowItWorksPage';
 import ContactPage from './pages/ContactPage';
 import AboutPage from './pages/AboutPage';
 import JoinUsPage from './pages/JoinUsPage';
+import PricingPage from './pages/PricingPage';
 import DashboardApp from './dashbaord-app/App';
 
 
@@ -73,6 +74,7 @@ function App() {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/join-us" element={<JoinUsPage />} />
+        <Route path="/pricing" element={<PricingPage />} />
 
         
         {/* Protected User Routes */}

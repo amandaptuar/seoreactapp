@@ -64,28 +64,10 @@ const Payment = () => {
                 {isProcessing ? 'Processing...' : 'Pay $19 & Get Instant Access'}
               </button>
 
-              <button 
-                onClick={() => navigate('/payment-success')} 
-                style={{
-                  width: '100%',
-                  padding: '12px',
-                  background: '#E2E8F0',
-                  color: '#475569',
-                  border: 'none',
-                  borderRadius: '12px',
-                  fontWeight: '700',
-                  fontSize: '21px',
-                  cursor: 'pointer',
-                  marginTop: '10px'
-                }}
-              >
-                Simulate Payment (Dev Only)
-              </button>
-              
+
               <button 
                 onClick={() => {
-                  sessionStorage.removeItem('isLoggedIn');
-                  navigate('/');
+                  navigate('/dashboard');
                   window.scrollTo(0, 0);
                 }} 
                 style={{
@@ -101,7 +83,7 @@ const Payment = () => {
                   marginTop: '10px'
                 }}
               >
-                Return to Home Page & Login Later
+                Return to Dashboard
               </button>
 
               <p style={{ fontSize: '20px', color: '#94A3B8', margin: 0, marginTop: '16px' }}>

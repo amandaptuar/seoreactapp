@@ -47,12 +47,20 @@ export async function fetchWithRetry(url, options = {}, retries = 3, delayMs = 2
   );
 }
 
-// ─── Backend URL Routing ─────────────────────────────────────────────────────
-// All requests go straight to the Node.js backend (CORS is enabled there).
-// Base URL comes from VITE_BACKEND_URL / environment — see lib/backendApi.js.
-import { BACKEND_URL } from './backendApi';
+// ─── AI Model Service Routing ────────────────────────────────────────────────
+// AI endpoints (generate-questions / analyze / PDFs / longitudinal-analysis)
+// are served by the Python model service (limitless-model.*.sslip.io). It has
+// no CORS, so: local dev goes through the Vite proxy (see vite.config.js) and
+// production goes through /api-proxy.php on the web host.
+// Account/database/admin calls use the Node.js backend instead — lib/backendApi.js.
+const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
-export const getApiUrl = (endpoint) => `${BACKEND_URL}${endpoint}`;
+export const getApiUrl = (endpoint) => {
+  if (isLocalhost) {
+    return endpoint; // Vite dev proxy forwards /api/* to the model service
+  }
+  return `/api-proxy.php?endpoint=${endpoint}`;
+};
 
 /**
  * Calls the generate-questions API with retry support.
@@ -93,4 +101,21 @@ export async function generatePdf(analysisData, teaser = false) {
     3000
   );
   return response;
+}
+
+/**
+ * Calls the longitudinal-analysis API with retry support.
+ */
+export async function fetchLongitudinalAnalysis(userId, history) {
+  const response = await fetchWithRetry(
+    getApiUrl('/api/v1/longitudinal-analysis'),
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, history }),
+    },
+    2,
+    3000
+  );
+  return response.json();
 }

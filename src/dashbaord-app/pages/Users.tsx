@@ -5,17 +5,18 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { StatusPill } from "@/components/custom/StatusPill"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuSeparator, 
-  DropdownMenuTrigger 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-import { getUsers, deleteUser } from "@/services/api"
+import { getUsers, deleteUser, updateUserStatus } from "@/services/api"
 
 export default function Users() {
   const navigate = useNavigate()
@@ -26,6 +27,7 @@ export default function Users() {
   
   const [users, setUsers] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([])
 
   useEffect(() => {
     fetchData()
@@ -48,8 +50,64 @@ export default function Users() {
     try {
       await deleteUser(id)
       setUsers(users.filter(u => u.id !== id))
+      setSelectedUsers(prev => prev.filter(uid => uid !== id))
     } catch (error) {
       console.error("Failed to delete user", error)
+    }
+  }
+
+  const handleBulkDelete = async () => {
+    if (selectedUsers.length === 0) return
+    if (!confirm(`Are you sure you want to delete ${selectedUsers.length} selected users?`)) return
+    try {
+      const { error } = await supabase.from('users').delete().in('id', selectedUsers)
+      if (error) throw error
+      setUsers(users.filter(u => !selectedUsers.includes(u.id)))
+      setSelectedUsers([])
+    } catch (error) {
+      console.error("Failed to delete users", error)
+    }
+  }
+
+  const handleBulkSuspend = async () => {
+    if (selectedUsers.length === 0) return
+    if (!confirm(`Are you sure you want to suspend ${selectedUsers.length} selected users?`)) return
+    try {
+      const { error } = await supabase.from('users').update({ payment_status: 'suspended' }).in('id', selectedUsers)
+      if (error) throw error
+      setUsers(users.map(u => selectedUsers.includes(u.id) ? { ...u, payment_status: 'suspended' } : u))
+      setSelectedUsers([])
+    } catch (error) {
+      console.error("Failed to suspend users", error)
+    }
+  }
+
+  const handleBulkUnsuspend = async () => {
+    if (selectedUsers.length === 0) return
+    if (!confirm(`Are you sure you want to unsuspend ${selectedUsers.length} selected users?`)) return
+    try {
+      const { error } = await supabase.from('users').update({ payment_status: 'paid' }).in('id', selectedUsers)
+      if (error) throw error
+      setUsers(users.map(u => selectedUsers.includes(u.id) ? { ...u, payment_status: 'paid' } : u))
+      setSelectedUsers([])
+    } catch (error) {
+      console.error("Failed to unsuspend users", error)
+    }
+  }
+
+  const toggleSelectAll = () => {
+    if (selectedUsers.length === filteredUsers.length) {
+      setSelectedUsers([])
+    } else {
+      setSelectedUsers(filteredUsers.map(u => u.id))
+    }
+  }
+
+  const toggleUserSelection = (id: string) => {
+    if (selectedUsers.includes(id)) {
+      setSelectedUsers(prev => prev.filter(uid => uid !== id))
+    } else {
+      setSelectedUsers(prev => [...prev, id])
     }
   }
 
@@ -130,10 +188,31 @@ export default function Users() {
         </div>
       </div>
 
+      {selectedUsers.length > 0 && (
+        <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg border">
+          <span className="text-sm font-medium">{selectedUsers.length} selected</span>
+          <Button variant="outline" size="sm" onClick={handleBulkSuspend} className="text-amber-600 hover:text-amber-700 hover:bg-amber-50">
+            Suspend Selected
+          </Button>
+          <Button variant="outline" size="sm" onClick={handleBulkUnsuspend} className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50">
+            Unsuspend Selected
+          </Button>
+          <Button variant="outline" size="sm" onClick={handleBulkDelete} className="text-destructive hover:text-destructive hover:bg-destructive/10">
+            <Trash2 className="h-4 w-4 mr-2" /> Delete Selected
+          </Button>
+        </div>
+      )}
+
       <div className="border rounded-lg bg-card overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-12 text-center">
+                <Checkbox 
+                  checked={filteredUsers.length > 0 && selectedUsers.length === filteredUsers.length}
+                  onCheckedChange={toggleSelectAll}
+                />
+              </TableHead>
               <TableHead>User</TableHead>
               <TableHead>Contact</TableHead>
               <TableHead>Score</TableHead>
@@ -145,15 +224,21 @@ export default function Users() {
           <TableBody>
             {loading ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-center py-8">Loading users...</TableCell>
+                <TableCell colSpan={7} className="text-center py-8">Loading users...</TableCell>
               </TableRow>
             ) : filteredUsers.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">No users found.</TableCell>
+                <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">No users found.</TableCell>
               </TableRow>
             ) : (
               filteredUsers.map((user) => (
                 <TableRow key={user.id}>
+                  <TableCell className="text-center">
+                    <Checkbox 
+                      checked={selectedUsers.includes(user.id)}
+                      onCheckedChange={() => toggleUserSelection(user.id)}
+                    />
+                  </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <Avatar className="h-9 w-9">
@@ -191,6 +276,7 @@ export default function Users() {
                   </TableCell>
                   <TableCell>
                     <StatusPill status={
+                      user.payment_status === 'suspended' ? 'suspended' :
                       user.payment_status === 'paid' ? 'active' : 
                       'inactive'
                     } />

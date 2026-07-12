@@ -208,6 +208,7 @@ const Header = () => {
               <Link to="/features" onClick={() => setIsMobileMenuOpen(false)} className="nav-link">Features</Link>
               <Link to="/benefits" onClick={() => setIsMobileMenuOpen(false)} className="nav-link">Benefits</Link>
               <Link to="/how-it-works" onClick={() => setIsMobileMenuOpen(false)} className="nav-link">How It Works</Link>
+              <Link to="/pricing" onClick={() => setIsMobileMenuOpen(false)} className="nav-link">Pricing</Link>
               <Link to="/join-us" onClick={() => setIsMobileMenuOpen(false)} className="nav-link">Join Now</Link>
             </nav>
             

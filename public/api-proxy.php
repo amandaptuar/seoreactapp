@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 // The real backend URL
-define('BACKEND_URL', 'https://limitless-b3he.onrender.com');
+define('BACKEND_URL', 'https://limitless-model.160-153-179-249.sslip.io');
 
 // Which endpoints are allowed to be proxied
 $allowed_endpoints = [
@@ -26,6 +26,7 @@ $allowed_endpoints = [
     '/api/v1/analyze',
     '/api/v1/generate-pdf',
     '/api/v1/generate-teaser-pdf',
+    '/api/v1/longitudinal-analysis',
 ];
 
 // Get the endpoint from query string: ?endpoint=/api/v1/generate-questions
