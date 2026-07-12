@@ -13,14 +13,13 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      // Local Node.js backend (MongoDB) — see ../backend
+      // AI model service (generate-questions / analyze / PDFs / longitudinal).
+      // Account & admin calls go to the Node backend via lib/backendApi.js
+      // (http://localhost:4000 in dev) and don't use this proxy.
       '/api': {
-<<<<<<< HEAD
-        target: 'http://localhost:4000',
-=======
         target: 'https://limitless-model.160-153-179-249.sslip.io',
->>>>>>> origin/main
         changeOrigin: true,
+        secure: false,
       }
     }
   }
