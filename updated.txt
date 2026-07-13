@@ -1,0 +1,11 @@
+Bhai, maine tumhara favicon change kar diya hai. Limitless ka naya logo ab index.html mein as a favicon set ho gaya hai.
+
+Maine ek naya dist/ folder bhi generate kar diya hai `npm run build` command use karke. 
+
+Tumhara final task bas yeh hai:
+1. Apna FTP (jaise FileZilla) open karo aur limitlessworld.net server par connect karo.
+2. Wahan apne live folder (jisme purana code rakha hai) ke andar jao.
+3. Apne is local "dist" folder ka Pura content copy karke FTP par live folder mein paste/replace kar do.
+4. "api-proxy.php" file bhi root mein replace ho jayegi, jo tumhare senior ne strictly bola tha.
+
+Iske baad tumhari website naye backend (MongoDB) par shift ho jayegi aur emails properly kaam karne lagenge. Koi problem aaye toh bata dena!
