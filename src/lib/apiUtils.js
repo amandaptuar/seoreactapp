@@ -50,14 +50,18 @@ export async function fetchWithRetry(url, options = {}, retries = 3, delayMs = 2
 // ─── AI Model Service Routing ────────────────────────────────────────────────
 // AI endpoints (generate-questions / analyze / PDFs / longitudinal-analysis)
 // are served by the Python model service (limitless-model.*.sslip.io). It has
-// no CORS, so: local dev goes through the Vite proxy (see vite.config.js) and
-// production goes through /api-proxy.php on the web host.
+// no CORS, so requests are proxied same-origin:
+//   • local dev        → Vite proxy (see vite.config.js)
+//   • VPS preview site → nginx "location /api/" proxy on the same host
+//   • PHP web hosting  → /api-proxy.php
 // Account/database/admin calls use the Node.js backend instead — lib/backendApi.js.
-const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const host = window.location.hostname;
+const hasSameOriginProxy =
+  host === 'localhost' || host === '127.0.0.1' || host.endsWith('.sslip.io');
 
 export const getApiUrl = (endpoint) => {
-  if (isLocalhost) {
-    return endpoint; // Vite dev proxy forwards /api/* to the model service
+  if (hasSameOriginProxy) {
+    return endpoint; // proxied to the model service by Vite (dev) or nginx (VPS)
   }
   return `/api-proxy.php?endpoint=${endpoint}`;
 };
