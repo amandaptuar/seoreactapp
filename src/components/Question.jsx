@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
 import { fetchWithRetry, getApiUrl } from '../lib/apiUtils';
-import { sendCredentialsEmail } from '../lib/emailService';
+import { saveAssessment } from '../lib/backendApi';
 import './Question.css';
 
 const Question = () => {
@@ -92,16 +91,14 @@ const Question = () => {
       const analysisResult = await analyzeResponse.json();
       sessionStorage.setItem('analysisReport', JSON.stringify(analysisResult));
 
-      // Save assessment report JSON to assessments table immediately so it's not lost
+      // Save the report to the account backend so it's never lost
+      // (the AI model service doesn't write to the database).
       const userId = sessionStorage.getItem('userId');
       if (userId) {
         try {
-          // Save a record of this assessment to the assessments table for unlimited history
-          await supabase
-            .from('assessments')
-            .insert([{ user_id: userId, report_json: analysisResult }]);
+          await saveAssessment(userId, analysisResult);
         } catch (dbErr) {
-          console.error("Error saving assessment to DB:", dbErr);
+          console.error('Error saving assessment to DB:', dbErr);
         }
       }
 

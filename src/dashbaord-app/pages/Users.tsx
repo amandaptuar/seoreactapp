@@ -7,17 +7,16 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { StatusPill } from "@/components/custom/StatusPill"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { supabase } from "@/lib/supabase"
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuSeparator, 
-  DropdownMenuTrigger 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-import { getUsers, deleteUser } from "@/services/api"
+import { getUsers, deleteUser, updateUserStatus } from "@/services/api"
 
 export default function Users() {
   const navigate = useNavigate()
@@ -61,12 +60,12 @@ export default function Users() {
     if (selectedUsers.length === 0) return
     if (!confirm(`Are you sure you want to delete ${selectedUsers.length} selected users?`)) return
     try {
-      const { error } = await supabase.from('users').delete().in('id', selectedUsers)
-      if (error) throw error
+      await Promise.all(selectedUsers.map(id => deleteUser(id)))
       setUsers(users.filter(u => !selectedUsers.includes(u.id)))
       setSelectedUsers([])
     } catch (error) {
       console.error("Failed to delete users", error)
+      fetchData()
     }
   }
 
@@ -74,12 +73,12 @@ export default function Users() {
     if (selectedUsers.length === 0) return
     if (!confirm(`Are you sure you want to suspend ${selectedUsers.length} selected users?`)) return
     try {
-      const { error } = await supabase.from('users').update({ payment_status: 'suspended' }).in('id', selectedUsers)
-      if (error) throw error
+      await Promise.all(selectedUsers.map(id => updateUserStatus(id, 'suspended')))
       setUsers(users.map(u => selectedUsers.includes(u.id) ? { ...u, payment_status: 'suspended' } : u))
       setSelectedUsers([])
     } catch (error) {
       console.error("Failed to suspend users", error)
+      fetchData()
     }
   }
 
@@ -87,12 +86,12 @@ export default function Users() {
     if (selectedUsers.length === 0) return
     if (!confirm(`Are you sure you want to unsuspend ${selectedUsers.length} selected users?`)) return
     try {
-      const { error } = await supabase.from('users').update({ payment_status: 'paid' }).in('id', selectedUsers)
-      if (error) throw error
+      await Promise.all(selectedUsers.map(id => updateUserStatus(id, 'paid')))
       setUsers(users.map(u => selectedUsers.includes(u.id) ? { ...u, payment_status: 'paid' } : u))
       setSelectedUsers([])
     } catch (error) {
       console.error("Failed to unsuspend users", error)
+      fetchData()
     }
   }
 

@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import './EnquiryModal.css';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
-import bcrypt from 'bcryptjs';
 import { generateAssessmentQuestions } from '../lib/apiUtils';
-import { sendCredentialsEmail } from '../lib/emailService';
+import { registerUser } from '../lib/backendApi';
 
 const EnquiryModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({ name: '', email: '', age: '', gender: '' });
@@ -25,80 +23,27 @@ const EnquiryModal = ({ isOpen, onClose }) => {
     setErrorMsg('');
 
     try {
-      // 1. Check if email already exists FIRST
-      const { data: existingUser } = await supabase
-        .from('users')
-        .select('id')
-        .eq('email', formData.email)
-        .maybeSingle();
+      // 1. Register through the backend — it generates the temp password,
+      //    sends the official welcome email, AND notifies the admin inbox
+      //    (replaces the old formsubmit.co call).
+      //    Throws with status 409 if the email is already registered.
+      await registerUser({
+        name: formData.name,
+        email: formData.email,
+        age: formData.age,
+        gender: formData.gender,
+      });
 
-      if (existingUser) {
-        setErrorMsg('This email is already registered. Please log in instead.');
-        setIsSubmitting(false);
-        return;
-      }
-
-      // 2. Generate Questions from Limitless API (with retry for cold starts)
+      // 2. Generate the personalized questions
       const questionsData = await generateAssessmentQuestions(formData.age, formData.gender);
-      
-      // 3. Generate temp password & insert user
-      const generatedPassword = Math.random().toString(36).slice(-8).toUpperCase();
-      const passwordHash = await bcrypt.hash(generatedPassword, 10);
-      
-      const { data: newUser, error: insertErr } = await supabase
-        .from('users')
-        .insert([{
-          name: formData.name,
-          email: formData.email,
-          temp_password: generatedPassword,
-          password_hash: passwordHash,
-          password_reset_required: true,
-          payment_status: 'pending',
-        }])
-        .select('id')
-        .single();
-
-      if (insertErr) {
-        throw new Error(`DB Error: ${insertErr.message || insertErr.details || JSON.stringify(insertErr)}`);
-      }
-      
-      const dbUserId = newUser.id;
-
-      try {
-        await sendCredentialsEmail({
-          name: formData.name,
-          email: formData.email,
-          tempPassword: generatedPassword,
-        });
-      } catch (emailErr) {
-        console.warn('Credentials email failed (non-fatal):', emailErr);
-      }
       setErrorMsg('');
-// 4. FormSubmit notification (fire and forget)
-      fetch('https://formsubmit.co/ajax/info@limitlessworld.net', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          name: formData.name, email: formData.email,
-          _subject: `New Assessment Enquiry from ${formData.name}`,
-          _template: 'box', _replyto: formData.email
-        }),
-      }).catch(() => { });
 
-      // 5. Save to sessionStorage
       sessionStorage.setItem('assessmentId', questionsData.assessmentId);
       sessionStorage.setItem('assessmentSections', JSON.stringify(questionsData.sections));
-      sessionStorage.setItem('userEmail', formData.email);
-      sessionStorage.setItem('username', formData.email);
-      sessionStorage.setItem('name', formData.name);
       sessionStorage.setItem('userAge', formData.age);
       sessionStorage.setItem('userGender', formData.gender);
-      sessionStorage.setItem('generatedPassword', generatedPassword);
-      sessionStorage.setItem('isLoggedIn', 'true');
-      sessionStorage.setItem('passwordResetRequired', 'true');
-      if (dbUserId) sessionStorage.setItem('userId', dbUserId);
 
-      // 6. Navigate to questions
+      // 3. Navigate to questions
       onClose();
       navigate('/question');
       window.scrollTo(0, 0);

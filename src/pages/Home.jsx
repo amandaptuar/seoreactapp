@@ -1,10 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
-import bcrypt from 'bcryptjs';
-import { generateAssessmentQuestions } from '../lib/apiUtils';
 import { startLoggedInAssessment } from '../lib/assessmentFlow';
-import { sendCredentialsEmail } from '../lib/emailService';
 import LoginModal from '../components/LoginModal';
 import AssessmentModal from '../components/AssessmentModal';
 import Header from '../components/Header';

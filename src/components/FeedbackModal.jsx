@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './EnquiryModal.css'; // Reusing the same styles for consistency
-import { supabase } from '../lib/supabase';
+import { submitEnquiry } from '../lib/backendApi';
 
 const FeedbackModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -19,32 +19,13 @@ const FeedbackModal = ({ isOpen, onClose }) => {
     setErrorMsg('');
 
     try {
-      // Assuming 'enquiries' table is created in Supabase
-      const { error: insertErr } = await supabase
-        .from('enquiries')
-        .insert([{
-          name: formData.name,
-          email: formData.email,
-          message: formData.message
-        }]);
-
-      if (insertErr) {
-        throw new Error(insertErr.message);
-      }
-
-      // Option: Also send an email notification using FormSubmit
-      fetch('https://formsubmit.co/ajax/info@limitlessworld.net', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          name: formData.name, 
-          email: formData.email,
-          message: formData.message,
-          _subject: `New Feedback/Enquiry from ${formData.name}`,
-          _template: 'box', 
-          _replyto: formData.email
-        }),
-      }).catch(() => { });
+      // Backend stores the enquiry AND emails the admin inbox
+      // (replaces the old formsubmit.co call).
+      await submitEnquiry({
+        name: formData.name,
+        email: formData.email,
+        message: formData.message,
+      });
 
       setSubmitted(true);
       setTimeout(() => {

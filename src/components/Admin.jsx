@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
+import { adminGetUsers, adminGetEnquiries, adminDeleteUser, adminUpdateUserStatus } from '../lib/backendApi';
 
 const Admin = () => {
   const [users, setUsers] = useState([]);
@@ -18,37 +18,30 @@ const Admin = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const { data: usersData, error: usersError } = await supabase
-        .from('users')
-        .select('*, assessments(*)')
-        .order('created_at', { ascending: false });
+      // Backend returns users newest-first with assessments[] plus the latest
+      // report_json / pdf_url already mirrored onto each user.
+      const usersData = await adminGetUsers();
 
-      if (usersError) throw usersError;
-
-      const { data: enquiriesData, error: enquiriesError } = await supabase
-        .from('enquiries')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (!enquiriesError && enquiriesData) {
-        setEnquiries(enquiriesData);
-      } else {
-        console.warn("Could not fetch enquiries. Ensure the 'enquiries' table exists.");
+      try {
+        setEnquiries(await adminGetEnquiries());
+      } catch {
+        console.warn('Could not fetch enquiries.');
       }
 
-      const mappedUsers = usersData.map(user => {
-        const sortedAssessments = user.assessments?.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) || [];
-        const latest = sortedAssessments[0];
-        return {
-          ...user,
-          ai_insights: latest?.report_json || null,
-          pdf_url: latest?.pdf_url || null,
-        };
-      });
+      const mappedUsers = usersData.map(user => ({
+        ...user,
+        ai_insights: user.report_json || null,
+      }));
 
       setUsers(mappedUsers);
       setLoading(false);
     } catch (err) {
+      // Expired/missing admin token → back to login
+      if (err.status === 401 || err.status === 403) {
+        sessionStorage.removeItem('adminLoggedIn');
+        navigate('/admin-login');
+        return;
+      }
       setError(err.message);
       setLoading(false);
     }
@@ -66,14 +59,10 @@ const Admin = () => {
   const deleteUser = async (userId, userEmail) => {
     if (window.confirm(`Are you sure you want to delete user ${userEmail}?`)) {
       try {
-        const { data, error } = await supabase.from('users').delete().eq('id', userId).select();
-        if (error) throw error;
-        if (!data || data.length === 0) {
-          alert('Could not delete user. This is usually because Row Level Security (RLS) is enabled on the "users" table but no DELETE policy exists. Please add a DELETE policy in your Supabase dashboard.');
-        } else {
-          setUsers(users.filter(u => u.id !== userId));
-          setSelectedUsers(selectedUsers.filter(id => id !== userId));
-        }
+        // Backend cascades: assessments and stored PDFs are removed too.
+        await adminDeleteUser(userId);
+        setUsers(users.filter(u => u.id !== userId));
+        setSelectedUsers(selectedUsers.filter(id => id !== userId));
       } catch (err) {
         alert('Error deleting user: ' + err.message);
       }
@@ -92,12 +81,12 @@ const Admin = () => {
     if (selectedUsers.length === 0) return;
     if (!window.confirm(`Are you sure you want to delete ${selectedUsers.length} selected users?`)) return;
     try {
-      const { error } = await supabase.from('users').delete().in('id', selectedUsers);
-      if (error) throw error;
+      await Promise.all(selectedUsers.map(id => adminDeleteUser(id)));
       setUsers(users.filter(u => !selectedUsers.includes(u.id)));
       setSelectedUsers([]);
     } catch (err) {
       alert('Error deleting users: ' + err.message);
+      fetchData();
     }
   };
 
@@ -105,13 +94,13 @@ const Admin = () => {
     if (selectedUsers.length === 0) return;
     if (!window.confirm(`Are you sure you want to suspend ${selectedUsers.length} selected users?`)) return;
     try {
-      const { error } = await supabase.from('users').update({ payment_status: 'suspended' }).in('id', selectedUsers);
-      if (error) throw error;
+      await Promise.all(selectedUsers.map(id => adminUpdateUserStatus(id, 'suspended')));
       setUsers(users.map(u => selectedUsers.includes(u.id) ? { ...u, payment_status: 'suspended' } : u));
       setSelectedUsers([]);
       alert('Users suspended successfully');
     } catch (err) {
       alert('Error suspending users: ' + err.message);
+      fetchData();
     }
   };
 
@@ -119,13 +108,13 @@ const Admin = () => {
     if (selectedUsers.length === 0) return;
     if (!window.confirm(`Are you sure you want to unsuspend ${selectedUsers.length} selected users?`)) return;
     try {
-      const { error } = await supabase.from('users').update({ payment_status: 'paid' }).in('id', selectedUsers);
-      if (error) throw error;
+      await Promise.all(selectedUsers.map(id => adminUpdateUserStatus(id, 'paid')));
       setUsers(users.map(u => selectedUsers.includes(u.id) ? { ...u, payment_status: 'paid' } : u));
       setSelectedUsers([]);
       alert('Users unsuspended successfully');
     } catch (err) {
       alert('Error unsuspending users: ' + err.message);
+      fetchData();
     }
   };
 

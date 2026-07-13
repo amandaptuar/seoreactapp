@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { supabase } from '../lib/supabase';
-import bcrypt from 'bcryptjs';
+import { changePassword } from '../lib/backendApi';
 
 const ChangePasswordModal = ({ isOpen, userId, onSuccess }) => {
   const [currentPwd, setCurrentPwd] = useState('');
@@ -20,44 +19,17 @@ const ChangePasswordModal = ({ isOpen, userId, onSuccess }) => {
 
     setIsLoading(true);
     try {
-      // 1. Fetch the stored temp_password and password_hash for verification
-      const { data: user, error: fetchErr } = await supabase
-        .from('users')
-        .select('temp_password, password_hash')
-        .eq('id', userId)
-        .single();
+      // Backend verifies the current password (temp or user-set), stores the
+      // new bcrypt hash, and clears the first-login reset flag.
+      const email = sessionStorage.getItem('userEmail');
+      if (!email) throw new Error('Could not verify your identity. Please log in again.');
 
-      if (fetchErr || !user) throw new Error('Could not verify your identity.');
+      await changePassword(email, currentPwd, newPwd);
 
-      // 2. Verify current password against temp password (plain) OR existing hash
-      const matchesTempPwd = currentPwd === user.temp_password;
-      const matchesHash = user.password_hash
-        ? await bcrypt.compare(currentPwd, user.password_hash)
-        : false;
-
-      if (!matchesTempPwd && !matchesHash) {
-        throw new Error('Current password is incorrect.');
-      }
-
-      // 3. Hash the new password and save
-      const newHash = await bcrypt.hash(newPwd, 10);
-      const { error: updateErr } = await supabase
-        .from('users')
-        .update({
-          temp_password: newPwd,
-          password_hash: newHash,
-          password_reset_required: false,
-        })
-        .eq('id', userId);
-
-      if (updateErr) throw new Error('Failed to update password. Please try again.');
-
-      // 4. Update sessionStorage
-      sessionStorage.setItem('passwordResetRequired', 'false');
       setSuccess(true);
       setTimeout(() => { onSuccess(); }, 2000);
     } catch (err) {
-      setError(err.message);
+      setError(err.status === 401 ? 'Current password is incorrect.' : err.message);
     } finally {
       setIsLoading(false);
     }

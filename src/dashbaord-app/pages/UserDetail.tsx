@@ -5,8 +5,8 @@ import {
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid,
   Cell, PieChart, Pie
 } from 'recharts';
-import { supabase } from '../../lib/supabase';
 import { getApiUrl } from '../../lib/apiUtils';
+import { fetchUserWithAssessments, updateUser, storeReportPdf } from '../../lib/backendApi';
 
 // Paywall lock overlay component
 const PaywallOverlay = () => (
@@ -56,17 +56,10 @@ const UserDetail = () => {
       setLoading(true);
 
       try {
-        const { data: userRecord } = await supabase
-          .from('users')
-          .select('payment_status, age, gender, name, email, temp_password')
-          .eq('id', id)
-          .maybeSingle();
-
-        const { data: history } = await supabase
-          .from('assessments')
-          .select('*')
-          .eq('user_id', id)
-          .order('created_at', { ascending: false });
+        // Backend returns the user (incl. temp_password for admins) together
+        // with their assessment history, newest first.
+        const userRecord = await fetchUserWithAssessments(id);
+        const history = userRecord.assessments || [];
 
         if (userRecord) {
           setUserName(userRecord.name || 'User');
@@ -109,18 +102,13 @@ const UserDetail = () => {
     if (!id) return;
     setIsSavingProfile(true);
     try {
-      const { error } = await supabase
-        .from('users')
-        .update({
-          name: editForm.name,
-          email: editForm.email,
-          age: editForm.age ? parseInt(editForm.age.toString(), 10) : null,
-          gender: editForm.gender
-        })
-        .eq('id', id);
+      await updateUser(id, {
+        name: editForm.name,
+        email: editForm.email,
+        age: editForm.age ? parseInt(editForm.age.toString(), 10) : null,
+        gender: editForm.gender
+      });
 
-      if (error) throw error;
-      
       setUserName(editForm.name);
       setUserEmail(editForm.email);
       setUserAge(editForm.age);
@@ -142,40 +130,23 @@ const UserDetail = () => {
 
     setIsGeneratingPdf(true);
     try {
-      const endpoint = isPaid ? '/api/v1/generate-pdf' : '/api/v1/generate-teaser-pdf';
-      const response = await fetch(getApiUrl(endpoint), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ analysis: report, brand: { primaryColor: '#3B82F6', accentColor: '#6366F1' } })
-      });
-
-      if (!response.ok) throw new Error('Failed to generate PDF');
-
-      const blob = await response.blob();
-      const dateStr = new Date().toISOString().split('T')[0];
-      const uniqueSuffix = currentAssessmentId ? `_${currentAssessmentId}` : `_${Date.now()}`;
-      const fileName = isPaid 
-        ? `Limitless_Cognitive_Report_${dateStr}${uniqueSuffix}.pdf`
-        : `Limitless_Cognitive_Teaser_${dateStr}${uniqueSuffix}.pdf`;
-
-      const downloadUrl = window.URL.createObjectURL(blob);
-      window.open(downloadUrl, '_blank');
-
       if (id && isPaid) {
-        const { error: uploadErr } = await supabase.storage
-          .from('pdf-reports')
-          .upload(`${id}/${fileName}`, blob, { contentType: 'application/pdf', upsert: true });
-
-        if (!uploadErr) {
-          const { data: { publicUrl } } = supabase.storage
-            .from('pdf-reports')
-            .getPublicUrl(`${id}/${fileName}`);
-
-          if (currentAssessmentId) {
-            await supabase.from('assessments').update({ pdf_url: publicUrl }).eq('id', currentAssessmentId);
-            setPdfUrl(publicUrl);
-          }
-        }
+        // Backend generates, stores, and saves the public URL on the latest
+        // assessment in one call.
+        const stored = await storeReportPdf(id, report);
+        setPdfUrl(stored.pdfUrl);
+        window.open(stored.pdfUrl, '_blank');
+      } else {
+        // Free preview: generate the teaser PDF directly (not stored)
+        const response = await fetch(getApiUrl('/api/v1/generate-teaser-pdf'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ analysis: report, brand: { primaryColor: '#3B82F6', accentColor: '#6366F1' } })
+        });
+        if (!response.ok) throw new Error('Failed to generate PDF');
+        const blob = await response.blob();
+        const downloadUrl = window.URL.createObjectURL(blob);
+        window.open(downloadUrl, '_blank');
       }
     } catch (err) {
       console.error('Error generating PDF:', err);

@@ -1,23 +1,27 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { adminLogin } from '../lib/backendApi';
 
 const AdminLogin = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Use the desired admin credentials
-    if (username === 'admin' && password === 'limitlessadmin') {
-      sessionStorage.setItem('adminLoggedIn', 'true');
+    setErrorMsg('');
+    setIsLoading(true);
+    try {
+      // Credentials are verified by the backend (from environment variables)
+      // and an admin JWT is stored for the admin API calls.
+      await adminLogin(username, password);
       navigate('/admin');
-    } else if (username === 'admin@limitlessworld.net' && password === 'limitlessadmin') {
-      sessionStorage.setItem('adminLoggedIn', 'true');
-      navigate('/admin');
-    } else {
-      setErrorMsg('Wrong credentials');
+    } catch (err) {
+      setErrorMsg(err.status === 401 ? 'Wrong credentials' : err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 

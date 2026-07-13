@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
-import bcrypt from 'bcryptjs';
+import { loginUser } from '../lib/backendApi';
 import ChangePasswordModal from './ChangePasswordModal';
 
 const LoginModal = ({ isOpen, onClose, onOpenAssessment }) => {
@@ -22,51 +21,10 @@ const LoginModal = ({ isOpen, onClose, onOpenAssessment }) => {
     setError('');
 
     try {
-      // 1. Look up user in Supabase by email
-      const { data: user, error: fetchErr } = await supabase
-        .from('users')
-        .select('id, name, email, temp_password, password_hash, password_reset_required, payment_status')
-        .eq('email', identifier.trim().toLowerCase())
-        .single();
-
-      if (fetchErr || !user) {
-        throw new Error('No account found with that email address.');
-      }
-
-      // 2. Verify password — check temp password (plain) OR bcrypt hash
-      const matchesTempPwd = password === user.temp_password;
-      const matchesHash = user.password_hash
-        ? await bcrypt.compare(password, user.password_hash)
-        : false;
-
-      if (!matchesTempPwd && !matchesHash) {
-        throw new Error('Incorrect password. Please try again.');
-      }
-
-      // 3. Restore all session data to sessionStorage
-      sessionStorage.setItem('isLoggedIn', 'true');
-      sessionStorage.setItem('userEmail', user.email);
-      sessionStorage.setItem('username', user.email);
-      sessionStorage.setItem('name', user.name || '');
-      sessionStorage.setItem('userId', user.id);
-      sessionStorage.setItem('paymentStatus', user.payment_status === 'paid' ? 'yes' : 'no');
-      sessionStorage.setItem('passwordResetRequired', user.password_reset_required ? 'true' : 'false');
-      if (user.age) sessionStorage.setItem('userAge', user.age);
-      if (user.gender) sessionStorage.setItem('userGender', user.gender);
-      if (user.temp_password) sessionStorage.setItem('generatedPassword', user.temp_password);
-
-      // 4. Restore latest assessment from Supabase if available
-      const { data: assessment } = await supabase
-        .from('assessments')
-        .select('report_json')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .single();
-
-      if (assessment?.report_json) {
-        sessionStorage.setItem('analysisReport', JSON.stringify(assessment.report_json));
-      }
+      // Backend verifies the password (temp or user-set), returns a JWT,
+      // the user, and their latest assessment. Session data is stored by
+      // loginUser (same sessionStorage keys as before).
+      const { user } = await loginUser(identifier, password);
 
       setIsSuccess(true);
       setLoggedInUserId(user.id);
@@ -81,7 +39,7 @@ const LoginModal = ({ isOpen, onClose, onOpenAssessment }) => {
       }, 1000);
 
     } catch (err) {
-      setError(err.message);
+      setError(err.status === 401 ? 'Invalid email or password. Please try again.' : err.message);
     } finally {
       setIsLoading(false);
     }
