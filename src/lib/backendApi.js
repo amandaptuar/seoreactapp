@@ -92,6 +92,20 @@ export function applyUserSession({ user, token, tempPassword }) {
 // ── Auth ─────────────────────────────────────────────────────────────────────
 
 /**
+ * Email a 6-digit verification code (10 min validity, 60s resend cooldown).
+ * Throws with .status 409 if the email is already registered.
+ */
+export const sendOtp = (email, name) =>
+  apiPost('/api/auth/send-otp', { email: email.trim().toLowerCase(), name: name || undefined });
+
+/**
+ * Verify the emailed code. On success the email is cleared for registration
+ * (30-minute window). Throws with the server message on a wrong/expired code.
+ */
+export const verifyOtp = (email, otp) =>
+  apiPost('/api/auth/verify-otp', { email: email.trim().toLowerCase(), otp: String(otp).trim() });
+
+/**
  * Register a new user. The backend generates the temporary password, hashes it,
  * and sends the official welcome email — no client-side bcrypt/EmailJS needed.
  * Throws with .status === 409 when the email is already registered.

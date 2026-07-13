@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { generateAssessmentQuestions } from '../lib/apiUtils';
-import { registerUser } from '../lib/backendApi';
+import { registerUser, sendOtp, verifyOtp } from '../lib/backendApi';
 import './JoinUsPage.css';
 
 const DemoPage = () => {
@@ -11,6 +11,11 @@ const DemoPage = () => {
   const [formData, setFormData] = useState({ name: '', email: '', age: '', gender: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
+  const [showOtpBox, setShowOtpBox] = useState(false);
+  const [otpValue, setOtpValue] = useState('');
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [otpError, setOtpError] = useState('');
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -18,10 +23,55 @@ const DemoPage = () => {
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
+  const handleVerifyEmail = async (e) => {
+    e.preventDefault();
+    if (!formData.email) {
+      setFormError('Please enter an email first');
+      return;
+    }
+    setIsSendingOtp(true);
+    try {
+      // Backend emails a 6-digit code (10 min validity)
+      await sendOtp(formData.email, formData.name);
+      setShowOtpBox(true);
+      setOtpError('');
+      setFormError('');
+    } catch (err) {
+      if (err.status === 429) {
+        // A code was already sent recently — let them type it
+        setShowOtpBox(true);
+        setOtpError(err.message);
+      } else {
+        setFormError(err.message || 'Could not send the verification code. Please try again.');
+      }
+    } finally {
+      setIsSendingOtp(false);
+    }
+  };
+
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault();
+    try {
+      await verifyOtp(formData.email, otpValue);
+      setIsEmailVerified(true);
+      setShowOtpBox(false);
+      setOtpError('');
+      setFormError('');
+    } catch (err) {
+      setOtpError(err.message || 'OTP invalid');
+    }
+  };
+
   const handleSignup = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setFormError('');
+
+    if (!isEmailVerified) {
+      setFormError('Please verify your email before starting the demo.');
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       // 1. Register a demo account through the backend (sends the welcome
@@ -99,8 +149,41 @@ const DemoPage = () => {
               
               <div className="form-group">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email Address" required />
+                <div style={{ position: 'relative', width: '100%' }}>
+                  <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email Address" required disabled={isEmailVerified}
+                    style={{ background: isEmailVerified ? '#F1F5F9' : undefined, color: isEmailVerified ? '#64748B' : undefined }} />
+                  {!isEmailVerified && formData.email && (
+                    <button type="button" onClick={handleVerifyEmail} disabled={isSendingOtp} style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', padding: '6px 12px', background: '#7c3aed', color: '#fff', border: 'none', borderRadius: '6px', fontSize: '12px', fontWeight: '600', cursor: isSendingOtp ? 'not-allowed' : 'pointer', zIndex: 10, opacity: isSendingOtp ? 0.7 : 1 }}>
+                      {isSendingOtp ? 'Sending…' : showOtpBox ? 'Resend' : 'Verify'}
+                    </button>
+                  )}
+                  {isEmailVerified && (
+                    <span style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', color: '#22c55e', fontSize: '12px', fontWeight: 'bold' }}>
+                      ✓ Verified
+                    </span>
+                  )}
+                </div>
               </div>
+
+              {showOtpBox && !isEmailVerified && (
+                <div style={{ background: 'rgba(124,58,237,0.05)', padding: '16px', borderRadius: '14px', border: '1px solid rgba(124,58,237,0.2)', marginBottom: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <label style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A' }}>Enter Verification Code</label>
+                    <span style={{ fontSize: '12px', color: '#64748B', fontWeight: '500' }}>Sent to {formData.email}</span>
+                  </div>
+                  <div style={{ display: 'flex', width: '100%', gap: '8px', flexWrap: 'wrap' }}>
+                    <input type="text" value={otpValue} onChange={(e) => setOtpValue(e.target.value)} placeholder="6-digit OTP" style={{ flex: '1 1 140px', padding: '12px 16px', borderRadius: '10px', border: '1.5px solid #cbd5e1', outline: 'none', background: '#fff', fontSize: '16px', boxSizing: 'border-box', letterSpacing: '2px', textAlign: 'center', fontWeight: '600', minWidth: '140px' }} maxLength={6} />
+                    <button type="button" onClick={handleVerifyOtp} style={{ flex: '1 1 100px', minWidth: '100px', padding: '12px 16px', background: '#7c3aed', color: '#fff', border: 'none', borderRadius: '10px', fontWeight: '700', fontSize: '15px', cursor: 'pointer', boxShadow: '0 4px 12px rgba(124, 58, 237, 0.25)', transition: 'all 0.2s', flexShrink: 0 }}
+                    onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-1px)'}
+                    onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                    >Verify</button>
+                  </div>
+                  {otpError && <div style={{ color: '#EF4444', fontSize: '13px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '6px', marginTop: '4px' }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    {otpError}
+                  </div>}
+                </div>
+              )}
 
               <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
                 <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>

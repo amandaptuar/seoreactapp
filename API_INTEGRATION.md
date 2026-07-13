@@ -59,7 +59,19 @@ accept the user's own token **or** an admin token.
 
 ### 3.1 Auth (public)
 
+**`POST /api/auth/send-otp`** — `{ "email", "name"? }`
+Emails a 6-digit verification code. `200 { "sent": true, "expiresInMinutes": 10 }` ·
+`409` email already registered · `429` resend within 60s cooldown · code valid 10 min,
+max 5 wrong attempts. (In non-production without SMTP, the response includes `devOtp` for testing.)
+
+**`POST /api/auth/verify-otp`** — `{ "email", "otp" }`
+→ `200 { "verified": true }` · `400 { "error": "OTP invalid" }` (or expired) · `429` too many attempts.
+On success the email is cleared for registration for **30 minutes**.
+
 **`POST /api/auth/register`**
+⚠️ **Requires a verified email** — returns `403 { "error": "Please verify your email with the OTP first." }`
+otherwise (backend-enforced; can be disabled with `OTP_REQUIRED=false` env). Frontend helpers:
+`sendOtp(email, name)` / `verifyOtp(email, otp)` in `backendApi.js`.
 ```json
 { "name": "Atul Jain", "email": "atul@example.com", "age": 45, "gender": "male",
   "paymentStatus": "demo",            // optional: only "pending" (default) or "demo"

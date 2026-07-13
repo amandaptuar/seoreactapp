@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { generateAssessmentQuestions } from '../lib/apiUtils';
-import { registerUser, loginUser } from '../lib/backendApi';
+import { registerUser, loginUser, sendOtp, verifyOtp } from '../lib/backendApi';
 import './JoinUsPage.css';
 
 const JoinUsPage = () => {
@@ -17,26 +17,44 @@ const JoinUsPage = () => {
   const [otpValue, setOtpValue] = useState('');
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [otpError, setOtpError] = useState('');
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
 
-  const handleVerifyEmail = (e) => {
+  const handleVerifyEmail = async (e) => {
     e.preventDefault();
     if (!formData.email) {
       setFormError('Please enter an email first');
       return;
     }
-    setShowOtpBox(true);
-    setOtpError('');
+    setIsSendingOtp(true);
+    try {
+      // Backend emails a 6-digit code (10 min validity)
+      await sendOtp(formData.email, formData.name);
+      setShowOtpBox(true);
+      setOtpError('');
+      setFormError('');
+    } catch (err) {
+      if (err.status === 429) {
+        // A code was already sent recently — let them type it
+        setShowOtpBox(true);
+        setOtpError(err.message);
+      } else {
+        setFormError(err.message || 'Could not send the verification code. Please try again.');
+      }
+    } finally {
+      setIsSendingOtp(false);
+    }
   };
 
-  const handleVerifyOtp = (e) => {
+  const handleVerifyOtp = async (e) => {
     e.preventDefault();
-    if (otpValue === '123456') { // Hardcoded mock OTP for frontend
+    try {
+      await verifyOtp(formData.email, otpValue);
       setIsEmailVerified(true);
       setShowOtpBox(false);
       setOtpError('');
       setFormError('');
-    } else {
-      setOtpError('OTP invalid');
+    } catch (err) {
+      setOtpError(err.message || 'OTP invalid');
     }
   };
 
@@ -196,8 +214,8 @@ const JoinUsPage = () => {
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                     <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email Address" required disabled={activeTab === 'signup' && isEmailVerified} />
                     {activeTab === 'signup' && !isEmailVerified && formData.email && (
-                      <button type="button" onClick={handleVerifyEmail} style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', padding: '6px 12px', background: '#7c3aed', color: '#fff', border: 'none', borderRadius: '6px', fontSize: '12px', cursor: 'pointer', zIndex: 10 }}>
-                        Verify
+                      <button type="button" onClick={handleVerifyEmail} disabled={isSendingOtp} style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', padding: '6px 12px', background: '#7c3aed', color: '#fff', border: 'none', borderRadius: '6px', fontSize: '12px', cursor: isSendingOtp ? 'not-allowed' : 'pointer', zIndex: 10, opacity: isSendingOtp ? 0.7 : 1 }}>
+                        {isSendingOtp ? 'Sending…' : showOtpBox ? 'Resend' : 'Verify'}
                       </button>
                     )}
                     {activeTab === 'signup' && isEmailVerified && (
@@ -211,7 +229,7 @@ const JoinUsPage = () => {
                     <div style={{ background: 'rgba(124,58,237,0.05)', padding: '16px', borderRadius: '14px', border: '1px solid rgba(124,58,237,0.2)', marginBottom: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <label style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A' }}>Enter Verification Code</label>
-                        <span style={{ fontSize: '12px', color: '#64748B', fontWeight: '500' }}>Demo: 123456</span>
+                        <span style={{ fontSize: '12px', color: '#64748B', fontWeight: '500' }}>Sent to {formData.email}</span>
                       </div>
                       <div style={{ display: 'flex', width: '100%', gap: '8px', flexWrap: 'wrap' }}>
                         <input type="text" value={otpValue} onChange={(e) => setOtpValue(e.target.value)} placeholder="6-digit OTP" style={{ flex: '1 1 140px', padding: '12px 16px', borderRadius: '10px', border: '1.5px solid #cbd5e1', outline: 'none', background: '#fff', fontSize: '16px', boxSizing: 'border-box', letterSpacing: '2px', textAlign: 'center', fontWeight: '600', minWidth: '140px' }} maxLength={6} />
