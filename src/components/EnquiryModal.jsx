@@ -9,8 +9,34 @@ const EnquiryModal = ({ isOpen, onClose }) => {
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [showOtpBox, setShowOtpBox] = useState(false);
+  const [otpValue, setOtpValue] = useState('');
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [otpError, setOtpError] = useState('');
   const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
   const navigate = useNavigate();
+
+  const handleVerifyEmail = (e) => {
+    e.preventDefault();
+    if (!formData.email) {
+      setErrorMsg('Please enter an email first');
+      return;
+    }
+    setShowOtpBox(true);
+    setOtpError('');
+  };
+
+  const handleVerifyOtp = (e) => {
+    e.preventDefault();
+    if (otpValue === '123456') { // Hardcoded mock OTP for frontend
+      setIsEmailVerified(true);
+      setShowOtpBox(false);
+      setOtpError('');
+      setErrorMsg('');
+    } else {
+      setOtpError('OTP invalid');
+    }
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -21,6 +47,12 @@ const EnquiryModal = ({ isOpen, onClose }) => {
     e.preventDefault();
     setIsSubmitting(true);
     setErrorMsg('');
+
+    if (!isEmailVerified && !isLoggedIn) {
+      setErrorMsg('Please verify your email before starting the assessment.');
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       // 1. Register through the backend — it generates the temp password,
@@ -59,8 +91,11 @@ const EnquiryModal = ({ isOpen, onClose }) => {
 
   return (
     <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
-      <div className="modal-content" style={{ maxWidth: '420px', borderRadius: '20px', padding: '40px', background: '#fff' }}>
-        <button className="close-btn" onClick={onClose} style={{ position: 'absolute', top: '16px', right: '20px', background: 'none', border: 'none', fontSize: '30px', cursor: 'pointer', color: '#64748b' }}>&times;</button>
+      <div className="modal-content" style={{ width: '90%', maxWidth: '460px', borderRadius: '24px', padding: '36px', background: '#fff', maxHeight: '90vh', overflowY: 'auto', position: 'relative', boxSizing: 'border-box' }}>
+        <button className="close-btn" onClick={onClose} style={{ position: 'absolute', top: '20px', right: '20px', background: '#f1f5f9', border: 'none', width: '36px', height: '36px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', cursor: 'pointer', color: '#64748b', transition: 'all 0.2s', padding: 0 }}
+        onMouseEnter={(e) => { e.currentTarget.style.background = '#e2e8f0'; e.currentTarget.style.color = '#0f172a'; }}
+        onMouseLeave={(e) => { e.currentTarget.style.background = '#f1f5f9'; e.currentTarget.style.color = '#64748b'; }}
+        >✕</button>
 
         {submitted ? (
           <div style={{ textAlign: 'center', padding: '20px 0' }}>
@@ -79,37 +114,69 @@ const EnquiryModal = ({ isOpen, onClose }) => {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 <label style={{ fontSize: '15px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '1px' }}>Full Name</label>
                 <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Your full name" required
-                  style={{ padding: '12px 16px', borderRadius: '10px', border: '1px solid #e2e8f0', fontSize: '18px', outline: 'none', transition: 'border-color 0.2s', fontFamily: 'inherit' }}
+                  style={{ padding: '12px 16px', borderRadius: '10px', border: '1.5px solid #e2e8f0', fontSize: '16px', outline: 'none', transition: 'border-color 0.2s', fontFamily: 'inherit', width: '100%', boxSizing: 'border-box' }}
                   onFocus={(e) => e.target.style.borderColor = '#6366F1'}
                   onBlur={(e) => e.target.style.borderColor = '#e2e8f0'} />
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 <label style={{ fontSize: '15px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '1px' }}>Email Address</label>
-                <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="you@example.com" required
-                  style={{ padding: '12px 16px', borderRadius: '10px', border: '1px solid #e2e8f0', fontSize: '18px', outline: 'none', transition: 'border-color 0.2s', fontFamily: 'inherit' }}
-                  onFocus={(e) => e.target.style.borderColor = '#6366F1'}
-                  onBlur={(e) => e.target.style.borderColor = '#e2e8f0'} />
+                <div style={{ position: 'relative', width: '100%' }}>
+                  <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="you@example.com" required disabled={isEmailVerified || isLoggedIn}
+                    style={{ padding: '12px 16px', borderRadius: '10px', border: '1.5px solid #e2e8f0', fontSize: '16px', outline: 'none', transition: 'border-color 0.2s', fontFamily: 'inherit', width: '100%', boxSizing: 'border-box', background: (isEmailVerified || isLoggedIn) ? '#F1F5F9' : '#fff', color: (isEmailVerified || isLoggedIn) ? '#64748B' : '#0F172A' }}
+                    onFocus={(e) => e.target.style.borderColor = '#6366F1'}
+                    onBlur={(e) => e.target.style.borderColor = '#e2e8f0'} />
+                  {!isEmailVerified && !isLoggedIn && formData.email && (
+                    <button type="button" onClick={handleVerifyEmail} style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', padding: '8px 14px', background: '#F59E0B', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '13px', fontWeight: '600', cursor: 'pointer', zIndex: 10, boxShadow: '0 4px 10px rgba(245,158,11,0.3)' }}>
+                      Verify
+                    </button>
+                  )}
+                  {(isEmailVerified || isLoggedIn) && (
+                    <span style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', color: '#22c55e', fontSize: '12px', fontWeight: 'bold' }}>
+                      ✓ Verified
+                    </span>
+                  )}
+                </div>
               </div>
 
               <div style={{ display: 'flex', gap: '12px' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', flex: 1 }}>
                   <label style={{ fontSize: '15px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '1px' }}>Age</label>
                   <input type="number" name="age" value={formData.age} onChange={handleChange} min="18" max="66" placeholder="e.g. 22" required
-                    style={{ padding: '12px 16px', borderRadius: '10px', border: '1px solid #e2e8f0', fontSize: '18px', outline: 'none', transition: 'border-color 0.2s', fontFamily: 'inherit', width: '100%' }}
+                    style={{ padding: '12px 16px', borderRadius: '10px', border: '1.5px solid #e2e8f0', fontSize: '16px', outline: 'none', transition: 'border-color 0.2s', fontFamily: 'inherit', width: '100%', boxSizing: 'border-box' }}
                     onFocus={(e) => e.target.style.borderColor = '#6366F1'}
                     onBlur={(e) => e.target.style.borderColor = '#e2e8f0'} />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', flex: 1 }}>
                   <label style={{ fontSize: '15px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '1px' }}>Gender</label>
                   <select name="gender" value={formData.gender} onChange={handleChange} required
-                    style={{ padding: '12px 16px', borderRadius: '10px', border: '1px solid #e2e8f0', fontSize: '18px', background: '#fff', color: '#0F172A', outline: 'none', fontFamily: 'inherit', width: '100%' }}>
+                    style={{ padding: '12px 16px', borderRadius: '10px', border: '1.5px solid #e2e8f0', fontSize: '16px', background: '#fff', color: '#0F172A', outline: 'none', fontFamily: 'inherit', width: '100%', boxSizing: 'border-box' }}>
                     <option value="">Select</option>
                     <option value="female">Female</option>
                     <option value="male">Male</option>
                   </select>
                 </div>
               </div>
+
+              {showOtpBox && !isEmailVerified && !isLoggedIn && (
+                <div style={{ background: '#F8FAFC', padding: '16px', borderRadius: '14px', border: '1.5px solid #E2E8F0', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <label style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A' }}>Enter Verification Code</label>
+                    <span style={{ fontSize: '12px', color: '#64748B', fontWeight: '500' }}>Demo: 123456</span>
+                  </div>
+                  <div style={{ display: 'flex', width: '100%', gap: '8px', flexWrap: 'wrap' }}>
+                    <input type="text" value={otpValue} onChange={(e) => setOtpValue(e.target.value)} placeholder="6-digit OTP" style={{ flex: '1 1 140px', padding: '12px 16px', borderRadius: '10px', border: '1.5px solid #cbd5e1', outline: 'none', background: '#fff', fontSize: '16px', boxSizing: 'border-box', letterSpacing: '2px', textAlign: 'center', fontWeight: '600', minWidth: '140px' }} maxLength={6} />
+                    <button type="button" onClick={handleVerifyOtp} style={{ flex: '1 1 100px', minWidth: '100px', padding: '12px 16px', background: '#10B981', color: '#fff', border: 'none', borderRadius: '10px', fontWeight: '700', fontSize: '15px', cursor: 'pointer', boxShadow: '0 4px 12px rgba(16, 185, 129, 0.25)', transition: 'all 0.2s', flexShrink: 0 }}
+                    onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-1px)'}
+                    onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                    >Verify</button>
+                  </div>
+                  {otpError && <div style={{ color: '#EF4444', fontSize: '13px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '6px', marginTop: '4px' }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    {otpError}
+                  </div>}
+                </div>
+              )}
 
               {errorMsg && (
                 <div style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '8px', padding: '10px 14px', color: '#ef4444', fontSize: '15px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '8px' }}>

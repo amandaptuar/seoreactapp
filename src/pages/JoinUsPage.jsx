@@ -13,6 +13,32 @@ const JoinUsPage = () => {
   const [formData, setFormData] = useState({ name: '', email: '', password: '', age: '', gender: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
+  const [showOtpBox, setShowOtpBox] = useState(false);
+  const [otpValue, setOtpValue] = useState('');
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [otpError, setOtpError] = useState('');
+
+  const handleVerifyEmail = (e) => {
+    e.preventDefault();
+    if (!formData.email) {
+      setFormError('Please enter an email first');
+      return;
+    }
+    setShowOtpBox(true);
+    setOtpError('');
+  };
+
+  const handleVerifyOtp = (e) => {
+    e.preventDefault();
+    if (otpValue === '123456') { // Hardcoded mock OTP for frontend
+      setIsEmailVerified(true);
+      setShowOtpBox(false);
+      setOtpError('');
+      setFormError('');
+    } else {
+      setOtpError('OTP invalid');
+    }
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -40,6 +66,12 @@ const JoinUsPage = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setFormError('');
+
+    if (!isEmailVerified) {
+      setFormError('Please verify your email before starting the assessment.');
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       // 1. Register through the backend — it generates the temp password,
@@ -160,10 +192,40 @@ const JoinUsPage = () => {
                       <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Full Name" required />
                     </div>
                   )}
-                  <div className="form-group">
+                  <div className="form-group" style={{ position: 'relative' }}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                    <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email Address" required />
+                    <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email Address" required disabled={activeTab === 'signup' && isEmailVerified} />
+                    {activeTab === 'signup' && !isEmailVerified && formData.email && (
+                      <button type="button" onClick={handleVerifyEmail} style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', padding: '6px 12px', background: '#7c3aed', color: '#fff', border: 'none', borderRadius: '6px', fontSize: '12px', cursor: 'pointer', zIndex: 10 }}>
+                        Verify
+                      </button>
+                    )}
+                    {activeTab === 'signup' && isEmailVerified && (
+                      <span style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', color: '#22c55e', fontSize: '12px', fontWeight: 'bold' }}>
+                        ✓ Verified
+                      </span>
+                    )}
                   </div>
+                  
+                  {activeTab === 'signup' && showOtpBox && !isEmailVerified && (
+                    <div style={{ background: 'rgba(124,58,237,0.05)', padding: '16px', borderRadius: '14px', border: '1px solid rgba(124,58,237,0.2)', marginBottom: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <label style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A' }}>Enter Verification Code</label>
+                        <span style={{ fontSize: '12px', color: '#64748B', fontWeight: '500' }}>Demo: 123456</span>
+                      </div>
+                      <div style={{ display: 'flex', width: '100%', gap: '8px', flexWrap: 'wrap' }}>
+                        <input type="text" value={otpValue} onChange={(e) => setOtpValue(e.target.value)} placeholder="6-digit OTP" style={{ flex: '1 1 140px', padding: '12px 16px', borderRadius: '10px', border: '1.5px solid #cbd5e1', outline: 'none', background: '#fff', fontSize: '16px', boxSizing: 'border-box', letterSpacing: '2px', textAlign: 'center', fontWeight: '600', minWidth: '140px' }} maxLength={6} />
+                        <button type="button" onClick={handleVerifyOtp} style={{ flex: '1 1 100px', minWidth: '100px', padding: '12px 16px', background: '#7c3aed', color: '#fff', border: 'none', borderRadius: '10px', fontWeight: '700', fontSize: '15px', cursor: 'pointer', boxShadow: '0 4px 12px rgba(124, 58, 237, 0.25)', transition: 'all 0.2s', flexShrink: 0 }}
+                        onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-1px)'}
+                        onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                        >Verify</button>
+                      </div>
+                      {otpError && <div style={{ color: '#EF4444', fontSize: '13px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '6px', marginTop: '4px' }}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        {otpError}
+                      </div>}
+                    </div>
+                  )}
                   
                   {activeTab === 'signin' && (
                     <div className="form-group">
