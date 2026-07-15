@@ -88,12 +88,13 @@ const Header = () => {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          position: relative;
+          gap: 20px;
         }
         .global-header .logo-area {
           display: flex;
           align-items: center;
           gap: 8px;
+          flex-shrink: 0;
         }
         .global-header .logo-mark {
           width: 120px;
@@ -116,18 +117,26 @@ const Header = () => {
           font-weight: 700;
           letter-spacing: 1px;
         }
-        .global-header .nav-links {
-          position: absolute;
-          left: 50%;
-          transform: translateX(-50%);
+        .global-header .mobile-menu-wrapper {
           display: flex;
           align-items: center;
+          justify-content: space-between;
+          flex: 1;
+          gap: 20px;
+        }
+        .global-header .nav-links {
+          display: flex;
+          align-items: center;
+          justify-content: center;
           gap: 6px;
+          flex: 1;
+          flex-wrap: wrap;
         }
         .global-header .header-actions {
           display: flex;
           align-items: center;
-          gap: 20px;
+          gap: 15px;
+          flex-shrink: 0;
         }
         .global-header .nav-link {
           color: #fff;
@@ -138,6 +147,7 @@ const Header = () => {
           display: flex;
           align-items: center;
           transition: color 0.2s ease;
+          white-space: nowrap;
         }
         .global-header .nav-link:hover {
           color: #F97316;
@@ -239,7 +249,7 @@ const Header = () => {
           font-weight: normal;
         }
 
-        @media (max-width: 992px) {
+        @media (max-width: 1200px) {
           .global-header .header-inner {
             display: flex;
             justify-content: space-between;
