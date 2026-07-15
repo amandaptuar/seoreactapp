@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { markUserPaid } from '../lib/backendApi';
+import { fetchUserWithAssessments } from '../lib/backendApi';
 
 const PaymentSuccess = () => {
   const [status, setStatus] = useState('processing');
@@ -9,30 +9,59 @@ const PaymentSuccess = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    let active = true;
     const completePayment = async () => {
       const email = sessionStorage.getItem('userEmail');
-      if (!email) { setStatus('error'); return; }
+      const userId = sessionStorage.getItem('userId');
+      if (!email || !userId) { 
+        if (active) setStatus('error'); 
+        return; 
+      }
 
       try {
-        const userId = sessionStorage.getItem('userId');
+        // Poll the backend to check if the payment status is marked 'paid' by the webhook
+        let attempts = 0;
+        let paid = false;
 
-        // Mark the user as paid via the backend.
-        // (When the Stripe webhook is configured, the backend also confirms
-        // real payments server-side — this is the instant UI path.)
-        if (userId) {
-          await markUserPaid(userId);
-          sessionStorage.setItem('paymentStatus', 'yes');
+        while (attempts < 10 && active) {
+          try {
+            const user = await fetchUserWithAssessments(userId);
+            if (user && user.payment_status === 'paid') {
+              sessionStorage.setItem('paymentStatus', 'yes');
+              paid = true;
+              break;
+            }
+          } catch (err) {
+            console.warn('[stripe] polling attempt failed:', err);
+          }
+          // Wait 2.5 seconds before retrying
+          await new Promise((resolve) => setTimeout(resolve, 2500));
+          attempts++;
         }
 
-        setStatus('success');
+        if (active) {
+          if (paid) {
+            setStatus('success');
+          } else {
+            console.warn('[stripe] Webhook confirmation timed out, proceeding to dashboard...');
+            sessionStorage.setItem('paymentStatus', 'yes'); // optimistically set to not block user
+            setStatus('success');
+          }
+        }
       } catch (err) {
         console.error('Payment save error:', err);
-        // Still show success — DB save is non-fatal
-        setStatus('success');
+        if (active) {
+          sessionStorage.setItem('paymentStatus', 'yes');
+          setStatus('success');
+        }
       }
     };
 
     completePayment();
+
+    return () => {
+      active = false;
+    };
   }, [navigate]);
 
   return (

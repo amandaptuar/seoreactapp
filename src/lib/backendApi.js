@@ -199,3 +199,6 @@ export const adminUpdateUserStatus = (id, payment_status) =>
   apiPatch(`/api/users/${id}`, { payment_status }, { token: getAdminToken() });
 
 export const getPlans = () => apiGet('/api/plans');
+
+export const createCheckoutSession = () =>
+  apiPost('/api/v1/payments/create-checkout-session', {}, { token: anyToken() });

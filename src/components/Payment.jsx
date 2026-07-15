@@ -1,21 +1,30 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCurrency } from '../hooks/useCurrency';
-
-const stripeLink = "https://buy.stripe.com/9B68wI7Ux7bGaXugBt7ss00";
+import { createCheckoutSession } from '../lib/backendApi';
 
 const Payment = () => {
   const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
   const userEmail = sessionStorage.getItem('userEmail');
   const { formatPrice } = useCurrency();
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
     setIsProcessing(true);
-    // Redirect user to the Stripe Payment Link
-    // To ensure they return to the app, the success URL must be configured in Stripe Dashboard
-    // to point to YOUR_DOMAIN/payment-success
-    window.location.href = stripeLink;
+    setError('');
+    try {
+      const result = await createCheckoutSession();
+      if (result && result.url) {
+        window.location.href = result.url;
+      } else {
+        throw new Error('No checkout URL returned from the server.');
+      }
+    } catch (err) {
+      console.error('[stripe] Checkout error:', err);
+      setError(err.message || 'Failed to start payment checkout session. Please try again.');
+      setIsProcessing(false);
+    }
   };
 
   return (
@@ -44,6 +53,12 @@ const Payment = () => {
               <h4 style={{ color: '#0F172A', margin: '0 0 12px 0', fontSize: '22px' }}>Important: Check your email</h4>
               <p style={{ color: '#64748B', fontSize: '20px', margin: 0 }}>Your assessment answers have been securely saved and your login credentials have been sent to your email. You can complete payment now to view your full report.</p>
             </div>
+
+            {error && (
+              <div style={{ color: '#EF4444', backgroundColor: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '12px', borderRadius: '8px', marginBottom: '20px', textAlign: 'center', fontWeight: '500' }}>
+                {error}
+              </div>
+            )}
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <button 
