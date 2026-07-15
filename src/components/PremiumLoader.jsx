@@ -3,12 +3,23 @@ import { useLocation } from 'react-router-dom';
 import logo from '../assets/limitless-logo.webp';
 
 const PremiumLoader = () => {
-  const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
+  const [isLoading, setIsLoading] = useState(true);
+  const [prevPath, setPrevPath] = useState(location.pathname);
+
+  // If the path changes, immediately show the loader before paint
+  if (location.pathname !== prevPath) {
+    setIsLoading(true);
+    setPrevPath(location.pathname);
+  }
 
   useEffect(() => {
-    setIsLoading(true);
-    
+    // If it's the admin panel, don't show the loader at all
+    if (location.pathname.startsWith('/admin-panel')) {
+      setIsLoading(false);
+      return;
+    }
+
     // Force Google Translate to re-translate the new DOM elements 
     // after React mounts them, solving the reset issue.
     const translateTimer = setTimeout(() => {
@@ -20,7 +31,7 @@ const PremiumLoader = () => {
 
     const loaderTimer = setTimeout(() => {
       setIsLoading(false);
-    }, 1000); // 1000ms premium loading transition
+    }, 800); // reduced to 800ms for a snappier feel
     
     return () => {
       clearTimeout(translateTimer);
@@ -28,7 +39,7 @@ const PremiumLoader = () => {
     };
   }, [location.pathname]);
 
-  if (!isLoading) return null;
+  if (location.pathname.startsWith('/admin-panel') || !isLoading) return null;
 
   return (
     <div className="premium-loader-overlay">
@@ -47,13 +58,15 @@ const PremiumLoader = () => {
         .premium-loader-overlay {
           position: fixed;
           top: 0; left: 0; right: 0; bottom: 0;
-          background: radial-gradient(circle at center, #0a0f24 0%, #020617 100%);
+          background: rgba(2, 6, 23, 0.6);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
           z-index: 999999;
           display: flex;
           justify-content: center;
           align-items: center;
           opacity: 1;
-          animation: fadeIn 0.3s ease-out;
+          animation: fadeIn 0.2s ease-out;
         }
         
         .premium-loader-content {
