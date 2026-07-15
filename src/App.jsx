@@ -110,6 +110,12 @@ function App() {
           </AdminProtectedRoute>
         } />
 
+        {/* Redirect old adminpanel paths to the new admin-panel */}
+        <Route path="/admin/adminpanel" element={<Navigate to="/admin-panel" replace />} />
+        <Route path="/admin/adminpanel/*" element={<Navigate to="/admin-panel" replace />} />
+        <Route path="/adminpanel" element={<Navigate to="/admin-panel" replace />} />
+        <Route path="/adminpanel/*" element={<Navigate to="/admin-panel" replace />} />
+
         {/* Dashboard App Integration */}
         <Route path="/admin-panel/*" element={<DashboardApp />} />
       </Routes>
