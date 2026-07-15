@@ -790,8 +790,30 @@ a:hover {
   }
 }
 
-
-
-
-
-
+/* ============================================================
+   GOOGLE TRANSLATE GLOBAL OVERRIDES
+   ============================================================ */
+.goog-te-banner-frame.skiptranslate,
+.goog-te-banner-frame,
+iframe.skiptranslate,
+.VIpgJd-ZVi9od-ORHb-OEVmcd,
+.VIpgJd-ZVi9od-aZ2wEe-wOHMyf { 
+  display: none !important; 
+}
+body { 
+  top: 0px !important; 
+  position: static !important;
+}
+#goog-gt-tt, 
+.goog-tooltip, 
+.goog-tooltip:hover { 
+  display: none !important; 
+}
+.goog-text-highlight { 
+  background-color: transparent !important; 
+  border: none !important; 
+  box-shadow: none !important; 
+}
+body > .skiptranslate {
+  display: none !important;
+}

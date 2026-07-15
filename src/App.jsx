@@ -24,6 +24,7 @@ import AboutPage from './pages/AboutPage';
 import JoinUsPage from './pages/JoinUsPage';
 import PricingPage from './pages/PricingPage';
 import DashboardApp from './dashbaord-app/App';
+import PremiumLoader from './components/PremiumLoader';
 
 
 const ProtectedRoute = ({ children }) => {
@@ -62,6 +63,7 @@ const GlobalComponents = () => {
 function App() {
   return (
     <Router>
+      <PremiumLoader />
       <ScrollToTop />
       <GlobalComponents />
       <Routes>

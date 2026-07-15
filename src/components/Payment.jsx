@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import { useCurrency } from '../hooks/useCurrency';
 
 const stripeLink = "https://buy.stripe.com/9B68wI7Ux7bGaXugBt7ss00";
 
@@ -8,6 +8,7 @@ const Payment = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const navigate = useNavigate();
   const userEmail = sessionStorage.getItem('userEmail');
+  const { formatPrice } = useCurrency();
 
   const handlePayment = () => {
     setIsProcessing(true);
@@ -25,17 +26,17 @@ const Payment = () => {
           <div className="slide-up">
             <h2 style={{ color: '#0F172A', fontSize: '42px', marginBottom: '16px', fontWeight: '800' }}>Complete Your Payment</h2>
             <p style={{ color: '#64748b', fontSize: '24px', marginBottom: '32px' }}>
-              Final step: Pay the one-time fee of <strong>$19</strong> to unlock your full cognitive report and personalized action plan.
+              Final step: Pay the one-time fee of <strong className="notranslate">{formatPrice(19)}</strong> to unlock your full cognitive report and personalized action plan.
             </p>
 
             <div style={{ background: '#F8FAFC', padding: '24px', borderRadius: '16px', border: '1px solid #E2E8F0', marginBottom: '32px', textAlign: 'left' }}>
                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
                  <span style={{ color: '#64748b' }}>Assessment Fee</span>
-                 <span style={{ fontWeight: '700', color: '#0F172A' }}>$19.00</span>
+                 <span className="notranslate" style={{ fontWeight: '700', color: '#0F172A' }}>{formatPrice(19)}</span>
                </div>
                <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid #E2E8F0', paddingTop: '10px' }}>
                  <span style={{ fontWeight: '700', color: '#0F172A' }}>Total</span>
-                 <span style={{ fontWeight: '800', color: '#0F172A', fontSize: '28px' }}>$19.00</span>
+                 <span className="notranslate" style={{ fontWeight: '800', color: '#0F172A', fontSize: '28px' }}>{formatPrice(19)}</span>
                </div>
             </div>
 
@@ -61,7 +62,7 @@ const Payment = () => {
                   boxShadow: '0 4px 14px rgba(245, 158, 11, 0.35)'
                 }}
               >
-                {isProcessing ? 'Processing...' : 'Pay $19 & Get Instant Access'}
+                {isProcessing ? 'Processing...' : `Pay ${formatPrice(19)} & Get Instant Access`}
               </button>
 
 

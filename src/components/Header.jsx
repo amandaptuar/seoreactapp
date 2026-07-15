@@ -14,6 +14,50 @@ const Header = () => {
   useEffect(() => {
     const loggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
     setIsLoggedIn(loggedIn);
+
+    let translateContainer = document.getElementById('google_translate_element');
+    
+    // Create the global container and script if they don't exist
+    if (!translateContainer) {
+      translateContainer = document.createElement('div');
+      translateContainer.id = 'google_translate_element';
+      translateContainer.className = 'translate-widget';
+      // Temporarily hide it until it's placed in the header
+      translateContainer.style.display = 'none';
+      document.body.appendChild(translateContainer);
+      
+      const script = document.createElement('script');
+      script.id = 'google-translate-script';
+      script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+      script.async = true;
+      document.body.appendChild(script);
+
+      window.googleTranslateElementInit = () => {
+        new window.google.translate.TranslateElement(
+          { 
+            pageLanguage: 'en', 
+            includedLanguages: 'en,hi,ha,ig,yo,pt',
+            autoDisplay: false 
+          },
+          'google_translate_element'
+        );
+      };
+    }
+
+    // Move the global container into our Header slot and show it
+    const headerSlot = document.getElementById('header_translate_slot');
+    if (headerSlot && translateContainer) {
+      translateContainer.style.display = 'block';
+      headerSlot.appendChild(translateContainer);
+    }
+
+    return () => {
+      // When Header unmounts, move the container back to body and hide it to preserve state
+      if (translateContainer) {
+        translateContainer.style.display = 'none';
+        document.body.appendChild(translateContainer);
+      }
+    };
   }, []);
 
   const handleLogout = () => {
@@ -152,6 +196,49 @@ const Header = () => {
         .global-header .hamburger.open span:nth-child(2) { opacity: 0; }
         .global-header .hamburger.open span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
 
+        
+        #header_translate_slot {
+          display: flex;
+          align-items: center;
+        }
+
+        /* Hide "Powered by Google" text and logo */
+        .goog-te-gadget { 
+          color: transparent !important; 
+          font-size: 0px !important; 
+          display: flex; 
+          align-items: center; 
+          height: 44px;
+        }
+        .goog-te-gadget > span { display: none !important; } 
+        .goog-logo-link { display: none !important; }
+        
+        .goog-te-gadget .goog-te-combo {
+          background: transparent;
+          color: #fff;
+          border: 2px solid rgba(255,255,255,0.5);
+          border-radius: 14px;
+          padding: 8px 12px;
+          font-size: 15px;
+          font-weight: 600;
+          outline: none;
+          cursor: pointer;
+          margin: 0;
+          height: 44px;
+          width: auto !important;
+          max-width: 160px;
+          transition: all 0.2s ease;
+        }
+        .goog-te-gadget .goog-te-combo:hover {
+          border-color: #fff;
+          background: rgba(255,255,255,0.1);
+        }
+        .goog-te-combo option {
+          background: #060919;
+          color: #fff;
+          font-weight: normal;
+        }
+
         @media (max-width: 992px) {
           .global-header .header-inner {
             display: flex;
@@ -182,6 +269,11 @@ const Header = () => {
           .global-header .header-actions { flex-direction: column; width: 100%; align-items: stretch; gap: 12px; }
           .global-header .nav-link { padding: 12px; font-size: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
           .global-header .btn-outline, .global-header .btn-orange { width: 100%; justify-content: center; }
+          
+          /* Translate widget mobile styles */
+          #header_translate_slot { width: auto; align-self: flex-start; }
+          .goog-te-gadget { width: auto; height: auto; }
+          .goog-te-gadget .goog-te-combo { width: auto !important; height: 48px; }
         }
         @media (max-width: 480px) {
           .global-header .logo-mark { width: 80px; height: 80px; }
@@ -213,6 +305,7 @@ const Header = () => {
             </nav>
             
             <div className="header-actions">
+              <div id="header_translate_slot"></div>
               {isLoggedIn ? (
                 <>
                   <button className="btn-outline" onClick={() => { navigate('/dashboard'); setIsMobileMenuOpen(false); }}>

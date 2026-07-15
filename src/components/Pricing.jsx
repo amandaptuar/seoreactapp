@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import AssessmentModal from './AssessmentModal';
+import { useCurrency } from '../hooks/useCurrency';
 
 const Pricing = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { formatPrice } = useCurrency();
 
   return (
     <>
@@ -79,8 +81,8 @@ const Pricing = () => {
                     LIMITED-TIME OFFER
                   </div>
                   <div className="price-display">
-                    <span className="price-old">$149</span>
-                    <span className="price-new">$19</span>
+                    <span className="price-old notranslate">{formatPrice(149)}</span>
+                    <span className="price-new notranslate">{formatPrice(19)}</span>
                     <span className="price-term">one-time</span>
                   </div>
                   <p className="price-description">Full Cognitive Performance Assessment</p>
