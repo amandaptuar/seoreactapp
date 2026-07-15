@@ -131,10 +131,13 @@ const UserDetail = () => {
     setIsGeneratingPdf(true);
     try {
       if (id && isPaid) {
-        // Backend generates, stores, and saves the public URL on the latest
-        // assessment in one call.
-        const stored = await storeReportPdf(id, report);
+        // Backend fetches the PDF from the AI report-generation model for
+        // THIS specific assessment, stores it, and saves the public URL.
+        const stored = await storeReportPdf(id, report, { assessmentId: currentAssessmentId });
         setPdfUrl(stored.pdfUrl);
+        setAssessmentsHistory((prev: any[]) => prev.map((a) =>
+          a.id === currentAssessmentId ? { ...a, pdf_url: stored.pdfUrl } : a
+        ));
         window.open(stored.pdfUrl, '_blank');
       } else {
         // Free preview: generate the teaser PDF directly (not stored)

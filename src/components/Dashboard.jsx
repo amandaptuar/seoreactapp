@@ -167,9 +167,13 @@ const Dashboard = () => {
       let fileName;
 
       if (isPaid && userId) {
-        // Paid: the backend generates the PDF, stores it (public URL saved on
-        // the latest assessment) and emails the download link to the user.
-        const stored = await storeReportPdf(userId, report, { sendEmail: true });
+        // Paid: the backend fetches the PDF from the AI report-generation
+        // model for THIS specific assessment, stores it, and emails the
+        // download link to the user.
+        const stored = await storeReportPdf(userId, report, {
+          assessmentId: currentAssessmentId,
+          sendEmail: true,
+        });
         setPdfUrl(stored.pdfUrl);
         if (currentAssessmentId) {
           setAssessmentsHistory(prev => prev.map(a =>

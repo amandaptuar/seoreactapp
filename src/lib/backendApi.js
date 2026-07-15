@@ -159,13 +159,16 @@ export const saveAssessment = (userId, reportJson) =>
   apiPost('/api/assessments', { user_id: userId, report_json: reportJson }, { token: anyToken() });
 
 /**
- * Server-side one-shot: generates the PDF, stores it, saves the public URL on
- * the latest assessment, and (optionally) emails the link to the user.
+ * Server-side one-shot: generates the PDF via the AI model service, stores
+ * it, saves the public URL on the given assessment, and (optionally) emails
+ * the link to the user. Always pass `assessmentId` when the user has more
+ * than one assessment — omitting it falls back to their latest one.
  * Returns { pdfUrl, fileName, assessment }.
  */
-export const storeReportPdf = (userId, analysis, { teaser = false, sendEmail = false } = {}) =>
+export const storeReportPdf = (userId, analysis, { assessmentId, teaser = false, sendEmail = false } = {}) =>
   apiPost(`/api/reports/${userId}/pdf`, {
     analysis,
+    assessmentId,
     brand: { primaryColor: '#3B82F6', accentColor: '#6366F1' },
     teaser,
     sendEmail,
