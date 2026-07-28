@@ -77,6 +77,11 @@ const FloatingCTA = () => {
           border-style: solid;
           border-color: transparent transparent transparent var(--secondary);
         }
+        @media (max-width: 1024px) {
+          .floating-cta {
+            display: none !important;
+          }
+        }
       `}</style>
       </div>
       <AssessmentModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />

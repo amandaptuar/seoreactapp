@@ -78,9 +78,15 @@ const AssessmentModal = ({ isOpen, onClose }) => {
     setFormError('');
 
     if (!isEmailVerified) {
-      setFormError('Please verify your email before starting the assessment.');
-      setIsSubmitting(false);
-      return;
+      if (!showOtpBox) {
+        setIsSubmitting(false);
+        handleVerifyEmail(e);
+        return;
+      } else {
+        setFormError('Please enter the verification code sent to your email.');
+        setIsSubmitting(false);
+        return;
+      }
     }
     try {
       // 1. Register through the backend — it generates the temp password,

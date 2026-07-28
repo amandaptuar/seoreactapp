@@ -97,8 +97,8 @@ const Header = () => {
           flex-shrink: 0;
         }
         .global-header .logo-mark {
-          width: 120px;
-          height: 120px;
+          width: 50px;
+          height: 50px;
           object-fit: contain;
         }
         .global-header .logo-text-group {
@@ -130,7 +130,7 @@ const Header = () => {
           justify-content: center;
           gap: 6px;
           flex: 1;
-          flex-wrap: wrap;
+          flex-wrap: nowrap;
         }
         .global-header .header-actions {
           display: flex;
@@ -249,7 +249,37 @@ const Header = () => {
           font-weight: normal;
         }
 
-        @media (max-width: 1200px) {
+        @media (min-width: 1301px) and (max-width: 1450px) {
+          .global-header .wrap {
+            padding: 0 20px;
+          }
+          .global-header .logo-mark {
+            width: 40px;
+            height: 40px;
+          }
+          .global-header .logo-text {
+            font-size: 20px;
+          }
+          .global-header .logo-sub {
+            font-size: 9px;
+          }
+          .global-header .nav-link {
+            font-size: 14px;
+            padding: 6px 8px;
+          }
+          .global-header .btn-outline, .global-header .btn-orange {
+            padding: 0 16px;
+            font-size: 14px;
+            height: 40px;
+          }
+          .goog-te-gadget .goog-te-combo {
+            height: 40px;
+            padding: 6px 10px;
+            font-size: 14px;
+          }
+        }
+
+        @media (max-width: 1300px) {
           .global-header .header-inner {
             display: flex;
             justify-content: space-between;
@@ -286,7 +316,7 @@ const Header = () => {
           .goog-te-gadget .goog-te-combo { width: auto !important; height: 48px; }
         }
         @media (max-width: 480px) {
-          .global-header .logo-mark { width: 80px; height: 80px; }
+          .global-header .logo-mark { width: 40px; height: 40px; }
           .global-header .logo-text { font-size: 16px; }
           .global-header .logo-sub { font-size: 7px; }
           .global-header .wrap { padding: 0 20px; }
