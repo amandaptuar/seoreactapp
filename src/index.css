@@ -251,7 +251,7 @@ a:hover {
   transition: transform 0.3s ease;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .floating-cta, .floating-whatsapp {
     width: 48px !important;
     height: 48px !important;

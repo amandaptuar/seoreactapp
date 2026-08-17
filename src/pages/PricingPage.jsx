@@ -2,10 +2,20 @@ import React, { useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import AssessmentModal from '../components/AssessmentModal';
+import { useCurrency } from '../hooks/useCurrency';
 import './PricingPage.css';
 
 const PricingPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { currency } = useCurrency();
+  
+  const getPrice = (basePrice) => {
+    if (basePrice === 0) return 0;
+    const converted = basePrice * currency.rate;
+    if (currency.code === 'USD' || currency.code === 'EUR') return converted.toFixed(0);
+    if (currency.code === 'INR') return Math.round(converted);
+    return Math.round(converted).toLocaleString();
+  };
 
   return (
     <div className="pricing-page-container">
@@ -28,8 +38,8 @@ const PricingPage = () => {
             <div className="plan-sub">Perfect for first-time users</div>
 
             <div className="price-row">
-              <span className="dollar">$</span>
-              <span className="amount">0</span>
+              <span className="dollar">{currency.symbol}</span>
+              <span className="amount">{getPrice(0)}</span>
             </div>
             <div className="price-caption free">Forever Free</div>
 
@@ -69,8 +79,8 @@ const PricingPage = () => {
             <div className="plan-sub">Unlock full potential of your mind</div>
 
             <div className="price-row">
-              <span className="dollar">$</span>
-              <span className="amount">19</span>
+              <span className="dollar">{currency.symbol}</span>
+              <span className="amount">{getPrice(19)}</span>
             </div>
             <div className="price-caption premium">Per Month</div>
 

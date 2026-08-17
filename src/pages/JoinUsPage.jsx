@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { generateAssessmentQuestions } from '../lib/apiUtils';
 import { registerUser, loginUser, sendOtp, verifyOtp } from '../lib/backendApi';
+import ForgotPasswordModal from '../components/ForgotPasswordModal';
 import './JoinUsPage.css';
 
 const JoinUsPage = () => {
@@ -18,6 +19,7 @@ const JoinUsPage = () => {
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [otpError, setOtpError] = useState('');
   const [isSendingOtp, setIsSendingOtp] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   const handleVerifyEmail = async (e) => {
     e.preventDefault();
@@ -86,9 +88,15 @@ const JoinUsPage = () => {
     setFormError('');
 
     if (!isEmailVerified) {
-      setFormError('Please verify your email before starting the assessment.');
-      setIsSubmitting(false);
-      return;
+      if (!showOtpBox) {
+        setIsSubmitting(false);
+        handleVerifyEmail(e);
+        return;
+      } else {
+        setFormError('Please enter the verification code sent to your email.');
+        setIsSubmitting(false);
+        return;
+      }
     }
 
     try {
@@ -268,9 +276,20 @@ const JoinUsPage = () => {
                     </div>
                   )}
 
+                  {activeTab === 'signin' && (
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '-8px', marginBottom: '8px' }}>
+                      <button
+                        type="button"
+                        onClick={() => setShowForgotPassword(true)}
+                        style={{ background: 'none', border: 'none', color: '#6366F1', fontSize: '13px', fontWeight: '600', cursor: 'pointer', padding: 0 }}
+                      >
+                        Forgot Password?
+                      </button>
+                    </div>
+                  )}
+
                   <div className="form-row">
                     <label className="remember"><input type="checkbox" defaultChecked /> Remember me</label>
-                    {activeTab === 'signin' && <a href="#forgot" className="forgot">Forgot Password?</a>}
                   </div>
                   <button type="submit" disabled={isSubmitting} className="btn-signin" style={{ opacity: isSubmitting ? 0.7 : 1 }}>
                     {isSubmitting ? 'Please wait...' : (activeTab === 'signin' ? 'Sign In' : 'Start Free Assessment')}
@@ -503,6 +522,14 @@ const JoinUsPage = () => {
       </main>
 
       <Footer />
+
+      {/* Forgot Password Modal */}
+      {showForgotPassword && (
+        <ForgotPasswordModal
+          isOpen={showForgotPassword}
+          onClose={() => setShowForgotPassword(false)}
+        />
+      )}
     </div>
   );
 };

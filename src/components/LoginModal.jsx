@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../lib/backendApi';
 import ChangePasswordModal from './ChangePasswordModal';
+import ForgotPasswordModal from './ForgotPasswordModal';
 
 const LoginModal = ({ isOpen, onClose, onOpenAssessment }) => {
   const [identifier, setIdentifier] = useState('');
@@ -10,10 +11,12 @@ const LoginModal = ({ isOpen, onClose, onOpenAssessment }) => {
   const [error, setError] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
   const [showChangePassword, setShowChangePassword] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [loggedInUserId, setLoggedInUserId] = useState(null);
   const navigate = useNavigate();
 
-  if (!isOpen && !showChangePassword) return null;
+  if (!isOpen && !showChangePassword && !showForgotPassword) return null;
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -59,8 +62,16 @@ const LoginModal = ({ isOpen, onClose, onOpenAssessment }) => {
         />
       )}
 
+      {/* Forgot Password Modal */}
+      {showForgotPassword && (
+        <ForgotPasswordModal
+          isOpen={showForgotPassword}
+          onClose={() => setShowForgotPassword(false)}
+        />
+      )}
+
       {/* Main Login Modal */}
-      {isOpen && (
+      {isOpen && !showForgotPassword && (
         <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
           <div className="modal-content" style={{ maxWidth: '420px', borderRadius: '20px', padding: '40px', background: '#fff', position: 'relative' }}>
             <button onClick={onClose} style={{ position: 'absolute', top: '16px', right: '20px', background: 'none', border: 'none', fontSize: '30px', cursor: 'pointer', color: '#64748b' }}>&times;</button>
@@ -95,16 +106,37 @@ const LoginModal = ({ isOpen, onClose, onOpenAssessment }) => {
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                     <label style={{ fontSize: '13px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Password</label>
-                    <input
-                      type="password"
-                      placeholder="••••••••"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      style={{ padding: '12px 16px', borderRadius: '10px', border: '1.5px solid #e2e8f0', fontSize: '18px', outline: 'none', transition: 'border-color 0.2s', fontFamily: 'inherit' }}
-                      onFocus={(e) => e.target.style.borderColor = '#F59E0B'}
-                      onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
-                    />
+                    <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="••••••••"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        style={{ width: '100%', padding: '12px 16px', paddingRight: '44px', borderRadius: '10px', border: '1.5px solid #e2e8f0', fontSize: '18px', outline: 'none', transition: 'border-color 0.2s', fontFamily: 'inherit', boxSizing: 'border-box' }}
+                        onFocus={(e) => e.target.style.borderColor = '#F59E0B'}
+                        onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+                      />
+                      <svg
+                        width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                        onClick={() => setShowPassword(!showPassword)}
+                        style={{ position: 'absolute', right: '14px', cursor: 'pointer', transition: 'color 0.2s' }}
+                        onMouseEnter={(e) => e.currentTarget.style.stroke = '#0F172A'}
+                        onMouseLeave={(e) => e.currentTarget.style.stroke = '#64748b'}
+                      >
+                        {showPassword ? (
+                          <>
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                          </>
+                        ) : (
+                          <>
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                          </>
+                        )}
+                      </svg>
+                    </div>
                   </div>
 
                   {error && (
@@ -112,6 +144,16 @@ const LoginModal = ({ isOpen, onClose, onOpenAssessment }) => {
                       ⚠️ {error}
                     </div>
                   )}
+
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '-8px' }}>
+                    <button
+                      type="button"
+                      onClick={() => setShowForgotPassword(true)}
+                      style={{ background: 'none', border: 'none', color: '#6366F1', fontSize: '14px', fontWeight: '600', cursor: 'pointer', padding: 0 }}
+                    >
+                      Forgot Password?
+                    </button>
+                  </div>
 
                   <button
                     type="submit"

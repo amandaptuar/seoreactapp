@@ -139,6 +139,13 @@ export async function changePassword(email, currentPassword, newPassword) {
   return data;
 }
 
+export const forgotPassword = (email) =>
+  apiPost('/api/auth/forgot-password', { email: email.trim().toLowerCase() });
+
+export const resetPassword = (email, otp, newPassword) =>
+  apiPost('/api/auth/reset-password', { email: email.trim().toLowerCase(), otp: String(otp).trim(), newPassword });
+
+
 // ── Users & assessments ──────────────────────────────────────────────────────
 // These endpoints accept either the logged-in user's token (own data only)
 // or an admin token (any user) — hence the fallback.

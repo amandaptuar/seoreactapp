@@ -6,27 +6,22 @@ const FeedbackCTA = () => {
 
   return (
     <>
-      <style>
-        {`
-          .feedback-cta-btn {
-            padding: 12px 24px;
-            border-radius: 50px;
+      <style>{`
+        .feedback-cta-btn {
+          padding: 12px 24px;
+          border-radius: 50px;
+        }
+        .feedback-cta-text {
+          display: inline;
+        }
+        @media (max-width: 1024px) {
+          .feedback-cta-wrapper {
+            display: none !important;
           }
-          .feedback-cta-text {
-            display: inline;
-          }
-          @media (max-width: 768px) {
-            .feedback-cta-btn {
-              padding: 16px;
-              border-radius: 50%;
-            }
-            .feedback-cta-text {
-              display: none;
-            }
-          }
-        `}
-      </style>
+        }
+      `}</style>
       <div 
+        className="feedback-cta-wrapper"
         style={{
           position: 'fixed',
           bottom: '30px',

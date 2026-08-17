@@ -147,7 +147,7 @@ const Home = () => {
                 {isSubmitting ? 'Generating Questionnaire...' : isLoggedIn ? 'Take Assessment Again' : 'Start Free Assessment ➔'}
               </button>
               <button onClick={() => navigate('/sample-report')}  className="btn btn-outline" style={{  cursor: 'pointer', }}>
-                'View Sample Report'
+                View Sample Report
               </button>
             </div>
             <div className="hero-meta">
@@ -411,7 +411,7 @@ const Home = () => {
                 <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="flex-shrink-0"><circle cx="12" cy="12" r="9" stroke="#10b981" strokeWidth="2"/><path d="M8 12.5l3 3 5-6" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg> Track progress over time</li>
               </ul>
               <button onClick={() => navigate('/sample-report')}  className="btn-purple-rounded" style={{  cursor: 'pointer', }}>
-                'View Sample Report ➔'
+                View Sample Report ➔
               </button>
             </div>
           </div>
