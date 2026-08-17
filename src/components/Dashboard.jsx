@@ -809,7 +809,10 @@ const Dashboard = () => {
 
             <div className="card age-card">
               <h4>🧠 Cognitive Age Estimate</h4>
-              <div style={{ filter: isPaid ? 'none' : 'blur(4px)', pointerEvents: isPaid ? 'auto' : 'none', userSelect: isPaid ? 'auto' : 'none' }}>
+              {/* Free for everyone — matches the teaser PDF, which has always
+                  shown this unlocked. Do not paywall this again without also
+                  locking it in the teaser PDF, or the two will disagree. */}
+              <div>
                 <div className="age-values">
                   <div>
                     <div className="age-label">Actual Age</div>
@@ -824,7 +827,6 @@ const Dashboard = () => {
                 </div>
                 <div className="age-note">ⓘ {cogAge?.disclaimer || 'Motivational wellness metric only — not a clinical measurement.'}</div>
               </div>
-              {!isPaid && <PaywallOverlay />}
             </div>
           </div>
 
