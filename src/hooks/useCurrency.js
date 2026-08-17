@@ -1,88 +1,25 @@
-<<<<<<< HEAD
 // Price is ALWAYS shown in USD, matching exactly what the Stripe Checkout
 // Session actually charges (see backend/src/routes/payment.routes.js —
 // currency: 'usd', unit_amount: 1900, fixed).
 //
-// This used to guess a display currency from the page's Google Translate
-// language cookie and convert using a hardcoded, stale exchange rate. That
-// number never matched what Stripe's own checkout page actually charges
-// (Stripe applies its own live conversion + a disclosed ~4% fee for
-// non-USD cards) — showing customers one price and charging a different
-// one is both confusing and a real compliance risk. Do not reintroduce a
-// second, independent price estimate here; if localized pricing is wanted,
-// it needs to be the SAME number the backend tells Stripe to charge.
+// NOTE for whoever picks this up next: there was a parallel attempt here
+// (geolocation via ipapi.co/geojs.io + a hardcoded per-currency `rate`,
+// e.g. 83.5 for INR) that looked more correct than the old Google-Translate
+// -cookie version it replaced, but has the SAME root bug: it computes a
+// local-currency price on the frontend, independently from what Stripe
+// actually charges. Stripe's own checkout page applies ITS live conversion
+// rate plus a disclosed ~4% fee for non-USD cards — a frontend guess can
+// never reliably match that number, accurate geolocation or not. That's
+// exactly the ₹1587-vs-₹1889.21 mismatch that got flagged as a compliance
+// issue on 12 Aug 2026.
+//
+// Do not reintroduce an independent client-side price estimate here. If
+// real per-region pricing is wanted, it has to be done properly: the
+// BACKEND decides the region + currency + exact amount, creates the Stripe
+// Session in that currency (not always 'usd'), and the frontend displays
+// that same backend-provided number — never its own calculation.
 export const useCurrency = () => {
   const currency = { symbol: '$', rate: 1, code: 'USD' };
   const formatPrice = (baseUsdPrice) => `$${baseUsdPrice.toFixed(0)}`;
-=======
-import { useState, useEffect } from 'react';
-
-const getInitialCurrency = () => {
-  try {
-    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
-    const offset = new Date().getTimezoneOffset();
-    
-    if (timeZone.includes('Kolkata') || timeZone.includes('Calcutta') || timeZone.includes('India') || offset === -330) {
-      return { symbol: '₹', rate: 83.5, code: 'INR' };
-    } else if (timeZone.includes('Lagos') || timeZone.includes('Africa') || offset === -60) {
-      return { symbol: '₦', rate: 1500, code: 'NGN' };
-    } else if (['Europe/Lisbon', 'Europe/Paris', 'Europe/Madrid', 'Europe/Berlin', 'Europe/Rome'].includes(timeZone)) {
-      return { symbol: '€', rate: 0.92, code: 'EUR' };
-    }
-  } catch (error) {
-    // Ignore error
-  }
-  return { symbol: '$', rate: 1, code: 'USD' };
-};
-
-export const useCurrency = () => {
-  const [currency, setCurrency] = useState(getInitialCurrency);
-
-  useEffect(() => {
-    const fetchRegionAndSetCurrency = async () => {
-      try {
-        // Try ipapi first
-        let response = await fetch('https://ipapi.co/json/').catch(() => null);
-        let data = response ? await response.json().catch(() => null) : null;
-        
-        // Try geojs as fallback
-        if (!data || data.error) {
-           response = await fetch('https://get.geojs.io/v1/ip/country.json').catch(() => null);
-           data = response ? await response.json().catch(() => null) : null;
-        }
-
-        if (!data) return; // If all fail, keep initial timezone-based currency
-
-        const countryCode = data.country_code || data.countryCode || data.country || '';
-        
-        if (countryCode === 'IN' || countryCode === 'IND' || countryCode === 'India') {
-          setCurrency({ symbol: '₹', rate: 83.5, code: 'INR' });
-        } else if (countryCode === 'NG' || countryCode === 'NGA' || countryCode === 'Nigeria') {
-          setCurrency({ symbol: '₦', rate: 1500, code: 'NGN' });
-        } else if (['PT', 'FR', 'ES', 'DE', 'IT'].includes(countryCode)) {
-          setCurrency({ symbol: '€', rate: 0.92, code: 'EUR' });
-        } else {
-          setCurrency({ symbol: '$', rate: 1, code: 'USD' });
-        }
-      } catch (error) {
-        // Fallback to timezone already handled by getInitialCurrency
-      }
-    };
-
-    fetchRegionAndSetCurrency();
-  }, []);
-
-  const formatPrice = (baseUsdPrice) => {
-    const converted = baseUsdPrice * currency.rate;
-    if (currency.code === 'USD' || currency.code === 'EUR') {
-      return `${currency.symbol}${converted.toFixed(0)}`;
-    } else if (currency.code === 'INR') {
-      return `${currency.symbol}${Math.round(converted)}`;
-    } else {
-      return `${currency.symbol}${Math.round(converted).toLocaleString()}`;
-    }
-  };
-
->>>>>>> d7635d735098a4c715ee0f91e663b33d2ff29c1e
   return { currency, formatPrice };
 };
