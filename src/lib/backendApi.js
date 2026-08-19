@@ -209,3 +209,11 @@ export const getPlans = () => apiGet('/api/plans');
 
 export const createCheckoutSession = () =>
   apiPost('/api/v1/payments/create-checkout-session', {}, { token: anyToken() });
+
+/**
+ * Fallback for when the Stripe webhook hasn't updated payment_status yet
+ * (or never does) — asks the backend to check the session with Stripe
+ * directly instead of waiting on webhook delivery. Returns { paid }.
+ */
+export const verifyPaymentSession = (sessionId) =>
+  apiPost('/api/v1/payments/verify-session', { sessionId }, { token: anyToken() });

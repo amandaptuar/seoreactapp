@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { fetchUserWithAssessments } from '../lib/backendApi';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { fetchUserWithAssessments, verifyPaymentSession } from '../lib/backendApi';
 
 const PaymentSuccess = () => {
   const [status, setStatus] = useState('processing');
   const [errorMessage, setErrorMessage] = useState('We encountered an error. Please contact support.');
   const [isNavigating, setIsNavigating] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     let active = true;
     const completePayment = async () => {
       const email = sessionStorage.getItem('userEmail');
       const userId = sessionStorage.getItem('userId');
-      if (!email || !userId) { 
-        if (active) setStatus('error'); 
-        return; 
+      const sessionId = searchParams.get('session_id');
+      if (!email || !userId) {
+        if (active) setStatus('error');
+        return;
       }
 
       try {
@@ -27,7 +29,6 @@ const PaymentSuccess = () => {
           try {
             const user = await fetchUserWithAssessments(userId);
             if (user && user.payment_status === 'paid') {
-              sessionStorage.setItem('paymentStatus', 'yes');
               paid = true;
               break;
             }
@@ -39,20 +40,33 @@ const PaymentSuccess = () => {
           attempts++;
         }
 
+        // Webhook hasn't confirmed it yet (or never will) — ask the backend
+        // to check the session with Stripe directly instead of just trusting
+        // the client and unlocking anyway.
+        if (!paid && sessionId && active) {
+          try {
+            const result = await verifyPaymentSession(sessionId);
+            paid = !!result?.paid;
+          } catch (err) {
+            console.warn('[stripe] direct session verification failed:', err);
+          }
+        }
+
         if (active) {
           if (paid) {
+            sessionStorage.setItem('paymentStatus', 'yes');
             setStatus('success');
           } else {
-            console.warn('[stripe] Webhook confirmation timed out, proceeding to dashboard...');
-            sessionStorage.setItem('paymentStatus', 'yes'); // optimistically set to not block user
-            setStatus('success');
+            console.warn('[stripe] payment could not be confirmed as paid.');
+            setErrorMessage("We couldn't confirm your payment yet. If you were charged, please contact support and we'll sort it out.");
+            setStatus('error');
           }
         }
       } catch (err) {
         console.error('Payment save error:', err);
         if (active) {
-          sessionStorage.setItem('paymentStatus', 'yes');
-          setStatus('success');
+          setErrorMessage('We encountered an error confirming your payment. Please contact support.');
+          setStatus('error');
         }
       }
     };
@@ -62,7 +76,7 @@ const PaymentSuccess = () => {
     return () => {
       active = false;
     };
-  }, [navigate]);
+  }, [navigate, searchParams]);
 
   return (
     <section style={styles.section}>
