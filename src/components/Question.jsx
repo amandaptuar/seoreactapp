@@ -76,12 +76,14 @@ const Question = () => {
       const age = parseInt(sessionStorage.getItem('userAge'), 10) || 22;
       let gender = sessionStorage.getItem('userGender') || 'prefer-not-to-say';
       if (gender === 'prefer_not_to_say') gender = 'prefer-not-to-say';
+      const name = sessionStorage.getItem('name');
 
       const analyzeResponse = await fetchWithRetry(getApiUrl('/api/v1/analyze'), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           assessmentId: assessmentId || "fallback-id",
+          ...(name ? { name } : {}),
           age: age,
           gender: gender,
           responses: apiResponses
