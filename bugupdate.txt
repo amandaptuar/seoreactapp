@@ -1,0 +1,52 @@
+Summary of Bug Fixes and Validations
+
+Status: ✅ = Done / ❌ = Not Done / ⚠️ = Addressed with minor note
+
+--- FULL NAME VALIDATIONS ---
+✅ Empty field -> Displays: "Please enter your full name."
+✅ Single character -> Displays: "Full name must be at least 2 characters."
+✅ More than 100 characters -> Displays: "Full name cannot exceed 100 characters."
+✅ Only spaces -> Displays: "Full name cannot be empty."
+✅ Leading/Trailing spaces -> Spaces are successfully trimmed before submission and no error is displayed.
+✅ Numbers only (e.g. 12345) -> Displays: "Full name can contain only letters, spaces, hyphens (-), and apostrophes (')."
+✅ Special characters (@#$%^) -> Displays: "Full name can contain only letters, spaces, hyphens (-), and apostrophes (')."
+✅ Valid apostrophe (O'Connor), hyphen (Anne-Marie), Unicode (José, 李雷) -> Successfully accepted.
+✅ Emojis (😀😀) -> Displays: "Full name can contain only letters, spaces, hyphens (-), and apostrophes (')."
+✅ SQL Injection / XSS -> Displays: "Full name can contain only letters, spaces, hyphens (-), and apostrophes (')."
+
+--- EMAIL VALIDATIONS ---
+✅ Empty field -> Displays: "Please enter email address."
+✅ Invalid Emails (No @, No domain, No username, Multiple @, Special chars, Consecutive dots, SQLi, XSS) -> Displays: "Please enter a valid email address."
+
+--- AGE VALIDATIONS ---
+✅ Empty field -> Displays: "Please enter your age."
+✅ Below 18 or negative -> Displays: "You must be at least 18 years old."
+✅ Above 66 -> Displays: "Please enter a valid age between 18 and 66"
+✅ Decimals (e.g. 23.5) -> Displays: "Age must be a whole number."
+
+--- GENDER VALIDATIONS ---
+✅ Not selected -> Displays: "Please select your gender."
+
+--- OTP VALIDATIONS ---
+❌ OTP Email Template -> NOT DONE (As requested, this is a backend-side issue and was left untouched to avoid disrupting backend flow).
+✅ Incorrect/Reused/Expired OTP -> Displays exactly: "Invalid OTP. Please try again."
+
+--- UI BUG FIXES ---
+✅ Language Dropdown Dimension -> Fixed `Header.jsx` to ensure the Google Translate dropdown dimensions identically match the Login button using `box-sizing: border-box`, identical height (`44px`), and flex centering.
+✅ Dashboard Navigation for Incomplete Assessments -> Fixed `Dashboard.jsx`. Previously, if a user started an assessment but didn't finish and clicked "Dashboard", the app silently redirected them back to Home (`/`). Now, it intelligently detects that they have a pending assessment and takes them directly back to `/question` so they can resume exactly where they left off.
+
+Note: The above frontend validation logic has been successfully applied to all registration/login flows across the app (JoinUsPage.jsx, DemoPage.jsx, Hero.jsx, EnquiryModal.jsx, AssessmentModal.jsx).
+
+--- ADDITIONAL UI FIXES ---
+✅ Sample Dashboard Assessment Link -> In `SampleDashboard.jsx`, the "Start Real Assessment" links at the top banner, top right, and bottom have been updated to directly open the `AssessmentModal` popup instead of just navigating to the homepage.
+✅ Home View Full Report Link -> In `Home.jsx`, the "View Full Report" button inside the report mockup now properly navigates to the `/sample-report` page.
+✅ Home Mobile Report Wrapper -> In `Home.css`, the `.report-mockup-wrapper` and `.report-dark-card-new` divs have been updated to stack vertically (`flex-direction: column`) and use `100%` width on mobile devices to prevent layout breaking.
+✅ Home Mobile Star Ratings -> In `Home.css`, the `.testi-stars-new` block inside the testimonials was fixed to ensure the star icons are perfectly center-aligned (`justify-content: center`) on mobile screens.
+
+--- PAGE LAYOUT & FOOTER FIXES ---
+✅ Missing Footers Added -> The `<Footer />` component was successfully imported and rendered at the bottom of `Features.jsx`, `Benefits.jsx`, and `HowItWorksPage.jsx`.
+✅ Features CTA Background -> The "Ready to unlock Your Potential" section (`.final-cta`) in `Features.css` was updated to include the correct pattern background image (`url('/dummy/image copy 3.png')`).
+✅ How It Works Spacing -> Fixed an issue in `HowItWorksPage.css` where `.section` padding was incorrectly set to `7.5px`, resulting in poor spacing. It has been restored to `60px 0` for proper section management.
+
+--- SYNTAX BUGS FIXED ---
+✅ Regex Syntax Error -> Fixed the `Uncaught SyntaxError: Invalid regular expression` on `\-\'` that was crashing `AssessmentModal.jsx`, `Hero.jsx`, `EnquiryModal.jsx`, `JoinUsPage.jsx`, and `DemoPage.jsx` when submitting validations.

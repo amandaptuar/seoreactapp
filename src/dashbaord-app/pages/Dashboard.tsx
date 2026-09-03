@@ -151,13 +151,16 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="space-y-8">
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Dashboard Overview</h2>
-          <p className="text-muted-foreground">Monitor key metrics, user growth, and subscription health.</p>
+    <div className="space-y-8 max-w-[1600px] mx-auto pb-10">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/60 shadow-[0_2px_20px_rgb(0,0,0,0.02)] relative overflow-hidden">
+        <div className="absolute right-0 top-0 w-64 h-64 bg-gradient-to-bl from-indigo-500/10 to-transparent rounded-full blur-3xl -z-0 pointer-events-none" />
+        <div className="relative z-10">
+          <h2 className="text-3xl font-black tracking-tight text-slate-900 mb-1">Dashboard Overview</h2>
+          <p className="text-slate-500 font-medium">Monitor key metrics, user growth, and subscription health in real-time.</p>
         </div>
-        <Button variant="outline" onClick={fetchData}><RefreshCw className="h-4 w-4 mr-2" /> Refresh Data</Button>
+        <Button onClick={fetchData} className="relative z-10 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold shadow-sm rounded-xl px-5 h-11">
+          <RefreshCw className="h-4 w-4 mr-2 text-indigo-500" /> Refresh Data
+        </Button>
       </div>
 
       {/* KPI Cards Row 1 */}

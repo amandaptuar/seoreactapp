@@ -1,0 +1,78 @@
+# Complete Work History & Updates (Last 30 Days)
+*Filtered strictly for Vigil & Limitless projects (July 8 - August 7, 2026).*
+
+## August 6 - 7, 2026
+- **Limitless Payment Integration (Website):** Implemented Stripe checkout sessions (`/api/v1/payments/create-checkout-session`) into the frontend. Connected `Payment.jsx` to route successfully.
+- **Instant Webhook Redirection:** Modified `/payment-success` (PaymentSuccess.jsx) to automatically poll the Limitless backend up to 10 times. Once `payment_status === "paid"` is confirmed, it automatically redirects the user to the dashboard.
+- **Pricing Page Routing Updates:** Modified "Upgrade to Premium" CTA to check `isLoggedIn` and route directly to `/payment` instead of the registration modal.
+- **Vigil Payment API Integration:** Completed Vigil payment API integration (LIVE mode active on Stripe), fetching pricing plans and configuring tiered subscriptions via frontend.
+
+## August 5, 2026
+- **Robust Form Validations:** Addressed comprehensive edge cases in registration and login flows. Added real-time frontend checks for: empty fields, special characters, max length, invalid formats, and strict OTP error messages.
+- **Hover/Blur Effects & UI Polish:** Fixed the homepage "Explore All Features" hover blur bug. Standardized the aesthetic presentation and video implementations for the Vigil website.
+
+## August 4, 2026
+- **Website Security Checks:** Handled the "Please wait, your request is being verified" page loops (diagnosed as a Cloudflare/CDN challenge on the domains).
+- **Vigil Contact/Form Fixes (Vigil_036):** Fixed Name validation fields not rendering proper error messages ("Please enter your full name") for the Contact Us and signup flows on Desktop Chrome.
+
+## August 3, 2026
+- **Dashboard UI Upgrades:** Deep professional redesign of the dashboard interfaces (sidebar colors, upgraded menu aesthetics).
+- **Registration Dashboard Bug:** Fixed a critical bug causing the Student Dashboard to fail loading upon successful registration (`Failed to load module script`).
+
+## August 1, 2026
+- **Typography & Font Overhauls:** Refined the brand style by integrating "Montserrat ExtraBold 800" Google Sans Serif font for titles to improve the premium look.
+- **Vigil OTP Flow API Integration:** Connected the backend OTP APIs directly into the app (Step 1: Sending OTP with email/name; Step 2: Verification).
+- **Explore Program Updates:** Configured age categorization rules (3 to 12 years grouping) for the Explore Program sections.
+
+## July 30, 2026
+- **"How to Delete Account" Functionality:** Generated a completely new frontend route (`/how-to-delete-account`) to assist users with "Delete Your Account" requests, ensuring privacy compliance.
+- **Vigil Legal & Document Pages:** Transferred 6 raw legal/info docs into dedicated React pages, ensuring their layout matched the aesthetic logic of the app.
+- **Video Integrations:** Copied the homepage promotional video setup into the "Watch our story" segment of the About page.
+
+## July 29, 2026
+- **Vigil Worldwide Privacy Policy:** Implemented the full "Worldwide Privacy Policy" page detailing user data terms and regulations.
+- **5-Page New Website Architecture:** Created the structure for an entirely new, highly aesthetic 5-page website setup using provided UI inspirations.
+
+## July 28, 2026
+- **Vigil Register 500 Error Fix:** Investigated and resolved the `500 Internal Server Error` that completely broke the Registration form.
+- **Limitless PDF Download API Mapping:** Analyzed the API routes to distinguish between free teaser PDF downloads and paid complete PDF report generation for backend integrations.
+
+## July 27, 2026
+- **Limitless Backend Flow Architecture:** Built comprehensive documentation mapping out the exact step-by-step workflow for users (from onboarding, questionnaire generation, up to the API logic required for results).
+- **Vigil Registration Navigation Updates:** Fixed routing logic to ensure smooth transitions post-signup ("redirect to new in-app /dashboard, not the dead old /parent").
+- **Supabase Environment Config:** Integrated and configured `VITE_SUPABASE_URL` and keys properly via `.env` file logic to fix database connection issues.
+
+## July 24, 2026
+- **Vigil Parent Web Integration:** Fully integrated API endpoints using the provided `Vigil Parent Web.postman_collection.json`.
+- **Dashboard Interface Migrations:** Entirely removed the old dashboard route triggered post-registration and reconstructed a new dashboard view from the Postman API architecture to ensure all relevant user data properly displays.
+
+## July 23, 2026
+- **Child App Download & Device Setup (Vigil_027):** Engineered the "Add Vigil Child app download link" integration into the device setup screen layout.
+
+## July 20, 2026
+- **Vigil Core Bug Tracking & Fixes (Vigil_001+):** Managed and cleared extensive bug IDs from the tracking sheet. Addressed primary Desktop Chrome navigation issues.
+- **Responsive Logo Alignment:** Corrected the main navigation Logo to ensure perfect Center alignment in both Portrait and Landscape responsive modes.
+- **Header Pixelation Fixes:** Resolved responsive scaling issues where the "Contact Us" header button would get chopped off in smaller pixel views.
+
+## July 18, 2026
+- **Full Backend Analysis & Documentation:** Deep-dived into the backend routing logic. Produced a detailed document explaining exactly what each route does and how it functions (documented natively in Hinglish for perfect team context).
+
+## July 14 - 15, 2026
+- **Language Selection Feature:** Engineered a global language selection toggle for the application.
+- **UI Overflow Fixes:** Fixed the Language Dropdown dimensions to prevent UI breaking (e.g., when the language was switched to Hindi, causing layout stretching).
+
+## July 13, 2026
+- **MongoDB Backend Migration:** Completed the transition to pull away from Supabase logic and finalized the custom backend API integration.
+- **Registration Email Verification:** Built out the email verification OTP generation module directly inside the registration flow.
+
+## July 12, 2026
+- **FTP Deployment Preparation:** Conducted complete app-wide sweeps to ensure absolute readiness and zero-error compilation for FTP server uploading.
+
+## July 9, 2026
+- **Admin Panel Data Tools:** Engineered and deployed a Date Filter system into the admin panel's user management section for easier auditing.
+
+## July 7 - 8, 2026
+- **Limitless Premium Upgrade Prompt:** Added an "Upgrade Subscription" option in the user dashboard sidebar specifically to convert free users.
+- **Student Dashboard Aesthetics:** Updated the UI of both the Student and School dashboards to increase professional appeal.
+- **Certificate Security:** Introduced unique certificate number generation ensuring PDFs trigger downloads correctly and are tamper-resistant.
+- **Floating Feedback Component:** Positioned a global floating "Send Feedback" button to route user insights straight to the backend admin panel.

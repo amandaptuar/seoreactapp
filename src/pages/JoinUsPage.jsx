@@ -14,6 +14,7 @@ const JoinUsPage = () => {
   const [formData, setFormData] = useState({ name: '', email: '', password: '', age: '', gender: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
+  const [errors, setErrors] = useState({});
   const [showOtpBox, setShowOtpBox] = useState(false);
   const [otpValue, setOtpValue] = useState('');
   const [isEmailVerified, setIsEmailVerified] = useState(false);
@@ -21,22 +22,70 @@ const JoinUsPage = () => {
   const [isSendingOtp, setIsSendingOtp] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
 
+  const validateName = (name) => {
+    if (name === undefined || name === null || name === '') return 'Please enter your full name.';
+    if (name.trim() === '') return 'Full name cannot be empty.';
+    const trimmed = name.trim();
+    if (trimmed.length === 1) return 'Full name must be at least 2 characters.';
+    if (trimmed.length > 100) return 'Full name cannot exceed 100 characters.';
+    const nameRegex = /^[\p{L}\s'-]+$/u;
+    if (!nameRegex.test(trimmed)) return "Full name can contain only letters, spaces, hyphens (-), and apostrophes (').";
+    return '';
+  };
+
+  const validateEmailField = (email) => {
+    if (!email || email.trim() === '') return 'Please enter email address.';
+    const trimmed = email.trim();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(trimmed) || trimmed.includes('..')) return 'Please enter a valid email address.';
+    return '';
+  };
+
+  const validateAge = (age) => {
+    if (age === undefined || age === null || age.toString().trim() === '') return 'Please enter your age.';
+    const ageStr = age.toString().trim();
+    const ageNum = Number(ageStr);
+    if (!Number.isInteger(Number(ageStr)) || ageStr.includes('.')) return 'Age must be a whole number.';
+    if (ageNum < 18) return 'You must be at least 18 years old.';
+    if (ageNum > 66) return 'Please enter a valid age between 18 and 66';
+    return '';
+  };
+
+  const validateGender = (gender) => {
+    if (!gender || gender.trim() === '') return 'Please select your gender.';
+    return '';
+  };
+
   const handleVerifyEmail = async (e) => {
-    e.preventDefault();
-    if (!formData.email) {
-      setFormError('Please enter an email first');
+    if (e) e.preventDefault();
+    setFormError('');
+    
+    const newErrors = {};
+    const nameError = validateName(formData.name);
+    if (nameError) newErrors.name = nameError;
+
+    const emailError = validateEmailField(formData.email);
+    if (emailError) newErrors.email = emailError;
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
+    setErrors({});
+
+    const trimmedName = formData.name.trim();
+    const trimmedEmail = formData.email.trim();
+    
+    setFormData(prev => ({ ...prev, name: trimmedName, email: trimmedEmail }));
+
     setIsSendingOtp(true);
     try {
-      // Backend emails a 6-digit code (10 min validity)
-      await sendOtp(formData.email, formData.name);
+      await sendOtp(trimmedEmail, trimmedName);
       setShowOtpBox(true);
       setOtpError('');
       setFormError('');
     } catch (err) {
       if (err.status === 429) {
-        // A code was already sent recently — let them type it
         setShowOtpBox(true);
         setOtpError(err.message);
       } else {
@@ -49,14 +98,19 @@ const JoinUsPage = () => {
 
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
+    if (!otpValue || otpValue.trim() === '') {
+      setOtpError('Invalid OTP. Please try again.');
+      return;
+    }
     try {
-      await verifyOtp(formData.email, otpValue);
+      const trimmedEmail = formData.email.trim();
+      await verifyOtp(trimmedEmail, otpValue);
       setIsEmailVerified(true);
       setShowOtpBox(false);
       setOtpError('');
       setFormError('');
     } catch (err) {
-      setOtpError(err.message || 'OTP invalid');
+      setOtpError('Invalid OTP. Please try again.');
     }
   };
 
@@ -70,9 +124,23 @@ const JoinUsPage = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setFormError('');
+    
+    const newErrors = {};
+    const emailError = validateEmailField(formData.email);
+    if (emailError) newErrors.email = emailError;
+
+    if (!formData.password || formData.password.trim() === '') {
+      newErrors.password = 'Please enter your password.';
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      setIsSubmitting(false);
+      return;
+    }
+    setErrors({});
 
     try {
-      // Backend verifies the password (temp or user-set) and returns a JWT.
       await loginUser(formData.email, formData.password);
       navigate('/dashboard');
     } catch (err) {
@@ -86,6 +154,31 @@ const JoinUsPage = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setFormError('');
+    
+    const newErrors = {};
+    const nameError = validateName(formData.name);
+    if (nameError) newErrors.name = nameError;
+
+    const emailError = validateEmailField(formData.email);
+    if (emailError) newErrors.email = emailError;
+
+    const ageError = validateAge(formData.age);
+    if (ageError) newErrors.age = ageError;
+
+    const genderError = validateGender(formData.gender);
+    if (genderError) newErrors.gender = genderError;
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      setIsSubmitting(false);
+      return;
+    }
+    setErrors({});
+
+    const trimmedName = formData.name.trim();
+    const trimmedEmail = formData.email.trim();
+    
+    setFormData(prev => ({ ...prev, name: trimmedName, email: trimmedEmail }));
 
     if (!isEmailVerified) {
       if (!showOtpBox) {
@@ -206,21 +299,23 @@ const JoinUsPage = () => {
                   <div className={`tab ${activeTab === 'signup' ? 'active' : ''}`} onClick={() => setActiveTab('signup')}>Sign Up</div>
                 </div>
 
-                <form onSubmit={activeTab === 'signin' ? handleLogin : handleSignup}>
+                <form onSubmit={activeTab === 'signin' ? handleLogin : handleSignup} noValidate>
                   {formError && (
                     <div style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)', borderRadius: '8px', padding: '10px 14px', color: '#ef4444', fontSize: '14px', fontWeight: '500', marginBottom: '16px' }}>
                       ⚠️ {formError}
                     </div>
                   )}
                   {activeTab === 'signup' && (
-                    <div className="form-group">
+                    <div className="form-group" style={{ marginBottom: errors.name ? '4px' : '' }}>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                      <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Full Name" required />
+                      <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Full Name" style={{ outline: errors.name ? '2px solid red' : 'none', borderRadius: '4px' }} required />
                     </div>
                   )}
-                  <div className="form-group" style={{ position: 'relative' }}>
+                  {activeTab === 'signup' && errors.name && <div style={{ color: '#ef4444', fontSize: '13px', fontWeight: '500', marginBottom: '16px', marginTop: '2px', paddingLeft: '4px' }}>{errors.name}</div>}
+
+                  <div className="form-group" style={{ position: 'relative', marginBottom: errors.email ? '4px' : '' }}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                    <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email Address" required disabled={activeTab === 'signup' && isEmailVerified} />
+                    <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email Address" required disabled={activeTab === 'signup' && isEmailVerified} style={{ outline: errors.email ? '2px solid red' : 'none', borderRadius: '4px' }} />
                     {activeTab === 'signup' && !isEmailVerified && formData.email && (
                       <button type="button" onClick={handleVerifyEmail} disabled={isSendingOtp} style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', padding: '6px 12px', background: '#7c3aed', color: '#fff', border: 'none', borderRadius: '6px', fontSize: '12px', cursor: isSendingOtp ? 'not-allowed' : 'pointer', zIndex: 10, opacity: isSendingOtp ? 0.7 : 1 }}>
                         {isSendingOtp ? 'Sending…' : showOtpBox ? 'Resend' : 'Verify'}
@@ -232,6 +327,7 @@ const JoinUsPage = () => {
                       </span>
                     )}
                   </div>
+                  {errors.email && <div style={{ color: '#ef4444', fontSize: '13px', fontWeight: '500', marginBottom: '16px', marginTop: '2px', paddingLeft: '4px' }}>{errors.email}</div>}
                   
                   {activeTab === 'signup' && showOtpBox && !isEmailVerified && (
                     <div style={{ background: 'rgba(124,58,237,0.05)', padding: '16px', borderRadius: '14px', border: '1px solid rgba(124,58,237,0.2)', marginBottom: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -240,7 +336,7 @@ const JoinUsPage = () => {
                         <span style={{ fontSize: '12px', color: '#64748B', fontWeight: '500' }}>Sent to {formData.email}</span>
                       </div>
                       <div style={{ display: 'flex', width: '100%', gap: '8px', flexWrap: 'wrap' }}>
-                        <input type="text" value={otpValue} onChange={(e) => setOtpValue(e.target.value)} placeholder="6-digit OTP" style={{ flex: '1 1 140px', padding: '12px 16px', borderRadius: '10px', border: '1.5px solid #cbd5e1', outline: 'none', background: '#fff', fontSize: '16px', boxSizing: 'border-box', letterSpacing: '2px', textAlign: 'center', fontWeight: '600', minWidth: '140px' }} maxLength={6} />
+                        <input type="text" value={otpValue} onChange={(e) => { setOtpValue(e.target.value); setOtpError(''); }} placeholder="6-digit OTP" style={{ flex: '1 1 140px', padding: '12px 16px', borderRadius: '10px', border: otpError ? '2px solid red' : '1.5px solid #cbd5e1', outline: 'none', background: '#fff', fontSize: '16px', boxSizing: 'border-box', letterSpacing: '2px', textAlign: 'center', fontWeight: '600', minWidth: '140px' }} maxLength={6} />
                         <button type="button" onClick={handleVerifyOtp} style={{ flex: '1 1 100px', minWidth: '100px', padding: '12px 16px', background: '#7c3aed', color: '#fff', border: 'none', borderRadius: '10px', fontWeight: '700', fontSize: '15px', cursor: 'pointer', boxShadow: '0 4px 12px rgba(124, 58, 237, 0.25)', transition: 'all 0.2s', flexShrink: 0 }}
                         onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-1px)'}
                         onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
@@ -254,25 +350,34 @@ const JoinUsPage = () => {
                   )}
                   
                   {activeTab === 'signin' && (
-                    <div className="form-group">
+                    <div className="form-group" style={{ marginBottom: errors.password ? '4px' : '' }}>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                      <input type={showPassword ? "text" : "password"} name="password" value={formData.password} onChange={handleChange} placeholder="Password" required />
+                      <input type={showPassword ? "text" : "password"} name="password" value={formData.password} onChange={handleChange} placeholder="Password" style={{ outline: errors.password ? '2px solid red' : 'none', borderRadius: '4px' }} required />
                       <svg className="eye-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" onClick={() => setShowPassword(!showPassword)}><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                     </div>
                   )}
+                  {activeTab === 'signin' && errors.password && <div style={{ color: '#ef4444', fontSize: '13px', fontWeight: '500', marginBottom: '16px', marginTop: '2px', paddingLeft: '4px' }}>{errors.password}</div>}
 
                   {activeTab === 'signup' && (
-                    <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
-                      <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
-                        <input type="number" name="age" value={formData.age} onChange={handleChange} placeholder="Age (18-66)" min="18" max="66" required />
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
+                      <div style={{ display: 'flex', gap: '12px' }}>
+                        <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
+                          <input type="text" name="age" value={formData.age} onChange={handleChange} placeholder="Age (18-66)" required style={{ outline: errors.age ? '2px solid red' : 'none', borderRadius: '4px' }} />
+                        </div>
+                        <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
+                          <select name="gender" value={formData.gender} onChange={handleChange} required style={{ border: '1px solid #e5e7eb', background: '#fff', width: '100%', padding: '12px 14px 12px 40px', outline: errors.gender ? '2px solid red' : 'none', fontSize: '14px', color: formData.gender ? '#374151' : '#9ca3af', borderRadius: '8px' }}>
+                            <option value="" disabled>Gender</option>
+                            <option value="female">Female</option>
+                            <option value="male">Male</option>
+                          </select>
+                        </div>
                       </div>
-                      <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
-                        <select name="gender" value={formData.gender} onChange={handleChange} required style={{ border: 'none', background: 'transparent', width: '100%', outline: 'none', fontSize: '15px', color: formData.gender ? '#0f172a' : '#9ca3af', appearance: 'none' }}>
-                          <option value="" disabled>Gender</option>
-                          <option value="female">Female</option>
-                          <option value="male">Male</option>
-                        </select>
-                      </div>
+                      {(errors.age || errors.gender) && (
+                        <div style={{ display: 'flex', gap: '12px' }}>
+                          <div style={{ flex: 1, color: '#ef4444', fontSize: '13px', fontWeight: '500', paddingLeft: '4px' }}>{errors.age}</div>
+                          <div style={{ flex: 1, color: '#ef4444', fontSize: '13px', fontWeight: '500', paddingLeft: '4px' }}>{errors.gender}</div>
+                        </div>
+                      )}
                     </div>
                   )}
 

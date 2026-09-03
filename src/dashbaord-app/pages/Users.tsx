@@ -132,54 +132,59 @@ export default function Users() {
   })
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Users</h2>
-          <p className="text-muted-foreground">Manage all registered users on the platform.</p>
+    <div className="space-y-6 max-w-[1600px] mx-auto pb-10">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/60 shadow-[0_2px_20px_rgb(0,0,0,0.02)] relative overflow-hidden">
+        <div className="absolute right-0 top-0 w-64 h-64 bg-gradient-to-bl from-indigo-500/10 to-transparent rounded-full blur-3xl -z-0 pointer-events-none" />
+        <div className="relative z-10">
+          <h2 className="text-3xl font-black tracking-tight text-slate-900 mb-1">Users</h2>
+          <p className="text-slate-500 font-medium">Manage all registered users on the platform.</p>
         </div>
-        <div className="flex items-center gap-3">
-          <Button variant="outline" onClick={fetchData}><Download className="h-4 w-4 mr-2" /> Refresh</Button>
+        <div className="relative z-10 flex items-center gap-3">
+          <Button onClick={fetchData} className="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold shadow-sm rounded-xl px-5 h-11">
+            <Download className="h-4 w-4 mr-2 text-indigo-500" /> Refresh
+          </Button>
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-4 items-center bg-card p-4 rounded-lg border">
+      <div className="flex flex-col sm:flex-row gap-4 items-center bg-white p-5 rounded-2xl border border-slate-200/60 shadow-[0_2px_20px_rgb(0,0,0,0.02)]">
         <div className="relative w-full sm:w-80">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
           <Input 
             placeholder="Search name, email..." 
-            className="pl-9"
+            className="pl-10 h-10 bg-slate-50 border-slate-200 focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600 rounded-xl text-slate-900 placeholder:text-slate-400 transition-all"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto sm:ml-auto">
-          <div className="flex items-center bg-background border rounded-md shadow-sm h-10 w-full sm:w-auto overflow-hidden focus-within:ring-1 focus-within:ring-ring transition-all">
-            <div className="flex items-center px-3 bg-muted/50 border-r text-muted-foreground h-full">
+          <div className="flex items-center bg-slate-50 border border-slate-200 rounded-xl shadow-sm h-10 w-full sm:w-auto overflow-hidden focus-within:ring-2 focus-within:ring-indigo-600/20 focus-within:border-indigo-600 transition-all">
+            <div className="flex items-center px-3 bg-slate-100 border-r border-slate-200 text-slate-500 h-full">
               <Calendar className="h-4 w-4 mr-2" />
-              <span className="text-sm font-medium">Date</span>
+              <span className="text-sm font-semibold">Date</span>
             </div>
             <Input 
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="w-full sm:w-[130px] border-0 focus-visible:ring-0 focus-visible:ring-offset-0 rounded-none bg-transparent h-full px-3 text-sm"
+              className="w-full sm:w-[130px] border-0 focus-visible:ring-0 focus-visible:ring-offset-0 rounded-none bg-transparent h-full px-3 text-sm font-medium text-slate-700"
               title="Start Date"
             />
-            <div className="px-1 text-muted-foreground/50 h-full flex items-center bg-transparent border-0">
+            <div className="px-1 text-slate-300 h-full flex items-center bg-transparent border-0">
               <ArrowRight className="h-3.5 w-3.5" />
             </div>
             <Input 
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="w-full sm:w-[130px] border-0 focus-visible:ring-0 focus-visible:ring-offset-0 rounded-none bg-transparent h-full px-3 text-sm"
+              className="w-full sm:w-[130px] border-0 focus-visible:ring-0 focus-visible:ring-offset-0 rounded-none bg-transparent h-full px-3 text-sm font-medium text-slate-700"
               title="End Date"
             />
           </div>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-[130px]"><SelectValue placeholder="Status" /></SelectTrigger>
-            <SelectContent>
+            <SelectTrigger className="w-[130px] h-10 bg-slate-50 border-slate-200 focus:ring-indigo-600/20 rounded-xl font-medium text-slate-700">
+              <SelectValue placeholder="Status" />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl border-slate-200">
               <SelectItem value="all">All Statuses</SelectItem>
               <SelectItem value="paid">Paid</SelectItem>
               <SelectItem value="free">Free</SelectItem>
@@ -203,7 +208,7 @@ export default function Users() {
         </div>
       )}
 
-      <div className="border rounded-lg bg-card overflow-x-auto">
+      <div className="border border-slate-200/60 rounded-2xl bg-white shadow-[0_2px_20px_rgb(0,0,0,0.02)] overflow-x-auto overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow>

@@ -13,18 +13,68 @@ const FeedbackModal = ({ isOpen, onClose }) => {
     if (errorMsg) setErrorMsg('');
   };
 
+  const validateName = (name) => {
+    if (!name || name === '') return 'Please enter your full name.';
+    if (name.trim() === '') return 'Full name cannot be empty.';
+    const trimmed = name.trim();
+    if (trimmed.length === 1) return 'Full name must be at least 2 characters.';
+    if (trimmed.length > 100) return 'Full name cannot exceed 100 characters.';
+    const nameRegex = /^[\p{L}\s'-]+$/u;
+    if (!nameRegex.test(trimmed)) return "Full name can contain only letters, spaces, hyphens (-), and apostrophes (').";
+    return '';
+  };
+
+  const validateEmailField = (email) => {
+    if (!email || email.trim() === '') return 'Please enter email address.';
+    const trimmed = email.trim();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(trimmed) || trimmed.includes('..')) return 'Please enter a valid email address.';
+    return '';
+  };
+
+  const validateMessage = (msg) => {
+    if (!msg || msg.trim() === '') return 'Please enter a message.';
+    if (msg.trim().length < 10) return 'Message must be at least 10 characters.';
+    return '';
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setErrorMsg('');
 
+    const nameError = validateName(formData.name);
+    if (nameError) {
+      setErrorMsg(nameError);
+      setIsSubmitting(false);
+      return;
+    }
+
+    const emailError = validateEmailField(formData.email);
+    if (emailError) {
+      setErrorMsg(emailError);
+      setIsSubmitting(false);
+      return;
+    }
+
+    const messageError = validateMessage(formData.message);
+    if (messageError) {
+      setErrorMsg(messageError);
+      setIsSubmitting(false);
+      return;
+    }
+
+    const trimmedName = formData.name.trim();
+    const trimmedEmail = formData.email.trim();
+    const trimmedMessage = formData.message.trim();
+
     try {
       // Backend stores the enquiry AND emails the admin inbox
       // (replaces the old formsubmit.co call).
       await submitEnquiry({
-        name: formData.name,
-        email: formData.email,
-        message: formData.message,
+        name: trimmedName,
+        email: trimmedEmail,
+        message: trimmedMessage,
       });
 
       setSubmitted(true);

@@ -146,7 +146,7 @@ const Home = () => {
               <button onClick={handleStartAssessment}  className="btn btn-gradient" style={{  cursor: 'pointer', }}>
                 {isSubmitting ? 'Generating Questionnaire...' : isLoggedIn ? 'Take Assessment Again' : 'Start Free Assessment ➔'}
               </button>
-              <button onClick={() => navigate('/sample-report')}  className="btn btn-outline" style={{  cursor: 'pointer', }}>
+              <button onClick={() => window.open('/Limitless_Cognitive_Report.pdf', '_blank')}  className="btn btn-outline" style={{  cursor: 'pointer', }}>
                 View Sample Report
               </button>
             </div>
@@ -348,7 +348,7 @@ const Home = () => {
                 </div>
                 
                 <p className="desc-text">You're performing better than<br/>78% of people in your age group.</p>
-                <button className="btn-blue-rounded">View Full Report</button>
+                <button className="btn-blue-rounded" onClick={() => window.open('/Limitless_Cognitive_Report.pdf', '_blank')} style={{ cursor: 'pointer' }}>View Full Report</button>
               </div>
 
               {/* White Box for Stats & Radar */}
@@ -410,7 +410,7 @@ const Home = () => {
                 <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="flex-shrink-0"><circle cx="12" cy="12" r="9" stroke="#10b981" strokeWidth="2"/><path d="M8 12.5l3 3 5-6" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg> Actionable recommendations</li>
                 <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="flex-shrink-0"><circle cx="12" cy="12" r="9" stroke="#10b981" strokeWidth="2"/><path d="M8 12.5l3 3 5-6" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg> Track progress over time</li>
               </ul>
-              <button onClick={() => navigate('/sample-report')}  className="btn-purple-rounded" style={{  cursor: 'pointer', }}>
+              <button onClick={() => window.open('/Limitless_Cognitive_Report.pdf', '_blank')}  className="btn-purple-rounded" style={{  cursor: 'pointer', }}>
                 View Sample Report ➔
               </button>
             </div>

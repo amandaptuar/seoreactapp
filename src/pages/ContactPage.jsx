@@ -4,10 +4,121 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { Link } from 'react-router-dom';
 import limitlessLogo from '../assets/limitless-logo.webp';
+import { submitEnquiry } from '../lib/backendApi';
 const ContactPage = () => {
     const [openFaq, setOpenFaq] = useState(null);
+    const [formData, setFormData] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
+    const [errorMsg, setErrorMsg] = useState('');
+    const [submitted, setSubmitted] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const toggleFaq = (index) => setOpenFaq(openFaq === index ? null : index);
+
+    const handleChange = (e) => {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+      if (errorMsg) setErrorMsg('');
+    };
+
+    const validateName = (name) => {
+      if (!name || name === '') return 'Please enter your full name.';
+      if (name.trim() === '') return 'Full name cannot be empty.';
+      const trimmed = name.trim();
+      if (trimmed.length === 1) return 'Full name must be at least 2 characters.';
+      if (trimmed.length > 100) return 'Full name cannot exceed 100 characters.';
+      const nameRegex = /^[\p{L}\s'-]+$/u;
+      if (!nameRegex.test(trimmed)) return "Full name can contain only letters, spaces, hyphens (-), and apostrophes (').";
+      return '';
+    };
+
+    const validateEmailField = (email) => {
+      if (!email || email.trim() === '') return 'Please enter email address.';
+      const trimmed = email.trim();
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(trimmed) || trimmed.includes('..')) return 'Please enter a valid email address.';
+      return '';
+    };
+
+    const validatePhone = (phone) => {
+      if (phone && phone.trim() !== '') {
+        const phoneRegex = /^[0-9+\-\s()]+$/;
+        if (!phoneRegex.test(phone.trim())) return 'Please enter a valid phone number.';
+      }
+      return '';
+    };
+
+    const validateSubject = (subject) => {
+      if (!subject || subject.trim() === '') return 'Please enter a subject.';
+      return '';
+    };
+
+    const validateMessage = (msg) => {
+      if (!msg || msg.trim() === '') return 'Please enter a message.';
+      if (msg.trim().length < 10) return 'Message must be at least 10 characters.';
+      return '';
+    };
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      setIsSubmitting(true);
+      setErrorMsg('');
+
+      const nameError = validateName(formData.name);
+      if (nameError) {
+        setErrorMsg(nameError);
+        setIsSubmitting(false);
+        return;
+      }
+
+      const emailError = validateEmailField(formData.email);
+      if (emailError) {
+        setErrorMsg(emailError);
+        setIsSubmitting(false);
+        return;
+      }
+
+      const phoneError = validatePhone(formData.phone);
+      if (phoneError) {
+        setErrorMsg(phoneError);
+        setIsSubmitting(false);
+        return;
+      }
+
+      const subjectError = validateSubject(formData.subject);
+      if (subjectError) {
+        setErrorMsg(subjectError);
+        setIsSubmitting(false);
+        return;
+      }
+
+      const messageError = validateMessage(formData.message);
+      if (messageError) {
+        setErrorMsg(messageError);
+        setIsSubmitting(false);
+        return;
+      }
+
+      const trimmedName = formData.name.trim();
+      const trimmedEmail = formData.email.trim();
+      const finalMessage = `Phone: ${formData.phone}\nSubject: ${formData.subject}\n\n${formData.message.trim()}`;
+
+      try {
+        await submitEnquiry({
+          name: trimmedName,
+          email: trimmedEmail,
+          message: finalMessage,
+        });
+
+        setSubmitted(true);
+        setTimeout(() => {
+          setSubmitted(false);
+          setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+        }, 3000);
+      } catch (err) {
+        setErrorMsg(err.message || 'Something went wrong. Please try again.');
+      } finally {
+        setIsSubmitting(false);
+      }
+    };
 
   useEffect(() => {
     document.title = "Limitless – Contact Us";
@@ -173,60 +284,76 @@ const ContactPage = () => {
     <h2>Send Us a Message</h2>
     <p>Fill out the form below and we'll get back to you.</p>
 
-    <div className="form-group">
-      <div className="form-field">
-        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-        </svg>
-        <input type="text" placeholder="Full Name"/>
+    {submitted ? (
+      <div style={{ textAlign: 'center', padding: '40px 0' }}>
+        <div style={{ fontSize: '50px', marginBottom: '16px' }}>✅</div>
+        <h3 style={{ color: '#0F172A', marginBottom: '8px' }}>Message Sent!</h3>
+        <p style={{ color: '#6B7280', fontSize: '18px' }}>We'll get back to you shortly.</p>
       </div>
-    </div>
-    <div className="form-group">
-      <div className="form-field">
-        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-        </svg>
-        <input type="email" placeholder="Email Address"/>
-      </div>
-    </div>
-    <div className="form-group">
-      <div className="form-field">
-        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-        </svg>
-        <input type="tel" placeholder="Phone Number"/>
-      </div>
-    </div>
-    <div className="form-group">
-      <div className="form-field">
-        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
-        </svg>
-        <input type="text" placeholder="Subject"/>
-      </div>
-    </div>
-    <div className="form-group">
-      <div className="form-field">
-        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" style={{alignSelf: 'flex-start', marginTop: '2px'}}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-        </svg>
-        <textarea placeholder="Your Message"></textarea>
-      </div>
-    </div>
+    ) : (
+      <form onSubmit={handleSubmit} noValidate>
+        <div className="form-group">
+          <div className="form-field">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+            <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Full Name" required />
+          </div>
+        </div>
+        <div className="form-group">
+          <div className="form-field">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+            <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email Address" required />
+          </div>
+        </div>
+        <div className="form-group">
+          <div className="form-field">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+            </svg>
+            <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone Number" />
+          </div>
+        </div>
+        <div className="form-group">
+          <div className="form-field">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+            </svg>
+            <input type="text" name="subject" value={formData.subject} onChange={handleChange} placeholder="Subject" required />
+          </div>
+        </div>
+        <div className="form-group">
+          <div className="form-field">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" style={{alignSelf: 'flex-start', marginTop: '2px'}}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            </svg>
+            <textarea name="message" value={formData.message} onChange={handleChange} placeholder="Your Message" required></textarea>
+          </div>
+        </div>
 
-    <button className="btn-send">
-      Send Message
-      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
-      </svg>
-    </button>
+        {errorMsg && (
+          <div style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '8px', padding: '10px 14px', color: '#ef4444', fontSize: '15px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+            ⚠️ {errorMsg}
+          </div>
+        )}
 
-    <div className="form-privacy">
-      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-      </svg>
-      Your information is safe with us. We never share your data.
-    </div>
+        <button type="submit" className="btn-send" disabled={isSubmitting} style={{ opacity: isSubmitting ? 0.7 : 1, cursor: isSubmitting ? 'not-allowed' : 'pointer' }}>
+          {isSubmitting ? 'Sending...' : 'Send Message'}
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+          </svg>
+        </button>
+
+        <div className="form-privacy">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+          Your information is safe with us. We never share your data.
+        </div>
+      </form>
+    )}
   </div>
 
   {/*  Contact Info  */}

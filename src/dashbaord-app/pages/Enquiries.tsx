@@ -38,30 +38,33 @@ export default function Enquiries() {
   })
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Feedback & Enquiries</h2>
-          <p className="text-muted-foreground">Manage user feedback and incoming enquiries.</p>
+    <div className="space-y-6 max-w-[1600px] mx-auto pb-10">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/60 shadow-[0_2px_20px_rgb(0,0,0,0.02)] relative overflow-hidden">
+        <div className="absolute right-0 top-0 w-64 h-64 bg-gradient-to-bl from-indigo-500/10 to-transparent rounded-full blur-3xl -z-0 pointer-events-none" />
+        <div className="relative z-10">
+          <h2 className="text-3xl font-black tracking-tight text-slate-900 mb-1">Feedback & Enquiries</h2>
+          <p className="text-slate-500 font-medium">Manage user feedback and incoming enquiries.</p>
         </div>
-        <div className="flex items-center gap-3">
-          <Button variant="outline" onClick={fetchData}><Download className="h-4 w-4 mr-2" /> Refresh</Button>
+        <div className="relative z-10 flex items-center gap-3">
+          <Button onClick={fetchData} className="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold shadow-sm rounded-xl px-5 h-11">
+            <Download className="h-4 w-4 mr-2 text-indigo-500" /> Refresh
+          </Button>
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-4 items-center bg-card p-4 rounded-lg border">
+      <div className="flex flex-col sm:flex-row gap-4 items-center bg-white p-5 rounded-2xl border border-slate-200/60 shadow-[0_2px_20px_rgb(0,0,0,0.02)]">
         <div className="relative w-full sm:w-80">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
           <Input 
             placeholder="Search name, email, or message..." 
-            className="pl-9"
+            className="pl-10 h-10 bg-slate-50 border-slate-200 focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600 rounded-xl text-slate-900 placeholder:text-slate-400 transition-all"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
       </div>
 
-      <div className="border rounded-lg bg-card overflow-x-auto">
+      <div className="border border-slate-200/60 rounded-2xl bg-white shadow-[0_2px_20px_rgb(0,0,0,0.02)] overflow-x-auto overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow>

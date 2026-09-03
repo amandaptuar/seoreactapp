@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import AssessmentModal from '../components/AssessmentModal';
+import ScenarioSimulator from '../components/ScenarioSimulator';
 import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Cell
@@ -38,6 +40,7 @@ const BAR_COLORS = ['#6366F1', '#3B82F6', '#8B5CF6', '#F59E0B'];
 
 const SampleDashboard = () => {
   const navigate = useNavigate();
+  const [isAssessmentOpen, setIsAssessmentOpen] = useState(false);
   const report = demoReport;
   const score = report.overall.score;
   const rating = report.overall.rating;
@@ -49,6 +52,7 @@ const SampleDashboard = () => {
 
   return (
     <div style={{ minHeight: '100vh', background: '#020617', fontFamily: "'Inter', -apple-system, sans-serif", color: '#F8FAFC' }}>
+      <AssessmentModal isOpen={isAssessmentOpen} onClose={() => setIsAssessmentOpen(false)} />
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
         * { box-sizing: border-box; }
@@ -63,7 +67,7 @@ const SampleDashboard = () => {
 
       {/* Demo Banner */}
       <div style={{ background: 'linear-gradient(90deg, #F59E0B, #FB923C)', padding: '12px', textAlign: 'center', fontSize: '15px', fontWeight: '700', color: '#fff', letterSpacing: '0.5px' }}>
-        📊 SAMPLE REPORT — This is a demo. <span style={{ textDecoration: 'underline', cursor: 'pointer' }} onClick={() => navigate('/')}>Start your real assessment →</span>
+        📊 SAMPLE REPORT — This is a demo. <span style={{ textDecoration: 'underline', cursor: 'pointer' }} onClick={() => setIsAssessmentOpen(true)}>Start your real assessment →</span>
       </div>
 
       <div style={{ position: 'relative', zIndex: 1, maxWidth: '1320px', margin: '0 auto', padding: '40px 32px 80px' }}>
@@ -80,7 +84,7 @@ const SampleDashboard = () => {
           </div>
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
             <button onClick={() => navigate('/')} style={{ padding: '12px 20px', background: 'rgba(15,23,42,0.7)', color: '#94A3B8', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '12px', fontWeight: '600', fontSize: '16px', cursor: 'pointer', fontFamily: 'inherit' }}>← Home</button>
-            <button onClick={() => navigate('/')} style={{ padding: '12px 24px', background: 'linear-gradient(135deg, #F59E0B, #FB923C)', color: '#fff', border: 'none', borderRadius: '12px', fontWeight: '700', fontSize: '16px', cursor: 'pointer', fontFamily: 'inherit' }}>Start Real Assessment →</button>
+            <button onClick={() => setIsAssessmentOpen(true)} style={{ padding: '12px 24px', background: 'linear-gradient(135deg, #F59E0B, #FB923C)', color: '#fff', border: 'none', borderRadius: '12px', fontWeight: '700', fontSize: '16px', cursor: 'pointer', fontFamily: 'inherit' }}>Start Real Assessment →</button>
           </div>
         </div>
 
@@ -232,11 +236,19 @@ const SampleDashboard = () => {
           </div>
         </div>
 
+        {/* What-If Scenario Simulator Demo */}
+        <div style={{ marginBottom: '32px' }}>
+          <ScenarioSimulator
+            analysis={demoReport}
+            onOpenCoach={() => setIsAssessmentOpen(true)}
+          />
+        </div>
+
         {/* CTA */}
         <div style={{ textAlign: 'center', padding: '48px', background: 'rgba(99,102,241,0.08)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: '28px' }}>
           <h2 style={{ color: '#F8FAFC', fontSize: '28px', fontWeight: '800', margin: '0 0 12px' }}>Ready to See Your Real Results?</h2>
           <p style={{ color: '#94A3B8', fontSize: '17px', margin: '0 0 28px' }}>This was a sample. Take the real assessment to get your personalized cognitive wellness report.</p>
-          <button onClick={() => navigate('/')} style={{ padding: '16px 40px', background: 'linear-gradient(135deg, #6366F1, #3B82F6)', color: '#fff', border: 'none', borderRadius: '14px', fontWeight: '700', fontSize: '18px', cursor: 'pointer', boxShadow: '0 8px 24px rgba(99,102,241,0.4)', fontFamily: 'inherit' }}>
+          <button onClick={() => setIsAssessmentOpen(true)} style={{ padding: '16px 40px', background: 'linear-gradient(135deg, #6366F1, #3B82F6)', color: '#fff', border: 'none', borderRadius: '14px', fontWeight: '700', fontSize: '18px', cursor: 'pointer', boxShadow: '0 8px 24px rgba(99,102,241,0.4)', fontFamily: 'inherit' }}>
             Start Free Assessment →
           </button>
         </div>

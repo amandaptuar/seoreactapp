@@ -14,14 +14,38 @@ const LoginModal = ({ isOpen, onClose, onOpenAssessment }) => {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [loggedInUserId, setLoggedInUserId] = useState(null);
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   if (!isOpen && !showChangePassword && !showForgotPassword) return null;
+
+  const validateEmailField = (email) => {
+    if (!email || email.trim() === '') return 'Please enter email address.';
+    const trimmed = email.trim();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(trimmed) || trimmed.includes('..')) return 'Please enter a valid email address.';
+    return '';
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
+    
+    const newErrors = {};
+    const emailError = validateEmailField(identifier);
+    if (emailError) newErrors.email = emailError;
+
+    if (!password || password.trim() === '') {
+      newErrors.password = 'Please enter your password.';
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      setIsLoading(false);
+      return;
+    }
+    setErrors({});
 
     try {
       // Backend verifies the password (temp or user-set), returns a JWT,
@@ -89,7 +113,7 @@ const LoginModal = ({ isOpen, onClose, onOpenAssessment }) => {
                   <p style={{ color: '#6B7280', fontSize: '18px', margin: 0 }}>Sign in to your Limitless account.</p>
                 </div>
 
-                <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <form onSubmit={handleLogin} noValidate style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                     <label style={{ fontSize: '13px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Email Address</label>
                     <input
@@ -98,10 +122,11 @@ const LoginModal = ({ isOpen, onClose, onOpenAssessment }) => {
                       value={identifier}
                       onChange={(e) => setIdentifier(e.target.value)}
                       required
-                      style={{ padding: '12px 16px', borderRadius: '10px', border: '1.5px solid #e2e8f0', fontSize: '18px', outline: 'none', transition: 'border-color 0.2s', fontFamily: 'inherit' }}
-                      onFocus={(e) => e.target.style.borderColor = '#F59E0B'}
-                      onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+                      style={{ padding: '12px 16px', borderRadius: '10px', border: errors.email ? '2px solid red' : '1.5px solid #e2e8f0', fontSize: '18px', outline: 'none', transition: 'border-color 0.2s', fontFamily: 'inherit' }}
+                      onFocus={(e) => { if (!errors.email) e.target.style.borderColor = '#F59E0B'; }}
+                      onBlur={(e) => { if (!errors.email) e.target.style.borderColor = '#e2e8f0'; }}
                     />
+                    {errors.email && <span style={{ color: '#ef4444', fontSize: '13px', fontWeight: '500', marginTop: '-4px' }}>{errors.email}</span>}
                   </div>
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -113,9 +138,9 @@ const LoginModal = ({ isOpen, onClose, onOpenAssessment }) => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        style={{ width: '100%', padding: '12px 16px', paddingRight: '44px', borderRadius: '10px', border: '1.5px solid #e2e8f0', fontSize: '18px', outline: 'none', transition: 'border-color 0.2s', fontFamily: 'inherit', boxSizing: 'border-box' }}
-                        onFocus={(e) => e.target.style.borderColor = '#F59E0B'}
-                        onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+                        style={{ width: '100%', padding: '12px 16px', paddingRight: '44px', borderRadius: '10px', border: errors.password ? '2px solid red' : '1.5px solid #e2e8f0', fontSize: '18px', outline: 'none', transition: 'border-color 0.2s', fontFamily: 'inherit', boxSizing: 'border-box' }}
+                        onFocus={(e) => { if (!errors.password) e.target.style.borderColor = '#F59E0B'; }}
+                        onBlur={(e) => { if (!errors.password) e.target.style.borderColor = '#e2e8f0'; }}
                       />
                       <svg
                         width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
@@ -137,6 +162,7 @@ const LoginModal = ({ isOpen, onClose, onOpenAssessment }) => {
                         )}
                       </svg>
                     </div>
+                    {errors.password && <span style={{ color: '#ef4444', fontSize: '13px', fontWeight: '500', marginTop: '-2px' }}>{errors.password}</span>}
                   </div>
 
                   {error && (

@@ -23,22 +23,67 @@ const DemoPage = () => {
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
+  const validateName = (name) => {
+    if (!name || name === '') return 'Please enter your full name.';
+    if (name.trim() === '') return 'Full name cannot be empty.';
+    const trimmed = name.trim();
+    if (trimmed.length === 1) return 'Full name must be at least 2 characters.';
+    if (trimmed.length > 100) return 'Full name cannot exceed 100 characters.';
+    const nameRegex = /^[\p{L}\s'-]+$/u;
+    if (!nameRegex.test(trimmed)) return "Full name can contain only letters, spaces, hyphens (-), and apostrophes (').";
+    return '';
+  };
+
+  const validateEmailField = (email) => {
+    if (!email || email.trim() === '') return 'Please enter email address.';
+    const trimmed = email.trim();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(trimmed) || trimmed.includes('..')) return 'Please enter a valid email address.';
+    return '';
+  };
+
+  const validateAge = (age) => {
+    if (!age || age.toString().trim() === '') return 'Please enter your age.';
+    const ageNum = Number(age);
+    if (!Number.isInteger(ageNum)) return 'Age must be a whole number.';
+    if (ageNum < 18) return 'You must be at least 18 years old.';
+    if (ageNum > 66) return 'Please enter a valid age between 18 and 66';
+    return '';
+  };
+
+  const validateGender = (gender) => {
+    if (!gender) return 'Please select your gender.';
+    return '';
+  };
+
   const handleVerifyEmail = async (e) => {
-    e.preventDefault();
-    if (!formData.email) {
-      setFormError('Please enter an email first');
+    if (e) e.preventDefault();
+
+    const nameError = validateName(formData.name);
+    if (nameError) {
+      setFormError(nameError);
       return;
     }
+
+    const emailError = validateEmailField(formData.email);
+    if (emailError) {
+      setFormError(emailError);
+      return;
+    }
+
+    const trimmedName = formData.name.trim();
+    const trimmedEmail = formData.email.trim();
+    
+    setFormData(prev => ({ ...prev, name: trimmedName, email: trimmedEmail }));
+
     setIsSendingOtp(true);
     try {
-      // Backend emails a 6-digit code (10 min validity)
-      await sendOtp(formData.email, formData.name);
+      await sendOtp(trimmedEmail, trimmedName);
       setShowOtpBox(true);
       setOtpError('');
       setFormError('');
     } catch (err) {
       if (err.status === 429) {
-        // A code was already sent recently — let them type it
         setShowOtpBox(true);
         setOtpError(err.message);
       } else {
@@ -52,13 +97,14 @@ const DemoPage = () => {
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
     try {
-      await verifyOtp(formData.email, otpValue);
+      const trimmedEmail = formData.email.trim();
+      await verifyOtp(trimmedEmail, otpValue);
       setIsEmailVerified(true);
       setShowOtpBox(false);
       setOtpError('');
       setFormError('');
     } catch (err) {
-      setOtpError(err.message || 'OTP invalid');
+      setOtpError('Invalid OTP. Please try again.');
     }
   };
 
@@ -66,6 +112,39 @@ const DemoPage = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setFormError('');
+
+    const nameError = validateName(formData.name);
+    if (nameError) {
+      setFormError(nameError);
+      setIsSubmitting(false);
+      return;
+    }
+
+    const emailError = validateEmailField(formData.email);
+    if (emailError) {
+      setFormError(emailError);
+      setIsSubmitting(false);
+      return;
+    }
+
+    const ageError = validateAge(formData.age);
+    if (ageError) {
+      setFormError(ageError);
+      setIsSubmitting(false);
+      return;
+    }
+
+    const genderError = validateGender(formData.gender);
+    if (genderError) {
+      setFormError(genderError);
+      setIsSubmitting(false);
+      return;
+    }
+
+    const trimmedName = formData.name.trim();
+    const trimmedEmail = formData.email.trim();
+    
+    setFormData(prev => ({ ...prev, name: trimmedName, email: trimmedEmail }));
 
     if (!isEmailVerified) {
       setFormError('Please verify your email before starting the demo.');

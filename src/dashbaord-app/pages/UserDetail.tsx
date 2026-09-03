@@ -89,6 +89,7 @@ const UserDetail = () => {
         } else {
             setReport(null);
         }
+
       } catch (err) {
         console.error('Error fetching assessment from DB:', err);
       } finally {
@@ -181,27 +182,42 @@ const UserDetail = () => {
     </div>
   );
 
-  const score = report.overall?.score ?? 0;
-  const rating = report.overall?.rating ?? 'Pending';
+  const extractNum = (val: any) => {
+    if (typeof val === 'object' && val !== null) {
+      return val.score ?? val.value ?? val.A ?? 0;
+    }
+    return Number(val) || 0;
+  };
+
+  const extractStr = (val: any, defaultStr: string) => {
+    if (typeof val === 'object' && val !== null) {
+      return val.rating ?? val.label ?? val.value ?? defaultStr;
+    }
+    return typeof val === 'string' ? val : defaultStr;
+  };
+
+  const score = extractNum(report.overall?.score);
+  const rating = extractStr(report.overall?.rating, 'Pending');
   const scoreColor = rating.includes('Excellent') || rating.includes('Good') ? '#10B981' : rating.includes('Risk') || rating.includes('Critical') ? '#EF4444' : '#6366F1';
 
-  const radarData = report.charts?.radarDomains?.labels?.map((label, i) => ({
+  const radarData = report.charts?.radarDomains?.labels?.map((label: string, i: number) => ({
     subject: label.replace('& ', '&\n'),
-    A: report.charts.radarDomains.values[i],
+    A: extractNum(report.charts.radarDomains.values[i]),
     fullMark: 100
   })) ?? [];
 
-  const barData = report.charts?.barLifestyleImpacts?.labels?.map((label, i) => ({
+  const barData = report.charts?.barLifestyleImpacts?.labels?.map((label: string, i: number) => ({
     name: label,
-    value: report.charts.barLifestyleImpacts.values[i]
+    value: extractNum(report.charts.barLifestyleImpacts.values[i])
   })) ?? [];
 
-  const lifestyleImpacts = report.lifestyleImpacts ? Object.entries(report.lifestyleImpacts) : [];
-  const domains = report.domains ? Object.entries(report.domains) : [];
+  const lifestyleImpacts = report.lifestyleImpacts ? Object.entries(report.lifestyleImpacts).map(([k, v]) => [k, extractStr(v, 'Medium')]) : [];
+  const domains = report.domains ? Object.entries(report.domains).map(([k, v]) => [k, extractNum(v)]) : [];
   let cogAge = report.cognitiveAge;
   if (!cogAge || !cogAge.estimatedCognitiveAge) {
     const userAgeInt = parseInt(userAge, 10) || 25;
-    const estAge = Math.max(18, userAgeInt + Math.round((70 - score) / 1.5));
+    const estAgeRaw = userAgeInt + (70 - score) / 1.5;
+    const estAge = Math.max(18, parseFloat(estAgeRaw.toFixed(1)));
     cogAge = {
       actualAge: cogAge?.actualAge || userAgeInt,
       estimatedCognitiveAge: estAge,
@@ -242,7 +258,8 @@ const UserDetail = () => {
         }
         .history-sidebar {
           width: 320px;
-          background: linear-gradient(180deg, #151e2d 0%, #0c1222 100%);
+          background: #020617; /* slate-950 */
+          border-right: 1px solid #0f172a; /* slate-900 */
           display: flex;
           flex-direction: column;
           color: #fff;
@@ -259,6 +276,7 @@ const UserDetail = () => {
           min-height: 100vh;
           display: flex;
           flex-direction: column;
+          background: #f8fafc; /* slate-50 */
         }
         .main-content {
           flex: 1;
@@ -267,9 +285,9 @@ const UserDetail = () => {
           gap: 24px;
         }
 
-        .topbar { background:linear-gradient(90deg, #151e2d 0%, #0c1222 100%); border-radius: var(--radius-lg); padding:20px 24px; display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; flex-wrap:wrap; gap:16px; box-shadow: var(--shadow); }
+        .topbar { background: #ffffff; border: 1px solid rgba(226, 232, 240, 0.6); border-radius: 16px; padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; box-shadow: 0 2px 20px rgba(0,0,0,0.02); }
         .topbar-title-row { display:flex; align-items:center; gap:12px; }
-        .topbar h1 { font-size:24px; margin:0; font-weight:700; color: #fff; }
+        .topbar h1 { font-size: 24px; margin: 0; font-weight: 800; color: #0f172a; }
         .topbar-actions { display:flex; gap:10px; flex-wrap:wrap; }
         .btn { display:flex; align-items:center; justify-content:center; gap:8px; padding:10px 18px; border-radius:10px; font-size:14px; font-weight:600; border:none; cursor:pointer; white-space:nowrap; }
         .btn-green { background:#1fa96a; color:#fff; }
@@ -389,7 +407,7 @@ const UserDetail = () => {
                        color: hist.report_json?.overall?.score >= 70 ? (currentAssessmentId === hist.id ? '#fff' : '#22c55e') : (currentAssessmentId === hist.id ? '#fff' : '#f59e0b'), 
                        padding: '4px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: '700' 
                     }}>
-                      {Math.round(hist.report_json?.overall?.score || 0)}
+                      {hist.report_json?.overall?.score || 0}
                     </div>
                   </div>
                 </div>
@@ -521,11 +539,11 @@ const UserDetail = () => {
             <div className="profile-stats" style={{ display: 'flex', flexWrap: 'nowrap', flexShrink: 0 }}>
               <div className="stat-block" style={{ padding: '0 26px', borderLeft: 'none', borderTop: 'none', textAlign: 'left', flex: 'none', marginTop: 0 }}>
                 <div style={{ fontSize: '12.5px', color: 'var(--text-grey)', marginBottom: '6px' }}>Overall Score</div>
-                <div style={{ color: scoreColor, fontSize: '20px', fontWeight: '700' }}>{Math.round(score)} / 100</div>
+                <div style={{ color: scoreColor, fontSize: '20px', fontWeight: '700' }}>{score} / 100</div>
               </div>
               <div className="stat-block" style={{ padding: '0 26px', borderLeft: '1px solid var(--border)', borderTop: 'none', textAlign: 'left', flex: 'none', marginTop: 0 }}>
                 <div style={{ fontSize: '12.5px', color: 'var(--text-grey)', marginBottom: '6px' }}>Rating</div>
-                <div style={{ color: scoreColor, fontSize: '20px', fontWeight: '700' }}>{rating.split(' ')[0]}</div>
+                <div style={{ color: scoreColor, fontSize: '20px', fontWeight: '700' }}>{rating}</div>
               </div>
               <div className="stat-block" style={{ padding: '0 26px', borderLeft: '1px solid var(--border)', borderTop: 'none', textAlign: 'left', flex: 'none', marginTop: 0 }}>
                 <div style={{ fontSize: '12.5px', color: 'var(--text-grey)', marginBottom: '6px' }}>Assessment</div>
@@ -563,13 +581,13 @@ const UserDetail = () => {
                       <circle cx="75" cy="75" r="62" fill="none" stroke={scoreColor} strokeWidth="16" strokeLinecap="round" strokeDasharray="389.5" strokeDashoffset={389.5 - (389.5 * (score / 100))}/>
                     </svg>
                     <div className="gauge-center">
-                      <div className="num">{Math.round(score)}</div>
+                      <div className="num">{score}</div>
                     </div>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
                     <span style={{ fontSize: '13px', color: '#94a3b8', fontWeight: 600 }}>OUT OF 100</span>
                     <div style={{ color: scoreColor, background: scoreColor + '15', padding: '6px 14px', borderRadius: '8px', fontSize: '13px', fontWeight: '700', display: 'inline-block', border: `1px solid ${scoreColor}40` }}>
-                      {rating.split(' ')[0]}
+                      {rating}
                     </div>
                   </div>
                 </div>
@@ -588,12 +606,9 @@ const UserDetail = () => {
                   }}>
                     {score >= 60 ? <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> : <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>}
                   </div>
-                  <div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                     <div style={{ fontWeight: '800', fontSize: '15px', color: '#1f2430' }}>
-                      {score >= 60 ? 'Low Risk' : 'Attention Needed'}
-                    </div>
-                    <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px', lineHeight: '1.4' }}>
-                      {score >= 60 ? 'No significant risks found.' : 'Some areas need attention.'}
+                      {report?.riskIndicators?.length > 0 ? report.riskIndicators.join(', ') : 'None'}
                     </div>
                   </div>
                 </div>
@@ -612,12 +627,9 @@ const UserDetail = () => {
                   }}>
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
                   </div>
-                  <div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                     <div style={{ fontSize: '15px', color: '#1f2430', fontWeight: '800', textTransform: 'capitalize' }}>
-                      {domains.length > 0 ? [...domains].sort((a,b) => b[1] - a[1])[0][0].replace(/([A-Z])/g, ' $1').trim() : 'Mental clarity'}
-                    </div>
-                    <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px', lineHeight: '1.4' }}>
-                      Top Performing Area
+                      {report?.strengths?.length > 0 ? report.strengths.join(', ') : 'None'}
                     </div>
                   </div>
                 </div>
@@ -665,7 +677,7 @@ const UserDetail = () => {
                   return (
                     <div key={key} className={`domain-box ${colorClass.bg}`}>
                       <div className={`label ${colorClass.fg}`} style={{ fontSize: '14px', marginBottom: '8px', fontWeight: '700' }}>{key.replace(/([A-Z])/g, ' $1').trim().replace(/^./, str => str.toUpperCase())}</div>
-                      <div style={{ fontSize: '26px', fontWeight: '800', color: 'var(--text-dark)' }}>{Math.round(val)}</div>
+                      <div style={{ fontSize: '26px', fontWeight: '800', color: 'var(--text-dark)' }}>{val}</div>
                     </div>
                   );
                 })}
@@ -676,15 +688,16 @@ const UserDetail = () => {
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '18px', fontWeight: '800', marginBottom: '16px' }}>🍃 Lifestyle Assessment</div>
               <div style={{ filter: isPaid ? 'none' : 'blur(4px)', display: 'flex', flexDirection: 'column', height: '100%' }}>
                 {lifestyleImpacts.map(([key, val], i) => {
+                  const formattedKey = key.replace(/Impact$/, '').replace(/([A-Z])/g, ' $1').trim().replace(/^./, str => str.toUpperCase());
                   const iconMap = { 'Sleep Quality': '🌙', 'Stress Level': '❤️', 'Anxiety Load': '😊', 'Burnout Risk': '🔥' };
-                  const icon = iconMap[key] || '🔹';
+                  const icon = iconMap[formattedKey] || '🔹';
                   let badgeColor = 'var(--green)';
                   let badgeBg = 'var(--green-badge)';
                   if(val === 'Medium') { badgeColor = '#f0a63a'; badgeBg = '#fdf3e7'; }
                   if(val === 'High') { badgeColor = '#e0455f'; badgeBg = '#fdf1ec'; }
                   return (
                     <div key={key} className="lifestyle-item">
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontWeight: '700' }}><span style={{ fontSize: '18px' }}>{icon}</span> {key} Impact</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontWeight: '700' }}><span style={{ fontSize: '18px' }}>{icon}</span> {formattedKey} Impact</div>
                       <span style={{ color: badgeColor, background: badgeBg, padding: '4px 14px', borderRadius: '20px', fontSize: '14px', fontWeight: '700' }}>{val}</span>
                     </div>
                   );

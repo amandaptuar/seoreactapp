@@ -22,6 +22,7 @@ import JoinUsPage from './pages/JoinUsPage';
 import PricingPage from './pages/PricingPage';
 import DashboardApp from './dashbaord-app/App';
 import PremiumLoader from './components/PremiumLoader';
+import DeleteAccountPage from './pages/DeleteAccountPage';
 
 
 const ProtectedRoute = ({ children }) => {
@@ -37,13 +38,14 @@ const GlobalComponents = () => {
   const location = useLocation();
   const isAdmin = location.pathname.startsWith('/admin');
   const isDashboard = location.pathname.startsWith('/dashboard');
+  const isPolicyPage = location.pathname === '/privacy-policy' || location.pathname === '/terms-conditions';
   
-  if (isAdmin) return null;
+  if (isAdmin || isPolicyPage) return null;
 
   return (
     <>
       <FloatingCTA />
-      <FloatingWhatsApp />
+      {!isDashboard && <FloatingWhatsApp />}
       {!isDashboard && <FeedbackCTA />}
     </>
   );
@@ -66,6 +68,7 @@ function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/join-us" element={<JoinUsPage />} />
         <Route path="/pricing" element={<PricingPage />} />
+        <Route path="/deleteyouraccount" element={<DeleteAccountPage />} />
 
         
         {/* Protected User Routes */}
@@ -87,6 +90,7 @@ function App() {
             <Dashboard />
           </ProtectedRoute>
         } />
+
         
         {/* Redirect old admin paths to the new admin-panel */}
         <Route path="/admin" element={<Navigate to="/admin-panel" replace />} />

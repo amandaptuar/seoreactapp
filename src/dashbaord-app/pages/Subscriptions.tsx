@@ -94,11 +94,12 @@ export default function Subscriptions() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Subscriptions Management</h2>
-          <p className="text-muted-foreground">Manage revenue, subscription plans, and subscriber billing.</p>
+    <div className="space-y-6 max-w-[1600px] mx-auto pb-10">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/60 shadow-[0_2px_20px_rgb(0,0,0,0.02)] relative overflow-hidden">
+        <div className="absolute right-0 top-0 w-64 h-64 bg-gradient-to-bl from-indigo-500/10 to-transparent rounded-full blur-3xl -z-0 pointer-events-none" />
+        <div className="relative z-10">
+          <h2 className="text-3xl font-black tracking-tight text-slate-900 mb-1">Subscriptions Management</h2>
+          <p className="text-slate-500 font-medium">Manage revenue, subscription plans, and subscriber billing.</p>
         </div>
       </div>
 
@@ -272,17 +273,17 @@ export default function Subscriptions() {
 
         {/* ===== ALL SUBSCRIPTIONS TAB ===== */}
         <TabsContent value="subscribers" className="space-y-4 m-0">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-card p-4 rounded-lg border">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200/60 shadow-[0_2px_20px_rgb(0,0,0,0.02)]">
             <div>
-              <h3 className="text-lg font-semibold">Subscriber List</h3>
-              <p className="text-sm text-muted-foreground">View and manage all users and their subscription statuses.</p>
+              <h3 className="text-xl font-bold tracking-tight text-slate-900">Subscriber List</h3>
+              <p className="text-sm font-medium text-slate-500 mt-1">View and manage all users and their subscription statuses.</p>
             </div>
-            <Button variant="outline" onClick={fetchData} className="w-full sm:w-auto">
+            <Button variant="outline" size="sm" onClick={fetchData} className="shrink-0">
               <RefreshCw className="h-4 w-4 mr-2" /> Refresh
             </Button>
           </div>
 
-          <div className="border rounded-lg bg-card overflow-x-auto">
+          <div className="border border-slate-200/60 rounded-2xl bg-white shadow-[0_2px_20px_rgb(0,0,0,0.02)] overflow-x-auto overflow-hidden">
             <Table>
               <TableHeader>
                 <TableRow>

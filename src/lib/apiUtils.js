@@ -63,7 +63,13 @@ export const getApiUrl = (endpoint) => {
   if (hasSameOriginProxy) {
     return endpoint; // proxied to the model service by Vite (dev) or nginx (VPS)
   }
-  return `/api-proxy.php?endpoint=${endpoint}`;
+  // Split endpoint into path and query parts for the PHP proxy
+  // e.g. "/api/v1/executive/instrument/pss10?user_id=123" becomes
+  //   /api-proxy.php?endpoint=/api/v1/executive/instrument/pss10&user_id=123
+  const [path, query] = endpoint.split('?');
+  let url = `/api-proxy.php?endpoint=${encodeURIComponent(path)}`;
+  if (query) url += `&${query}`;
+  return url;
 };
 
 /**
@@ -123,3 +129,172 @@ export async function fetchLongitudinalAnalysis(userId, history) {
   );
   return response.json();
 }
+
+// ─── Limitless Executive AI Coach API ─────────────────────────────────────────
+
+// Use the proxy to avoid CORS issues
+const EXECUTIVE_API_BASE = '/api/v1/executive';
+
+async function fetchExecutiveApi(endpoint, token, userId) {
+  if (!token) throw new Error("No auth token provided");
+  
+  const separator = endpoint.includes('?') ? '&' : '?';
+  const finalEndpoint = userId ? `${endpoint}${separator}user_id=${userId}` : endpoint;
+  
+  const response = await fetchWithRetry(
+    getApiUrl(`${EXECUTIVE_API_BASE}${finalEndpoint}`),
+    {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'X-API-Key': 'DXgBpoByl6UvMsD9KgVa4MAJILeiI8JqUDd4YzDPQzs'
+      }
+    },
+    2,
+    2000
+  );
+  return response.json();
+}
+
+/**
+ * Fetches the Executive Overview (scores, features, streak, etc.)
+ */
+export async function fetchExecutiveOverview(token, userId) {
+  return fetchExecutiveApi('/overview', token, userId);
+}
+
+/**
+ * Fetches the Cognitive Health Agent insights
+ */
+export async function fetchCognitiveHealthAgent(token, userId) {
+  return fetchExecutiveApi('/agents/cognitive-health', token, userId);
+}
+
+/**
+ * Fetches the Stress & Burnout Agent insights
+ */
+export async function fetchStressBurnoutAgent(token, userId) {
+  return fetchExecutiveApi('/agents/stress-burnout', token, userId);
+}
+
+/**
+ * Fetches the initial AI Coach follow-up suggestions based on the analysis.
+ */
+export async function fetchCoachSuggestions(analysis) {
+  const response = await fetchWithRetry(
+    getApiUrl('/api/v1/coach/suggestions'),
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ analysis, locale: 'en' }),
+    },
+    2,
+    2000
+  );
+  return response.json();
+}
+
+/**
+ * Sends a chat message to the AI Coach and gets the response along with new suggestions.
+ */
+export async function fetchCoachChat(analysis, messages) {
+  const response = await fetchWithRetry(
+    getApiUrl('/api/v1/coach/chat'),
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ analysis, messages, locale: 'en' }),
+    },
+    2,
+    2000
+  );
+  return response.json();
+}
+
+// ─── Limitless Daily Engagement API ───────────────────────────────────────────
+
+/**
+ * Generates a 30-day engagement roadmap from the user's assessment analysis.
+ * POST /api/v1/engagement/roadmap
+ */
+export async function fetchEngagementRoadmap(analysis, taskPolicy = {}) {
+  const response = await fetchWithRetry(
+    getApiUrl('/api/v1/engagement/roadmap'),
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ analysis, taskPolicy }),
+    },
+    2,
+    3000
+  );
+  return response.json();
+}
+
+/**
+ * Gets the daily engagement summary (wellness state, adherence, trends).
+ * POST /api/v1/engagement/summary
+ */
+export async function fetchEngagementSummary(state, today = null) {
+  const body = { state };
+  if (today) body.today = today;
+  const response = await fetchWithRetry(
+    getApiUrl('/api/v1/engagement/summary'),
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    },
+    2,
+    3000
+  );
+  return response.json();
+}
+
+// ─── Limitless What-If Scenario API ───────────────────────────────────────────
+
+/**
+ * Fetches the calibrated scenario levers, horizon limits, and model metadata.
+ * GET /api/v1/levers
+ */
+export async function fetchScenarioLevers() {
+  const response = await fetchWithRetry(
+    getApiUrl('/api/v1/levers'),
+    {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    },
+    2,
+    2000
+  );
+  return response.json();
+}
+
+/**
+ * Simulates cognitive trajectory projections based on adjusted levers.
+ * POST /api/v1/scenario
+ * @param {Object} analysis - The AnalyzeResponse held by the client
+ * @param {Object} current - Current baseline per lever { sleepHours: 6, ... }
+ * @param {Object} target - Target goal per lever { sleepHours: 8, ... }
+ * @param {number} horizonWeeks - Projection horizon (default 4.0, max 26.0)
+ */
+export async function fetchScenarioSimulation(analysis, current = {}, target = {}, horizonWeeks = 4.0) {
+  const response = await fetchWithRetry(
+    getApiUrl('/api/v1/scenario'),
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        analysis,
+        current,
+        target,
+        horizonWeeks: Number(horizonWeeks) || 4.0,
+      }),
+    },
+    2,
+    2500
+  );
+  return response.json();
+}
+

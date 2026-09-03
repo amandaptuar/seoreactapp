@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import AssessmentModal from '../components/AssessmentModal';
@@ -8,9 +9,11 @@ import './PricingPage.css';
 const PricingPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { currency } = useCurrency();
+  const navigate = useNavigate();
   
   const getPrice = (basePrice) => {
     if (basePrice === 0) return 0;
+    if (currency.code === 'INR' && basePrice === 19) return '1889.21';
     const converted = basePrice * currency.rate;
     if (currency.code === 'USD' || currency.code === 'EUR') return converted.toFixed(0);
     if (currency.code === 'INR') return Math.round(converted);
@@ -99,7 +102,13 @@ const PricingPage = () => {
 
             <div className="spacer"></div>
 
-            <button className="btn premium" onClick={() => setIsModalOpen(true)}>
+            <button className="btn premium" onClick={() => {
+              if (sessionStorage.getItem('isLoggedIn') === 'true') {
+                navigate('/payment');
+              } else {
+                setIsModalOpen(true);
+              }
+            }}>
               Upgrade to Premium
               <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </button>

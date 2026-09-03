@@ -40,19 +40,24 @@ const PaymentSuccess = () => {
         }
 
         if (active) {
+          sessionStorage.setItem('isLoggedIn', 'true');
+          sessionStorage.setItem('paymentStatus', 'yes');
+          sessionStorage.removeItem('demoMode');
+          
           if (paid) {
-            setStatus('success');
+            navigate('/dashboard', { replace: true });
           } else {
             console.warn('[stripe] Webhook confirmation timed out, proceeding to dashboard...');
-            sessionStorage.setItem('paymentStatus', 'yes'); // optimistically set to not block user
-            setStatus('success');
+            navigate('/dashboard', { replace: true });
           }
         }
       } catch (err) {
         console.error('Payment save error:', err);
         if (active) {
+          sessionStorage.setItem('isLoggedIn', 'true');
           sessionStorage.setItem('paymentStatus', 'yes');
-          setStatus('success');
+          sessionStorage.removeItem('demoMode');
+          navigate('/dashboard', { replace: true });
         }
       }
     };

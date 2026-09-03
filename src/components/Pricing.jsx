@@ -83,7 +83,7 @@ const Pricing = () => {
                   <div className="price-display">
                     <span className="price-old notranslate">{formatPrice(149)}</span>
                     <span className="price-new notranslate">{formatPrice(19)}</span>
-                    <span className="price-term">one-time</span>
+                    <span className="price-term">monthly</span>
                   </div>
                   <p className="price-description">Full Cognitive Performance Assessment</p>
                 </div>

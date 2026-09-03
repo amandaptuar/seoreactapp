@@ -1,25 +1,11 @@
 import React from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 
 const PrivacyPolicy = () => {
   return (
     <>
-      <Header />
-      <section className="page-banner" style={{ padding: '150px 0 80px', background: 'linear-gradient(135deg, var(--secondary) 0%, var(--bg-dark) 100%)', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-        <div className="container position-relative" style={{ zIndex: 2 }}>
-          <div className="heading sec-title-animation animation-style2 mb-0">
-            <h2 className="title-animation mb-2 text-white">Privacy Policy</h2>
-          </div>
-        </div>
-        <ul className="shaps-img" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1, pointerEvents: 'none' }}>
-          <li><img src="./assets/img/shaps-4.png" alt="img" /></li>
-          <li><img src="./assets/img/shaps-1.png" alt="img" /></li>
-        </ul>
-      </section>
-
-      <section className="gap" style={{ backgroundColor: 'var(--bg-light)' }}>
+      <section className="gap" style={{ backgroundColor: 'var(--bg-light)', paddingTop: '180px' }}>
         <div className="container" style={{ maxWidth: '950px' }}>
+          <h1 className="text-center mb-5" style={{ color: '#222', fontWeight: '800' }}>Privacy Policy</h1>
           <div className="policy-content" style={{ backgroundColor: '#ffffff', padding: '60px', borderRadius: '30px', boxShadow: 'var(--shadow-lg)', color: 'var(--text-secondary)', lineHeight: '1.8', fontSize: '20px' }}>
             <p>Limitless ("we," "our," or "us") operates as a digital wellness platform providing online health assessments, including Mental Health Assessment, Women’s Health Assessment, Sexual Health Assessment, and related services (collectively, the "Services").</p>
             <p>We are committed to protecting your privacy and ensuring the security of your personal information in compliance with applicable laws in the United States.</p>
@@ -92,7 +78,7 @@ const PrivacyPolicy = () => {
               <li>Request correction or deletion</li>
               <li>Opt-out of communications</li>
             </ul>
-            <p>To exercise your rights, contact us at: <a href="mailto:info@limitlessworld.net">info@limitlessworld.net</a></p>
+            <p>To exercise your rights, contact us at: info@limitlessworld.net</p>
 
             <h4 className="mt-4 mb-3" style={{ color: 'var(--main-color)', fontWeight: '700', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>7. Cookies Policy</h4>
             <p>We use cookies and similar technologies to enhance user experience, analyze traffic, and improve our services.</p>
@@ -113,12 +99,11 @@ const PrivacyPolicy = () => {
               Limitless Wellness<br/>
               7454 Old Alexandria Ferry Road<br/>
               Clinton, MD 20744, USA<br/>
-              Email: <a href="mailto:info@limitlessworld.net">info@limitlessworld.net</a>
+              Email: info@limitlessworld.net
             </p>
           </div>
         </div>
       </section>
-      <Footer />
     </>
   );
 };

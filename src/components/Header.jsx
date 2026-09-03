@@ -41,6 +41,15 @@ const Header = () => {
           },
           'google_translate_element'
         );
+        
+        // Rename "Select Language" to "Language"
+        const interval = setInterval(() => {
+          const select = document.querySelector('.goog-te-combo');
+          if (select && select.options.length > 0 && select.options[0].text.includes('Language')) {
+            select.options[0].text = 'Language';
+            clearInterval(interval);
+          }
+        }, 100);
       };
     }
 
@@ -164,6 +173,10 @@ const Header = () => {
           transition: all 0.2s ease;
           white-space: nowrap;
           height: 44px;
+          box-sizing: border-box;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
         .global-header .btn-outline:hover {
           background: rgba(255,255,255,0.1);
@@ -178,11 +191,12 @@ const Header = () => {
           font-weight: 600;
           font-size: 15px;
           cursor: pointer;
-          height: 48px;
+          height: 44px;
           display: flex;
           align-items: center;
           justify-content: center;
           white-space: nowrap;
+          box-sizing: border-box;
         }
         .global-header .hamburger {
           display: none;
@@ -228,7 +242,7 @@ const Header = () => {
           color: #fff;
           border: 2px solid rgba(255,255,255,0.5);
           border-radius: 14px;
-          padding: 8px 12px;
+          padding: 0 16px;
           font-size: 15px;
           font-weight: 600;
           outline: none;
@@ -237,6 +251,7 @@ const Header = () => {
           height: 44px;
           width: auto !important;
           max-width: 160px;
+          box-sizing: border-box;
           transition: all 0.2s ease;
         }
         .goog-te-gadget .goog-te-combo:hover {

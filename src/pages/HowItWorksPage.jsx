@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import AssessmentModal from '../components/AssessmentModal';
 import './HowItWorksPage.css';
 
@@ -174,7 +175,7 @@ const HowItWorksPage = () => {
                 </div>
               </div>
 
-              <button className="btn btn-block" style={{ background: 'linear-gradient(135deg, #3B82F6, #6366f1)', color: '#fff', marginTop: '12px', padding: '14px', borderRadius: '12px', fontSize: '16px', display: 'flex', justifyContent: 'center', gap: '8px', border: 'none' }}>
+              <button onClick={handleStartAssessment} className="btn btn-block" style={{ background: 'linear-gradient(135deg, #3B82F6, #6366f1)', color: '#fff', marginTop: '12px', padding: '14px', borderRadius: '12px', fontSize: '16px', display: 'flex', justifyContent: 'center', gap: '8px', border: 'none', cursor: 'pointer' }}>
                 Start Free Assessment
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
               </button>
@@ -425,6 +426,7 @@ const HowItWorksPage = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
     <AssessmentModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
     </>

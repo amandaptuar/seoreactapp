@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import AssessmentModal from '../components/AssessmentModal';
 import './Benefits.css';
 
@@ -372,6 +373,7 @@ const Benefits = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
     <AssessmentModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
     </>

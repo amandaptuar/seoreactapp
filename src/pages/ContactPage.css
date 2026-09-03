@@ -217,7 +217,7 @@
     margin: 0 auto;
     padding: 56px 30px;
     display: grid;
-    grid-template-columns: 1.2fr 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 80px;
     align-items: stretch;
   }.limitless-contact .form-section h2 {

@@ -1,12 +1,149 @@
-Update Summary:
+=======================================================================
+  UPDATE — Limitless What-If Scenario Model Integration (03 Sep 2026)
+=======================================================================
 
-1. Ensured the user profile data is only deeply exposed in the Admin panel via `AdminUserDetail.jsx` and kept the regular User dashboard unmodified as per instructions.
-2. Added bulk selection checkboxes to the Admin user list (`src/components/Admin.jsx`).
-3. Implemented a "Suspend Selected" action that updates the users' payment_status to "suspended" and highlights it in orange.
-4. Implemented a "Delete Selected" action to allow deleting multiple users at once.
-5. Preserved the individual user delete functionality and all existing admin features.
-6. Replaced all occurrences of the old email address (hello@...) with the new address (support@limitless.com) across all frontend components and static HTML pages.
-7. Applied the same bulk selection, "Suspend", and "Delete" functionalities to the newer admin-panel dashboard (`src/dashbaord-app/pages/Users.tsx`) and updated the UI StatusPill component to handle the "suspended" state.
-8. Added an "Unsuspend Selected" option alongside the bulk actions in both admin dashboards to easily restore suspended users back to "paid" status.
-9. Removed the "Simulate Payment (Dev Only)" button from the payment page (`src/components/Payment.jsx`) to finalize the user checkout experience.
-10. Updated the return button on the payment page to navigate users to the Dashboard (`/dashboard`) instead of logging them out and returning to the home page.
+100% STATELESS WHAT-IF SCENARIO MODEL INTEGRATION:
+--------------------------------------------------
+Integrated the Limitless What-If Scenario service (`https://scenario-v1.160-153-179-249.sslip.io`)
+directly into the website and the user-facing assessment dashboard (`/dashboard`)
+and demo dashboard (`/sample-report`).
+
+KEY FEATURES:
+1. 🔮 REACTIVE WHAT-IF SCENARIO SIMULATOR (src/components/ScenarioSimulator.jsx):
+   - Dual Baseline vs. Target Controls for all 6 scientific levers:
+     • Sleep Duration (3.0 – 10.0 hrs/night)
+     • Sleep Quality (1.0 – 5.0 rating)
+     • Sleep Irregularity (0.0 – 4.0 hrs variation)
+     • Work After 20:00 (0% – 100% of days)
+     • Exercise Frequency (0 – 7 days/week)
+     • Deliberate Breaks (0 – 6 screen-free breaks/day)
+   - Multi-Week Time Horizon:
+     • Selectable 2, 4, 8, 12, 16, or 26 weeks.
+     • Dynamic ramp-factor display (e.g., ~74% effect realized at 4 weeks).
+   - Quick Presets:
+     • 🌟 "Optimal Recovery"
+     • 🛡️ "Burnout Shield"
+     • ⚡ "High Performance"
+     • 🔄 "Reset to Baseline"
+   - Live Dynamic Results:
+     • Modifiable Load Index: before vs after score, point delta (+Δ), natural language summary.
+     • Movable Domains (Sleep & Recovery, Mental Energy, Stress Load) with comparative progress bars.
+     • Contribution Breakdown ("Show the Working"): shows which lever moved which domain.
+     • Scientific Integrity Drawer: explains why non-lifestyle domains (Memory, Overall score) remain unchanged.
+     • Direct "Discuss with AI Coach" handover action.
+
+2. 🤖 FLOATING AI COACH IN PLACE OF WHATSAPP ON DASHBOARD:
+   - Replaced the WhatsApp floating button on `/dashboard` with a dedicated, circular floating AI Coach button.
+   - Removed the bulky inline card from the middle of the dashboard layout.
+3. 🔮 REDEVELOPED WHAT-IF SCENARIO DASHBOARD (USER-ACCESSIBLE & MOBILE COCKPIT):
+   - Universal Access: Added persistent "Overview Report" vs "What-If Scenario Simulator" tab pill switcher directly at the top of the dashboard content area for 1-tap switching on all mobile, tablet, and desktop devices without opening menus.
+   - Interactive Overview Spotlight Launcher: Added an executive teaser card on the assessment report overview that leads directly into the simulator with projected point gains (+16 pts).
+   - Frictionless Lever Controls: Replaced confusing dual-dropdowns with single tactile goal sliders equipped with `[-]` and `[+]` touch-friendly precision stepper buttons for seamless mobile tweaking.
+   - 1-Click Strategy Presets: Added prominent preset pills ("🌟 Deep Recovery", "🛡️ Burnout Shield", "⚡ Peak Performance", "🔄 Reset") for instant simulation.
+   - High-Impact Transformation Scorecard: Features large dynamic Before ➔ After capacity numbers (`62 ➔ 71 (+9.0 pts)`), natural language model summary, and dual-fill comparative progress meters for all 3 movable domains.
+   - Mobile Sticky Projection Footer: Keeps real-time projected scores and a direct "Coach 🤖" button visible at the bottom of the screen when scrolling through habit sliders on mobile devices.
+   - Clean Tabbed Insights: Deep dive tabs for "🔬 Why This Works (Attribution)", "🛡️ Scientific Integrity", and "🤖 AI Coach Action Plan".
+
+CHANGED FILES:
+1. vite.config.js
+   - Proxy rules added for `/api/v1/scenario` and `/api/v1/levers`.
+2. public/api-proxy.php
+   - Added `SCENARIO_URL` and CORS-free server-to-server proxy routing.
+3. src/lib/apiUtils.js
+   - Added `fetchScenarioLevers()` and `fetchScenarioSimulation()`.
+4. src/components/ScenarioSimulator.jsx
+   - New standalone reactive simulator component.
+5. src/components/Dashboard.jsx
+   - Embedded ScenarioSimulator right before the Daily Engagement Plan.
+6. src/pages/SampleDashboard.jsx
+   - Embedded ScenarioSimulator demo with sample data.
+7. src/pages/Features.jsx
+   - Added spotlight feature card for What-If Scenario Simulator.
+
+=======================================================================
+  UPDATE — Daily Engagement Model Integration (31 Aug 2026)
+=======================================================================
+
+100% DYNAMIC DATA INTEGRATION (NO STATIC / MOCK DATA):
+------------------------------------------------------
+Pehle humne dynamic look dene ke liye mock/fake data generate kiya tha. 
+Ab humne use poori tarah se hata diya hai. Ab poora data 100% user ke 
+actual input par chalega aur directly engagement model (`/api/v1/summary` 
+aur `/api/v1/roadmap`) se dynamically calculate hoga.
+
+Iske liye humne user-facing dashboard par do main interactives add kiye hain:
+
+1. 🌡️ INLINE WELLNESS LOGGING:
+   - "Daily Wellness" card par agar user ne aaj check-in nahi kiya hai, 
+     toh wahan ek dynamic "Log Daily Wellness" button dikhega.
+   - Button click karte hi inline sliders (Sleep, Stress, Energy, Focus) 
+     aur note field khul jayenge.
+   - Save karne par yeh data user ki `localStorage` mein date ke sath save 
+     hoga aur automatically summary update hogi.
+   - Agar aaj ka check-in ho chuka hai, toh "✓ Logged today" status aur 
+     emoji rating dikhegi.
+
+2. 🗺️ TASK COMPLETION TOGGLE:
+   - Roadmap weeks ke andar jitne bhi tasks hain, unpar ab user click 
+     karke aaj ke liye completion status toggle kar sakta hai.
+   - Task completed hone par:
+     • Task text par strike-through (line-through) aayega aur opacity 70% 
+       ho jayegi.
+     • Ring icon green checkmark (✓) ban jayega.
+     • Task ke neche badge dikhega: (e.g. "3 completed") — jo show karega 
+       ki yeh task user ne ab tak kitni baar complete kiya hai.
+   - Click karte hi completion data update hota hai aur summary re-fetch 
+     hoti hai.
+
+3. 🔄 RESET BUTTON:
+   - Agar user apni checking ya completion history clear karke fir se zero 
+     se start karna chahta hai, toh section ke sabse neeche right corner pe 
+     "Reset Daily Check-ins & Completions" button diya gaya hai.
+
+
+DASHBOARD METRICS (SUMMARY STATE MAPPING):
+------------------------------------------
+
+- Day Streak 🔥: Actual consecutive check-in streak.
+- Week / Overall Adherence: Dynamic calculations based on expected tasks 
+  vs completions from the model.
+- Wellness Trends: Sleep, Stress, Energy, Focus rollings automatically 
+  calculated by the model from check-ins logged (minimum number of check-ins 
+  are required for trends, model dynamic output is shown directly).
+- Behind This Week: Displays tasks that expected completions but have 
+  underperformed based on active local dates.
+
+
+CHANGED FILES:
+--------------
+
+1. vite.config.js
+   - Proxy rules whitelisted `/api/v1/engagement`.
+
+2. src/lib/apiUtils.js
+   - API endpoints whitelisted for `fetchEngagementRoadmap` & `fetchEngagementSummary`.
+
+3. public/api-proxy.php
+   - PHP proxy handler updated to route engagement calls without CORS 400 errors.
+
+4. src/components/Dashboard.jsx (USER-FACING DASHBOARD)
+   - Imports: Added utils.
+   - State Variables: `localCheckins`, `localCompletions`, form helpers.
+   - Date Logic: safe timezone offset for exact local YYYY-MM-DD.
+   - Interactive Handlers: `handleSaveCheckin`, `handleToggleTask`, `handleClearEngagementData`.
+   - UI: Sleek check-in form, task completed checkbox state styling, dynamic streak/trends cards.
+
+5. src/dashbaord-app/pages/UserDetail.tsx (ADMIN VIEW)
+   - 100% clean revert to original code.
+
+
+KAISE TEST KAREIN:
+-------------------
+1. App run karein, assessment lekar dashboard open karein.
+2. Scroll karein "Daily Engagement Plan" section par.
+3. Pehli baar mein adherence stats 0, check-ins empty aur roadmap clean dikhega.
+4. "Log Daily Wellness" par click karke aaj ka check-in submit karein.
+5. Roadmap ke kisi task card par click karke completed mark karein (it turns green with check).
+6. Metrics dynamically change ho jayengi!
+
+=======================================================================

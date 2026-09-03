@@ -13,23 +13,71 @@ const AssessmentModal = ({ isOpen, onClose }) => {
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [otpError, setOtpError] = useState('');
   const [isSendingOtp, setIsSendingOtp] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const validateName = (name) => {
+    if (name === undefined || name === null || name === '') return 'Please enter your full name.';
+    if (name.trim() === '') return 'Full name cannot be empty.';
+    const trimmed = name.trim();
+    if (trimmed.length === 1) return 'Full name must be at least 2 characters.';
+    if (trimmed.length > 100) return 'Full name cannot exceed 100 characters.';
+    const nameRegex = /^[\p{L}\s'-]+$/u;
+    if (!nameRegex.test(trimmed)) return "Full name can contain only letters, spaces, hyphens (-), and apostrophes (').";
+    return '';
+  };
+
+  const validateEmailField = (email) => {
+    if (!email || email.trim() === '') return 'Please enter email address.';
+    const trimmed = email.trim();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(trimmed) || trimmed.includes('..')) return 'Please enter a valid email address.';
+    return '';
+  };
+
+  const validateAge = (age) => {
+    if (age === undefined || age === null || age.toString().trim() === '') return 'Please enter your age.';
+    const ageStr = age.toString().trim();
+    const ageNum = Number(ageStr);
+    if (!Number.isInteger(Number(ageStr)) || ageStr.includes('.')) return 'Age must be a whole number.';
+    if (ageNum < 18) return 'You must be at least 18 years old.';
+    if (ageNum > 66) return 'Please enter a valid age between 18 and 66';
+    return '';
+  };
+
+  const validateGender = (gender) => {
+    if (!gender || gender.trim() === '') return 'Please select your gender.';
+    return '';
+  };
 
   const handleVerifyEmail = async (e) => {
-    e.preventDefault();
-    if (!formData.email) {
-      setFormError('Please enter an email first');
+    if (e) e.preventDefault();
+    setFormError('');
+    
+    const newErrors = {};
+    const nameError = validateName(formData.name);
+    if (nameError) newErrors.name = nameError;
+
+    const emailError = validateEmailField(formData.email);
+    if (emailError) newErrors.email = emailError;
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
+    setErrors({});
+
+    const trimmedName = formData.name.trim();
+    const trimmedEmail = formData.email.trim();
+    setFormData(prev => ({ ...prev, name: trimmedName, email: trimmedEmail }));
+
     setIsSendingOtp(true);
     try {
-      // Backend emails a 6-digit code (10 min validity)
-      await sendOtp(formData.email, formData.name);
+      await sendOtp(trimmedEmail, trimmedName);
       setShowOtpBox(true);
       setOtpError('');
       setFormError('');
     } catch (err) {
       if (err.status === 429) {
-        // A code was already sent recently — let them type it
         setShowOtpBox(true);
         setOtpError(err.message);
       } else {
@@ -42,14 +90,19 @@ const AssessmentModal = ({ isOpen, onClose }) => {
 
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
+    if (!otpValue || otpValue.trim() === '') {
+      setOtpError('Invalid OTP. Please try again.');
+      return;
+    }
     try {
-      await verifyOtp(formData.email, otpValue);
+      const trimmedEmail = formData.email.trim();
+      await verifyOtp(trimmedEmail, otpValue);
       setIsEmailVerified(true);
       setShowOtpBox(false);
       setOtpError('');
       setFormError('');
     } catch (err) {
-      setOtpError(err.message || 'OTP invalid');
+      setOtpError('Invalid OTP. Please try again.');
     }
   };
 
@@ -76,6 +129,30 @@ const AssessmentModal = ({ isOpen, onClose }) => {
     e.preventDefault();
     setIsSubmitting(true);
     setFormError('');
+    
+    const newErrors = {};
+    const nameError = validateName(formData.name);
+    if (nameError) newErrors.name = nameError;
+
+    const emailError = validateEmailField(formData.email);
+    if (emailError) newErrors.email = emailError;
+
+    const ageError = validateAge(formData.age);
+    if (ageError) newErrors.age = ageError;
+
+    const genderError = validateGender(formData.gender);
+    if (genderError) newErrors.gender = genderError;
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      setIsSubmitting(false);
+      return;
+    }
+    setErrors({});
+
+    const trimmedName = formData.name.trim();
+    const trimmedEmail = formData.email.trim();
+    setFormData(prev => ({ ...prev, name: trimmedName, email: trimmedEmail }));
 
     if (!isEmailVerified) {
       if (!showOtpBox) {
@@ -153,21 +230,22 @@ const AssessmentModal = ({ isOpen, onClose }) => {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleFormSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <form onSubmit={handleFormSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           {/* Name + Email */}
           <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
             <div style={{ flex: '1 1 100%', display: 'flex', flexDirection: 'column', gap: '6px' }}>
               <label style={{ fontSize: '13px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.8px' }}>Full Name</label>
               <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="John Doe" required
-                style={{ padding: '13px 16px', borderRadius: '10px', border: '1.5px solid #E2E8F0', fontSize: '16px', background: '#F8FAFC', outline: 'none', width: '100%', boxSizing: 'border-box' }} />
+                style={{ padding: '13px 16px', borderRadius: '10px', border: errors.name ? '2px solid red' : '1.5px solid #E2E8F0', fontSize: '16px', background: '#F8FAFC', outline: 'none', width: '100%', boxSizing: 'border-box' }} />
+              {errors.name && <span style={{ color: '#ef4444', fontSize: '13px', fontWeight: '500' }}>{errors.name}</span>}
             </div>
             <div style={{ flex: '1 1 100%', display: 'flex', flexDirection: 'column', gap: '6px' }}>
               <label style={{ fontSize: '13px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.8px' }}>Email Address</label>
               <div style={{ position: 'relative', width: '100%' }}>
                 <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="john@example.com" required disabled={isEmailVerified}
-                  style={{ padding: '13px 16px', borderRadius: '10px', border: '1.5px solid #E2E8F0', fontSize: '16px', background: isEmailVerified ? '#F1F5F9' : '#F8FAFC', outline: 'none', width: '100%', boxSizing: 'border-box', color: isEmailVerified ? '#64748B' : '#0F172A', transition: 'border-color 0.2s' }} 
-                  onFocus={(e) => e.target.style.borderColor = '#3B82F6'}
-                  onBlur={(e) => e.target.style.borderColor = '#E2E8F0'}
+                  style={{ padding: '13px 16px', borderRadius: '10px', border: errors.email ? '2px solid red' : '1.5px solid #E2E8F0', fontSize: '16px', background: isEmailVerified ? '#F1F5F9' : '#F8FAFC', outline: 'none', width: '100%', boxSizing: 'border-box', color: isEmailVerified ? '#64748B' : '#0F172A', transition: 'border-color 0.2s' }} 
+                  onFocus={(e) => { if(!errors.email) e.target.style.borderColor = '#3B82F6'; }}
+                  onBlur={(e) => { if(!errors.email) e.target.style.borderColor = '#E2E8F0'; }}
                 />
                 {!isEmailVerified && formData.email && (
                   <button type="button" onClick={handleVerifyEmail} disabled={isSendingOtp} style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', padding: '8px 14px', background: '#3B82F6', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '13px', fontWeight: '600', cursor: isSendingOtp ? 'not-allowed' : 'pointer', zIndex: 10, boxShadow: '0 4px 10px rgba(59,130,246,0.3)', opacity: isSendingOtp ? 0.7 : 1 }}>
@@ -180,6 +258,7 @@ const AssessmentModal = ({ isOpen, onClose }) => {
                   </span>
                 )}
               </div>
+              {errors.email && <span style={{ color: '#ef4444', fontSize: '13px', fontWeight: '500' }}>{errors.email}</span>}
             </div>
           </div>
 
@@ -187,17 +266,19 @@ const AssessmentModal = ({ isOpen, onClose }) => {
           <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
             <div style={{ flex: '1 1 calc(50% - 8px)', display: 'flex', flexDirection: 'column', gap: '6px' }}>
               <label style={{ fontSize: '13px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.8px' }}>Age</label>
-              <input type="number" name="age" value={formData.age} onChange={handleChange} min="18" max="66" placeholder="22" required
-                style={{ padding: '13px 16px', borderRadius: '10px', border: '1.5px solid #E2E8F0', fontSize: '16px', background: '#F8FAFC', outline: 'none', width: '100%', boxSizing: 'border-box' }} />
+              <input type="text" name="age" value={formData.age} onChange={handleChange} placeholder="22" required
+                style={{ padding: '13px 16px', borderRadius: '10px', border: errors.age ? '2px solid red' : '1.5px solid #E2E8F0', fontSize: '16px', background: '#F8FAFC', outline: 'none', width: '100%', boxSizing: 'border-box' }} />
+              {errors.age && <span style={{ color: '#ef4444', fontSize: '13px', fontWeight: '500' }}>{errors.age}</span>}
             </div>
             <div style={{ flex: '1 1 calc(50% - 8px)', display: 'flex', flexDirection: 'column', gap: '6px' }}>
               <label style={{ fontSize: '13px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.8px' }}>Gender</label>
               <select name="gender" value={formData.gender} onChange={handleChange} required
-                style={{ padding: '13px 16px', borderRadius: '10px', border: '1.5px solid #E2E8F0', fontSize: '16px', background: '#F8FAFC', color: '#0F172A', outline: 'none', width: '100%', boxSizing: 'border-box' }}>
+                style={{ padding: '13px 16px', borderRadius: '10px', border: errors.gender ? '2px solid red' : '1.5px solid #E2E8F0', fontSize: '16px', background: '#F8FAFC', color: '#0F172A', outline: 'none', width: '100%', boxSizing: 'border-box' }}>
                 <option value="">Select Gender</option>
                 <option value="female">Female</option>
                 <option value="male">Male</option>
               </select>
+              {errors.gender && <span style={{ color: '#ef4444', fontSize: '13px', fontWeight: '500' }}>{errors.gender}</span>}
             </div>
           </div>
 
@@ -208,7 +289,7 @@ const AssessmentModal = ({ isOpen, onClose }) => {
                 <span style={{ fontSize: '12px', color: '#64748B', fontWeight: '500' }}>Sent to {formData.email}</span>
               </div>
               <div style={{ display: 'flex', width: '100%', gap: '8px', flexWrap: 'wrap' }}>
-                <input type="text" value={otpValue} onChange={(e) => setOtpValue(e.target.value)} placeholder="6-digit OTP" style={{ flex: '1 1 140px', padding: '12px 16px', borderRadius: '10px', border: '1.5px solid #cbd5e1', outline: 'none', background: '#fff', fontSize: '16px', boxSizing: 'border-box', letterSpacing: '2px', textAlign: 'center', fontWeight: '600', minWidth: '140px' }} maxLength={6} />
+                <input type="text" value={otpValue} onChange={(e) => { setOtpValue(e.target.value); setOtpError(''); }} placeholder="6-digit OTP" style={{ flex: '1 1 140px', padding: '12px 16px', borderRadius: '10px', border: otpError ? '2px solid red' : '1.5px solid #cbd5e1', outline: 'none', background: '#fff', fontSize: '16px', boxSizing: 'border-box', letterSpacing: '2px', textAlign: 'center', fontWeight: '600', minWidth: '140px' }} maxLength={6} />
                 <button type="button" onClick={handleVerifyOtp} style={{ flex: '1 1 100px', minWidth: '100px', padding: '12px 16px', background: '#10B981', color: '#fff', border: 'none', borderRadius: '10px', fontWeight: '700', fontSize: '15px', cursor: 'pointer', boxShadow: '0 4px 12px rgba(16, 185, 129, 0.25)', transition: 'all 0.2s', flexShrink: 0 }}
                 onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-1px)'}
                 onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}

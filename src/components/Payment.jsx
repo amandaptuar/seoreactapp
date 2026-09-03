@@ -35,7 +35,7 @@ const Payment = () => {
           <div className="slide-up">
             <h2 style={{ color: '#0F172A', fontSize: '42px', marginBottom: '16px', fontWeight: '800' }}>Complete Your Payment</h2>
             <p style={{ color: '#64748b', fontSize: '24px', marginBottom: '32px' }}>
-              Final step: Pay the one-time fee of <strong className="notranslate">{formatPrice(19)}</strong> to unlock your full cognitive report and personalized action plan.
+              Final step: Pay the monthly plan of <strong className="notranslate">{formatPrice(19)}</strong> to unlock your full cognitive report and personalized action plan.
             </p>
 
             <div style={{ background: '#F8FAFC', padding: '24px', borderRadius: '16px', border: '1px solid #E2E8F0', marginBottom: '32px', textAlign: 'left' }}>

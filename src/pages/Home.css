@@ -1299,6 +1299,14 @@
   .limitless-home .challenge-wrap {
     flex-direction: column;
   }
+  .limitless-home .report-mockup-wrapper {
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+  .limitless-home .report-dark-card-new {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
   .limitless-home .report-white-box-new {
     flex-direction: column;
     padding: 16px;
@@ -1656,6 +1664,12 @@
     flex-direction: column !important;
     align-items: center;
     text-align: center;
+  }
+  .limitless-home .testi-stars-new {
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    margin-bottom: 12px;
   }
 
   /* Trust Stats & Science */

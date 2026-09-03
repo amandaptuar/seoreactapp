@@ -8,7 +8,7 @@
 // Allow requests from your site only
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-API-Key');
 header('Content-Type: application/json');
 
 // Handle OPTIONS preflight
@@ -17,25 +17,65 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-// The real backend URL
+// The real backend URL for the original model service
 define('BACKEND_URL', 'https://limitless-model.160-153-179-249.sslip.io');
-
-// Which endpoints are allowed to be proxied
-$allowed_endpoints = [
-    '/api/v1/generate-questions',
-    '/api/v1/analyze',
-    '/api/v1/generate-pdf',
-    '/api/v1/generate-teaser-pdf',
-    '/api/v1/longitudinal-analysis',
-];
+define('EXECUTIVE_URL', 'https://limitless-executive.160-153-179-249.sslip.io');
+define('COACH_URL', 'https://coach-v1.160-153-179-249.sslip.io');
+define('ENGAGEMENT_URL', 'https://engagement-v1.160-153-179-249.sslip.io');
+define('SCENARIO_URL', 'https://scenario-v1.160-153-179-249.sslip.io');
 
 // Get the endpoint from query string: ?endpoint=/api/v1/generate-questions
 $endpoint = isset($_GET['endpoint']) ? trim($_GET['endpoint']) : '';
 
-if (!in_array($endpoint, $allowed_endpoints)) {
-    http_response_code(400);
-    echo json_encode(['error' => 'Invalid or missing endpoint']);
-    exit();
+// Check if this is a coach API endpoint
+$is_coach = strpos($endpoint, '/api/v1/coach/') === 0;
+
+// Check if this is an executive API endpoint
+$is_executive = strpos($endpoint, '/api/v1/executive/') === 0 || $endpoint === '/api/v1/executive';
+
+// Check if this is an engagement API endpoint
+$is_engagement = strpos($endpoint, '/api/v1/engagement/') === 0;
+
+// Check if this is a scenario API endpoint
+$is_scenario = strpos($endpoint, '/api/v1/scenario') === 0 || strpos($endpoint, '/api/v1/levers') === 0;
+
+if ($is_coach) {
+    $target_url = COACH_URL . $endpoint;
+} elseif ($is_executive) {
+    // Strip "/api/v1/executive" and replace with "/v1" for the executive backend
+    $target_endpoint = str_replace('/api/v1/executive', '/v1', $endpoint);
+    $target_url = EXECUTIVE_URL . $target_endpoint;
+} elseif ($is_engagement) {
+    // Strip "/api/v1/engagement" and replace with "/api/v1" for the engagement backend
+    $target_endpoint = str_replace('/api/v1/engagement', '/api/v1', $endpoint);
+    $target_url = ENGAGEMENT_URL . $target_endpoint;
+} elseif ($is_scenario) {
+    $target_url = SCENARIO_URL . $endpoint;
+} else {
+    // Which endpoints are allowed to be proxied for the model service
+    $allowed_endpoints = [
+        '/api/v1/generate-questions',
+        '/api/v1/analyze',
+        '/api/v1/generate-pdf',
+        '/api/v1/generate-teaser-pdf',
+        '/api/v1/longitudinal-analysis',
+    ];
+
+    if (!in_array($endpoint, $allowed_endpoints)) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Invalid or missing endpoint']);
+        exit();
+    }
+    
+    $target_url = BACKEND_URL . $endpoint;
+}
+
+// Forward any extra query params (like user_id) to the backend
+$extra_params = $_GET;
+unset($extra_params['endpoint']); // Remove the 'endpoint' param itself
+if (!empty($extra_params)) {
+    $separator = (strpos($target_url, '?') !== false) ? '&' : '?';
+    $target_url .= $separator . http_build_query($extra_params);
 }
 
 // Read request body
@@ -45,18 +85,28 @@ $method = $_SERVER['REQUEST_METHOD'];
 // Determine if this endpoint returns PDF (binary) or JSON
 $is_pdf_endpoint = strpos($endpoint, 'pdf') !== false;
 
+// Build headers
+$headers = "Content-Type: application/json\r\nAccept: " . ($is_pdf_endpoint ? 'application/pdf' : 'application/json');
+
+// Forward auth headers
+if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+    $headers .= "\r\nAuthorization: " . $_SERVER['HTTP_AUTHORIZATION'];
+}
+if (isset($_SERVER['HTTP_X_API_KEY'])) {
+    $headers .= "\r\nX-API-Key: " . $_SERVER['HTTP_X_API_KEY'];
+}
+
 // Forward to backend
 $context = stream_context_create([
     'http' => [
         'method'  => $method,
-        'header'  => "Content-Type: application/json\r\nAccept: " . ($is_pdf_endpoint ? 'application/pdf' : 'application/json'),
+        'header'  => $headers,
         'content' => $body,
         'timeout' => 150,
         'ignore_errors' => true,
     ]
 ]);
 
-$target_url = BACKEND_URL . $endpoint;
 $response = file_get_contents($target_url, false, $context);
 
 // Get the HTTP status from the response headers
