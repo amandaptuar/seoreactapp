@@ -8,27 +8,7 @@ import {
 import { getApiUrl } from '../../lib/apiUtils';
 import { fetchUserWithAssessments, updateUser, storeReportPdf } from '../../lib/backendApi';
 
-// Paywall lock overlay component
-const PaywallOverlay = () => (
-  <div style={{
-    position: 'absolute', inset: 0, zIndex: 10,
-    background: 'rgba(255, 255, 255, 0.7)',
-    backdropFilter: 'blur(8px)',
-    borderRadius: 'inherit',
-    display: 'flex', flexDirection: 'column',
-    alignItems: 'center', justifyContent: 'center',
-    gap: '12px',
-    border: '1.5px solid rgba(99,102,241,0.25)',
-  }}>
-    <div style={{ fontSize: '36px' }}>🔒</div>
-    <p style={{ color: '#0F172A', fontSize: '18px', fontWeight: '700', margin: 0, textAlign: 'center' }}>
-      Premium Feature
-    </p>
-    <p style={{ color: '#64748B', fontSize: '14px', margin: 0, textAlign: 'center', maxWidth: '260px', lineHeight: 1.5 }}>
-      This user has not unlocked premium features.
-    </p>
-  </div>
-);
+
 
 const UserDetail = () => {
   const { id } = useParams();
@@ -131,27 +111,30 @@ const UserDetail = () => {
 
     setIsGeneratingPdf(true);
     try {
-      if (id && isPaid) {
-        // Backend fetches the PDF from the AI report-generation model for
+      if (id) {
+        // Backend fetches the full PDF from the AI report-generation model for
         // THIS specific assessment, stores it, and saves the public URL.
         const stored = await storeReportPdf(id, report, { assessmentId: currentAssessmentId });
-        setPdfUrl(stored.pdfUrl);
-        setAssessmentsHistory((prev: any[]) => prev.map((a) =>
-          a.id === currentAssessmentId ? { ...a, pdf_url: stored.pdfUrl } : a
-        ));
-        window.open(stored.pdfUrl, '_blank');
-      } else {
-        // Free preview: generate the teaser PDF directly (not stored)
-        const response = await fetch(getApiUrl('/api/v1/generate-teaser-pdf'), {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ analysis: report, brand: { primaryColor: '#3B82F6', accentColor: '#6366F1' } })
-        });
-        if (!response.ok) throw new Error('Failed to generate PDF');
-        const blob = await response.blob();
-        const downloadUrl = window.URL.createObjectURL(blob);
-        window.open(downloadUrl, '_blank');
+        if (stored?.pdfUrl) {
+          setPdfUrl(stored.pdfUrl);
+          setAssessmentsHistory((prev: any[]) => prev.map((a: any) =>
+            a.id === currentAssessmentId ? { ...a, pdf_url: stored.pdfUrl } : a
+          ));
+          window.open(stored.pdfUrl, '_blank');
+          return;
+        }
       }
+      
+      // Free/Direct generation fallback if storage fails
+      const response = await fetch(getApiUrl('/api/v1/generate-teaser-pdf'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ analysis: report, brand: { primaryColor: '#3B82F6', accentColor: '#6366F1' } })
+      });
+      if (!response.ok) throw new Error('Failed to generate PDF');
+      const blob = await response.blob();
+      const downloadUrl = window.URL.createObjectURL(blob);
+      window.open(downloadUrl, '_blank');
     } catch (err) {
       console.error('Error generating PDF:', err);
       alert('Failed to generate PDF. Please try again.');
@@ -175,8 +158,17 @@ const UserDetail = () => {
       <div style={{ textAlign: 'center', padding: '20px' }}>
         <h2 style={{ color: '#0F172A', fontSize: '24px', fontWeight: 'bold' }}>No Report Data</h2>
         <p style={{ color: '#64748B', margin: '12px 0 24px', maxWidth: '400px' }}>This user hasn't completed any assessments or their report data is empty.</p>
-        <button onClick={() => navigate('/admin-panel/admin/users')} style={{ background: '#374151', color: '#fff', padding: '10px 24px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontWeight: '600' }}>
-          Back to Users
+        <button
+          onClick={() => navigate('/admin-panel/admin/users')}
+          className="px-6 py-2.5 rounded-xl font-bold text-sm text-white transition-all hover:-translate-y-0.5 active:scale-[0.98]"
+          style={{
+            backgroundColor: '#059669',
+            color: '#ffffff',
+            border: '1px solid #34d399',
+            boxShadow: '0 4px 10px 0 rgba(5,150,105,0.25)'
+          }}
+        >
+          ← Back to Users
         </button>
       </div>
     </div>
@@ -375,50 +367,77 @@ const UserDetail = () => {
 
           <div style={{ flex: 1, overflowY: 'auto', padding: '20px' }}>
             {assessmentsHistory && assessmentsHistory.length > 0 ? (
-              assessmentsHistory.map((hist) => (
-                <div 
-                  key={hist.id}
-                  className="assessment-item"
-                  style={{
-                    border: currentAssessmentId === hist.id ? 'none' : '1px solid #1A2035',
-                    background: currentAssessmentId === hist.id ? 'linear-gradient(135deg, #6366F1, #7C3AED)' : '#0F172A',
-                  }}
-                  onClick={() => {
-                    setCurrentAssessmentId(hist.id);
-                    if (hist.report_json) setReport(hist.report_json);
-                    if (hist.pdf_url) setPdfUrl(hist.pdf_url);
-                    else setPdfUrl(null);
-                  }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                       <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: currentAssessmentId === hist.id ? 'rgba(255,255,255,0.2)' : 'rgba(99,102,241,0.1)', color: currentAssessmentId === hist.id ? '#fff' : '#6366F1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                       </div>
-                       <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                         <span style={{ fontWeight: '600', fontSize: '13.5px', color: '#fff' }}>Assessment</span>
-                         <span style={{ fontSize: '11.5px', color: currentAssessmentId === hist.id ? 'rgba(255,255,255,0.75)' : '#9ca3af' }}>
-                           {new Date(hist.created_at).toLocaleDateString()}
-                         </span>
-                       </div>
-                    </div>
-                    <div style={{ 
-                       background: hist.report_json?.overall?.score >= 70 ? (currentAssessmentId === hist.id ? 'rgba(255,255,255,0.25)' : 'rgba(34, 197, 94, 0.15)') : (currentAssessmentId === hist.id ? 'rgba(255,255,255,0.25)' : 'rgba(245, 158, 11, 0.15)'), 
-                       color: hist.report_json?.overall?.score >= 70 ? (currentAssessmentId === hist.id ? '#fff' : '#22c55e') : (currentAssessmentId === hist.id ? '#fff' : '#f59e0b'), 
-                       padding: '4px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: '700' 
-                    }}>
-                      {hist.report_json?.overall?.score || 0}
+              assessmentsHistory.map((hist, idx) => {
+                const attemptNum = assessmentsHistory.length - idx;
+                const isSelected = currentAssessmentId === hist.id;
+                const currentScore = hist.report_json?.overall?.score || 0;
+
+                return (
+                  <div 
+                    key={hist.id}
+                    className="assessment-item"
+                    style={{
+                      border: isSelected ? 'none' : '1px solid #1A2035',
+                      background: isSelected ? 'linear-gradient(135deg, #6366F1, #7C3AED)' : '#0F172A',
+                    }}
+                    onClick={() => {
+                      setCurrentAssessmentId(hist.id);
+                      if (hist.report_json) setReport(hist.report_json);
+                      if (hist.pdf_url) setPdfUrl(hist.pdf_url);
+                      else setPdfUrl(null);
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                         <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: isSelected ? 'rgba(255,255,255,0.2)' : 'rgba(99,102,241,0.1)', color: isSelected ? '#fff' : '#6366F1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                         </div>
+                         <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                           <span style={{ fontWeight: '700', fontSize: '13.5px', color: '#fff' }}>Attempt #{attemptNum}</span>
+                           <span style={{ fontSize: '11.5px', color: isSelected ? 'rgba(255,255,255,0.85)' : '#9ca3af' }}>
+                             {new Date(hist.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                           </span>
+                         </div>
+                      </div>
+                      <div style={{ 
+                         background: currentScore >= 70 ? (isSelected ? 'rgba(255,255,255,0.25)' : 'rgba(34, 197, 94, 0.15)') : (isSelected ? 'rgba(255,255,255,0.25)' : 'rgba(245, 158, 11, 0.15)'), 
+                         color: currentScore >= 70 ? (isSelected ? '#fff' : '#22c55e') : (isSelected ? '#fff' : '#f59e0b'), 
+                         padding: '4px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: '800' 
+                      }}>
+                        {currentScore} pts
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             ) : (
               <p style={{ fontSize: '14px', color: '#8a8fa3', textAlign: 'center', marginTop: '20px' }}>No past assessments.</p>
             )}
           </div>
           
-          <div style={{ padding: '20px', borderTop: '1px solid rgba(255,255,255,0.05)', marginTop: 'auto' }}>
-            <button className="btn" style={{ width: '100%', justifyContent: 'center', background: '#374151', color: '#fff', border: '1px solid #4B5563', padding: '12px' }} onClick={() => navigate('/admin-panel/admin/users')}>
+          <div style={{ padding: '16px 20px', borderTop: '1px solid rgba(255,255,255,0.05)', marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <button
+              onClick={() => navigate('/admin-panel/admin/assessments')}
+              className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl font-bold text-xs text-white transition-all hover:-translate-y-0.5 active:scale-[0.98]"
+              style={{
+                backgroundColor: '#059669',
+                color: '#ffffff',
+                border: '1px solid #34d399',
+                boxShadow: '0 4px 10px 0 rgba(5,150,105,0.25)'
+              }}
+            >
+              📊 All Assessments Hub
+            </button>
+            <button
+              onClick={() => navigate('/admin-panel/admin/users')}
+              className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl font-bold text-xs text-white transition-all hover:-translate-y-0.5 active:scale-[0.98]"
+              style={{
+                backgroundColor: '#dc2626',
+                color: '#ffffff',
+                border: '1px solid #ef4444',
+                boxShadow: '0 4px 10px 0 rgba(220,38,38,0.25)'
+              }}
+            >
               ← Back to Users
             </button>
           </div>
@@ -430,33 +449,22 @@ const UserDetail = () => {
             <div className="topbar-title-row">
               <h1 style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 User Dashboard 
-                <span style={{ fontSize: '13px', background: '#f59e0b', color: '#fff', padding: '4px 10px', borderRadius: '6px', fontWeight: 'bold' }}>Admin View</span>
+                <span style={{ fontSize: '13px', background: '#059669', color: '#fff', padding: '4px 10px', borderRadius: '6px', fontWeight: 'bold' }}>Admin View</span>
               </h1>
             </div>
             <div className="topbar-actions">
               <button 
                 onClick={handleGeneratePdf} 
                 disabled={isGeneratingPdf} 
+                className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white transition-all hover:-translate-y-0.5 active:scale-[0.98]"
                 style={{ 
                   opacity: isGeneratingPdf ? 0.7 : 1, 
-                  background: 'linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%)', 
-                  color: '#ffffff', 
-                  fontWeight: 700,
-                  fontSize: '14px',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  borderRadius: '12px',
-                  padding: '12px 24px',
-                  boxShadow: '0 8px 20px rgba(139, 92, 246, 0.3), inset 0 1px 0 rgba(255,255,255,0.2)',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  cursor: isGeneratingPdf ? 'not-allowed' : 'pointer',
-                  transition: 'all 0.3s ease',
-                  letterSpacing: '0.3px',
-                  textShadow: '0 1px 2px rgba(0,0,0,0.2)'
+                  backgroundColor: '#16a34a',
+                  color: '#ffffff',
+                  border: '1px solid #22c55e',
+                  boxShadow: '0 4px 10px 0 rgba(22,163,74,0.25)',
+                  cursor: isGeneratingPdf ? 'not-allowed' : 'pointer'
                 }}
-                onMouseOver={(e) => { if (!isGeneratingPdf) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 12px 24px rgba(139, 92, 246, 0.4), inset 0 1px 0 rgba(255,255,255,0.2)'; } }}
-                onMouseOut={(e) => { if (!isGeneratingPdf) { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 20px rgba(139, 92, 246, 0.3), inset 0 1px 0 rgba(255,255,255,0.2)'; } }}
               >
                 {isGeneratingPdf ? (
                   <>
@@ -513,9 +521,33 @@ const UserDetail = () => {
                       <option value="female">Female</option>
                     </select>
                   </div>
-                  <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
-                    <button onClick={handleSaveProfile} disabled={isSavingProfile} style={{ padding: '6px 16px', background: '#22c55e', color: '#fff', border: 'none', borderRadius: '6px', fontSize: '13px', cursor: 'pointer', fontWeight: 700 }}>{isSavingProfile ? 'Saving...' : 'Save'}</button>
-                    <button onClick={() => setIsEditingProfile(false)} disabled={isSavingProfile} style={{ padding: '6px 16px', background: '#f1f5f9', color: '#64748b', border: 'none', borderRadius: '6px', fontSize: '13px', cursor: 'pointer', fontWeight: 700 }}>Cancel</button>
+                  <div style={{ display: 'flex', gap: '10px', marginTop: '6px' }}>
+                    <button
+                      onClick={handleSaveProfile}
+                      disabled={isSavingProfile}
+                      className="px-4 py-1.5 rounded-xl font-bold text-xs text-white transition-all hover:-translate-y-0.5 active:scale-[0.98]"
+                      style={{
+                        backgroundColor: '#16a34a',
+                        color: '#ffffff',
+                        border: '1px solid #22c55e',
+                        boxShadow: '0 4px 10px 0 rgba(22,163,74,0.25)'
+                      }}
+                    >
+                      {isSavingProfile ? 'Saving...' : 'Save Changes'}
+                    </button>
+                    <button
+                      onClick={() => setIsEditingProfile(false)}
+                      disabled={isSavingProfile}
+                      className="px-4 py-1.5 rounded-xl font-bold text-xs text-white transition-all hover:-translate-y-0.5 active:scale-[0.98]"
+                      style={{
+                        backgroundColor: '#dc2626',
+                        color: '#ffffff',
+                        border: '1px solid #ef4444',
+                        boxShadow: '0 4px 10px 0 rgba(220,38,38,0.25)'
+                      }}
+                    >
+                      Cancel
+                    </button>
                   </div>
                 </div>
               ) : (
@@ -639,7 +671,7 @@ const UserDetail = () => {
 
             <div className="card age-card">
               <h4 style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '0 0 18px', fontSize: '16px', fontWeight: '700' }}>🧠 Cognitive Age Estimate</h4>
-              <div style={{ filter: isPaid ? 'none' : 'blur(4px)' }}>
+              <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
                   <div>
                     <div style={{ fontSize: '14px', color: 'var(--text-grey)', marginBottom: '6px', fontWeight: '600' }}>Actual Age</div>
@@ -654,7 +686,6 @@ const UserDetail = () => {
                 </div>
                 <div style={{ fontSize: '13px', color: 'var(--text-grey)', borderTop: '1px solid var(--border)', paddingTop: '12px' }}>ⓘ {cogAge?.disclaimer || 'Motivational wellness metric only — not a clinical measurement.'}</div>
               </div>
-              {!isPaid && <PaywallOverlay />}
             </div>
           </div>
 
@@ -686,7 +717,7 @@ const UserDetail = () => {
 
             <div className="card lifestyle-card">
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '18px', fontWeight: '800', marginBottom: '16px' }}>🍃 Lifestyle Assessment</div>
-              <div style={{ filter: isPaid ? 'none' : 'blur(4px)', display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                 {lifestyleImpacts.map(([key, val], i) => {
                   const formattedKey = key.replace(/Impact$/, '').replace(/([A-Z])/g, ' $1').trim().replace(/^./, str => str.toUpperCase());
                   const iconMap = { 'Sleep Quality': '🌙', 'Stress Level': '❤️', 'Anxiety Load': '😊', 'Burnout Risk': '🔥' };
@@ -703,7 +734,6 @@ const UserDetail = () => {
                   );
                 })}
               </div>
-              {!isPaid && <PaywallOverlay />}
             </div>
           </div>
 
@@ -775,24 +805,18 @@ const UserDetail = () => {
 
             <div className="card reco-card">
               <div style={{ fontSize: '18px', fontWeight: '800', marginBottom: '16px' }}>💡 Personalized Recommendations</div>
-              <div style={{ filter: isPaid ? 'none' : 'blur(4px)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {isPaid ? (
-                  (report.recommendations ?? []).map((rec, i) => (
-                    <div key={i} className="reco-item">
-                      <div className="reco-num" style={{ background: ['#6c5ce7', '#1fa96a', '#f0a63a'][i % 3] }}>{i + 1}</div>
-                      <div className="reco-text" style={{ fontSize: '15px', lineHeight: '1.6', fontWeight: '500' }}>{rec}</div>
-                    </div>
-                  ))
-                ) : (
-                  [1,2,3].map(i => (
-                    <div key={i} className="reco-item">
-                       <div className="reco-num" style={{ background: '#6c5ce7' }}>{i}</div>
-                       <div className="reco-text" style={{ color: 'transparent', textShadow: '0 0 8px rgba(0,0,0,0.5)' }}>This is a blurred out premium recommendation.</div>
-                    </div>
-                  ))
-                )}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {((report.recommendations && report.recommendations.length > 0) ? report.recommendations : [
+                  'Maintain a consistent 7-8 hour sleep schedule to support memory consolidation and executive functioning.',
+                  'Incorporate 20-30 minutes of daily moderate aerobic exercise to enhance cerebral oxygenation and mental focus.',
+                  'Engage in regular problem-solving and cognitive challenge tasks to boost processing speed and working memory resilience.'
+                ]).map((rec: string, i: number) => (
+                  <div key={i} className="reco-item">
+                    <div className="reco-num" style={{ background: ['#059669', '#16a34a', '#0d9488'][i % 3] }}>{i + 1}</div>
+                    <div className="reco-text" style={{ fontSize: '15px', lineHeight: '1.6', fontWeight: '500' }}>{rec}</div>
+                  </div>
+                ))}
               </div>
-              {!isPaid && <PaywallOverlay />}
             </div>
             </div>
           </div>

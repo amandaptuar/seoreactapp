@@ -158,9 +158,19 @@ export default function Dashboard() {
           <h2 className="text-3xl font-black tracking-tight text-slate-900 mb-1">Dashboard Overview</h2>
           <p className="text-slate-500 font-medium">Monitor key metrics, user growth, and subscription health in real-time.</p>
         </div>
-        <Button onClick={fetchData} className="relative z-10 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold shadow-sm rounded-xl px-5 h-11">
-          <RefreshCw className="h-4 w-4 mr-2 text-indigo-500" /> Refresh Data
-        </Button>
+        <button
+          onClick={fetchData}
+          className="relative z-10 flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm text-white transition-all hover:-translate-y-0.5 active:scale-[0.98]"
+          style={{
+            backgroundColor: '#059669',
+            color: '#ffffff',
+            border: '1px solid #34d399',
+            boxShadow: '0 4px 10px 0 rgba(5,150,105,0.25)'
+          }}
+        >
+          <RefreshCw className={`h-4 w-4 text-white ${loading ? "animate-spin" : ""}`} />
+          <span>Refresh Data</span>
+        </button>
       </div>
 
       {/* KPI Cards Row 1 */}

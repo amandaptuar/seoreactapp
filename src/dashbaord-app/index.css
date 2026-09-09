@@ -13,7 +13,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    /* Primary blue #2a78d6 */
+    /* Primary blue */
     --primary: 213 68% 50%;
     --primary-foreground: 210 40% 98%;
 
@@ -26,15 +26,15 @@
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
-    /* Danger red #e34948 */
+    /* Danger red */
     --destructive: 359 74% 59%;
     --destructive-foreground: 210 40% 98%;
     
-    /* Success green #008300 */
+    /* Success green */
     --success: 120 100% 26%;
     --success-foreground: 0 0% 100%;
 
-    /* Warning amber #eda100 */
+    /* Warning amber */
     --warning: 41 100% 46%;
     --warning-foreground: 0 0% 100%;
 
@@ -42,76 +42,151 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 213 68% 50%;
 
-    --radius: 0.75rem; /* 12px radius */
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 213 68% 50%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 359 74% 59%;
-    --destructive-foreground: 210 40% 98%;
-
-    --success: 120 100% 26%;
-    --success-foreground: 0 0% 100%;
-
-    --warning: 41 100% 46%;
-    --warning-foreground: 0 0% 100%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    --radius: 0.75rem;
   }
 }
 
-@layer base {
-  .dashbaord-root * {
-    @apply border-border;
-    border-style: solid;
-    border-width: 0;
-    box-sizing: border-box;
-  }
-  .dashbaord-root {
-    @apply bg-background text-foreground;
-  }
-  /* Preflight fixes for Shadcn UI without global preflight */
-  .dashbaord-root button,
-  .dashbaord-root [role="button"] {
-    cursor: pointer;
-    background-color: transparent;
-    background-image: none;
-    padding: 0;
-    line-height: inherit;
-    color: inherit;
-  }
-  .dashbaord-root h1, .dashbaord-root h2, .dashbaord-root h3, .dashbaord-root h4, .dashbaord-root h5, .dashbaord-root h6 {
-    font-size: inherit;
-    font-weight: inherit;
-    margin: 0;
-  }
-  .dashbaord-root p {
-    margin: 0;
-  }
-  .dashbaord-root a {
-    color: inherit;
-    text-decoration: inherit;
-  }
+/* ========================================================= */
+/* STRICT ADMIN PANEL SCOPED ISOLATION & TYPOGRAPHY RESETS  */
+/* ========================================================= */
+
+.dashbaord-root {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  color: #0f172a !important;
+  background-color: #f8fafc !important;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Override website template large fonts & leaky styles */
+.dashbaord-root * {
+  box-sizing: border-box !important;
+}
+
+.dashbaord-root p {
+  font-size: 13.5px !important;
+  line-height: 1.5 !important;
+  color: #64748b !important;
+  margin: 0 !important;
+}
+
+.dashbaord-root h1 {
+  font-size: 24px !important;
+  line-height: 1.3 !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  margin: 0 !important;
+}
+
+.dashbaord-root h2 {
+  font-size: 20px !important;
+  line-height: 1.3 !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  margin: 0 !important;
+}
+
+.dashbaord-root h3 {
+  font-size: 16px !important;
+  line-height: 1.4 !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  margin: 0 !important;
+}
+
+.dashbaord-root h4 {
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  margin: 0 !important;
+}
+
+/* Link reset in Dashboard */
+.dashbaord-root a {
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+/* Sidebar Specific High-Contrast Styles */
+.dashbaord-root aside {
+  background-color: #020617 !important;
+  color: #ffffff !important;
+}
+
+.dashbaord-root aside a {
+  color: #cbd5e1 !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.dashbaord-root aside a:hover {
+  color: #ffffff !important;
+  background-color: rgba(30, 41, 59, 0.7) !important;
+}
+
+.dashbaord-root aside a.active,
+.dashbaord-root aside a[aria-current="page"] {
+  color: #ffffff !important;
+  background-color: #4f46e5 !important;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35) !important;
+}
+
+.dashbaord-root aside a span {
+  color: inherit !important;
+}
+
+.dashbaord-root aside a svg {
+  color: inherit !important;
+  stroke: currentColor !important;
+}
+
+.dashbaord-root aside a.active svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Topbar Specific Styles */
+.dashbaord-root header {
+  background-color: #020617 !important;
+  color: #ffffff !important;
+}
+
+.dashbaord-root header svg {
+  stroke: currentColor !important;
+}
+
+/* Table fixes & Anti-collision */
+.dashbaord-root table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  font-size: 13px !important;
+}
+
+.dashbaord-root th {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #475569 !important;
+  padding: 12px 16px !important;
+  background-color: #f8fafc !important;
+  white-space: nowrap !important;
+}
+
+.dashbaord-root td {
+  padding: 12px 16px !important;
+  font-size: 13px !important;
+  vertical-align: middle !important;
+}
+
+.dashbaord-root input,
+.dashbaord-root select,
+.dashbaord-root textarea {
+  font-size: 13px !important;
+  line-height: normal !important;
+}
+
+.dashbaord-root button {
+  font-size: 13px !important;
 }

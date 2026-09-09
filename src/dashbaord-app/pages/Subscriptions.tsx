@@ -101,6 +101,19 @@ export default function Subscriptions() {
           <h2 className="text-3xl font-black tracking-tight text-slate-900 mb-1">Subscriptions Management</h2>
           <p className="text-slate-500 font-medium">Manage revenue, subscription plans, and subscriber billing.</p>
         </div>
+        <button
+          onClick={fetchData}
+          className="relative z-10 flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm text-white transition-all hover:-translate-y-0.5 active:scale-[0.98]"
+          style={{
+            backgroundColor: '#059669',
+            color: '#ffffff',
+            border: '1px solid #34d399',
+            boxShadow: '0 4px 10px 0 rgba(5,150,105,0.25)'
+          }}
+        >
+          <RefreshCw className={`h-4 w-4 text-white ${loading ? "animate-spin" : ""}`} />
+          <span>Refresh Data</span>
+        </button>
       </div>
 
       <Tabs defaultValue="dashboard" className="w-full">
@@ -142,16 +155,26 @@ export default function Subscriptions() {
             <CardHeader className="flex flex-row items-center justify-between pb-4">
               <div>
                 <CardTitle className="flex items-center gap-2">
-                  <Shield className="h-5 w-5 text-primary" />
+                  <Shield className="h-5 w-5 text-emerald-600" />
                   User Plan Management
                 </CardTitle>
                 <CardDescription className="mt-1">
                   View and manage each user&apos;s subscription plan. Upgrade or downgrade their plan — changes update instantly in the database.
                 </CardDescription>
               </div>
-              <Button variant="outline" size="sm" onClick={fetchData} className="shrink-0">
-                <RefreshCw className="h-4 w-4 mr-2" /> Refresh
-              </Button>
+              <button
+                onClick={fetchData}
+                className="flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-xl font-bold text-xs text-white transition-all hover:-translate-y-0.5 active:scale-[0.98] shrink-0"
+                style={{
+                  backgroundColor: '#059669',
+                  color: '#ffffff',
+                  border: '1px solid #34d399',
+                  boxShadow: '0 4px 10px 0 rgba(5,150,105,0.25)'
+                }}
+              >
+                <RefreshCw className="h-3.5 w-3.5 text-white" />
+                <span>Refresh</span>
+              </button>
             </CardHeader>
 
             {/* Summary badges */}
@@ -230,34 +253,43 @@ export default function Subscriptions() {
 
                             <TableCell className="text-right">
                               {isPaid ? (
-                                <Button
-                                  size="sm"
+                                <button
                                   disabled={isUpgrading}
-                                  variant="outline"
-                                  className="text-xs gap-1.5 text-slate-600 hover:text-slate-900 border-slate-300"
+                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-white transition-all hover:-translate-y-0.5 active:scale-[0.98] disabled:opacity-50"
+                                  style={{
+                                    backgroundColor: '#dc2626',
+                                    color: '#ffffff',
+                                    border: '1px solid #ef4444',
+                                    boxShadow: '0 4px 10px 0 rgba(220,38,38,0.25)'
+                                  }}
                                   onClick={() => handlePlanUpgrade(user.id, user.payment_status)}
                                 >
                                   {isUpgrading ? (
-                                    <RefreshCw className="h-3 w-3 animate-spin" />
+                                    <RefreshCw className="h-3 w-3 animate-spin text-white" />
                                   ) : (
-                                    <ArrowDownCircle className="h-3.5 w-3.5" />
+                                    <ArrowDownCircle className="h-3.5 w-3.5 text-white" />
                                   )}
-                                  Downgrade to Free
-                                </Button>
+                                  <span>Downgrade to Free</span>
+                                </button>
                               ) : (
-                                <Button
-                                  size="sm"
+                                <button
                                   disabled={isUpgrading}
-                                  className="text-xs gap-1.5 bg-primary hover:bg-primary/90 text-primary-foreground"
+                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-white transition-all hover:-translate-y-0.5 active:scale-[0.98] disabled:opacity-50"
+                                  style={{
+                                    backgroundColor: '#16a34a',
+                                    color: '#ffffff',
+                                    border: '1px solid #22c55e',
+                                    boxShadow: '0 4px 10px 0 rgba(22,163,74,0.25)'
+                                  }}
                                   onClick={() => handlePlanUpgrade(user.id, user.payment_status)}
                                 >
                                   {isUpgrading ? (
-                                    <RefreshCw className="h-3 w-3 animate-spin" />
+                                    <RefreshCw className="h-3 w-3 animate-spin text-white" />
                                   ) : (
-                                    <ArrowUpCircle className="h-3.5 w-3.5" />
+                                    <ArrowUpCircle className="h-3.5 w-3.5 text-white" />
                                   )}
-                                  Upgrade to Paid
-                                </Button>
+                                  <span>Upgrade to Paid</span>
+                                </button>
                               )}
                             </TableCell>
                           </TableRow>
@@ -278,9 +310,19 @@ export default function Subscriptions() {
               <h3 className="text-xl font-bold tracking-tight text-slate-900">Subscriber List</h3>
               <p className="text-sm font-medium text-slate-500 mt-1">View and manage all users and their subscription statuses.</p>
             </div>
-            <Button variant="outline" size="sm" onClick={fetchData} className="shrink-0">
-              <RefreshCw className="h-4 w-4 mr-2" /> Refresh
-            </Button>
+            <button
+              onClick={fetchData}
+              className="flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl font-bold text-xs text-white transition-all hover:-translate-y-0.5 active:scale-[0.98] shrink-0"
+              style={{
+                backgroundColor: '#059669',
+                color: '#ffffff',
+                border: '1px solid #34d399',
+                boxShadow: '0 4px 10px 0 rgba(5,150,105,0.25)'
+              }}
+            >
+              <RefreshCw className="h-3.5 w-3.5 mr-1.5 text-white" />
+              <span>Refresh</span>
+            </button>
           </div>
 
           <div className="border border-slate-200/60 rounded-2xl bg-white shadow-[0_2px_20px_rgb(0,0,0,0.02)] overflow-x-auto overflow-hidden">
@@ -339,9 +381,9 @@ export default function Subscriptions() {
                         <TableCell className="text-right">
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" className="h-8 w-8 p-0">
+                              <button className="h-8 w-8 rounded-xl bg-slate-50 hover:bg-emerald-50 text-slate-700 hover:text-emerald-800 border border-slate-200 hover:border-emerald-300 flex items-center justify-center transition-all">
                                 <MoreHorizontal className="h-4 w-4" />
-                              </Button>
+                              </button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                               {!isPaid ? (

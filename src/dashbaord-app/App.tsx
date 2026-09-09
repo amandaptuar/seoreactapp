@@ -6,6 +6,7 @@ import './index.css'
 import Dashboard from "./pages/Dashboard"
 import Users from "./pages/Users"
 import UserDetail from "./pages/UserDetail"
+import Assessments from "./pages/Assessments"
 import Subscriptions from "./pages/Subscriptions"
 import Reports from "./pages/Reports"
 import Enquiries from "./pages/Enquiries"
@@ -22,6 +23,7 @@ function DashboardApp() {
           <Route index element={<Dashboard />} />
           <Route path="users" element={<Users />} />
           <Route path="users/:id" element={<UserDetail />} />
+          <Route path="assessments" element={<Assessments />} />
           <Route path="subscriptions" element={<Subscriptions />} />
           <Route path="reports" element={<Reports />} />
           <Route path="enquiries" element={<Enquiries />} />
