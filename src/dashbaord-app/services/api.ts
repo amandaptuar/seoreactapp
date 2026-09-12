@@ -5,6 +5,8 @@
  */
 
 import {
+  adminLogin,
+  adminVerifyOtp,
   adminGetUsers,
   adminGetUser,
   adminDeleteUser,
@@ -14,6 +16,8 @@ import {
   adminUpdateUserStatus,
   getPlans as fetchPlans,
 } from '../../lib/backendApi';
+
+export { adminLogin, adminVerifyOtp };
 
 // Users — backend returns them newest-first, each with assessments[] and the
 // latest report_json / pdf_url mirrored onto the user object.

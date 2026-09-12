@@ -189,10 +189,17 @@ export const submitEnquiry = ({ name, email, message }) =>
 // ── Admin ────────────────────────────────────────────────────────────────────
 
 export async function adminLogin(username, password) {
-  const data = await apiPost('/api/admin/login', { username, password });
-  setAdminToken(data.token);
-  sessionStorage.setItem('adminLoggedIn', 'true');
-  sessionStorage.setItem('isAuthenticated', 'true');
+  return apiPost('/api/admin/login', { username, password });
+}
+
+export async function adminVerifyOtp(otp) {
+  const data = await apiPost('/api/admin/verify-otp', { otp: String(otp).trim() });
+  if (data?.token) {
+    setAdminToken(data.token);
+    sessionStorage.setItem('adminLoggedIn', 'true');
+    sessionStorage.setItem('isAuthenticated', 'true');
+    if (data.role) sessionStorage.setItem('adminRole', data.role);
+  }
   return data;
 }
 
